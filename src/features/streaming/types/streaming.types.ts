@@ -8,8 +8,9 @@ export interface ObsState {
     scenes: string[];
     isStreaming: boolean;
     isRecording: boolean;
-    cpuUsage: number;
-    fps: number;
+    cpuUsage?: number;
+    fps?: number;
+    isConnected: boolean;
 }
 
 export interface VmixState {
@@ -18,12 +19,13 @@ export interface VmixState {
     isStreaming: boolean;
     isRecording: boolean;
     isExternal: boolean;
-    isMultiCaster: boolean;
+    isMultiCorder: boolean;
 }
 
 export interface StreamingState {
     productionId: string;
     engineType: EngineType;
+    status: string;
     isConnected: boolean;
     obs?: ObsState;
     vmix?: VmixState;

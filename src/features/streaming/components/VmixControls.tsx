@@ -35,7 +35,27 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
     }
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6">
+            {/* Status Indicators */}
+            <div className="flex flex-wrap gap-2">
+                <div className={`px-3 py-1.5 rounded-lg border flex items-center gap-2 transition-all ${state?.isStreaming ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-stone-900 border-stone-800 text-stone-600'}`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${state?.isStreaming ? 'bg-emerald-500 animate-pulse' : 'bg-stone-700'}`} />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Streaming</span>
+                </div>
+                <div className={`px-3 py-1.5 rounded-lg border flex items-center gap-2 transition-all ${state?.isRecording ? 'bg-red-500/10 border-red-500/30 text-red-500' : 'bg-stone-900 border-stone-800 text-stone-600'}`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${state?.isRecording ? 'bg-red-500 animate-pulse' : 'bg-stone-700'}`} />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Recording</span>
+                </div>
+                <div className={`px-3 py-1.5 rounded-lg border flex items-center gap-2 transition-all ${state?.isExternal ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-500' : 'bg-stone-900 border-stone-800 text-stone-600'}`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${state?.isExternal ? 'bg-indigo-500 animate-pulse' : 'bg-stone-700'}`} />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">External</span>
+                </div>
+                <div className={`px-3 py-1.5 rounded-lg border flex items-center gap-2 transition-all ${state?.isMultiCorder ? 'bg-blue-500/10 border-blue-500/30 text-blue-500' : 'bg-stone-900 border-stone-800 text-stone-600'}`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${state?.isMultiCorder ? 'bg-blue-500 animate-pulse' : 'bg-stone-700'}`} />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">MultiCorder</span>
+                </div>
+            </div>
+
             {/* State Overview */}
             <div className="flex gap-4">
                 <div className="flex-1 bg-stone-950 border border-stone-800 rounded-2xl p-6 text-center">

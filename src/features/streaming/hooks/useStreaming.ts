@@ -49,7 +49,11 @@ export const useStreaming = (productionId: string | undefined) => {
         const handleObsSceneChanged = (data: any) => {
             if (data.productionId === productionId || !data.productionId) {
                 updateStreamingState(productionId, {
-                    obs: { currentScene: data.sceneName },
+                    obs: {
+                        currentScene: data.sceneName,
+                        cpuUsage: data.cpuUsage,
+                        fps: data.fps
+                    },
                     isConnected: true
                 });
             }
@@ -82,7 +86,7 @@ export const useStreaming = (productionId: string | undefined) => {
                         isStreaming: data.isStreaming,
                         isRecording: data.isRecording,
                         isExternal: data.isExternal,
-                        isMultiCaster: data.isMultiCaster
+                        isMultiCorder: data.isMultiCorder
                     },
                     isConnected: true
                 });
