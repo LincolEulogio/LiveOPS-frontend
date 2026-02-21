@@ -10,7 +10,7 @@ import { authService } from '@/features/auth/api/auth.service';
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { token, user, clearAuth } = useAuthStore();
+  const { token, user, clearAuth, isHydrated } = useAuthStore();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -18,10 +18,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, []);
 
   useEffect(() => {
-    if (isMounted && !token) {
+    // Wait for store to be rehydrated from localStorage OR for initial client-side mount
+    // to avoid false-positive redirect to /login
+    if (isMounted && isHydrated && !token) {
       router.push('/login');
     }
-  }, [token, isMounted, router]);
+  }, [token, isMounted, isHydrated, router]);
 
   const handleLogout = async () => {
     await authService.logout();
@@ -30,7 +32,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   // Prevent hydration mismatch or flashing protected content
-  if (!isMounted || !token) {
+  if (!isMounted || !isHydrated || !token) {
     return (
       <div className="min-h-screen bg-stone-950 flex items-center justify-center">
         <span className="text-stone-500">Loading...</span>
