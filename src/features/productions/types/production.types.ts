@@ -51,12 +51,14 @@ export interface UpdateProductionDto {
   status?: ProductionStatus;
   engineType?: EngineType;
   obsConfig?: {
-    url?: string;
+    host?: string;
+    port?: string;
     password?: string;
     isEnabled?: boolean;
   };
   vmixConfig?: {
-    url?: string;
+    host?: string;
+    port?: string;
     isEnabled?: boolean;
   };
 }

@@ -16,11 +16,13 @@ const updateProductionSchema = z.object({
     engineType: z.nativeEnum(EngineType),
     status: z.nativeEnum(ProductionStatus),
     obsConfig: z.object({
-        url: z.string().optional(),
+        host: z.string().optional(),
+        port: z.string().optional(),
         password: z.string().optional(),
     }).optional(),
     vmixConfig: z.object({
-        url: z.string().optional(),
+        host: z.string().optional(),
+        port: z.string().optional(),
     }).optional(),
 });
 
@@ -48,19 +50,38 @@ export default function EditProductionPage() {
 
     const activeEngineType = watch('engineType');
 
+    const parseUrl = (url: string | undefined, protocol: 'ws' | 'http') => {
+        if (!url) return { host: '127.0.0.1', port: protocol === 'ws' ? '4455' : '8088' };
+        try {
+            const cleanUrl = url.includes('://') ? url : `${protocol}://${url}`;
+            const parsed = new URL(cleanUrl);
+            return {
+                host: parsed.hostname || '127.0.0.1',
+                port: parsed.port || (protocol === 'ws' ? '4455' : '8088'),
+            };
+        } catch (e) {
+            return { host: '127.0.0.1', port: protocol === 'ws' ? '4455' : '8088' };
+        }
+    };
+
     useEffect(() => {
         if (production) {
+            const obs = parseUrl(production.obsConnection?.url, 'ws');
+            const vmix = parseUrl(production.vmixConnection?.url, 'http');
+
             reset({
                 name: production.name,
                 description: production.description || '',
                 engineType: production.engineType,
                 status: production.status,
                 obsConfig: {
-                    url: production.obsConnection?.url || 'ws://127.0.0.1:4455',
+                    host: obs.host,
+                    port: obs.port,
                     password: production.obsConnection?.password || '',
                 },
                 vmixConfig: {
-                    url: production.vmixConnection?.url || 'http://127.0.0.1:8088',
+                    host: vmix.host,
+                    port: vmix.port,
                 }
             });
         }
@@ -163,17 +184,26 @@ export default function EditProductionPage() {
                         </h3>
 
                         {activeEngineType === EngineType.OBS && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">WebSocket URL</label>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="md:col-span-1">
+                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Server IP / Host</label>
                                     <input
-                                        {...register('obsConfig.url')}
+                                        {...register('obsConfig.host')}
                                         type="text"
-                                        placeholder="ws://127.0.0.1:4455"
+                                        placeholder="127.0.0.1"
                                         className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
                                     />
                                 </div>
-                                <div>
+                                <div className="md:col-span-1">
+                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Port</label>
+                                    <input
+                                        {...register('obsConfig.port')}
+                                        type="text"
+                                        placeholder="4455"
+                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                    />
+                                </div>
+                                <div className="md:col-span-1">
                                     <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">WS Password</label>
                                     <input
                                         {...register('obsConfig.password')}
@@ -186,14 +216,25 @@ export default function EditProductionPage() {
                         )}
 
                         {activeEngineType === EngineType.VMIX && (
-                            <div>
-                                <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Web Controller URL</label>
-                                <input
-                                    {...register('vmixConfig.url')}
-                                    type="text"
-                                    placeholder="http://127.0.0.1:8088"
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Server IP / Host</label>
+                                    <input
+                                        {...register('vmixConfig.host')}
+                                        type="text"
+                                        placeholder="127.0.0.1"
+                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Port</label>
+                                    <input
+                                        {...register('vmixConfig.port')}
+                                        type="text"
+                                        placeholder="8088"
+                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                    />
+                                </div>
                             </div>
                         )}
                     </div>
