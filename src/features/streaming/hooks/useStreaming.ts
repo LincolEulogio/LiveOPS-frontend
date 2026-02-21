@@ -12,12 +12,29 @@ export const useStreaming = (productionId: string | undefined) => {
     const currentState = productionId ? states[productionId] : undefined;
 
     // 1. Initial State Fetch
-    const { isLoading, error } = useQuery({
+    const { data: initialData, isLoading, error } = useQuery({
         queryKey: ['streaming-state', productionId],
         queryFn: () => streamingService.getStreamingState(productionId!),
         enabled: !!productionId,
         staleTime: 10000,
     });
+
+    useEffect(() => {
+        if (initialData && productionId) {
+            if (!currentState?.isConnected) {
+                setStreamingState(productionId, initialData);
+            } else {
+                // We are already online. 
+                // Only merge metadata, but DO NOT allow initialData to set isConnected to false
+                if (initialData.isConnected === false) {
+                    const { isConnected, ...metaOnly } = initialData;
+                    updateStreamingState(productionId, metaOnly);
+                } else {
+                    updateStreamingState(productionId, initialData);
+                }
+            }
+        }
+    }, [initialData, productionId, setStreamingState, updateStreamingState, currentState?.isConnected]);
 
     // 2. Real-time Listeners
     useEffect(() => {
@@ -32,7 +49,7 @@ export const useStreaming = (productionId: string | undefined) => {
         const handleObsSceneChanged = (data: any) => {
             if (data.productionId === productionId || !data.productionId) {
                 updateStreamingState(productionId, {
-                    obs: { ...(currentState?.obs as any), currentScene: data.sceneName },
+                    obs: { currentScene: data.sceneName },
                     isConnected: true
                 });
             }
@@ -41,7 +58,16 @@ export const useStreaming = (productionId: string | undefined) => {
         const handleObsStreamState = (data: any) => {
             if (data.productionId === productionId) {
                 updateStreamingState(productionId, {
-                    obs: { ...(currentState?.obs as any), isStreaming: data.active },
+                    obs: { isStreaming: data.active },
+                    isConnected: true
+                });
+            }
+        };
+
+        const handleObsRecordState = (data: any) => {
+            if (data.productionId === productionId) {
+                updateStreamingState(productionId, {
+                    obs: { isRecording: data.active },
                     isConnected: true
                 });
             }
@@ -65,6 +91,7 @@ export const useStreaming = (productionId: string | undefined) => {
 
         socket.on('obs.scene.changed', handleObsSceneChanged);
         socket.on('obs.stream.state', handleObsStreamState);
+        socket.on('obs.record.state', handleObsRecordState);
         socket.on('obs.connection.state', handleConnectionState);
         socket.on('vmix.connection.state', handleConnectionState);
         socket.on('vmix.input.changed', handleVmixUpdate);
@@ -75,12 +102,13 @@ export const useStreaming = (productionId: string | undefined) => {
         return () => {
             socket.off('obs.scene.changed', handleObsSceneChanged);
             socket.off('obs.stream.state', handleObsStreamState);
+            socket.off('obs.record.state', handleObsRecordState);
             socket.off('obs.connection.state', handleConnectionState);
             socket.off('vmix.connection.state', handleConnectionState);
             socket.off('vmix.input.changed', handleVmixUpdate);
             socket.off('engine.connection', handleConnectionState);
         };
-    }, [socket, productionId, updateStreamingState, currentState]);
+    }, [socket, productionId, updateStreamingState]);
 
     // 3. Command Mutation
     const commandMutation = useMutation({
