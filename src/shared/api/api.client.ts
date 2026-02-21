@@ -93,7 +93,16 @@ apiClient.interceptors.response.use(
     }
 
     // Normalize error shape to be consistent
-    const message = (error.response?.data as any)?.message || error.message;
+    const errorData = error.response?.data as any;
+    let message = errorData?.message || error.message;
+
+    // Handle NestJS validation array messages
+    if (Array.isArray(message)) {
+      message = message.join(', ');
+    } else if (typeof message === 'object' && message !== null) {
+      message = JSON.stringify(message);
+    }
+
     return Promise.reject(new Error(message));
   }
 );
