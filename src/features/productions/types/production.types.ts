@@ -28,6 +28,7 @@ export interface Production {
   vmixConnection?: {
     url: string;
     isEnabled: boolean;
+    pollingInterval?: number;
   };
   users?: Array<{
     userId: string;
@@ -60,6 +61,7 @@ export interface UpdateProductionDto {
     host?: string;
     port?: string;
     isEnabled?: boolean;
+    pollingInterval?: number;
   };
 }
 

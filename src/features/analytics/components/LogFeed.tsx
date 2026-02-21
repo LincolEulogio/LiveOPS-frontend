@@ -44,13 +44,18 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                         className="bg-stone-950 border border-stone-800 rounded-xl px-3 py-2 text-[10px] font-bold text-stone-400 uppercase tracking-widest focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
                         onChange={(e) => {
                             const val = e.target.value;
-                            setSearchTerm(val === 'all' ? '' : val);
+                            if (val === 'system') {
+                                setSearchTerm('production.user|device');
+                            } else {
+                                setSearchTerm(val === 'all' ? '' : val);
+                            }
                         }}
                     >
                         <option value="all">All Events</option>
                         <option value="obs">OBS Only</option>
                         <option value="vmix">vMix Only</option>
                         <option value="timeline">Timeline Only</option>
+                        <option value="system">System Only</option>
                     </select>
                 </div>
             </div>
@@ -102,7 +107,8 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                                             "text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider",
                                             log.eventType.includes('obs') ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-400" :
                                                 log.eventType.includes('vmix') ? "bg-amber-500/10 border-amber-500/20 text-amber-400" :
-                                                    "bg-stone-800 border-stone-700 text-stone-400"
+                                                    log.eventType.includes('production.user') || log.eventType.includes('device') ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
+                                                        "bg-stone-800 border-stone-700 text-stone-400"
                                         )}>
                                             {log.eventType}
                                         </span>

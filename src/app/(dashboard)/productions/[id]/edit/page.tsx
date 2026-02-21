@@ -23,6 +23,7 @@ const updateProductionSchema = z.object({
     vmixConfig: z.object({
         host: z.string().optional(),
         port: z.string().optional(),
+        pollingInterval: z.number().min(100).max(5000).optional(),
     }).optional(),
 });
 
@@ -82,6 +83,7 @@ export default function EditProductionPage() {
                 vmixConfig: {
                     host: vmix.host,
                     port: vmix.port,
+                    pollingInterval: production.vmixConnection?.pollingInterval || 500,
                 }
             });
         }
@@ -216,24 +218,41 @@ export default function EditProductionPage() {
                         )}
 
                         {activeEngineType === EngineType.VMIX && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Server IP / Host</label>
-                                    <input
-                                        {...register('vmixConfig.host')}
-                                        type="text"
-                                        placeholder="127.0.0.1"
-                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
-                                    />
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Server IP / Host</label>
+                                        <input
+                                            {...register('vmixConfig.host')}
+                                            type="text"
+                                            placeholder="127.0.0.1"
+                                            className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Port</label>
+                                        <input
+                                            {...register('vmixConfig.port')}
+                                            type="text"
+                                            placeholder="8088"
+                                            className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                        />
+                                    </div>
                                 </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Port</label>
+                                <div className="space-y-2">
+                                    <div className="flex justify-between">
+                                        <label className="block text-[10px] font-bold text-stone-600 uppercase">Polling Interval</label>
+                                        <span className="text-[10px] font-mono text-indigo-400">{watch('vmixConfig.pollingInterval')}ms</span>
+                                    </div>
                                     <input
-                                        {...register('vmixConfig.port')}
-                                        type="text"
-                                        placeholder="8088"
-                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                        {...register('vmixConfig.pollingInterval', { valueAsNumber: true })}
+                                        type="range"
+                                        min="100"
+                                        max="5000"
+                                        step="100"
+                                        className="w-full h-1.5 bg-stone-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
                                     />
+                                    <p className="text-[10px] text-stone-500">Frequency of API requests to vMix. Lower values provide faster feedback but increase CPU/Network load.</p>
                                 </div>
                             </div>
                         )}
