@@ -3,23 +3,32 @@
 import { VmixState, StreamingCommand } from '../types/streaming.types';
 import { Play, Repeat, Zap, ZapOff, Grid, AlertCircle } from 'lucide-react';
 
+import Link from 'next/link';
+
 interface VmixControlsProps {
+    productionId: string;
     state?: VmixState;
     sendCommand: (command: StreamingCommand) => void;
     isPending: boolean;
     isDisconnected: boolean;
 }
 
-export function VmixControls({ state, sendCommand, isPending, isDisconnected }: VmixControlsProps) {
+export function VmixControls({ productionId, state, sendCommand, isPending, isDisconnected }: VmixControlsProps) {
     if (isDisconnected) {
         return (
             <div className="flex flex-col items-center justify-center p-8 text-center space-y-3">
                 <AlertCircle className="text-stone-700" size={48} />
                 <div className="space-y-1">
                     <h3 className="text-stone-400 font-semibold">vMix Disconnected</h3>
-                    <p className="text-stone-600 text-sm max-w-xs">
+                    <p className="text-stone-600 text-sm max-w-xs mb-4">
                         Verify your vMix Web Controller settings and ensure vMix is running on the target machine.
                     </p>
+                    <Link
+                        href={`/productions/${productionId}/edit`}
+                        className="text-xs font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+                    >
+                        Configure Connection
+                    </Link>
                 </div>
             </div>
         );
@@ -74,10 +83,10 @@ export function VmixControls({ state, sendCommand, isPending, isDisconnected }: 
                             onClick={() => sendCommand({ type: 'VMIX_SELECT_INPUT', payload: { input } })}
                             disabled={isPending}
                             className={`aspect-square rounded-lg border flex items-center justify-center font-mono text-sm transition-all ${state?.activeInput === input
-                                    ? 'bg-emerald-600 border-emerald-500 text-white'
-                                    : state?.previewInput === input
-                                        ? 'bg-orange-500/20 border-orange-500 text-orange-400'
-                                        : 'bg-stone-950 border-stone-800 text-stone-600 hover:border-stone-700 hover:text-stone-400'
+                                ? 'bg-emerald-600 border-emerald-500 text-white'
+                                : state?.previewInput === input
+                                    ? 'bg-orange-500/20 border-orange-500 text-orange-400'
+                                    : 'bg-stone-950 border-stone-800 text-stone-600 hover:border-stone-700 hover:text-stone-400'
                                 }`}
                         >
                             {input}

@@ -88,6 +88,7 @@ export function StreamingDashboard({ productionId, engineType }: StreamingDashbo
                 <div className="p-6">
                     {engineType === EngineType.OBS ? (
                         <ObsControls
+                            productionId={productionId}
                             state={state?.obs}
                             sendCommand={sendCommand}
                             isPending={isPending}
@@ -95,6 +96,7 @@ export function StreamingDashboard({ productionId, engineType }: StreamingDashbo
                         />
                     ) : (
                         <VmixControls
+                            productionId={productionId}
                             state={state?.vmix}
                             sendCommand={sendCommand}
                             isPending={isPending}

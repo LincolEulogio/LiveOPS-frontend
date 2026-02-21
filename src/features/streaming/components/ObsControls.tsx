@@ -4,14 +4,17 @@
 import { ObsState, StreamingCommand } from '@/features/streaming/types/streaming.types';
 import { Play, Square, Video, Settings, Layers, AlertCircle } from 'lucide-react';
 
+import Link from 'next/link';
+
 interface ObsControlsProps {
+    productionId: string;
     state?: ObsState;
     sendCommand: (command: StreamingCommand) => void;
     isPending: boolean;
     isDisconnected: boolean;
 }
 
-export function ObsControls({ state, sendCommand, isPending, isDisconnected }: ObsControlsProps) {
+export function ObsControls({ productionId, state, sendCommand, isPending, isDisconnected }: ObsControlsProps) {
     if (isDisconnected) {
         return (
             <div className="flex flex-col items-center justify-center p-8 text-center space-y-3">
@@ -21,12 +24,12 @@ export function ObsControls({ state, sendCommand, isPending, isDisconnected }: O
                     <p className="text-stone-600 text-sm max-w-xs mb-4">
                         Verify your OBS WebSocket settings (URL, Port, Password) and ensure OBS is running.
                     </p>
-                    <button
-                        onClick={() => window.location.href += '/edit'}
+                    <Link
+                        href={`/productions/${productionId}/edit`}
                         className="text-xs font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
                     >
                         Configure Connection
-                    </button>
+                    </Link>
                 </div>
             </div>
         );
