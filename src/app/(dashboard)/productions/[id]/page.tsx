@@ -8,6 +8,7 @@ import { EngineType } from '@/features/streaming/types/streaming.types';
 import { AlertCircle, Server, Settings, Users, Video, Layout } from 'lucide-react';
 import Link from 'next/link';
 import { Guard } from '@/shared/components/Guard';
+import { TimelineContainer } from '@/features/timeline/components/TimelineContainer';
 
 export default function ProductionDetailPage() {
   const params = useParams();
@@ -99,6 +100,10 @@ export default function ProductionDetailPage() {
             </div>
 
             <StreamingDashboard productionId={id} engineType={production.engineType as any} />
+          </section>
+
+          <section>
+            <TimelineContainer productionId={id} />
           </section>
         </div>
 
