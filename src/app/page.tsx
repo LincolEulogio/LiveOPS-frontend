@@ -4,7 +4,9 @@ export default function Home() {
       <h1 className="text-4xl font-bold tracking-tight text-white gap-2 flex items-center">
         LiveOPS Central
       </h1>
-      <p className="mt-4 text-xl text-stone-400">Waiting for Authentication flow implementation...</p>
+      <p className="mt-4 text-xl text-stone-400">
+        Waiting for Authentication flow implementation...
+      </p>
     </main>
   );
 }

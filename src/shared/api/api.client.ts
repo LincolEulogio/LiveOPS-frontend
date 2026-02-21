@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 
 // Create a configured axios instance
 export const apiClient = axios.create({
@@ -6,20 +7,16 @@ export const apiClient = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    withCredentials: true, // Send cookies if using them, or needed for CORS
+    withCredentials: true, // Required to send HTTP-only cookies if we were using them
 });
 
-// Request interceptor: Attach JWT token if stored in memory/localStorage (Note: in-memory is safer for XSS, but localStorage is simpler for MVP. Adjust as needed based on auth strategy).
+// Request interceptor: Attach JWT token from memory
 apiClient.interceptors.request.use(
     (config) => {
-        // In a real app with pure JWT, you might grab the token from Zustand store here.
-        // Since we'll implement auth in Phase 1, we set up the skeleton.
-
-        // Example:
-        // const token = useAuthStore.getState().token;
-        // if (token) {
-        //   config.headers.Authorization = `Bearer ${token}`;
-        // }
+        const token = useAuthStore.getState().token;
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
     },
     (error) => {
@@ -27,16 +24,72 @@ apiClient.interceptors.request.use(
     }
 );
 
-// Response interceptor: Handle global errors like 401 Unauthorized
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+    failedQueue.forEach((prom) => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+    failedQueue = [];
+};
+
+// Response interceptor: Handle global errors like 401 Unauthorized and attempt silent refresh
 apiClient.interceptors.response.use(
     (response) => {
         return response.data; // simplify payload for callers
     },
     async (error: AxiosError) => {
-        if (error.response?.status === 401) {
-            // Handle Unauthorized logic here: dispatch logout to Zustand or redirect to /login
-            console.warn('Unauthorized request, handle session expiration');
-            // e.g., useAuthStore.getState().logout();
+        const originalRequest = error.config as any;
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            if (isRefreshing) {
+                return new Promise(function (resolve, reject) {
+                    failedQueue.push({ resolve, reject });
+                })
+                    .then((token) => {
+                        originalRequest.headers.Authorization = `Bearer ${token}`;
+                        return apiClient(originalRequest);
+                    })
+                    .catch((err) => {
+                        return Promise.reject(err);
+                    });
+            }
+
+            originalRequest._retry = true;
+            isRefreshing = true;
+
+            try {
+                // Assume backend has a /auth/refresh endpoint that checks cookies/rotation
+                const response = await axios.post(
+                    `${apiClient.defaults.baseURL}/auth/refresh`,
+                    {},
+                    { withCredentials: true }
+                );
+                const newToken = response.data.accessToken;
+
+                // Update store
+                useAuthStore.getState().setAuth(newToken, response.data.user);
+
+                processQueue(null, newToken);
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+
+                return apiClient(originalRequest);
+            } catch (refreshError) {
+                processQueue(refreshError, null);
+                useAuthStore.getState().clearAuth(); // Force logout
+                // Optionally redirect to login via window.location if not handled by components
+                if (typeof window !== 'undefined') {
+                    window.location.href = '/login';
+                }
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
+            }
         }
 
         // Normalize error shape to be consistent
