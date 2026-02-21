@@ -69,29 +69,31 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </Link>
 
           {/* Admin Section */}
-          {(user?.globalRole?.name === 'ADMIN' || user?.role?.name === 'ADMIN') && (
-            <>
-              <div className="pt-4 pb-1 mt-4 border-t border-stone-800/50">
-                <p className="px-3 text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-1">Administration</p>
-              </div>
+          <Guard requiredPermissions={['user:manage', 'role:manage']}>
+            <div className="pt-4 pb-1 mt-4 border-t border-stone-800/50">
+              <p className="px-3 text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-1">Administration</p>
+            </div>
+          </Guard>
 
-              <Link
-                href="/admin/users"
-                className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/users') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
-              >
-                <Users size={18} />
-                Global Users
-              </Link>
+          <Guard requiredPermissions={['user:manage']}>
+            <Link
+              href="/admin/users"
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/users') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+            >
+              <Users size={18} />
+              Global Users
+            </Link>
+          </Guard>
 
-              <Link
-                href="/admin/roles"
-                className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/roles') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
-              >
-                <Shield size={18} />
-                Roles & Permissions
-              </Link>
-            </>
-          )}
+          <Guard requiredPermissions={['role:manage']}>
+            <Link
+              href="/admin/roles"
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/roles') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+            >
+              <Shield size={18} />
+              Roles & Permissions
+            </Link>
+          </Guard>
         </nav>
 
         <div className="p-4 border-t border-stone-800 bg-stone-900/50">

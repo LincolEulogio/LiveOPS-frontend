@@ -6,16 +6,22 @@ export function usePermissions(requiredPermissions: string[]) {
   if (!user) return false;
 
   // 1. Collect all permission actions
-  const globalActions = user.globalRole?.permissions?.map(p => p.permission.action) || [];
-  const prodActions = user.role?.permissions || [];
+  // The backend might return these as { permission: { action: string } } objects
+  const globalActions = user.globalRole?.permissions?.map((p: any) =>
+    typeof p.permission?.action === 'string' ? p.permission.action : p.permission
+  ) || [];
 
-  const allActions = [...new Set([...globalActions, ...prodActions])];
+  const prodActions = user.role?.permissions?.map((p: any) =>
+    typeof p.permission?.action === 'string' ? p.permission.action : p
+  ) || [];
 
-  // 2. Admin bypass by name (Optional, but let's stick to actions for precision)
+  const allActions = [...new Set([...globalActions, ...prodActions as any])];
+
+  // 2. Admin bypass by name
   if (user.globalRole?.name === 'ADMIN' || user.role?.name === 'ADMIN') {
     return true;
   }
 
-  // 3. Check if all required permissions are present
+  // 3. Check if any of the required permissions are present
   return requiredPermissions.every((permission) => allActions.includes(permission));
 }
