@@ -4,6 +4,8 @@ export interface User {
     name: string | null;
     createdAt: string;
     updatedAt?: string;
+    globalRoleId?: string;
+    globalRole?: { name: string };
 }
 
 export interface Role {
