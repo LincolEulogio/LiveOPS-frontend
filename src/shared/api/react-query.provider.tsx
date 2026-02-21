@@ -9,10 +9,14 @@ export const ReactQueryProvider = ({ children }: { children: React.ReactNode }) 
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000, // 1 minute
-            retry: 1,
-            refetchOnWindowFocus: false, // Don't aggressively refetch on focus unless needed
+            staleTime: 60 * 1000,
+            retry: 2, // 2 retries on top of initial try
+            retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+            refetchOnWindowFocus: false,
           },
+          mutations: {
+            retry: 1, // At least one retry for mutations in case of network blips
+          }
         },
       })
   );
