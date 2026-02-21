@@ -5,7 +5,7 @@ import { useProduction } from '@/features/productions/hooks/useProductions';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { StreamingDashboard } from '@/features/streaming/components/StreamingDashboard';
 import { EngineType } from '@/features/streaming/types/streaming.types';
-import { AlertCircle, Server, Settings, Users, Video, Layout } from 'lucide-react';
+import { AlertCircle, Server, Settings, Users, Video, Layout, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { Guard } from '@/shared/components/Guard';
 import { TimelineContainer } from '@/features/timeline/components/TimelineContainer';
@@ -130,6 +130,22 @@ export default function ProductionDetailPage() {
                 Open Team Manager
               </Link>
             </Guard>
+          </div>
+
+          <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
+            <div className="flex items-center gap-3 mb-4 text-stone-200">
+              <Zap className="text-indigo-400" size={20} />
+              <h2 className="text-lg font-semibold">Automation</h2>
+            </div>
+            <p className="text-sm text-stone-500 mb-6 leading-relaxed">
+              Create rules to trigger actions automatically on specific events.
+            </p>
+            <Link
+              href={`/productions/${id}/automation`}
+              className="block w-full text-center px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-sm font-semibold rounded-lg transition-all"
+            >
+              Open Engine
+            </Link>
           </div>
 
           <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
