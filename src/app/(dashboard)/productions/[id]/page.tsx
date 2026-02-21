@@ -9,6 +9,7 @@ import { AlertCircle, Server, Settings, Users, Video, Layout } from 'lucide-reac
 import Link from 'next/link';
 import { Guard } from '@/shared/components/Guard';
 import { TimelineContainer } from '@/features/timeline/components/TimelineContainer';
+import { IntercomPanel } from '@/features/chat/components/IntercomPanel';
 
 export default function ProductionDetailPage() {
   const params = useParams();
@@ -108,7 +109,11 @@ export default function ProductionDetailPage() {
         </div>
 
         {/* Sidebar: Utils & Team */}
-        <div className="space-y-8">
+        <div className="space-y-8 h-full">
+          <section className="h-[500px]">
+            <IntercomPanel productionId={id} />
+          </section>
+
           <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
             <div className="flex items-center gap-3 mb-4 text-stone-200">
               <Users className="text-indigo-400" size={20} />
