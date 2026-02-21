@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useProduction, useAssignUser, useRemoveUser } from '@/features/productions/hooks/useProductions';
+import { useUsers, useRoles } from '@/features/users/hooks/useUsers';
 import { ArrowLeft, Loader2, UserPlus, UserMinus, Shield, User, Mail, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 
@@ -10,9 +11,14 @@ export default function TeamManagementPage() {
     const params = useParams();
     const id = params.id as string;
 
-    const { data: production, isLoading, error: fetchError } = useProduction(id);
+    const { data: production, isLoading: prodLoading, error: fetchError } = useProduction(id);
+    const { data: users, isLoading: usersLoading } = useUsers();
+    const { data: roles, isLoading: rolesLoading } = useRoles();
+
     const assignMutation = useAssignUser();
     const removeMutation = useRemoveUser();
+
+    const isLoading = prodLoading || usersLoading || rolesLoading;
 
     const [email, setEmail] = useState('');
     const [roleName, setRoleName] = useState('OPERATOR');
@@ -101,14 +107,17 @@ export default function TeamManagementPage() {
                                 <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5">User Email</label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-2.5 text-stone-600" size={16} />
-                                    <input
-                                        type="email"
+                                    <select
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="colleague@example.com"
-                                        className="w-full bg-stone-950 border border-stone-800 rounded-lg pl-10 pr-3 py-2 text-sm text-white placeholder:text-stone-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                                        className="w-full bg-stone-950 border border-stone-800 rounded-lg pl-10 pr-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
                                         required
-                                    />
+                                    >
+                                        <option value="" disabled>Select a user</option>
+                                        {users?.map(u => (
+                                            <option key={u.id} value={u.email}>{u.name || 'No Name'} ({u.email})</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
@@ -117,12 +126,11 @@ export default function TeamManagementPage() {
                                 <select
                                     value={roleName}
                                     onChange={(e) => setRoleName(e.target.value)}
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                                    className="w-full bg-stone-950 border border-stone-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
                                 >
-                                    <option value="ADMIN">Admin</option>
-                                    <option value="OPERATOR">Operator</option>
-                                    <option value="PRODUCER">Producer</option>
-                                    <option value="VIEWER">Viewer</option>
+                                    {roles?.map(r => (
+                                        <option key={r.id} value={r.name}>{r.name}</option>
+                                    ))}
                                 </select>
                             </div>
 
