@@ -37,7 +37,20 @@ export const useTimeline = (productionId: string) => {
 
     const deleteMutation = useMutation({
         mutationFn: (id: string) => timelineService.deleteBlock(productionId, id),
-        onSuccess: () => {
+        onMutate: async (id) => {
+            await queryClient.cancelQueries({ queryKey: ['timeline', productionId] });
+            const previousBlocks = queryClient.getQueryData<TimelineBlock[]>(['timeline', productionId]);
+            if (previousBlocks) {
+                queryClient.setQueryData(['timeline', productionId], previousBlocks.filter(b => b.id !== id));
+            }
+            return { previousBlocks };
+        },
+        onError: (err, id, context) => {
+            if (context?.previousBlocks) {
+                queryClient.setQueryData(['timeline', productionId], context.previousBlocks);
+            }
+        },
+        onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['timeline', productionId] });
         },
     });

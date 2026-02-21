@@ -6,6 +6,8 @@ import { MessageSquare, Send, AlertCircle, Zap, ShieldAlert, History } from 'luc
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/shared/utils/cn';
 
+import { IntercomSkeleton } from '@/shared/components/SkeletonLoaders';
+
 interface Props {
     productionId: string;
 }
@@ -94,10 +96,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                 className="flex-1 overflow-y-auto p-4 space-y-4 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-fixed"
             >
                 {isLoading ? (
-                    <div className="flex flex-col items-center justify-center h-full opacity-20 animate-pulse gap-4">
-                        <History size={48} />
-                        <span className="text-xs uppercase tracking-[0.2em]">Synchronizing...</span>
-                    </div>
+                    <IntercomSkeleton />
                 ) : history.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-stone-600 gap-3">
                         <MessageSquare size={32} strokeWidth={1} />

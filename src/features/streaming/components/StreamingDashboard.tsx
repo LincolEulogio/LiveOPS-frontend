@@ -5,6 +5,7 @@ import { EngineType } from '@/features/streaming/types/streaming.types';
 import { ObsControls } from '@/features/streaming/components/ObsControls';
 import { VmixControls } from '@/features/streaming/components/VmixControls';
 import { Wifi, WifiOff, Activity, Loader2 } from 'lucide-react';
+import { useKeyboardShortcuts } from '@/shared/hooks/useKeyboardShortcuts';
 
 interface StreamingDashboardProps {
     productionId: string;
@@ -13,6 +14,29 @@ interface StreamingDashboardProps {
 
 export function StreamingDashboard({ productionId, engineType }: StreamingDashboardProps) {
     const { state, isLoading, isSocketConnected, sendCommand, isPending } = useStreaming(productionId);
+
+    // Keyboard Shortcuts
+    useKeyboardShortcuts({
+        ' ': () => {
+            if (engineType === EngineType.VMIX) {
+                sendCommand({ type: 'VMIX_CUT' });
+            }
+        },
+        '1': () => handleQuickScene(0),
+        '2': () => handleQuickScene(1),
+        '3': () => handleQuickScene(2),
+        '4': () => handleQuickScene(3),
+        '5': () => handleQuickScene(4),
+    }, !isLoading && isSocketConnected);
+
+    const handleQuickScene = (index: number) => {
+        if (engineType === EngineType.OBS && state?.obs?.scenes?.[index]) {
+            sendCommand({ type: 'CHANGE_SCENE', sceneName: state.obs.scenes[index] });
+        } else if (engineType === EngineType.VMIX) {
+            // vMix inputs are typically numeric 1, 2, 3...
+            sendCommand({ type: 'VMIX_SELECT_INPUT', payload: { input: index + 1 } });
+        }
+    };
 
     if (isLoading) {
         return (

@@ -22,6 +22,7 @@ import { Plus, Layout } from 'lucide-react';
 import { useState } from 'react';
 import { TimelineCRUD } from '@/features/timeline/components/TimelineCRUD';
 import { TimelineBlock } from '@/features/timeline/types/timeline.types';
+import { TimelineSkeleton } from '@/shared/components/SkeletonLoaders';
 
 interface Props {
     productionId: string;
@@ -75,13 +76,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
     };
 
     if (isLoading) {
-        return (
-            <div className="space-y-4 animate-pulse">
-                {[1, 2, 3].map(i => (
-                    <div key={i} className="h-20 bg-stone-900/50 rounded-xl border border-stone-800/50"></div>
-                ))}
-            </div>
-        );
+        return <TimelineSkeleton />;
     }
 
     return (

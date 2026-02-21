@@ -9,6 +9,7 @@ import {
     SendCommandDto,
     AckCommandDto,
     CommandResponse,
+    CommandStatus,
 } from '../types/chat.types';
 
 export const useChat = (productionId: string) => {
@@ -77,6 +78,7 @@ export const useChat = (productionId: string) => {
     const sendCommand = useCallback((message: string, options?: Partial<Omit<SendCommandDto, 'message' | 'productionId' | 'senderId'>>) => {
         if (!socket || !isConnected || !user) return;
 
+        const tempId = `temp-${Date.now()}`;
         const dto: SendCommandDto = {
             productionId,
             senderId: user.id,
@@ -86,8 +88,23 @@ export const useChat = (productionId: string) => {
             requiresAck: options?.requiresAck ?? true,
         };
 
+        // Optimistic append
+        const optimisticCommand: Command = {
+            id: tempId,
+            ...dto,
+            targetRoleId: dto.targetRoleId ?? null,
+            templateId: dto.templateId ?? null,
+            requiresAck: dto.requiresAck ?? true,
+            createdAt: new Date().toISOString(),
+            status: CommandStatus.SENT,
+            sender: { id: user.id, name: user.name || 'Me' },
+            responses: []
+        };
+
+        queryClient.setQueryData(['chat-history', productionId], (old: Command[] = []) => [optimisticCommand, ...old]);
+
         socket.emit('command.send', dto);
-    }, [socket, isConnected, productionId, user]);
+    }, [socket, isConnected, productionId, user, queryClient]);
 
     const ackCommand = useCallback((commandId: string, response: string, note?: string) => {
         if (!socket || !isConnected || !user) return;
@@ -100,8 +117,30 @@ export const useChat = (productionId: string) => {
             productionId,
         };
 
+        // Optimistic ACK
+        queryClient.setQueryData(['chat-history', productionId], (old: Command[] = []) => {
+            return old.map(cmd => {
+                if (cmd.id === commandId) {
+                    const optimisticResponse: CommandResponse = {
+                        id: `temp-ack-${Date.now()}`,
+                        commandId,
+                        responderId: user.id,
+                        response,
+                        note: note || null,
+                        createdAt: new Date().toISOString(),
+                        responder: { id: user.id, name: user.name || 'Me' }
+                    };
+                    return {
+                        ...cmd,
+                        responses: [...(cmd.responses || []), optimisticResponse]
+                    };
+                }
+                return cmd;
+            });
+        });
+
         socket.emit('command.ack', dto);
-    }, [socket, isConnected, productionId, user]);
+    }, [socket, isConnected, productionId, user, queryClient]);
 
     return {
         history,
