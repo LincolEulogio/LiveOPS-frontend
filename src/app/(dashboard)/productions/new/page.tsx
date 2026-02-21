@@ -6,9 +6,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCreateProduction } from '@/features/productions/hooks/useProductions';
+import { useUsers, useRoles } from '@/features/users/hooks/useUsers';
 import { EngineType, ProductionStatus } from '@/features/productions/types/production.types';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Users, Plus, X, Shield, Mail } from 'lucide-react';
 
 const createProductionSchema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
@@ -22,6 +23,9 @@ export default function NewProductionPage() {
   const router = useRouter();
   const createMutation = useCreateProduction();
   const [error, setError] = useState<string | null>(null);
+  const { data: globalUsers } = useUsers();
+  const [initialMembers, setInitialMembers] = useState<Array<{ email: string; roleName: string }>>([]);
+  const [selectedEmail, setSelectedEmail] = useState('');
 
   const {
     register,
@@ -35,12 +39,28 @@ export default function NewProductionPage() {
     mode: 'onChange',
   });
 
+  const addMember = () => {
+    if (!selectedEmail) return;
+    if (initialMembers.find(m => m.email === selectedEmail)) return;
+
+    const user = globalUsers?.find(u => u.email === selectedEmail);
+    const roleName = user?.globalRole?.name || 'VIEWER';
+
+    setInitialMembers([...initialMembers, { email: selectedEmail, roleName }]);
+    setSelectedEmail('');
+  };
+
+  const removeMember = (email: string) => {
+    setInitialMembers(initialMembers.filter(m => m.email !== email));
+  };
+
   const onSubmit = async (data: CreateFormValues) => {
     try {
       setError(null);
       const newProd = await createMutation.mutateAsync({
         ...data,
         status: ProductionStatus.SETUP,
+        initialMembers,
       });
       router.push(`/productions/${newProd.id}`);
     } catch (err: any) {
@@ -128,6 +148,67 @@ export default function NewProductionPage() {
             </div>
             {errors.engineType && (
               <p className="text-xs text-red-400 mt-1">{errors.engineType.message}</p>
+            )}
+          </div>
+
+          <div className="pt-6 border-t border-stone-800">
+            <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <Users size={18} className="text-indigo-400" />
+              Initial Team Members
+            </h3>
+
+            <div className="flex gap-2 mb-4">
+              <div className="flex-1">
+                <select
+                  value={selectedEmail}
+                  onChange={(e) => setSelectedEmail(e.target.value)}
+                  className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-2 text-sm text-stone-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 appearance-none"
+                >
+                  <option value="">Select a user...</option>
+                  {globalUsers?.map(u => (
+                    <option key={u.id} value={u.email}>
+                      {u.name || u.email} {u.globalRole ? `(${u.globalRole.name})` : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <button
+                type="button"
+                onClick={addMember}
+                disabled={!selectedEmail}
+                className="px-6 bg-stone-800 hover:bg-stone-700 text-white rounded-md transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-sm font-medium"
+              >
+                <Plus size={18} /> Add
+              </button>
+            </div>
+
+            {initialMembers.length > 0 && (
+              <div className="space-y-2 bg-stone-950 border border-stone-800 rounded-lg p-3">
+                {initialMembers.map(member => (
+                  <div key={member.email} className="flex items-center justify-between py-1.5 px-2 hover:bg-stone-900 rounded-md transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <Mail size={14} className="text-stone-500" />
+                      <div>
+                        <p className="text-sm font-medium text-stone-200">{member.email}</p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <Shield size={10} className="text-indigo-400" />
+                          <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">{member.roleName}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeMember(member.email)}
+                      className="text-stone-600 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition-all"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {initialMembers.length === 0 && (
+              <p className="text-xs text-stone-500 italic">No members added yet. You'll be the Admin by default.</p>
             )}
           </div>
 

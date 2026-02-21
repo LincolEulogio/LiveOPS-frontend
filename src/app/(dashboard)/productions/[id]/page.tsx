@@ -115,19 +115,44 @@ export default function ProductionDetailPage() {
           </section>
 
           <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
-            <div className="flex items-center gap-3 mb-4 text-stone-200">
-              <Users className="text-indigo-400" size={20} />
-              <h2 className="text-lg font-semibold">Team Management</h2>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3 text-stone-200">
+                <Users className="text-indigo-400" size={20} />
+                <h2 className="text-lg font-semibold">Team Management</h2>
+              </div>
+              <span className="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 rounded text-[10px] font-bold text-indigo-400">
+                {production.users?.length || 0} MEMBERS
+              </span>
             </div>
-            <p className="text-sm text-stone-500 mb-6 leading-relaxed">
-              Manage {production.users?.length || 0} operators and producers assigned to this environment.
-            </p>
+
+            <div className="space-y-4 mb-8">
+              {production.users?.slice(0, 3).map((u: any) => (
+                <div key={u.userId} className="flex items-center gap-3 group">
+                  <div className="w-8 h-8 rounded-full bg-stone-950 border border-stone-800 flex items-center justify-center text-[10px] font-bold text-stone-500 group-hover:border-indigo-500/50 transition-colors">
+                    {u.user.name?.[0]?.toUpperCase() || 'U'}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-stone-200 truncate">{u.user.name || u.user.email}</p>
+                    <p className="text-[10px] text-stone-500 uppercase tracking-widest font-bold">{u.role.name}</p>
+                  </div>
+                </div>
+              ))}
+              {(!production.users || production.users.length === 0) && (
+                <p className="text-xs text-stone-600 italic">No members assigned yet.</p>
+              )}
+              {production.users && production.users.length > 3 && (
+                <p className="text-[10px] text-stone-500 font-medium pl-11">
+                  + {production.users.length - 3} more members
+                </p>
+              )}
+            </div>
+
             <Guard requiredPermissions={['manage_team']}>
               <Link
                 href={`/productions/${id}/team`}
-                className="block w-full text-center px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition-all shadow-lg shadow-indigo-600/10"
+                className="block w-full text-center px-4 py-2.5 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all hover:border-indigo-500/30"
               >
-                Open Team Manager
+                Manage Team
               </Link>
             </Guard>
           </div>

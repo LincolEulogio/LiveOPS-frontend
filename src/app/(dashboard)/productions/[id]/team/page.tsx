@@ -13,15 +13,13 @@ export default function TeamManagementPage() {
 
     const { data: production, isLoading: prodLoading, error: fetchError } = useProduction(id);
     const { data: users, isLoading: usersLoading } = useUsers();
-    const { data: roles, isLoading: rolesLoading } = useRoles();
 
     const assignMutation = useAssignUser();
     const removeMutation = useRemoveUser();
 
-    const isLoading = prodLoading || usersLoading || rolesLoading;
+    const isLoading = prodLoading || usersLoading;
 
     const [email, setEmail] = useState('');
-    const [roleName, setRoleName] = useState('OPERATOR');
     const [error, setError] = useState<string | null>(null);
 
     const handleAssign = async (e: React.FormEvent) => {
@@ -30,9 +28,11 @@ export default function TeamManagementPage() {
 
         try {
             setError(null);
+            const user = users?.find(u => u.email === email);
+            const roleName = user?.globalRole?.name || 'VIEWER';
+
             await assignMutation.mutateAsync({ id, email, roleName });
             setEmail('');
-            setRoleName('OPERATOR');
         } catch (err: any) {
             setError(err.response?.data?.message || err.message || 'Failed to assign user');
         }
@@ -115,24 +115,15 @@ export default function TeamManagementPage() {
                                     >
                                         <option value="" disabled>Select a user</option>
                                         {users?.map(u => (
-                                            <option key={u.id} value={u.email}>{u.name || 'No Name'} ({u.email})</option>
+                                            <option key={u.id} value={u.email}>
+                                                {u.name || u.email} {u.globalRole ? `(${u.globalRole.name})` : ''}
+                                            </option>
                                         ))}
                                     </select>
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5">Role</label>
-                                <select
-                                    value={roleName}
-                                    onChange={(e) => setRoleName(e.target.value)}
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
-                                >
-                                    {roles?.map(r => (
-                                        <option key={r.id} value={r.name}>{r.name}</option>
-                                    ))}
-                                </select>
-                            </div>
+                            {/* Role selector removed - using global roles */}
 
                             <button
                                 type="submit"

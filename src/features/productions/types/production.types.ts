@@ -44,6 +44,7 @@ export interface CreateProductionDto {
   description?: string;
   engineType: EngineType;
   status?: ProductionStatus;
+  initialMembers?: Array<{ email: string; roleName: string }>;
 }
 
 export interface UpdateProductionDto {
