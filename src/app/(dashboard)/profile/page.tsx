@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function ProfilePage() {
   const user = useAuthStore((state) => state.user);
   const { data: productionsResponse, isLoading, error } = useProductions();
-  const productions = productionsResponse?.data || [];
+  const productions = Array.isArray(productionsResponse) ? productionsResponse : (productionsResponse as any)?.data || [];
 
   if (!user) return null;
 
@@ -22,6 +22,19 @@ export default function ProfilePage() {
         <div className="text-center md:text-left">
           <h1 className="text-3xl font-bold text-white tracking-tight">{user.name || 'User'}</h1>
           <p className="text-stone-400 font-medium">{user.email}</p>
+          {user.globalRole && (
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
+                <Shield size={14} className="text-indigo-400" />
+                <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest">
+                  System {user.globalRole.name}
+                </span>
+              </div>
+              <span className="text-[10px] text-stone-500 font-bold uppercase tracking-widest px-3 py-1 bg-stone-950 border border-stone-800 rounded-full">
+                Member since {new Date(user.createdAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -58,7 +71,7 @@ export default function ProfilePage() {
                       <Layout size={18} className="text-stone-500 group-hover:text-indigo-400 transition-colors" />
                       <h3 className="font-semibold text-white">{prod.name}</h3>
                     </div>
-                    <span className="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 rounded text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+                    <span className="px-2 py-0.5 bg-zinc-800 border border-stone-700 rounded text-[10px] font-bold text-stone-300 uppercase tracking-wider">
                       {myRole?.name || 'VIEWER'}
                     </span>
                   </div>

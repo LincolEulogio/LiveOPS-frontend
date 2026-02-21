@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -21,6 +22,7 @@ type CreateFormValues = z.infer<typeof createProductionSchema>;
 
 export default function NewProductionPage() {
   const router = useRouter();
+  const { user } = useAuthStore();
   const createMutation = useCreateProduction();
   const [error, setError] = useState<string | null>(null);
   const { data: globalUsers } = useUsers();
@@ -182,8 +184,26 @@ export default function NewProductionPage() {
               </button>
             </div>
 
-            {initialMembers.length > 0 && (
+            {(initialMembers.length > 0 || user) && (
               <div className="space-y-2 bg-stone-950 border border-stone-800 rounded-lg p-3">
+                {/* Creator (Always listed) */}
+                {user && (
+                  <div className="flex items-center justify-between py-1.5 px-2 bg-indigo-500/5 border border-indigo-500/10 rounded-md">
+                    <div className="flex items-center gap-3">
+                      <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-bold text-white uppercase">
+                        {(user.name || user.email).charAt(0)}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-stone-200">{user.name || user.email} <span className="text-[10px] text-indigo-400 opacity-70">(You)</span></p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <Shield size={10} className="text-indigo-400" />
+                          <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">ADMIN</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {initialMembers.map(member => (
                   <div key={member.email} className="flex items-center justify-between py-1.5 px-2 hover:bg-stone-900 rounded-md transition-colors group">
                     <div className="flex items-center gap-3">

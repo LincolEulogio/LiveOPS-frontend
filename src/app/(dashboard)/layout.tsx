@@ -87,14 +87,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </Link>
         </nav>
 
-        <div className="p-4 border-t border-stone-800">
-          <div className="flex items-center gap-3 px-3 py-2 mb-2">
-            <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold">
-              {user?.name?.charAt(0) || 'U'}
+        <div className="p-4 border-t border-stone-800 bg-stone-900/50">
+          <div className="flex items-center gap-3 px-3 py-2 mb-2 group">
+            <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform">
+              {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{user?.name || 'Operator'}</p>
-              <p className="text-xs text-stone-500 truncate">{user?.role?.name}</p>
+              <p className="text-sm font-semibold text-white truncate">{user?.name || 'User'}</p>
+              <div className="flex flex-col">
+                <p className="text-[10px] text-stone-500 truncate">{user?.email}</p>
+                {user?.globalRole && (
+                  <p className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mt-0.5">
+                    {user.globalRole.name}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
           <button
