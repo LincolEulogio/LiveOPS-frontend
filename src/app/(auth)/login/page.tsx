@@ -34,7 +34,7 @@ export default function LoginPage() {
       setError(null);
       const response = await authService.login(data);
       setAuth(response.accessToken, response.user);
-      router.push('/profile');
+      router.push('/productions');
     } catch (err: any) {
       setError(err.message || 'Failed to login');
     }

@@ -120,7 +120,7 @@ export default function ProductionDetailPage() {
               <h2 className="text-lg font-semibold">Team Management</h2>
             </div>
             <p className="text-sm text-stone-500 mb-6 leading-relaxed">
-              Manage operators and producers assigned to this environment.
+              Manage {production.users?.length || 0} operators and producers assigned to this environment.
             </p>
             <Guard requiredPermissions={['manage_team']}>
               <Link
@@ -173,9 +173,12 @@ export default function ProductionDetailPage() {
               Configure connection parameters for {production.engineType}.
             </p>
             <Guard requiredPermissions={['manage_engine']}>
-              <button className="w-full text-center px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-sm font-semibold rounded-lg transition-all">
+              <Link
+                href={`/productions/${id}/edit`}
+                className="block w-full text-center px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-sm font-semibold rounded-lg transition-all"
+              >
                 Settings
-              </button>
+              </Link>
             </Guard>
           </div>
         </div>

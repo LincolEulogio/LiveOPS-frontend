@@ -18,9 +18,15 @@ export function ObsControls({ state, sendCommand, isPending, isDisconnected }: O
                 <AlertCircle className="text-stone-700" size={48} />
                 <div className="space-y-1">
                     <h3 className="text-stone-400 font-semibold">OBS Disconnected</h3>
-                    <p className="text-stone-600 text-sm max-w-xs">
+                    <p className="text-stone-600 text-sm max-w-xs mb-4">
                         Verify your OBS WebSocket settings (URL, Port, Password) and ensure OBS is running.
                     </p>
+                    <button
+                        onClick={() => window.location.href += '/edit'}
+                        className="text-xs font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+                    >
+                        Configure Connection
+                    </button>
                 </div>
             </div>
         );

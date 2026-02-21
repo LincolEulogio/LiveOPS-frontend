@@ -15,6 +15,13 @@ const updateProductionSchema = z.object({
     description: z.string().optional(),
     engineType: z.nativeEnum(EngineType),
     status: z.nativeEnum(ProductionStatus),
+    obsConfig: z.object({
+        url: z.string().optional(),
+        password: z.string().optional(),
+    }).optional(),
+    vmixConfig: z.object({
+        url: z.string().optional(),
+    }).optional(),
 });
 
 type EditFormValues = z.infer<typeof updateProductionSchema>;
@@ -32,11 +39,14 @@ export default function EditProductionPage() {
         register,
         handleSubmit,
         reset,
+        watch,
         formState: { errors, isValid, isDirty },
     } = useForm<EditFormValues>({
         resolver: zodResolver(updateProductionSchema),
         mode: 'onChange',
     });
+
+    const activeEngineType = watch('engineType');
 
     useEffect(() => {
         if (production) {
@@ -45,6 +55,13 @@ export default function EditProductionPage() {
                 description: production.description || '',
                 engineType: production.engineType,
                 status: production.status,
+                obsConfig: {
+                    url: production.obsConnection?.url || 'ws://127.0.0.1:4455',
+                    password: production.obsConnection?.password || '',
+                },
+                vmixConfig: {
+                    url: production.vmixConnection?.url || 'http://127.0.0.1:8088',
+                }
             });
         }
     }, [production, reset]);
@@ -58,7 +75,7 @@ export default function EditProductionPage() {
             });
             router.push(`/productions/${id}`);
         } catch (err: any) {
-            setError(err.message || 'Failed to update production');
+            setError(err.response?.data?.message || err.message || 'Failed to update production');
         }
     };
 
@@ -137,6 +154,48 @@ export default function EditProductionPage() {
                                 <option value={ProductionStatus.DRAFT}>Draft</option>
                             </select>
                         </div>
+                    </div>
+
+                    {/* Conditional Connection Config */}
+                    <div className="p-4 bg-stone-950/50 border border-stone-800 rounded-lg space-y-4">
+                        <h3 className="text-xs font-bold text-stone-500 uppercase tracking-widest">
+                            {activeEngineType} Connection Settings
+                        </h3>
+
+                        {activeEngineType === EngineType.OBS && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">WebSocket URL</label>
+                                    <input
+                                        {...register('obsConfig.url')}
+                                        type="text"
+                                        placeholder="ws://127.0.0.1:4455"
+                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">WS Password</label>
+                                    <input
+                                        {...register('obsConfig.password')}
+                                        type="password"
+                                        placeholder="Optional"
+                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {activeEngineType === EngineType.VMIX && (
+                            <div>
+                                <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Web Controller URL</label>
+                                <input
+                                    {...register('vmixConfig.url')}
+                                    type="text"
+                                    placeholder="http://127.0.0.1:8088"
+                                    className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <div className="pt-4 flex justify-end gap-3 border-t border-stone-800">

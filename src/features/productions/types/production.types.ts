@@ -20,6 +20,22 @@ export interface Production {
   engineType: EngineType;
   createdAt: string;
   updatedAt: string;
+  obsConnection?: {
+    url: string;
+    password?: string;
+    isEnabled: boolean;
+  };
+  vmixConnection?: {
+    url: string;
+    isEnabled: boolean;
+  };
+  users?: Array<{
+    userId: string;
+    productionId: string;
+    roleId: string;
+    user: { id: string; name: string; email: string };
+    role: { id: string; name: string };
+  }>;
 }
 
 export interface CreateProductionDto {
@@ -34,6 +50,15 @@ export interface UpdateProductionDto {
   description?: string;
   status?: ProductionStatus;
   engineType?: EngineType;
+  obsConfig?: {
+    url?: string;
+    password?: string;
+    isEnabled?: boolean;
+  };
+  vmixConfig?: {
+    url?: string;
+    isEnabled?: boolean;
+  };
 }
 
 export interface ProductionListResponse extends PaginatedResponse<Production> { }
