@@ -34,38 +34,58 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       // auth: { token: '...' }
     });
 
-    socketInstance.on('connect', () => {
-      console.log('Connected to WebSocket server:', socketInstance.id);
-      setIsConnected(true);
+    const initSocket = () => {
+      // Reconnect if needed
+      if (!socketInstance.connected) {
+        socketInstance.connect();
+      }
 
-      // If we have an active production, join its room immediately upon connection
-      if (activeProductionId) {
-        socketInstance.emit('production.join', { productionId: activeProductionId });
+      // Listen for connection
+      socketInstance.on('connect', () => {
+        console.log('Connected to WebSocket server:', socketInstance.id);
+        setIsConnected(true);
+
+        // Join the active production room if one is set
+        const currentActiveProductionId = useAppStore.getState().activeProductionId;
+        if (currentActiveProductionId) {
+          socketInstance.emit('production.join', { productionId: currentActiveProductionId });
+        }
+      });
+
+      // Listen for disconnect
+      socketInstance.on('disconnect', () => {
+        console.log('Disconnected from WebSocket server');
+        setIsConnected(false);
+      });
+
+      setSocket(socketInstance);
+    };
+
+    // Initial init
+    initSocket();
+
+    // Subscribe to store changes to join production rooms dynamically
+    const unsubscribe = useAppStore.subscribe((state, prevState) => {
+      const newProductionId = state.activeProductionId;
+      const prevProductionId = prevState.activeProductionId;
+
+      if (newProductionId !== prevProductionId && socketInstance?.connected) {
+        if (prevProductionId) {
+          socketInstance.emit('production.leave', { productionId: prevProductionId });
+        }
+        if (newProductionId) {
+          socketInstance.emit('production.join', { productionId: newProductionId });
+        }
       }
     });
-
-    socketInstance.on('disconnect', () => {
-      console.log('Disconnected from WebSocket server');
-      setIsConnected(false);
-    });
-
-    setSocket(socketInstance);
 
     return () => {
-      socketInstance.disconnect();
+      unsubscribe();
+      if (socketInstance) {
+        socketInstance.disconnect();
+      }
     };
   }, []);
-
-  // Effect to handle joining/leaving rooms if the active production changes dynamically
-  useEffect(() => {
-    if (socket && isConnected) {
-      if (activeProductionId) {
-        socket.emit('production.join', { productionId: activeProductionId });
-      } else {
-        socket.emit('production.leave');
-      }
-    }
-  }, [socket, isConnected, activeProductionId]);
 
   return (
     <SocketContext.Provider value={{ socket, isConnected }}>{children}</SocketContext.Provider>

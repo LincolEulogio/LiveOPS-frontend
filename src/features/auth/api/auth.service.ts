@@ -2,24 +2,24 @@ import { apiClient } from '@/shared/api/api.client';
 import { AuthResponse } from '../types/auth.types';
 
 export const authService = {
-    async login(data: any): Promise<AuthResponse> {
-        return apiClient.post('/auth/login', data);
-    },
+  async login(data: any): Promise<AuthResponse> {
+    return apiClient.post('/auth/login', data);
+  },
 
-    async register(data: any): Promise<AuthResponse> {
-        return apiClient.post('/auth/register', data);
-    },
+  async register(data: any): Promise<AuthResponse> {
+    return apiClient.post('/auth/register', data);
+  },
 
-    async getProfile(): Promise<any> {
-        return apiClient.get('/auth/profile');
-    },
+  async getProfile(): Promise<any> {
+    return apiClient.get('/auth/profile');
+  },
 
-    async logout(): Promise<void> {
-        // Optionally hit backend so they invalidate refresh tokens/cookies
-        try {
-            await apiClient.post('/auth/logout');
-        } catch {
-            // ignore errors on logout
-        }
-    },
+  async logout(): Promise<void> {
+    // Optionally hit backend so they invalidate refresh tokens/cookies
+    try {
+      await apiClient.post('/auth/logout');
+    } catch {
+      // ignore errors on logout
+    }
+  },
 };
