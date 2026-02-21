@@ -6,6 +6,7 @@ import { useAuthStore } from '@/features/auth/store/auth.store';
 import { LogOut, User as UserIcon, Server, Users, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { authService } from '@/features/auth/api/auth.service';
+import { Guard } from '@/shared/components/Guard';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -68,23 +69,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </Link>
 
           {/* Admin Section */}
-          <div className="pt-4 pb-1 mt-4 border-t border-stone-800/50">
-            <p className="px-3 text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-1">Administration</p>
-          </div>
-          <Link
-            href="/admin/users"
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/users') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
-          >
-            <Users size={18} />
-            Global Users
-          </Link>
-          <Link
-            href="/admin/roles"
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/roles') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
-          >
-            <Shield size={18} />
-            Roles & Permissions
-          </Link>
+          {(user?.globalRole?.name === 'ADMIN' || user?.role?.name === 'ADMIN') && (
+            <>
+              <div className="pt-4 pb-1 mt-4 border-t border-stone-800/50">
+                <p className="px-3 text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-1">Administration</p>
+              </div>
+
+              <Link
+                href="/admin/users"
+                className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/users') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+              >
+                <Users size={18} />
+                Global Users
+              </Link>
+
+              <Link
+                href="/admin/roles"
+                className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/roles') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+              >
+                <Shield size={18} />
+                Roles & Permissions
+              </Link>
+            </>
+          )}
         </nav>
 
         <div className="p-4 border-t border-stone-800 bg-stone-900/50">

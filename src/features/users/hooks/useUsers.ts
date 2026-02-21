@@ -79,3 +79,27 @@ export function useUpdateRolePermissions() {
         }
     });
 }
+
+export function useCreateRole() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (data: { name: string; description?: string }) => {
+            return await apiClient.post('/users/roles', data);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['roles'] });
+        }
+    });
+}
+
+export function useDeleteRole() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (id: string) => {
+            return await apiClient.delete(`/users/roles/${id}`);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['roles'] });
+        }
+    });
+}

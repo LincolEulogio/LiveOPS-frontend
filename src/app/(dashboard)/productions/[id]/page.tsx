@@ -147,7 +147,7 @@ export default function ProductionDetailPage() {
               )}
             </div>
 
-            <Guard requiredPermissions={['manage_team']}>
+            <Guard requiredPermissions={['production:manage']}>
               <Link
                 href={`/productions/${id}/team`}
                 className="block w-full text-center px-4 py-2.5 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all hover:border-indigo-500/30"
@@ -197,7 +197,7 @@ export default function ProductionDetailPage() {
             <p className="text-sm text-stone-500 mb-6 leading-relaxed">
               Configure connection parameters for {production.engineType}.
             </p>
-            <Guard requiredPermissions={['manage_engine']}>
+            <Guard requiredPermissions={['production:manage']}>
               <Link
                 href={`/productions/${id}/edit`}
                 className="block w-full text-center px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-sm font-semibold rounded-lg transition-all"

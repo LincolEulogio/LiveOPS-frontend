@@ -6,6 +6,7 @@ export interface User {
   globalRole?: {
     id: string;
     name: string;
+    permissions?: { permission: { action: string } }[];
   };
   role?: {
     id: string;

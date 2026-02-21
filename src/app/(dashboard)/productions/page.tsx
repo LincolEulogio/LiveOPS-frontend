@@ -43,13 +43,15 @@ export default function ProductionsListPage() {
           <p className="text-stone-400 text-sm mt-1">Manage all multi-tenant live streams</p>
         </div>
 
-        <Link
-          href="/productions/new"
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-        >
-          <Plus size={18} />
-          <span>New Production</span>
-        </Link>
+        <Guard requiredPermissions={['production:create']}>
+          <Link
+            href="/productions/new"
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            <Plus size={18} />
+            <span>New Production</span>
+          </Link>
+        </Guard>
       </div>
 
       <div className="mb-6 flex gap-2">

@@ -35,7 +35,7 @@ export interface Production {
     productionId: string;
     roleId: string;
     user: { id: string; name: string; email: string };
-    role: { id: string; name: string };
+    role: { id: string; name: string; permissions?: any[] };
   }>;
 }
 
