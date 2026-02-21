@@ -51,3 +51,27 @@ export const useDeleteProduction = () => {
     },
   });
 };
+
+export const useAssignUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, email, roleName }: { id: string; email: string; roleName: string }) =>
+      productionsService.assignUser(id, email, roleName),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['productions', variables.id] });
+    },
+  });
+};
+
+export const useRemoveUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, userId }: { id: string; userId: string }) =>
+      productionsService.removeUser(id, userId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['productions', variables.id] });
+    },
+  });
+};

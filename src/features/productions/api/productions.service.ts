@@ -35,4 +35,12 @@ export const productionsService = {
   async deleteProduction(id: string): Promise<void> {
     return apiClient.delete(`/productions/${id}`);
   },
+
+  async assignUser(id: string, email: string, roleName: string): Promise<any> {
+    return apiClient.post(`/productions/${id}/users`, { email, roleName });
+  },
+
+  async removeUser(id: string, userId: string): Promise<void> {
+    return apiClient.delete(`/productions/${id}/users/${userId}`);
+  },
 };

@@ -62,11 +62,10 @@ export default function ProductionsListPage() {
               setPage(1);
               setStatusFilter(status);
             }}
-            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-              statusFilter === status
-                ? 'bg-stone-800 text-white'
-                : 'bg-stone-900/50 text-stone-400 hover:bg-stone-800 hover:text-stone-200'
-            }`}
+            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${statusFilter === status
+              ? 'bg-stone-800 text-white'
+              : 'bg-stone-900/50 text-stone-400 hover:bg-stone-800 hover:text-stone-200'
+              }`}
           >
             {status || 'All'}
           </button>
@@ -87,42 +86,45 @@ export default function ProductionsListPage() {
       ) : (
         <div className="bg-stone-900 border border-stone-800 rounded-xl overflow-hidden shadow-xl">
           <ul className="divide-y divide-stone-800/50">
-            {data?.data.map((production) => (
-              <li key={production.id}>
-                <Link
-                  href={`/productions/${production.id}`}
-                  className="flex items-center justify-between p-4 hover:bg-stone-800/50 transition-colors group"
-                >
-                  <div className="flex gap-4 items-center">
-                    <div className="w-10 h-10 rounded-lg bg-stone-950 flex items-center justify-center border border-stone-800">
-                      {getEngineIcon(production.engineType)}
+            {(() => {
+              const productions = Array.isArray(data) ? data : (data?.data || []);
+              if (productions.length === 0) {
+                return <li className="p-8 text-center text-stone-500">No productions found.</li>;
+              }
+              return productions.map((production: any) => (
+                <li key={production.id}>
+                  <Link
+                    href={`/productions/${production.id}`}
+                    className="flex items-center justify-between p-4 hover:bg-stone-800/50 transition-colors group"
+                  >
+                    <div className="flex gap-4 items-center">
+                      <div className="w-10 h-10 rounded-lg bg-stone-950 flex items-center justify-center border border-stone-800">
+                        {getEngineIcon(production.engineType)}
+                      </div>
+                      <div>
+                        <h3 className="text-white font-medium group-hover:text-indigo-400 transition-colors">
+                          {production.name}
+                        </h3>
+                        <p className="text-sm text-stone-500 truncate max-w-[200px] sm:max-w-sm">
+                          {production.description || 'No description provided'}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-white font-medium group-hover:text-indigo-400 transition-colors">
-                        {production.name}
-                      </h3>
-                      <p className="text-sm text-stone-500 truncate max-w-[200px] sm:max-w-sm">
-                        {production.description || 'No description provided'}
-                      </p>
+                    <div className="flex items-center gap-4">
+                      <span
+                        className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${getStatusColor(production.status)}`}
+                      >
+                        {production.status}
+                      </span>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span
-                      className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${getStatusColor(production.status)}`}
-                    >
-                      {production.status}
-                    </span>
-                  </div>
-                </Link>
-              </li>
-            ))}
-            {data?.data.length === 0 && (
-              <li className="p-8 text-center text-stone-500">No productions found.</li>
-            )}
+                  </Link>
+                </li>
+              ));
+            })()}
           </ul>
 
           {/* Pagination Controls */}
-          {data && data.meta.lastPage > 1 && (
+          {data && !Array.isArray(data) && data.meta?.lastPage > 1 && (
             <div className="p-4 border-t border-stone-800 flex justify-between items-center text-sm">
               <button
                 disabled={page === 1}

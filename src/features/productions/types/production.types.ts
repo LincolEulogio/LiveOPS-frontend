@@ -9,6 +9,7 @@ export enum ProductionStatus {
   SETUP = 'SETUP',
   ACTIVE = 'ACTIVE',
   ARCHIVED = 'ARCHIVED',
+  DRAFT = 'DRAFT',
 }
 
 export interface Production {
@@ -35,4 +36,4 @@ export interface UpdateProductionDto {
   engineType?: EngineType;
 }
 
-export interface ProductionListResponse extends PaginatedResponse<Production> {}
+export interface ProductionListResponse extends PaginatedResponse<Production> { }

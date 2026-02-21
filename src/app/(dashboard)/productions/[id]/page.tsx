@@ -3,9 +3,10 @@
 import { useParams } from 'next/navigation';
 import { useProduction } from '@/features/productions/hooks/useProductions';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
-import { AlertCircle, Server, Settings, Users, Video } from 'lucide-react';
+import { StreamingDashboard } from '@/features/streaming/components/StreamingDashboard';
+import { EngineType } from '@/features/streaming/types/streaming.types';
+import { AlertCircle, Server, Settings, Users, Video, Layout } from 'lucide-react';
 import Link from 'next/link';
-import { EngineType } from '@/features/productions/types/production.types';
 import { Guard } from '@/shared/components/Guard';
 
 export default function ProductionDetailPage() {
@@ -41,7 +42,7 @@ export default function ProductionDetailPage() {
         </p>
         <Link
           href="/productions"
-          className="px-4 py-2 bg-stone-900 text-white rounded hover:bg-stone-800 transition-colors"
+          className="px-4 py-2 bg-stone-950 text-white rounded hover:bg-stone-800 transition-colors"
         >
           Return to List
         </Link>
@@ -50,70 +51,91 @@ export default function ProductionDetailPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
+    <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-sm gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-xl gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-stone-950 rounded border border-stone-800">
               {production.engineType === EngineType.OBS ? (
-                <Video className="text-blue-400" />
+                <Video className="text-blue-400" size={24} />
               ) : (
-                <Server className="text-orange-400" />
+                <Server className="text-orange-400" size={24} />
               )}
             </div>
             <h1 className="text-3xl font-bold text-white tracking-tight">{production.name}</h1>
           </div>
-          <p className="text-stone-400 max-w-2xl">
+          <p className="text-stone-400 max-w-2xl text-sm">
             {production.description || 'No description provided.'}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="px-3 py-1 bg-stone-950 border border-stone-800 rounded-full text-xs font-semibold uppercase tracking-wider text-stone-300">
+          <Link
+            href={`/productions/${id}/edit`}
+            className="p-2.5 bg-stone-950 border border-stone-800 rounded-xl hover:bg-stone-800 transition-all text-stone-400 hover:text-white"
+            title="Edit Production"
+          >
+            <Settings size={20} />
+          </Link>
+          <span className="px-3 py-1 bg-stone-950 border border-stone-800 rounded-full text-[10px] font-bold uppercase tracking-widest text-stone-300">
             {production.engineType}
           </span>
-          <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-xs font-semibold uppercase tracking-wider">
+          <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold uppercase tracking-widest">
             {production.status}
           </span>
         </div>
       </div>
 
-      {/* Tabs / Sub-navigation */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Team Overview Card */}
-        <div className="bg-stone-900 border border-stone-800 rounded-xl p-6">
-          <div className="flex items-center gap-3 mb-4 text-stone-200">
-            <Users className="text-indigo-400" />
-            <h2 className="text-lg font-semibold">Team Members</h2>
-          </div>
-          <p className="text-sm text-stone-400 mb-6">
-            Manage operators, producers, and their specific roles for this stream.
-          </p>
-          <Guard requiredPermissions={['manage_team']}>
-            <Link
-              href={`/productions/${id}/team`}
-              className="inline-block w-full text-center px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              Manage Team
-            </Link>
-          </Guard>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        {/* Main Content: Dashboard */}
+        <div className="xl:col-span-2 space-y-8">
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <Layout size={20} className="text-indigo-400" />
+                Live Dashboard
+              </h2>
+            </div>
+
+            <StreamingDashboard productionId={id} engineType={production.engineType as any} />
+          </section>
         </div>
 
-        {/* Engine Settings Card */}
-        <div className="bg-stone-900 border border-stone-800 rounded-xl p-6">
-          <div className="flex items-center gap-3 mb-4 text-stone-200">
-            <Settings className="text-stone-400" />
-            <h2 className="text-lg font-semibold">Engine Config</h2>
+        {/* Sidebar: Utils & Team */}
+        <div className="space-y-8">
+          <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
+            <div className="flex items-center gap-3 mb-4 text-stone-200">
+              <Users className="text-indigo-400" size={20} />
+              <h2 className="text-lg font-semibold">Team Management</h2>
+            </div>
+            <p className="text-sm text-stone-500 mb-6 leading-relaxed">
+              Manage operators and producers assigned to this environment.
+            </p>
+            <Guard requiredPermissions={['manage_team']}>
+              <Link
+                href={`/productions/${id}/team`}
+                className="block w-full text-center px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition-all shadow-lg shadow-indigo-600/10"
+              >
+                Open Team Manager
+              </Link>
+            </Guard>
           </div>
-          <p className="text-sm text-stone-400 mb-6">
-            Configure connection parameters (IP, Port, Password) for {production.engineType}.
-          </p>
-          <Guard requiredPermissions={['manage_engine']}>
-            <button className="inline-block w-full text-center px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
-              Setup Connection
-            </button>
-          </Guard>
+
+          <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
+            <div className="flex items-center gap-3 mb-4 text-stone-200">
+              <Settings className="text-stone-400" size={20} />
+              <h2 className="text-lg font-semibold">Engine Config</h2>
+            </div>
+            <p className="text-sm text-stone-500 mb-6 leading-relaxed">
+              Configure connection parameters for {production.engineType}.
+            </p>
+            <Guard requiredPermissions={['manage_engine']}>
+              <button className="w-full text-center px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-sm font-semibold rounded-lg transition-all">
+                Settings
+              </button>
+            </Guard>
+          </div>
         </div>
       </div>
     </div>
