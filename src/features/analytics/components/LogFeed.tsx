@@ -29,14 +29,29 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                     <h2 className="text-sm font-bold text-white uppercase tracking-widest">Event Feed</h2>
                 </div>
 
-                <div className="relative w-full sm:w-64">
-                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-600" />
-                    <input
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Search logs..."
-                        className="w-full bg-stone-950 border border-stone-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder:text-stone-700 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
-                    />
+                <div className="flex flex-1 items-center gap-3 w-full sm:w-auto">
+                    <div className="relative flex-1 sm:flex-initial sm:w-64">
+                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-600" />
+                        <input
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Search logs..."
+                            className="w-full bg-stone-950 border border-stone-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder:text-stone-700 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                        />
+                    </div>
+
+                    <select
+                        className="bg-stone-950 border border-stone-800 rounded-xl px-3 py-2 text-[10px] font-bold text-stone-400 uppercase tracking-widest focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            setSearchTerm(val === 'all' ? '' : val);
+                        }}
+                    >
+                        <option value="all">All Events</option>
+                        <option value="obs">OBS Only</option>
+                        <option value="vmix">vMix Only</option>
+                        <option value="timeline">Timeline Only</option>
+                    </select>
                 </div>
             </div>
 

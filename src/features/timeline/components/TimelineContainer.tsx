@@ -18,7 +18,7 @@ import {
 import { useTimeline } from '@/features/timeline/hooks/useTimeline';
 import { TimelineBlockItem } from '@/features/timeline/components/TimelineBlockItem';
 import { TimelineIndicator } from '@/features/timeline/components/TimelineIndicator';
-import { Plus, Layout } from 'lucide-react';
+import { Plus, Layout, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { TimelineCRUD } from '@/features/timeline/components/TimelineCRUD';
 import { TimelineBlock } from '@/features/timeline/types/timeline.types';
@@ -86,13 +86,29 @@ export const TimelineContainer = ({ productionId }: Props) => {
                     <Layout size={20} className="text-indigo-400" />
                     <h2 className="text-lg font-bold text-white tracking-tight">Timeline</h2>
                 </div>
-                <button
-                    onClick={handleCreate}
-                    className="flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white px-3 py-1.5 rounded-lg border border-stone-800 transition-all text-sm font-medium"
-                >
-                    <Plus size={16} />
-                    Add Block
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => {
+                            if (confirm('Reset all blocks to pending?')) {
+                                blocks.forEach(b => {
+                                    if (b.status !== 'PENDING') resetBlock(b.id);
+                                });
+                            }
+                        }}
+                        className="flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-stone-400 hover:text-orange-400 px-3 py-1.5 rounded-lg border border-stone-800 transition-all text-sm font-medium"
+                        title="Reset all blocks"
+                    >
+                        <RotateCcw size={16} />
+                        Reset All
+                    </button>
+                    <button
+                        onClick={handleCreate}
+                        className="flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white px-3 py-1.5 rounded-lg border border-stone-800 transition-all text-sm font-medium"
+                    >
+                        <Plus size={16} />
+                        Add Block
+                    </button>
+                </div>
             </div>
 
             <div className="bg-stone-950/20 rounded-2xl border border-stone-800/50 p-4 min-h-[400px]">

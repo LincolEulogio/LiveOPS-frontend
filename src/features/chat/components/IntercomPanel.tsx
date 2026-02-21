@@ -2,7 +2,8 @@
 
 import { useChat } from '../hooks/useChat';
 import { CommandItem } from './CommandItem';
-import { MessageSquare, Send, AlertCircle, Zap, ShieldAlert, History } from 'lucide-react';
+import { TemplateManager } from './TemplateManager';
+import { MessageSquare, Send, AlertCircle, Zap, ShieldAlert, History, Settings } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/shared/utils/cn';
 
@@ -19,11 +20,14 @@ export const IntercomPanel = ({ productionId }: Props) => {
         isLoading,
         sendCommand,
         ackCommand,
+        createTemplate,
+        deleteTemplate,
         isConnected
     } = useChat(productionId);
 
     const [message, setMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
+    const [isTemplateManagerOpen, setIsTemplateManagerOpen] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Auto-scroll to bottom only if we are already near bottom
@@ -68,11 +72,28 @@ export const IntercomPanel = ({ productionId }: Props) => {
                     </h2>
                 </div>
                 <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setIsTemplateManagerOpen(true)}
+                        className="p-1.5 hover:bg-stone-800 rounded-lg text-stone-500 hover:text-stone-300 transition-colors"
+                        title="Manage Presets"
+                    >
+                        <Settings size={14} />
+                    </button>
                     <span className="text-[10px] font-bold text-stone-500 bg-stone-800 px-2 py-0.5 rounded uppercase tracking-tighter">
                         Active: {history.length}
                     </span>
                 </div>
             </div>
+
+            {/* Template Manager Modal */}
+            {isTemplateManagerOpen && (
+                <TemplateManager
+                    templates={templates}
+                    onCreate={createTemplate}
+                    onDelete={deleteTemplate}
+                    onClose={() => setIsTemplateManagerOpen(false)}
+                />
+            )}
 
             {/* Templates / Quick Actions */}
             {templates.length > 0 && (

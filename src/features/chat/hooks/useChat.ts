@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { chatService } from '../api/chat.service';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useAuthStore } from '@/features/auth/store/auth.store';
@@ -142,12 +142,29 @@ export const useChat = (productionId: string) => {
         socket.emit('command.ack', dto);
     }, [socket, isConnected, productionId, user, queryClient]);
 
+    const createTemplateMutation = useMutation({
+        mutationFn: (dto: Omit<CommandTemplate, 'id' | 'productionId' | 'createdAt' | 'updatedAt'>) =>
+            chatService.createTemplate(productionId, dto),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['chat-templates', productionId] });
+        },
+    });
+
+    const deleteTemplateMutation = useMutation({
+        mutationFn: (templateId: string) => chatService.deleteTemplate(productionId, templateId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['chat-templates', productionId] });
+        },
+    });
+
     return {
         history,
         templates,
         isLoading: isLoadingHistory || isLoadingTemplates,
         sendCommand,
         ackCommand,
+        createTemplate: createTemplateMutation.mutateAsync,
+        deleteTemplate: deleteTemplateMutation.mutateAsync,
         isConnected,
     };
 };

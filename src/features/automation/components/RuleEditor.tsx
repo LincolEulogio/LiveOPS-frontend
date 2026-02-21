@@ -35,13 +35,17 @@ interface Props {
 const EVENT_TYPES = [
     { value: 'obs.scene.changed', label: 'OBS Scene Changed' },
     { value: 'obs.stream.state', label: 'OBS Stream State' },
+    { value: 'obs.record.state', label: 'OBS Record State' },
     { value: 'vmix.input.changed', label: 'vMix Input Changed' },
+    { value: 'vmix.connection.state', label: 'vMix Connection State' },
     { value: 'timeline.updated', label: 'Timeline Updated' },
+    { value: 'timeline.intercom.trigger', label: 'Timeline Intercom Trigger' },
 ];
 
 const ACTION_TYPES = [
     { value: 'obs.changeScene', label: 'OBS: Change Scene' },
     { value: 'vmix.cut', label: 'vMix: Cut' },
+    { value: 'vmix.fade', label: 'vMix: Fade' },
     { value: 'vmix.changeInput', label: 'vMix: Change Input' },
     { value: 'webhook.call', label: 'HTTP: Call Webhook' },
 ];

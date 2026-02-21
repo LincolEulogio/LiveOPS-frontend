@@ -11,7 +11,8 @@ import {
     Clock,
     MoreVertical,
     Trash2,
-    Edit2
+    Edit2,
+    MessageSquare
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 
@@ -107,6 +108,12 @@ export const TimelineBlockItem = ({
                         <span className="text-[10px] font-bold bg-stone-800 text-stone-400 px-1.5 py-0.5 rounded border border-stone-700 uppercase tracking-tight">
                             {block.linkedScene}
                         </span>
+                    )}
+                    {block.intercomTemplateId && (
+                        <div className="flex items-center gap-1 text-[10px] font-bold bg-indigo-500/10 text-indigo-400 px-1.5 py-0.5 rounded border border-indigo-500/20 uppercase tracking-tight" title="Linked Intercom Template">
+                            <MessageSquare size={10} />
+                            Auto
+                        </div>
                     )}
                 </div>
                 {block.description && (

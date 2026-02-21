@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { VmixState, StreamingCommand } from '../types/streaming.types';
 import { Play, Repeat, Zap, ZapOff, Grid, AlertCircle } from 'lucide-react';
 
@@ -14,6 +15,8 @@ interface VmixControlsProps {
 }
 
 export function VmixControls({ productionId, state, sendCommand, isPending, isDisconnected }: VmixControlsProps) {
+    const [fadeDuration, setFadeDuration] = useState(500);
+
     if (isDisconnected) {
         return (
             <div className="flex flex-col items-center justify-center p-8 text-center space-y-3">
@@ -69,24 +72,44 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
             </div>
 
             {/* Main Bus Buttons */}
-            <div className="flex gap-4">
-                <button
-                    onClick={() => sendCommand({ type: 'VMIX_CUT' })}
-                    disabled={isPending}
-                    className="flex-1 bg-stone-900 border border-stone-800 hover:border-red-500/50 hover:bg-red-500/10 hover:text-red-500 text-stone-400 rounded-2xl p-8 flex flex-col items-center gap-3 transition-all group"
-                >
-                    <Zap size={32} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-bold uppercase tracking-widest">Cut</span>
-                </button>
+            <div className="space-y-4">
+                <div className="flex gap-4">
+                    <button
+                        onClick={() => sendCommand({ type: 'VMIX_CUT' })}
+                        disabled={isPending}
+                        className="flex-1 bg-stone-900 border border-stone-800 hover:border-red-500/50 hover:bg-red-500/10 hover:text-red-500 text-stone-400 rounded-2xl p-8 flex flex-col items-center gap-3 transition-all group"
+                    >
+                        <Zap size={32} className="group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-bold uppercase tracking-widest">Cut</span>
+                    </button>
 
-                <button
-                    onClick={() => sendCommand({ type: 'VMIX_FADE', duration: 500 })}
-                    disabled={isPending}
-                    className="flex-1 bg-stone-900 border border-stone-800 hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:text-indigo-500 text-stone-400 rounded-2xl p-8 flex flex-col items-center gap-3 transition-all group"
-                >
-                    <Repeat size={32} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-bold uppercase tracking-widest">Fade</span>
-                </button>
+                    <button
+                        onClick={() => sendCommand({ type: 'VMIX_FADE', duration: fadeDuration })}
+                        disabled={isPending}
+                        className="flex-1 bg-stone-900 border border-stone-800 hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:text-indigo-500 text-stone-400 rounded-2xl p-8 flex flex-col items-center gap-3 transition-all group"
+                    >
+                        <Repeat size={32} className="group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-bold uppercase tracking-widest">Fade</span>
+                    </button>
+                </div>
+
+                <div className="bg-stone-950/50 border border-stone-800/50 rounded-xl p-4 flex items-center gap-4">
+                    <div className="flex-1 space-y-2">
+                        <div className="flex justify-between">
+                            <label className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Fade Duration</label>
+                            <span className="text-[10px] font-mono text-indigo-400">{fadeDuration}ms</span>
+                        </div>
+                        <input
+                            type="range"
+                            min="100"
+                            max="5000"
+                            step="100"
+                            value={fadeDuration}
+                            onChange={(e) => setFadeDuration(parseInt(e.target.value))}
+                            className="w-full h-1.5 bg-stone-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                        />
+                    </div>
+                </div>
             </div>
 
             {/* Input Grid (Simplified Example) */}
