@@ -43,15 +43,13 @@ export default function ProductionsListPage() {
           <p className="text-stone-400 text-sm mt-1">Manage all multi-tenant live streams</p>
         </div>
 
-        <Guard requiredPermissions={['manage_productions']}>
-          <Link
-            href="/productions/new"
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-          >
-            <Plus size={18} />
-            <span>New Production</span>
-          </Link>
-        </Guard>
+        <Link
+          href="/productions/new"
+          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+        >
+          <Plus size={18} />
+          <span>New Production</span>
+        </Link>
       </div>
 
       <div className="mb-6 flex gap-2">
@@ -89,7 +87,29 @@ export default function ProductionsListPage() {
             {(() => {
               const productions = Array.isArray(data) ? data : (data?.data || []);
               if (productions.length === 0) {
-                return <li className="p-8 text-center text-stone-500">No productions found.</li>;
+                return (
+                  <li className="p-16 flex flex-col items-center text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-stone-800/50 flex items-center justify-center text-stone-600">
+                      <Plus size={32} />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="text-white font-medium">No productions found</h3>
+                      <p className="text-stone-500 text-sm max-w-xs">
+                        {statusFilter
+                          ? `No productions matching the "${statusFilter.toLowerCase()}" status.`
+                          : "Get started by creating your first live production."}
+                      </p>
+                    </div>
+                    {!statusFilter && (
+                      <Link
+                        href="/productions/new"
+                        className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-full font-medium transition-all hover:scale-105"
+                      >
+                        Create Production
+                      </Link>
+                    )}
+                  </li>
+                );
               }
               return productions.map((production: any) => (
                 <li key={production.id}>
