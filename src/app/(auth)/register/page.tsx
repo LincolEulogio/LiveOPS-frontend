@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Link from 'next/link';
+import { useQueryClient } from '@tanstack/react-query';
 import { authService } from '@/features/auth/api/auth.service';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 
@@ -24,6 +25,7 @@ const MySwal = withReactContent(Swal);
 
 export default function RegisterPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -38,6 +40,9 @@ export default function RegisterPage() {
     try {
       setError(null);
       await authService.register(data);
+
+      // Invalidate setup check so SetupRedirect knows we are done
+      await queryClient.invalidateQueries({ queryKey: ['auth', 'check-setup'] });
 
       await MySwal.fire({
         title: 'Registration Successful!',
