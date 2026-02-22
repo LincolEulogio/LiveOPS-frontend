@@ -5,13 +5,17 @@ import { useProduction } from '@/features/productions/hooks/useProductions';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { StreamingDashboard } from '@/features/streaming/components/StreamingDashboard';
 import { EngineType } from '@/features/streaming/types/streaming.types';
-import { AlertCircle, Server, Settings, Users, Video, Layout, Zap, BarChart3, FileText, Monitor } from 'lucide-react';
+import { AlertCircle, Server, Settings, Users, Video, Layout, Zap, BarChart3, FileText, Monitor, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { Guard } from '@/shared/components/Guard';
 import { TimelineContainer } from '@/features/timeline/components/TimelineContainer';
 import { IntercomPanel } from '@/features/chat/components/IntercomPanel';
 import { ChatPanel } from '@/features/chat/components/ChatPanel';
 import { ScriptEditor } from '@/features/script/components/ScriptEditor';
+import { SocialManager } from '@/features/social/components/SocialManager';
+import { PeripheralManager } from '@/features/peripherals/components/PeripheralManager';
+import { HealthMonitor } from '@/features/streaming/components/HealthMonitor';
+import { MediaSidebar } from '@/features/media/components/MediaSidebar';
 
 export default function ProductionDetailPage() {
   const params = useParams();
@@ -125,6 +129,13 @@ export default function ProductionDetailPage() {
                   <Monitor size={14} className="text-emerald-400" />
                   Teleprompter
                 </Link>
+                <Link
+                  href={`/productions/${id}/guest`}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-[10px] font-bold text-indigo-400 uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition-all shadow-lg"
+                >
+                  <Users size={14} />
+                  Green Room
+                </Link>
               </div>
             </div>
             <div className="h-[600px]">
@@ -133,14 +144,38 @@ export default function ProductionDetailPage() {
           </section>
 
           <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <Share2 size={20} className="text-indigo-400" />
+                Social Media Feed
+              </h2>
+            </div>
+            <div className="h-[400px]">
+              <SocialManager productionId={id} />
+            </div>
+          </section>
+
+          <section>
             <TimelineContainer productionId={id} />
+          </section>
+
+          <section>
+            <HealthMonitor productionId={id} />
           </section>
         </div>
 
         {/* Sidebar: Utils & Team */}
         <div className="space-y-8 h-full">
           <section className="h-[500px]">
+            <MediaSidebar />
+          </section>
+
+          <section className="h-[500px]">
             <IntercomPanel productionId={id} />
+          </section>
+
+          <section>
+            <PeripheralManager productionId={id} />
           </section>
 
           <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
