@@ -19,7 +19,8 @@ import {
     CheckCircle2,
     AlertCircle,
     Radio,
-    ShieldAlert
+    ShieldAlert,
+    ExternalLink
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CrewCard } from './CrewCard';
@@ -143,6 +144,13 @@ export const DashboardView = () => {
                         </button>
                     </div>
 
+                    <button
+                        onClick={() => window.open(`/productions/${activeProductionId}/talent`, '_blank')}
+                        className="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 border border-stone-700 flex items-center gap-2"
+                    >
+                        <ExternalLink size={14} />
+                        TALENT VIEW
+                    </button>
                     <button className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-indigo-600/20">
                         TODO READY
                     </button>

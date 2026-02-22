@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/intercom') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
           >
             <Info size={18} />
-            Live Alert System
+            Operational Hub
           </Link>
           <Link
             href="/profile"
