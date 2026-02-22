@@ -5,12 +5,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { TimelineBlock, CreateTimelineBlockDto } from '../types/timeline.types';
 import { useTimeline } from '../hooks/useTimeline';
-import { X, Clock, Type, AlignLeft, Hash } from 'lucide-react';
+import { X, Clock, Type, AlignLeft, Hash, Video } from 'lucide-react';
 import { useEffect } from 'react';
 
 const blockSchema = z.object({
     title: z.string().min(1, 'Title is required'),
     description: z.string().optional(),
+    source: z.string().optional(),
+    notes: z.string().optional(),
     durationMs: z.number().min(0, 'Duration must be positive'),
     linkedScene: z.string().optional(),
 });
@@ -18,6 +20,8 @@ const blockSchema = z.object({
 type FormValues = {
     title: string;
     description?: string;
+    source?: string;
+    notes?: string;
     durationMs: number;
     linkedScene?: string;
 };
@@ -59,6 +63,8 @@ export const TimelineCRUD = ({
             reset({
                 title: editingBlock.title,
                 description: editingBlock.description || '',
+                source: editingBlock.source || '',
+                notes: editingBlock.notes || '',
                 durationMs: editingBlock.durationMs,
                 linkedScene: editingBlock.linkedScene || '',
             });
@@ -66,6 +72,8 @@ export const TimelineCRUD = ({
             reset({
                 title: '',
                 description: '',
+                source: '',
+                notes: '',
                 durationMs: 300000,
                 linkedScene: '',
             });
@@ -75,7 +83,7 @@ export const TimelineCRUD = ({
     const onSubmit = async (data: FormValues) => {
         try {
             if (editingBlock) {
-                await updateBlock({ id: editingBlock.id, dto: data });
+                await updateBlock({ id: editingBlock.id, data: data });
             } else {
                 await createBlock({ ...data, order: nextOrder });
             }
@@ -144,23 +152,47 @@ export const TimelineCRUD = ({
                             </label>
                             <input
                                 type="number"
-                                {...register('durationMs')}
+                                {...register('durationMs', { valueAsNumber: true })}
                                 className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
                             />
-                            <p className="text-[10px] text-stone-500">300000 = 5 minutes</p>
                         </div>
 
                         <div className="space-y-2">
                             <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
-                                <Hash size={16} className="text-indigo-400" />
-                                Linked Scene
+                                <Video size={16} className="text-indigo-400" />
+                                Source / Fuente
                             </label>
                             <input
-                                {...register('linkedScene')}
+                                {...register('source')}
                                 className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
-                                placeholder="OBS Scene Name"
+                                placeholder="e.g. CAM 1, VTR"
                             />
                         </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
+                            <Hash size={16} className="text-indigo-400" />
+                            Linked Scene (Automation)
+                        </label>
+                        <input
+                            {...register('linkedScene')}
+                            className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                            placeholder="OBS Scene Name"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
+                            <AlignLeft size={16} className="text-indigo-400" />
+                            Internal Notes
+                        </label>
+                        <textarea
+                            {...register('notes')}
+                            rows={2}
+                            className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all resize-none"
+                            placeholder="Private notes for the team..."
+                        />
                     </div>
 
                     <div className="pt-4 flex gap-3">

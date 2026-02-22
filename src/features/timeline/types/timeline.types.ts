@@ -9,6 +9,8 @@ export interface TimelineBlock {
     productionId: string;
     title: string;
     description?: string;
+    source?: string;
+    notes?: string;
     durationMs?: number;
     order: number;
     status: TimelineStatus;
@@ -16,7 +18,7 @@ export interface TimelineBlock {
     endTime?: string;
     linkedScene?: string;
     intercomTemplateId?: string;
-    intercomTemplate?: any; // To be typed if needed
+    intercomTemplate?: any;
     createdAt: string;
     updatedAt: string;
 }
@@ -24,6 +26,8 @@ export interface TimelineBlock {
 export interface CreateTimelineBlockDto {
     title: string;
     description?: string;
+    source?: string;
+    notes?: string;
     durationMs?: number;
     order?: number;
     linkedScene?: string;
