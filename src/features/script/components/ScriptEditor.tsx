@@ -19,10 +19,11 @@ interface Props {
 }
 
 export const ScriptEditor = ({ productionId }: Props) => {
-    const { doc, isLoaded } = useScript(productionId);
+    const { doc, awareness, isLoaded } = useScript(productionId);
     const user = useAuthStore((state) => state.user);
 
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [
             StarterKit,
             Placeholder.configure({
@@ -33,6 +34,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
                 document: doc,
             }),
             CollaborationCaret.configure({
+                provider: { awareness } as any,
                 render: (user: any) => {
                     const cursor = document.createElement('span');
                     cursor.classList.add('collaboration-cursor__caret');

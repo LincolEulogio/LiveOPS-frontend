@@ -1,10 +1,12 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import * as Y from 'yjs';
+import * as awarenessProtocol from 'y-protocols/awareness';
 import { useSocket } from '@/shared/socket/socket.provider';
 
 export const useScript = (productionId: string) => {
     const { socket, isConnected } = useSocket();
     const [doc] = useState(() => new Y.Doc());
+    const [awareness] = useState(() => new awarenessProtocol.Awareness(doc));
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
@@ -26,30 +28,50 @@ export const useScript = (productionId: string) => {
             Y.applyUpdate(doc, new Uint8Array(data.update));
         };
 
+        // 4. Handle awareness updates (cursors/selections) from others
+        const handleAwarenessReceived = (data: { update: number[] }) => {
+            awarenessProtocol.applyAwarenessUpdate(awareness, new Uint8Array(data.update), socket);
+        };
+
         socket.on('script.sync_response', handleSyncResponse);
         socket.on('script.update_received', handleUpdateReceived);
+        socket.on('script.awareness_received', handleAwarenessReceived);
 
-        // 4. Propagate local updates to server
+        // 5. Propagate local doc updates to server
         const onUpdate = (update: Uint8Array, origin: any) => {
             if (origin !== socket) {
                 socket.emit('script.update', {
                     productionId,
-                    update: Array.from(update), // Send as array for JSON serializability
+                    update: Array.from(update),
                 });
             }
         };
 
+        // 6. Propagate local awareness updates to server
+        const onAwarenessUpdate = ({ added, updated, removed }: any) => {
+            const changedClients = added.concat(updated).concat(removed);
+            const update = awarenessProtocol.encodeAwarenessUpdate(awareness, changedClients);
+            socket.emit('script.awareness_update', {
+                productionId,
+                update: Array.from(update),
+            });
+        };
+
         doc.on('update', onUpdate);
+        awareness.on('update', onAwarenessUpdate);
 
         return () => {
             socket.off('script.sync_response', handleSyncResponse);
             socket.off('script.update_received', handleUpdateReceived);
+            socket.off('script.awareness_received', handleAwarenessReceived);
             doc.off('update', onUpdate);
+            awareness.off('update', onAwarenessUpdate);
         };
-    }, [socket, isConnected, productionId, doc]);
+    }, [socket, isConnected, productionId, doc, awareness]);
 
     return {
         doc,
+        awareness,
         isLoaded,
     };
 };
