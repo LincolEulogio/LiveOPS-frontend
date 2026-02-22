@@ -30,6 +30,7 @@ import { TemplateManager } from './TemplateManager';
 import { useIntercomTemplates } from '../hooks/useIntercomTemplates';
 import { AutomationDashboard } from '../../automation/components/AutomationDashboard';
 import { cn } from '@/shared/utils/cn';
+import { HealthMonitor } from '../../health/components/HealthMonitor';
 
 export const DashboardView = () => {
     const activeProductionId = useAppStore((state) => state.activeProductionId);
@@ -258,6 +259,9 @@ export const DashboardView = () => {
                             </AnimatePresence>
                         </div>
                     </div>
+
+                    {/* Health Monitor Card */}
+                    <HealthMonitor productionId={activeProductionId || ''} />
                 </div>
             </div>
         </div>
