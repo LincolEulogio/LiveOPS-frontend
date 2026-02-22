@@ -40,16 +40,16 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       reconnectionDelay: 1000,
       query: {
         productionId: useAppStore.getState().activeProductionId || '',
-        userId: useAuthStore.getState().user?.id || '',
-        userName: useAuthStore.getState().user?.name || '',
-        roleId: useAuthStore.getState().user?.role?.id || useAuthStore.getState().user?.globalRole?.id || '',
-        roleName: useAuthStore.getState().user?.role?.name || useAuthStore.getState().user?.globalRole?.name || 'Viewer',
+        userId: user?.id || '',
+        userName: user?.name || '',
+        roleId: user?.role?.id || user?.globalRole?.id || '',
+        roleName: user?.role?.name || user?.globalRole?.name || 'Viewer',
       },
     });
 
     const initSocket = () => {
-      // Only connect if we have a user
-      if (useAuthStore.getState().user?.id) {
+      // Only connect if we have a valid user session
+      if (user?.id) {
         socketInstance.connect();
       }
 
