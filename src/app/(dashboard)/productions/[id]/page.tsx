@@ -5,12 +5,13 @@ import { useProduction } from '@/features/productions/hooks/useProductions';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { StreamingDashboard } from '@/features/streaming/components/StreamingDashboard';
 import { EngineType } from '@/features/streaming/types/streaming.types';
-import { AlertCircle, Server, Settings, Users, Video, Layout, Zap, BarChart3 } from 'lucide-react';
+import { AlertCircle, Server, Settings, Users, Video, Layout, Zap, BarChart3, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { Guard } from '@/shared/components/Guard';
 import { TimelineContainer } from '@/features/timeline/components/TimelineContainer';
 import { IntercomPanel } from '@/features/chat/components/IntercomPanel';
 import { ChatPanel } from '@/features/chat/components/ChatPanel';
+import { ScriptEditor } from '@/features/script/components/ScriptEditor';
 
 export default function ProductionDetailPage() {
   const params = useParams();
@@ -102,6 +103,18 @@ export default function ProductionDetailPage() {
             </div>
 
             <StreamingDashboard productionId={id} engineType={production.engineType as any} />
+          </section>
+
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <FileText size={20} className="text-indigo-400" />
+                Guion Vivo
+              </h2>
+            </div>
+            <div className="h-[600px]">
+              <ScriptEditor productionId={id} />
+            </div>
           </section>
 
           <section>
