@@ -9,4 +9,45 @@
   body {
     @apply antialiased bg-stone-950 text-stone-50 overflow-x-hidden;
   }
+
+  /* Custom Scrollbar Styles - Global */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0c0a09;
+    /* stone-950 */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #292524;
+    /* stone-800 */
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #44403c;
+    /* stone-700 */
+  }
+
+  /* Specific class for components like Escaleta */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #292524 transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #292524;
+    border-radius: 20px;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

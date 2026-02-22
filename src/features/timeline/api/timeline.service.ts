@@ -9,7 +9,7 @@ import {
 export const timelineService = {
     getBlocks: async (productionId: string): Promise<TimelineBlock[]> => {
         const response = await apiClient.get<TimelineBlock[]>(`/productions/${productionId}/timeline`);
-        return response.data;
+        return response.data || [];
     },
 
     createBlock: async (productionId: string, data: CreateTimelineBlockDto): Promise<TimelineBlock> => {

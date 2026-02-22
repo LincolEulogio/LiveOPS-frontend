@@ -25,6 +25,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CrewCard } from './CrewCard';
 import { ProductionSelector } from '@/features/productions/components/ProductionSelector';
 import { TimelineView } from '../../timeline/components/TimelineView';
+import { TemplateManager } from './TemplateManager';
+import { useIntercomTemplates } from '../hooks/useIntercomTemplates';
 
 export const DashboardView = () => {
     const activeProductionId = useAppStore((state) => state.activeProductionId);
@@ -43,14 +45,7 @@ export const DashboardView = () => {
     });
 
     // Fetch Templates
-    const { data: templates = [] } = useQuery<any[]>({
-        queryKey: ['intercom-templates', activeProductionId],
-        queryFn: async () => {
-            const data = await (apiClient.get(`/productions/${activeProductionId}/intercom/templates`) as any);
-            return data || [];
-        },
-        enabled: !!activeProductionId,
-    });
+    const { templates = [] } = useIntercomTemplates(activeProductionId || undefined);
 
     // Merge registered users with online status
     const crewMembers = useMemo(() => {
@@ -103,8 +98,9 @@ export const DashboardView = () => {
 
                 <div className="hidden lg:block border-l border-stone-800 h-10 mx-2" />
 
-                <div className="flex-1 flex justify-center max-w-sm">
+                <div className="flex-1 flex justify-center max-w-sm gap-4">
                     <ProductionSelector />
+                    <TemplateManager />
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -167,24 +163,25 @@ export const DashboardView = () => {
                 </div>
 
                 {/* Right Area: Timeline & Logs */}
-                <div className="xl:col-span-1 space-y-6 flex flex-col h-[calc(100vh-210px)] sticky top-6">
-                    <div className="flex-1 min-h-0 bg-stone-900 border border-stone-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+                <div className="xl:col-span-1 space-y-6 flex flex-col h-fit sticky top-6 pb-10">
+                    {/* Escaleta Card */}
+                    <div className="bg-stone-900/50 border border-stone-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[450px]">
                         <TimelineView />
                     </div>
 
-                    {/* Live Tracking Panel (Mini Version) */}
-                    <div className="flex-1 min-h-0 bg-stone-900 border border-stone-800 rounded-3xl flex flex-col shadow-2xl overflow-hidden">
+                    {/* Activity Log Card */}
+                    <div className="bg-stone-900/50 border border-stone-800 rounded-3xl flex flex-col shadow-2xl overflow-hidden h-[300px]">
                         <div className="p-4 border-b border-stone-800 bg-stone-950/20 flex items-center justify-between">
                             <h2 className="text-[10px] font-black text-stone-500 uppercase tracking-widest flex items-center gap-2">
                                 <Clock size={14} className="text-indigo-400" /> Historial Log
                             </h2>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar text-[10px]">
+                        <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
                             <AnimatePresence initial={false}>
                                 {history.length === 0 ? (
                                     <div className="h-full flex flex-col items-center justify-center text-stone-700 text-center p-4">
-                                        <p className="font-bold uppercase tracking-widest opacity-40">Sin actividad</p>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest opacity-40 italic">Sin actividad registrada</p>
                                     </div>
                                 ) : (
                                     history.slice(0, 50).map((item, idx) => (
@@ -192,16 +189,16 @@ export const DashboardView = () => {
                                             key={item.id}
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
-                                            className="bg-stone-950/50 border border-stone-800 p-2 rounded-lg group relative overflow-hidden"
+                                            className="bg-stone-950/50 border border-stone-800 p-3 rounded-xl group relative overflow-hidden"
                                         >
-                                            <div className="flex items-center justify-between mb-1">
+                                            <div className="flex items-center justify-between mb-1.5">
                                                 <span className="text-[8px] font-black text-stone-600 uppercase tracking-widest">
                                                     {new Date(item.timestamp).toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
-                                            <h4 className="text-[10px] font-bold text-white uppercase tracking-tight truncate">{item.message}</h4>
+                                            <h4 className="text-[10px] font-bold text-white uppercase tracking-tight line-clamp-2">{item.message}</h4>
                                             <div
-                                                className="absolute left-0 top-0 bottom-0 w-1 opacity-40"
+                                                className="absolute left-0 top-0 bottom-0 w-1 opacity-60"
                                                 style={{ backgroundColor: item.color }}
                                             />
                                         </motion.div>
