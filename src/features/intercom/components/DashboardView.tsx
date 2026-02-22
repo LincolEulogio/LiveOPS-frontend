@@ -27,12 +27,15 @@ import { ProductionSelector } from '@/features/productions/components/Production
 import { TimelineView } from '../../timeline/components/TimelineView';
 import { TemplateManager } from './TemplateManager';
 import { useIntercomTemplates } from '../hooks/useIntercomTemplates';
+import { AutomationDashboard } from '../../automation/components/AutomationDashboard';
+import { cn } from '@/shared/utils/cn';
 
 export const DashboardView = () => {
     const activeProductionId = useAppStore((state) => state.activeProductionId);
     const { sendCommand, members: onlineMembers } = useIntercom();
     const { history } = useIntercomStore();
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const [activeTab, setActiveTab] = useState<'intercom' | 'automation'>('intercom');
 
     // Fetch Production Data (including registered users)
     const { data: production } = useQuery<any>({
@@ -100,10 +103,31 @@ export const DashboardView = () => {
 
                 <div className="flex-1 flex justify-center max-w-sm gap-4">
                     <ProductionSelector />
-                    <TemplateManager />
+                    <div className="h-10 w-px bg-stone-800 hidden md:block" />
+                    <div className="flex bg-stone-950 p-1 rounded-2xl border border-stone-800">
+                        <button
+                            onClick={() => setActiveTab('intercom')}
+                            className={cn(
+                                "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                                activeTab === 'intercom' ? "bg-stone-800 text-indigo-400 shadow-inner" : "text-stone-500 hover:text-stone-300"
+                            )}
+                        >
+                            Comms
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('automation')}
+                            className={cn(
+                                "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                                activeTab === 'automation' ? "bg-stone-800 text-indigo-400 shadow-inner" : "text-stone-500 hover:text-stone-300"
+                            )}
+                        >
+                            Automation
+                        </button>
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-3">
+                    <TemplateManager />
                     <div className="flex bg-stone-950 p-1 rounded-xl border border-stone-800">
                         <button
                             onClick={() => setViewMode('grid')}
@@ -137,29 +161,48 @@ export const DashboardView = () => {
                 <div className="xl:col-span-3 space-y-6">
 
                     {/* Crew Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
-                        {crewMembers.map((member: any) => (
-                            <CrewCard
-                                key={member.userId}
-                                productionId={activeProductionId || ''}
-                                member={member}
-                                templates={templates}
-                                onSendCommand={(t) => sendCommand({
-                                    message: t.name,
-                                    templateId: t.id,
-                                    targetUserId: member.userId,
-                                    targetRoleId: production?.users.find((pu: any) => pu.userId === member.userId)?.roleId,
-                                    requiresAck: true
-                                })}
-                            />
-                        ))}
-                        {crewMembers.length === 0 && (
-                            <div className="col-span-full py-20 text-center bg-stone-900/30 border border-dashed border-stone-800 rounded-3xl">
-                                <Users size={48} className="text-stone-700 mx-auto mb-4" />
-                                <p className="text-stone-500 font-bold uppercase tracking-widest text-xs">No hay usuarios registrados en esta producción</p>
-                            </div>
+                    <AnimatePresence mode="wait">
+                        {activeTab === 'intercom' ? (
+                            <motion.div
+                                key="intercom"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6"
+                            >
+                                {crewMembers.map((member: any) => (
+                                    <CrewCard
+                                        key={member.userId}
+                                        productionId={activeProductionId || ''}
+                                        member={member}
+                                        templates={templates}
+                                        onSendCommand={(t) => sendCommand({
+                                            message: t.name,
+                                            templateId: t.id,
+                                            targetUserId: member.userId,
+                                            targetRoleId: production?.users.find((pu: any) => pu.userId === member.userId)?.roleId,
+                                            requiresAck: true
+                                        })}
+                                    />
+                                ))}
+                                {crewMembers.length === 0 && (
+                                    <div className="col-span-full py-20 text-center bg-stone-900/30 border border-dashed border-stone-800 rounded-3xl">
+                                        <Users size={48} className="text-stone-700 mx-auto mb-4" />
+                                        <p className="text-stone-500 font-bold uppercase tracking-widest text-xs">No hay usuarios registrados en esta producción</p>
+                                    </div>
+                                )}
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="automation"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                            >
+                                <AutomationDashboard productionId={activeProductionId || ''} />
+                            </motion.div>
                         )}
-                    </div>
+                    </AnimatePresence>
                 </div>
 
                 {/* Right Area: Timeline & Logs */}

@@ -4,9 +4,12 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Rule, CreateRuleDto } from '../types/automation.types';
-import { X, Plus, Trash2, Zap, Play, ArrowRight, Settings2, Info } from 'lucide-react';
-import { useEffect } from 'react';
+import { X, Plus, Trash2, Zap, Play, ArrowRight, Settings2, Info, Clock, Bell, Monitor, Radio } from 'lucide-react';
+import { useEffect, useMemo } from 'react';
 import { cn } from '@/shared/utils/cn';
+import { useQuery } from '@tanstack/react-query';
+import { intercomService } from '../../intercom/api/intercom.service';
+import { productionsService } from '../../productions/api/productions.service';
 
 const ruleSchema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -26,6 +29,7 @@ const ruleSchema = z.object({
 type FormValues = z.infer<typeof ruleSchema>;
 
 interface Props {
+    productionId: string;
     isOpen: boolean;
     onClose: () => void;
     onSave: (dto: any) => Promise<void>;
@@ -33,29 +37,51 @@ interface Props {
 }
 
 const EVENT_TYPES = [
-    { value: 'obs.scene.changed', label: 'OBS Scene Changed' },
-    { value: 'obs.stream.state', label: 'OBS Stream State' },
-    { value: 'obs.record.state', label: 'OBS Record State' },
-    { value: 'vmix.input.changed', label: 'vMix Input Changed' },
-    { value: 'vmix.connection.state', label: 'vMix Connection State' },
-    { value: 'timeline.updated', label: 'Timeline Updated' },
-    { value: 'timeline.intercom.trigger', label: 'Timeline Intercom Trigger' },
+    { value: 'timeline.before_end', label: 'Time: Before block ends', icon: Clock },
+    { value: 'timeline.updated', label: 'Timeline: Any update', icon: Zap },
+    { value: 'obs.scene.changed', label: 'OBS: Scene Changed', icon: Monitor },
+    { value: 'obs.stream.state', label: 'OBS: Stream State', icon: Radio },
+    { value: 'vmix.input.changed', label: 'vMix: Input Changed', icon: Monitor },
 ];
 
 const ACTION_TYPES = [
-    { value: 'obs.changeScene', label: 'OBS: Change Scene' },
-    { value: 'vmix.cut', label: 'vMix: Cut' },
-    { value: 'vmix.fade', label: 'vMix: Fade' },
-    { value: 'vmix.changeInput', label: 'vMix: Change Input' },
-    { value: 'webhook.call', label: 'HTTP: Call Webhook' },
+    { value: 'intercom.send', label: 'Alert: Send Intercom Command', icon: Bell },
+    { value: 'obs.changeScene', label: 'OBS: Change Scene', icon: Monitor },
+    { value: 'vmix.cut', label: 'vMix: Cut', icon: Zap },
+    { value: 'vmix.fade', label: 'vMix: Fade', icon: Zap },
+    { value: 'webhook.call', label: 'HTTP: Call Webhook', icon: Zap },
 ];
 
-export const RuleEditor = ({ isOpen, onClose, onSave, editingRule }: Props) => {
+export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule }: Props) => {
+    // Fetch dependencies for selects
+    const { data: templates = [] } = useQuery({
+        queryKey: ['intercom-templates', productionId],
+        queryFn: () => intercomService.getTemplates(productionId),
+        enabled: isOpen,
+    });
+
+    const { data: production } = useQuery({
+        queryKey: ['production', productionId],
+        queryFn: () => productionsService.getProduction(productionId),
+        enabled: isOpen,
+    });
+
+    const roles = useMemo(() => {
+        if (!production?.users) return [];
+        const uniqueRoles = new Map();
+        production.users.forEach(u => {
+            if (u.role) uniqueRoles.set(u.role.id, u.role.name);
+        });
+        return Array.from(uniqueRoles.entries()).map(([id, name]) => ({ id, name }));
+    }, [production]);
+
     const {
         register,
         control,
         handleSubmit,
         reset,
+        watch,
+        setValue,
         formState: { errors, isSubmitting },
     } = useForm<FormValues>({
         resolver: zodResolver(ruleSchema),
@@ -63,8 +89,8 @@ export const RuleEditor = ({ isOpen, onClose, onSave, editingRule }: Props) => {
             name: '',
             description: '',
             isEnabled: true,
-            triggers: [{ eventType: 'obs.scene.changed' }],
-            actions: [{ actionType: 'obs.changeScene', order: 0 }],
+            triggers: [{ eventType: 'timeline.before_end', condition: { secondsBefore: 30 } }],
+            actions: [{ actionType: 'intercom.send', order: 0, payload: { requiresAck: true } }],
         },
     });
 
@@ -78,22 +104,25 @@ export const RuleEditor = ({ isOpen, onClose, onSave, editingRule }: Props) => {
         name: 'actions',
     });
 
+    const watchedTriggers = watch('triggers');
+    const watchedActions = watch('actions');
+
     useEffect(() => {
-        if (editingRule) {
+        if (editingRule && isOpen) {
             reset({
                 name: editingRule.name,
                 description: editingRule.description || '',
                 isEnabled: editingRule.isEnabled,
-                triggers: editingRule.triggers.map(t => ({ eventType: t.eventType, condition: t.condition })),
-                actions: editingRule.actions.map(a => ({ actionType: a.actionType, payload: a.payload, order: a.order })),
+                triggers: editingRule.triggers.map(t => ({ eventType: t.eventType, condition: t.condition || {} })),
+                actions: editingRule.actions.map(a => ({ actionType: a.actionType, payload: a.payload || {}, order: a.order })),
             });
-        } else {
+        } else if (!editingRule && isOpen) {
             reset({
                 name: '',
                 description: '',
                 isEnabled: true,
-                triggers: [{ eventType: 'obs.scene.changed' }],
-                actions: [{ actionType: 'obs.changeScene', order: 0 }],
+                triggers: [{ eventType: 'timeline.before_end', condition: { secondsBefore: 30 } }],
+                actions: [{ actionType: 'intercom.send', order: 0, payload: { requiresAck: true } }],
             });
         }
     }, [editingRule, reset, isOpen]);
@@ -130,7 +159,7 @@ export const RuleEditor = ({ isOpen, onClose, onSave, editingRule }: Props) => {
                             <label className="text-xs font-bold text-stone-400 uppercase tracking-widest pl-1">Rule Name</label>
                             <input
                                 {...register('name')}
-                                placeholder="e.g., Auto Cut to Black"
+                                placeholder="e.g., Warning: Block Ending"
                                 className="w-full bg-stone-950 border border-stone-800 rounded-2xl px-4 py-3 text-white placeholder:text-stone-700 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
                             />
                             {errors.name && <p className="text-[10px] text-red-400 ml-1">{errors.name.message}</p>}
@@ -139,7 +168,7 @@ export const RuleEditor = ({ isOpen, onClose, onSave, editingRule }: Props) => {
                             <label className="text-xs font-bold text-stone-400 uppercase tracking-widest pl-1">Description</label>
                             <input
                                 {...register('description')}
-                                placeholder="Optional description..."
+                                placeholder="Action triggered automatically..."
                                 className="w-full bg-stone-950 border border-stone-800 rounded-2xl px-4 py-3 text-white placeholder:text-stone-700 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
                             />
                         </div>
@@ -151,44 +180,75 @@ export const RuleEditor = ({ isOpen, onClose, onSave, editingRule }: Props) => {
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <h3 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
-                                <Zap size={14} className="text-amber-500" />
-                                Triggers
+                                <Zap size={14} className="text-amber-400" />
+                                When this happens...
                             </h3>
                             <button
                                 type="button"
-                                onClick={() => appendTrigger({ eventType: 'obs.scene.changed' })}
+                                onClick={() => appendTrigger({ eventType: 'timeline.updated', condition: {} })}
                                 className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 uppercase tracking-wider flex items-center gap-1.5"
                             >
                                 <Plus size={14} /> Add Trigger
                             </button>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                             {triggerFields.map((field, index) => (
-                                <div key={field.id} className="flex gap-3 items-end bg-stone-950/40 p-4 rounded-2xl border border-stone-800/50 group">
-                                    <div className="flex-1 space-y-2">
-                                        <label className="text-[10px] font-bold text-stone-600 uppercase tracking-tighter">Event Type</label>
-                                        <select
-                                            {...register(`triggers.${index}.eventType`)}
-                                            className="w-full bg-stone-900 border border-stone-800 rounded-xl px-3 py-2 text-sm text-stone-300 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
-                                        >
-                                            {EVENT_TYPES.map(e => <option key={e.value} value={e.value}>{e.label}</option>)}
-                                        </select>
+                                <div key={field.id} className="bg-stone-950/40 p-5 rounded-2xl border border-stone-800/50 group space-y-4">
+                                    <div className="flex gap-4 items-end">
+                                        <div className="flex-1 space-y-2">
+                                            <label className="text-[10px] font-bold text-stone-600 uppercase tracking-tighter">Event Trigger</label>
+                                            <select
+                                                {...register(`triggers.${index}.eventType`)}
+                                                className="w-full bg-stone-900 border border-stone-800 rounded-xl px-3 py-2 text-sm text-stone-300 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                                            >
+                                                {EVENT_TYPES.map(e => <option key={e.value} value={e.value}>{e.label}</option>)}
+                                            </select>
+                                        </div>
+                                        {triggerFields.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeTrigger(index)}
+                                                className="p-2.5 text-stone-600 hover:text-red-400 hover:bg-red-500/10 rounded-xl mb-0.5 transition-all"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        )}
                                     </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => removeTrigger(index)}
-                                        className="p-2.5 text-stone-600 hover:text-red-400 hover:bg-red-500/10 rounded-xl mb-0.5 opacity-0 group-hover:opacity-100 transition-all"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
+
+                                    {/* Trigger Conditions */}
+                                    {watchedTriggers[index]?.eventType === 'timeline.before_end' && (
+                                        <div className="pt-2 pl-4 border-l-2 border-stone-800 space-y-3">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-medium text-stone-500">Seconds before end</label>
+                                                <input
+                                                    type="number"
+                                                    {...register(`triggers.${index}.condition.secondsBefore`, { valueAsNumber: true })}
+                                                    className="w-24 bg-stone-900 border border-stone-800 rounded-lg px-3 py-1.5 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {watchedTriggers[index]?.eventType === 'obs.scene.changed' && (
+                                        <div className="pt-2 pl-4 border-l-2 border-stone-800 space-y-3">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-medium text-stone-500">Only for scene name (Optional)</label>
+                                                <input
+                                                    placeholder="Input name..."
+                                                    {...register(`triggers.${index}.condition.sceneName`)}
+                                                    className="w-full bg-stone-900 border border-stone-800 rounded-lg px-3 py-1.5 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
                     </div>
 
                     <div className="flex justify-center py-2">
-                        <div className="w-px h-8 bg-stone-800"></div>
+                        <ArrowRight size={20} className="text-stone-800 rotate-90" />
                     </div>
 
                     {/* Actions */}
@@ -196,39 +256,104 @@ export const RuleEditor = ({ isOpen, onClose, onSave, editingRule }: Props) => {
                         <div className="flex items-center justify-between">
                             <h3 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
                                 <Play size={14} className="text-indigo-400" />
-                                Actions Sequence
+                                Do these actions...
                             </h3>
                             <button
                                 type="button"
-                                onClick={() => appendAction({ actionType: 'obs.changeScene', order: actionFields.length })}
+                                onClick={() => appendAction({ actionType: 'obs.changeScene', order: actionFields.length, payload: {} })}
                                 className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 uppercase tracking-wider flex items-center gap-1.5"
                             >
                                 <Plus size={14} /> Add Action
                             </button>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                             {actionFields.map((field, index) => (
-                                <div key={field.id} className="relative flex gap-3 items-end bg-stone-950/40 p-4 rounded-2xl border border-stone-800/50 group animate-in slide-in-from-left-2 duration-300">
-                                    <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-stone-800 border border-stone-700 flex items-center justify-center text-[10px] font-bold text-stone-500 ring-4 ring-stone-900">
+                                <div key={field.id} className="relative bg-stone-950/40 p-5 rounded-2xl border border-stone-800/50 group space-y-4 animate-in slide-in-from-left-2 duration-300">
+                                    <div className="absolute -left-3 top-6 w-6 h-6 rounded-full bg-stone-800 border border-stone-700 flex items-center justify-center text-[10px] font-bold text-stone-500 ring-4 ring-stone-900">
                                         {index + 1}
                                     </div>
-                                    <div className="flex-1 space-y-2 ml-2">
-                                        <label className="text-[10px] font-bold text-stone-600 uppercase tracking-tighter">Action Type</label>
-                                        <select
-                                            {...register(`actions.${index}.actionType`)}
-                                            className="w-full bg-stone-900 border border-stone-800 rounded-xl px-3 py-2 text-sm text-stone-300 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
-                                        >
-                                            {ACTION_TYPES.map(a => <option key={a.value} value={a.value}>{a.label}</option>)}
-                                        </select>
+
+                                    <div className="flex gap-4 items-end ml-2">
+                                        <div className="flex-1 space-y-2">
+                                            <label className="text-[10px] font-bold text-stone-600 uppercase tracking-tighter">Action Type</label>
+                                            <select
+                                                {...register(`actions.${index}.actionType`)}
+                                                className="w-full bg-stone-900 border border-stone-800 rounded-xl px-3 py-2 text-sm text-stone-300 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                                            >
+                                                {ACTION_TYPES.map(a => <option key={a.value} value={a.value}>{a.label}</option>)}
+                                            </select>
+                                        </div>
+                                        {actionFields.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeAction(index)}
+                                                className="p-2.5 text-stone-600 hover:text-red-400 hover:bg-red-500/10 rounded-xl mb-0.5 transition-all"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        )}
                                     </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => removeAction(index)}
-                                        className="p-2.5 text-stone-600 hover:text-red-400 hover:bg-red-500/10 rounded-xl mb-0.5 opacity-0 group-hover:opacity-100 transition-all"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
+
+                                    {/* Action Payloads */}
+                                    {watchedActions[index]?.actionType === 'intercom.send' && (
+                                        <div className="pt-2 ml-2 pl-4 border-l-2 border-indigo-500/30 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-medium text-stone-500 uppercase tracking-widest">Alert Template</label>
+                                                <select
+                                                    {...register(`actions.${index}.payload.templateId`)}
+                                                    className="w-full bg-stone-900 border border-stone-800 rounded-xl px-3 py-2 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                                                >
+                                                    <option value="">Custom Message Only</option>
+                                                    {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                                </select>
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-medium text-stone-500 uppercase tracking-widest">Target Role</label>
+                                                <select
+                                                    {...register(`actions.${index}.payload.targetRoleId`)}
+                                                    className="w-full bg-stone-900 border border-stone-800 rounded-xl px-3 py-2 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                                                >
+                                                    <option value="">Broadcast (All)</option>
+                                                    {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                                                </select>
+                                            </div>
+                                            <div className="md:col-span-2 space-y-1.5">
+                                                <label className="text-[10px] font-medium text-stone-500 uppercase tracking-widest">Optional Message Override</label>
+                                                <input
+                                                    placeholder="Keep empty to use template name..."
+                                                    {...register(`actions.${index}.payload.message`)}
+                                                    className="w-full bg-stone-900 border border-stone-800 rounded-xl px-3 py-2 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {watchedActions[index]?.actionType === 'obs.changeScene' && (
+                                        <div className="pt-2 ml-2 pl-4 border-l-2 border-indigo-500/30">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-medium text-stone-500 uppercase tracking-widest">Target Scene Name</label>
+                                                <input
+                                                    placeholder="Exact scene name in OBS..."
+                                                    {...register(`actions.${index}.payload.sceneName`)}
+                                                    className="w-full bg-stone-900 border border-stone-800 rounded-xl px-3 py-2 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {watchedActions[index]?.actionType === 'vmix.changeInput' && (
+                                        <div className="pt-2 ml-2 pl-4 border-l-2 border-indigo-500/30">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-medium text-stone-500 uppercase tracking-widest">Input Number or Name</label>
+                                                <input
+                                                    placeholder="Input in vMix..."
+                                                    {...register(`actions.${index}.payload.input`)}
+                                                    className="w-full bg-stone-900 border border-stone-800 rounded-xl px-3 py-2 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -236,25 +361,28 @@ export const RuleEditor = ({ isOpen, onClose, onSave, editingRule }: Props) => {
                 </form>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-stone-800 bg-stone-900/50 flex gap-4">
+                <div className="p-6 border-t border-stone-800 bg-stone-900/50 flex flex-col md:flex-row gap-4">
                     <div className="flex items-center gap-2 text-[10px] text-stone-500 flex-1 px-2">
                         <Info size={14} className="text-indigo-400" />
-                        Actions run sequentially in the order defined above.
+                        Actions run sequentially. Time triggers are evaluated every second.
                     </div>
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="px-6 py-2.5 text-sm font-bold text-stone-400 hover:text-white transition-all uppercase tracking-widest"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={handleSubmit(onSave)}
-                        disabled={isSubmitting}
-                        className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold px-8 py-2.5 rounded-2xl transition-all shadow-xl shadow-indigo-600/20 uppercase text-xs tracking-widest"
-                    >
-                        {isSubmitting ? 'Saving...' : editingRule ? 'Update Rule' : 'Activate Rule'}
-                    </button>
+                    <div className="flex gap-3">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-6 py-2.5 text-xs font-bold text-stone-400 hover:text-white transition-all uppercase tracking-widest"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleSubmit(onSave)}
+                            disabled={isSubmitting}
+                            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold px-8 py-2.5 rounded-2xl transition-all shadow-xl shadow-indigo-600/20 uppercase text-xs tracking-widest flex items-center gap-2"
+                        >
+                            {isSubmitting ? 'Saving...' : editingRule ? 'Update Rule' : 'Activate Rule'}
+                            {!isSubmitting && <ArrowRight size={14} />}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

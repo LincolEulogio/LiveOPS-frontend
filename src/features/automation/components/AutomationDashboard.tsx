@@ -128,6 +128,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
             </div>
 
             <RuleEditor
+                productionId={productionId}
                 isOpen={isEditorOpen}
                 onClose={() => setIsEditorOpen(false)}
                 onSave={async (dto) => {

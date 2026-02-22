@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Automation Hub - Rule Engine</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      h1 { font-size: 1.6rem; }
+      form { margin-bottom: 20px; }
+      label { display: block; margin-top: 8px; }
+      input, select, textarea { width: 100%; padding: 6px; margin-top: 4px; }
+      button { padding: 8px 12px; margin-top: 8px; }
+      .rule { border: 1px solid #ccc; padding: 10px; margin-bottom: 8px; }
+      .badge { display: inline-block; padding: 2px 6px; background: #eee; border-radius: 4px; font-size: 12px; margin-left: 6px; }
+    </style>
+  </head>
+  <body>
+    <h1>Automation Hub</h1>
+    <p>Configura reglas: triggers -> actions para avisos automáticos durante la transmision.</p>
+
+    <section id="new-rule">
+      <h2>Nueva Regla</h2>
+      <form id="ruleForm">
+        <label>Nombre</label>
+        <input type="text" id="name" placeholder="Ej. Alerta VTR Prevenido" />
+
+        <label>Trigger</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <select id="triggerType">
+            <option value="timing">Timing</option>
+          </select>
+          <input type="text" id="blockId" placeholder="Id de bloque (p. ej. bloque-01)" />
+          <input type="number" id="timeLeft" placeholder="Tiempo (s)" value="30" style="width:120px" />
+        </div>
+
+        <label>Action</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="actionType">
+            <option value="sendAlert">Enviar Alerta</option>
+          </select>
+          <input type="text" id="message" placeholder="Mensaje de alerta" value="VTR PREVENIDO" />
+        </div>
+        <button type="submit">Guardar Regla</button>
+      </form>
+    </section>
+
+    <section id="rulesList">
+      <h2>Reglas</h2>
+      <div id="rules"></div>
+    </section>
+
+    <section id="simulateSection">
+      <h2>Simular Evento</h2>
+      <div>
+        <input id="simBlock" placeholder="Block id" />
+        <input id="simTime" placeholder="Time left (s)" type="number" value="30" />
+        <button id="simulateBtn">Simular</button>
+      </div>
+    </section>
+
+    <section id="alertsSection">
+      <h2>Alerts (recientes)</h2>
+      <div id="alerts"></div>
+    </section>
+
+    <script src="/automation-hub/app.js"></script>
+  </body>
+  </html>
