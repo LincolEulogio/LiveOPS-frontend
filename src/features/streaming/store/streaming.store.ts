@@ -8,6 +8,7 @@ interface StreamingStore {
         isConnected?: boolean;
         obs?: Partial<import('../types/streaming.types').ObsState>;
         vmix?: Partial<import('../types/streaming.types').VmixState>;
+        tally?: import('../types/streaming.types').TallyUpdate;
     }) => void;
     getProductionState: (productionId: string) => StreamingState | undefined;
 }

@@ -40,13 +40,13 @@ export const useStreaming = (productionId: string | undefined) => {
     useEffect(() => {
         if (!socket || !productionId) return;
 
-        const handleConnectionState = (data: any) => {
+        const handleConnectionState = (data: { productionId: string; connected: boolean }) => {
             if (data.productionId === productionId) {
                 updateStreamingState(productionId, { isConnected: data.connected });
             }
         };
 
-        const handleObsSceneChanged = (data: any) => {
+        const handleObsSceneChanged = (data: { productionId: string; sceneName: string; cpuUsage?: number; fps?: number }) => {
             if (data.productionId === productionId || !data.productionId) {
                 updateStreamingState(productionId, {
                     obs: {
@@ -59,7 +59,7 @@ export const useStreaming = (productionId: string | undefined) => {
             }
         };
 
-        const handleObsStreamState = (data: any) => {
+        const handleObsStreamState = (data: { productionId: string; active: boolean }) => {
             if (data.productionId === productionId) {
                 updateStreamingState(productionId, {
                     obs: { isStreaming: data.active },
@@ -68,7 +68,7 @@ export const useStreaming = (productionId: string | undefined) => {
             }
         };
 
-        const handleObsRecordState = (data: any) => {
+        const handleObsRecordState = (data: { productionId: string; active: boolean }) => {
             if (data.productionId === productionId) {
                 updateStreamingState(productionId, {
                     obs: { isRecording: data.active },
@@ -77,7 +77,15 @@ export const useStreaming = (productionId: string | undefined) => {
             }
         };
 
-        const handleVmixUpdate = (data: any) => {
+        const handleVmixUpdate = (data: {
+            productionId: string;
+            activeInput: number;
+            previewInput: number;
+            isStreaming: boolean;
+            isRecording: boolean;
+            isExternal: boolean;
+            isMultiCorder: boolean;
+        }) => {
             if (data.productionId === productionId && data.activeInput !== undefined) {
                 updateStreamingState(productionId, {
                     vmix: {
@@ -93,12 +101,19 @@ export const useStreaming = (productionId: string | undefined) => {
             }
         };
 
+        const handleTallyUpdate = (data: import('../types/streaming.types').TallyUpdate) => {
+            if (data.productionId === productionId) {
+                updateStreamingState(productionId, { tally: data });
+            }
+        };
+
         socket.on('obs.scene.changed', handleObsSceneChanged);
         socket.on('obs.stream.state', handleObsStreamState);
         socket.on('obs.record.state', handleObsRecordState);
         socket.on('obs.connection.state', handleConnectionState);
         socket.on('vmix.connection.state', handleConnectionState);
         socket.on('vmix.input.changed', handleVmixUpdate);
+        socket.on('streaming.tally', handleTallyUpdate);
 
         // Some legacy events might still be emitted
         socket.on('engine.connection', handleConnectionState);
@@ -110,6 +125,7 @@ export const useStreaming = (productionId: string | undefined) => {
             socket.off('obs.connection.state', handleConnectionState);
             socket.off('vmix.connection.state', handleConnectionState);
             socket.off('vmix.input.changed', handleVmixUpdate);
+            socket.off('streaming.tally', handleTallyUpdate);
             socket.off('engine.connection', handleConnectionState);
         };
     }, [socket, productionId, updateStreamingState]);

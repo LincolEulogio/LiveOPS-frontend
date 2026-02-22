@@ -3,15 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import {
     Play, CheckCircle2, RotateCcw,
-    MoreHorizontal, Clock, Video,
-    AlertTriangle, Tag, Edit2, Trash2,
-    ChevronUp, ChevronDown
+    Clock, Video,
+    AlertTriangle, Tag, Edit2, Trash2
 } from 'lucide-react';
 import { TimelineBlock, TimelineStatus } from '../types/timeline.types';
 import { cn } from '@/shared/utils/cn';
 import { formatDuration } from '@/shared/utils/format';
 
+import { useTally } from '@/features/streaming/hooks/useTally';
+
 interface Props {
+    productionId: string;
     blocks: TimelineBlock[];
     onStart: (id: string) => void;
     onComplete: (id: string) => void;
@@ -23,6 +25,7 @@ interface Props {
 }
 
 export const RundownTable = ({
+    productionId,
     blocks,
     onStart,
     onComplete,
@@ -33,6 +36,7 @@ export const RundownTable = ({
     canEdit = true
 }: Props) => {
     const [currentTime, setCurrentTime] = useState(new Date());
+    const { isProgram, isPreview } = useTally(productionId);
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -66,14 +70,22 @@ export const RundownTable = ({
                             block.durationMs && block.durationMs > 0 &&
                             effective > block.durationMs;
 
+                        const inProgram = isProgram(block.source);
+                        const inPreview = isPreview(block.source);
+
                         return (
                             <tr
                                 key={block.id}
                                 className={cn(
-                                    "group transition-colors",
-                                    block.status === TimelineStatus.ACTIVE ? "bg-indigo-500/5" : "hover:bg-white/[0.02]"
+                                    "group transition-colors relative",
+                                    block.status === TimelineStatus.ACTIVE ? "bg-indigo-500/5" : "hover:bg-white/[0.02]",
+                                    inProgram && "bg-red-500/10",
+                                    inPreview && "bg-emerald-500/10"
                                 )}
                             >
+                                {/* Tally Indicator Border */}
+                                {inProgram && <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-600 shadow-[2px_0_10px_rgba(220,38,38,0.5)]" />}
+                                {inPreview && <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-600" />}
                                 <td className="px-4 py-4 text-xs font-mono text-stone-600">
                                     {(index + 1).toString().padStart(2, '0')}
                                 </td>
@@ -92,8 +104,16 @@ export const RundownTable = ({
                                 </td>
                                 <td className="px-4 py-4">
                                     <div className="flex items-center gap-2">
-                                        <Video size={12} className="text-stone-500" />
-                                        <span className="text-xs font-bold text-stone-400 uppercase">{block.source || '---'}</span>
+                                        <div className={cn(
+                                            "w-2 h-2 rounded-full",
+                                            inProgram ? "bg-red-500 animate-pulse" : inPreview ? "bg-emerald-500" : "bg-stone-700"
+                                        )} />
+                                        <span className={cn(
+                                            "text-xs font-bold uppercase",
+                                            inProgram ? "text-red-400" : inPreview ? "text-emerald-400" : "text-stone-400"
+                                        )}>
+                                            {block.source || '---'}
+                                        </span>
                                     </div>
                                 </td>
                                 <td className="px-4 py-4 text-center">

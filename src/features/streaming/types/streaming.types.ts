@@ -29,6 +29,7 @@ export interface StreamingState {
     isConnected: boolean;
     obs?: ObsState;
     vmix?: VmixState;
+    tally?: TallyUpdate;
     lastUpdate: string;
 }
 
@@ -46,4 +47,11 @@ export interface CommandResponse {
     success: boolean;
     message?: string;
     error?: string;
+}
+
+export interface TallyUpdate {
+    productionId: string;
+    engineType: EngineType;
+    program: string;
+    preview?: string;
 }
