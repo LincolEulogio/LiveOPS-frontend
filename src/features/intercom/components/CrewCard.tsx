@@ -133,52 +133,46 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
             </div>
 
             {/* Command Grid (Professional Switcher Style) */}
-            <div className="px-4 pb-5 grid grid-cols-2 gap-2 min-h-[120px]">
-                {templates.length > 0 ? (
-                    templates.slice(0, 8).map(t => {
-                        const isPending = member.isOnline && currentStatus === t.name.toUpperCase();
+            <div className="px-4 pb-5 grid grid-cols-2 gap-2 min-h-[160px]">
+                {templates.slice(0, 8).map(t => {
+                    const isPending = member.isOnline && currentStatus === t.name.toUpperCase();
 
-                        return (
-                            <button
-                                key={t.id}
-                                onClick={() => onSendCommand(t)}
-                                className={`group/btn relative h-14 rounded-xl transition-all flex items-center justify-center border-2 shadow-sm active:scale-95
-                                    ${!member.isOnline ? 'opacity-40 grayscale-[0.5]' : ''}
-                                    ${isPending
-                                        ? 'bg-indigo-500/10 border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.2)] animate-pulse'
-                                        : 'bg-stone-900 border-stone-800 hover:border-stone-700 hover:bg-stone-800'}`}
-                            >
-                                {/* Inner Highlight for professional feel */}
-                                <div className={`absolute inset-0 rounded-xl opacity-0 group-hover/btn:opacity-10 transition-opacity ${isPending ? 'opacity-20' : ''}`} style={{ backgroundColor: t.color }} />
+                    return (
+                        <button
+                            key={t.id}
+                            onClick={() => onSendCommand(t)}
+                            disabled={!member.isOnline}
+                            className={`
+                                group/btn relative p-3 rounded-xl border transition-all active:scale-95
+                                ${member.isOnline
+                                    ? 'bg-stone-900/50 border-stone-800 hover:border-indigo-500/50 hover:bg-stone-800'
+                                    : 'bg-stone-950/20 border-transparent cursor-not-allowed opacity-40'}
+                                ${isPending ? 'ring-2 ring-indigo-500/50 border-indigo-500/50 bg-indigo-500/5' : ''}
+                            `}
+                        >
+                            {/* Inner Highlight for professional feel */}
+                            <div className={`absolute inset-0 rounded-xl opacity-0 group-hover/btn:opacity-10 transition-opacity pointer-events-none ${isPending ? 'opacity-20' : ''}`} style={{ backgroundColor: t.color }} />
 
-                                <div className="flex flex-col items-center relative z-10">
-                                    <div className="mb-1 transition-transform group-hover/btn:scale-110 duration-300">
-                                        {getIconForTemplate(t.name, t.color)}
-                                    </div>
-                                    <span className={`text-[9px] font-black uppercase tracking-widest transition-colors ${isPending ? 'text-white' : 'text-stone-500 group-hover/btn:text-stone-200'}`}>
-                                        {t.name}
-                                    </span>
+                            <div className="flex flex-col items-center relative z-10 pointer-events-none">
+                                <div className="mb-1 transition-transform group-hover/btn:scale-110 duration-300">
+                                    {getIconForTemplate(t.name, t.color)}
                                 </div>
+                                <span className={`text-[9px] font-black uppercase tracking-widest transition-colors ${isPending ? 'text-indigo-400' : 'text-stone-500 group-hover/btn:text-white'}`}>
+                                    {t.name}
+                                </span>
+                            </div>
 
-                                {/* Status Indicator Dot & Name Confirmation */}
-                                {isPending && (
-                                    <>
-                                        <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_5px_rgba(129,140,248,0.8)]" />
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 5 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="absolute -top-1 px-1.5 py-0.5 bg-indigo-600 rounded text-[6px] font-black text-white shadow-lg pointer-events-none"
-                                        >
-                                            ENVIANDO A {member.userName.split(' ')[0]}
-                                        </motion.div>
-                                    </>
-                                )}
-                            </button>
-                        );
-                    })
-                ) : (
-                    <div className="col-span-2 py-8 text-center bg-stone-900/20 border border-dashed border-stone-800 rounded-2xl">
-                        <p className="text-[8px] font-black text-stone-600 uppercase tracking-widest italic">Sin Plantillas</p>
+                            {/* Status Indicator Dot */}
+                            {isPending && (
+                                <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_5px_rgba(129,140,248,0.8)]" />
+                            )}
+                        </button>
+                    );
+                })}
+                {templates.length === 0 && (
+                    <div className="col-span-2 flex flex-col items-center justify-center py-8 opacity-30 border border-dashed border-stone-800 rounded-2xl">
+                        <Zap size={16} className="text-stone-700 mb-2" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-stone-700">Sin Plantillas</span>
                     </div>
                 )}
             </div>

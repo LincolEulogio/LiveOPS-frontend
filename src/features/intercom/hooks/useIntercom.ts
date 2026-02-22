@@ -97,8 +97,17 @@ export const useIntercom = (forcedUserId?: string) => {
         templateId?: string;
         requiresAck?: boolean;
     }) => {
-        if (!socket || !isConnected || !activeProductionId || !user) return;
+        if (!socket || !isConnected || !activeProductionId || !user) {
+            console.error('[Intercom] Cannot send command: Missing context', {
+                hasSocket: !!socket,
+                isConnected,
+                activeProductionId,
+                hasUser: !!user
+            });
+            return;
+        }
 
+        console.log(`[Intercom] Emitting command: ${data.message} to production ${activeProductionId}`, data);
         socket.emit('command.send', {
             productionId: activeProductionId,
             senderId: user.id,

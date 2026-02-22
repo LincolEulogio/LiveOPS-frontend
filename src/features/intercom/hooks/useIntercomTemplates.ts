@@ -53,5 +53,6 @@ export const useIntercomTemplates = (productionId?: string) => {
             return res;
         },
         isMutating: createMutation.isPending || updateMutation.isPending || deleteMutation.isPending,
+        refetch: query.refetch,
     };
 };

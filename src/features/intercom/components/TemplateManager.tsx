@@ -23,9 +23,8 @@ const COLORS = [
     '#444444', // Dark
 ];
 
-export const TemplateManager = () => {
-    const activeProductionId = useAppStore((state) => state.activeProductionId);
-    const { templates, createTemplate, updateTemplate, deleteTemplate, isMutating } = useIntercomTemplates(activeProductionId || undefined);
+export const TemplateManager = ({ productionId }: { productionId: string }) => {
+    const { templates, createTemplate, updateTemplate, deleteTemplate, isMutating, refetch } = useIntercomTemplates(productionId);
 
     const [isManagerOpen, setIsManagerOpen] = useState(false);
     const [view, setView] = useState<'form' | 'list'>('form');
@@ -61,6 +60,10 @@ export const TemplateManager = () => {
             } else {
                 await createTemplate(data);
             }
+
+            console.log(`[TemplateManager] Mutation success, awaiting data refetch...`);
+            await refetch();
+            console.log(`[TemplateManager] Refetch complete, showing success UI`);
 
             MySwal.fire({
                 title: <p className="text-white font-black uppercase tracking-tighter">Éxito</p>,

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { useIntercom } from '../hooks/useIntercom';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
@@ -33,7 +34,10 @@ import { cn } from '@/shared/utils/cn';
 import { HealthMonitor } from '../../health/components/HealthMonitor';
 
 export const DashboardView = () => {
-    const activeProductionId = useAppStore((state) => state.activeProductionId);
+    const { id: productionIdFromParams } = useParams();
+    const activeProductionId = (useAppStore((state) => state.activeProductionId) || productionIdFromParams) as string;
+
+    // Pass direct ID to useIntercom to ensure it identifies correctly
     const { sendCommand, members: onlineMembers } = useIntercom();
     const { history } = useIntercomStore();
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -49,8 +53,8 @@ export const DashboardView = () => {
         enabled: !!activeProductionId,
     });
 
-    // Fetch Templates - Use activeProductionId or build from URL params if missing
-    const { templates = [] } = useIntercomTemplates(activeProductionId || undefined);
+    // Fetch Templates - Use activeProductionId which is stabilized by params
+    const { templates = [] } = useIntercomTemplates(activeProductionId);
 
     // Merge registered users with online status
     const crewMembers = useMemo(() => {
@@ -134,7 +138,7 @@ export const DashboardView = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <TemplateManager />
+                    <TemplateManager productionId={activeProductionId} />
 
                     <button
                         onClick={() => window.open(`/productions/${activeProductionId}/talent`, '_blank')}
