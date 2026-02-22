@@ -10,6 +10,8 @@ import {
     AckCommandDto,
     CommandResponse,
     CommandStatus,
+    ChatMessage,
+    SendChatMessageDto
 } from '../types/chat.types';
 
 export const useChat = (productionId: string) => {
@@ -31,16 +33,19 @@ export const useChat = (productionId: string) => {
         enabled: !!productionId,
     });
 
-    // 2. Local state for real-time updates (we prepend new commands)
-    // We use the query as the initial state, but we also want to react to WS events instantly
+    const { data: chatHistory = [], isLoading: isLoadingChat } = useQuery({
+        queryKey: ['chat-messages', productionId],
+        queryFn: () => chatService.getChatHistory(productionId),
+        enabled: !!productionId,
+    });
+
+    // 2. Local state for real-time updates
     useEffect(() => {
         if (!socket || !productionId) return;
 
         const handleCommandReceived = (command: Command) => {
             if (command.productionId === productionId) {
-                // Optimistically update the query cache
                 queryClient.setQueryData(['chat-history', productionId], (old: Command[] = []) => {
-                    // Check if it already exists to avoid duplicates
                     if (old.some(c => c.id === command.id)) return old;
                     return [command, ...old];
                 });
@@ -51,7 +56,6 @@ export const useChat = (productionId: string) => {
             queryClient.setQueryData(['chat-history', productionId], (old: Command[] = []) => {
                 return old.map(cmd => {
                     if (cmd.id === response.commandId) {
-                        // Check if response already exists
                         const responseExists = cmd.responses?.some(r => r.id === response.id);
                         if (responseExists) return cmd;
 
@@ -65,16 +69,49 @@ export const useChat = (productionId: string) => {
             });
         };
 
+        const handleChatReceived = (message: ChatMessage) => {
+            if (message.productionId === productionId) {
+                queryClient.setQueryData(['chat-messages', productionId], (old: ChatMessage[] = []) => {
+                    if (old.some(m => m.id === message.id)) return old;
+                    return [...old, message];
+                });
+            }
+        };
+
         socket.on('command.received', handleCommandReceived);
         socket.on('command.ack_received', handleAckReceived);
+        socket.on('chat.received', handleChatReceived);
 
         return () => {
             socket.off('command.received', handleCommandReceived);
             socket.off('command.ack_received', handleAckReceived);
+            socket.off('chat.received', handleChatReceived);
         };
     }, [socket, productionId, queryClient]);
 
-    // 3. Command Actions
+    // 3. Actions
+    const sendChatMessage = useCallback((message: string) => {
+        if (!socket || !isConnected || !user) return;
+
+        const dto: SendChatMessageDto = {
+            productionId,
+            userId: user.id,
+            message,
+        };
+
+        // Optimistic append
+        const optimisticMessage: ChatMessage = {
+            id: `temp-chat-${Date.now()}`,
+            ...dto,
+            createdAt: new Date().toISOString(),
+            user: { id: user.id, name: user.name || 'Me' },
+        };
+
+        queryClient.setQueryData(['chat-messages', productionId], (old: ChatMessage[] = []) => [...old, optimisticMessage]);
+
+        socket.emit('chat.send', dto);
+    }, [socket, isConnected, productionId, user, queryClient]);
+
     const sendCommand = useCallback((message: string, options?: Partial<Omit<SendCommandDto, 'message' | 'productionId' | 'senderId'>>) => {
         if (!socket || !isConnected || !user) return;
 
@@ -159,9 +196,11 @@ export const useChat = (productionId: string) => {
 
     return {
         history,
+        chatHistory,
         templates,
-        isLoading: isLoadingHistory || isLoadingTemplates,
+        isLoading: isLoadingHistory || isLoadingTemplates || isLoadingChat,
         sendCommand,
+        sendChatMessage,
         ackCommand,
         createTemplate: createTemplateMutation.mutateAsync,
         deleteTemplate: deleteTemplateMutation.mutateAsync,

@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { Guard } from '@/shared/components/Guard';
 import { TimelineContainer } from '@/features/timeline/components/TimelineContainer';
 import { IntercomPanel } from '@/features/chat/components/IntercomPanel';
+import { ChatPanel } from '@/features/chat/components/ChatPanel';
 
 export default function ProductionDetailPage() {
   const params = useParams();
@@ -208,6 +209,7 @@ export default function ProductionDetailPage() {
           </div>
         </div>
       </div>
+      <ChatPanel productionId={id} />
     </div>
   );
 }

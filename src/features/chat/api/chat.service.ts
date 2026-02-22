@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/api.client';
-import { Command, CommandTemplate } from '../types/chat.types';
+import { Command, CommandTemplate, ChatMessage } from '../types/chat.types';
 
 export const chatService = {
     getCommandHistory: (productionId: string, limit: number = 50): Promise<Command[]> =>
@@ -16,4 +16,7 @@ export const chatService = {
 
     deleteTemplate: (productionId: string, templateId: string): Promise<{ success: boolean }> =>
         apiClient.delete(`/productions/${productionId}/intercom/templates/${templateId}`),
+
+    getChatHistory: (productionId: string, limit: number = 100): Promise<ChatMessage[]> =>
+        apiClient.get(`/chats/${productionId}`, { params: { limit } }),
 };

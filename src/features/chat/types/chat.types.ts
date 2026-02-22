@@ -66,3 +66,21 @@ export interface AckCommandDto {
     note?: string;
     productionId: string;
 }
+
+export interface ChatMessage {
+    id: string;
+    productionId: string;
+    userId: string;
+    message: string;
+    createdAt: string;
+    user?: {
+        id: string;
+        name: string;
+    };
+}
+
+export interface SendChatMessageDto {
+    productionId: string;
+    userId: string;
+    message: string;
+}
