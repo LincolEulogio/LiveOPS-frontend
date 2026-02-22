@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ReactQueryProvider } from '@/shared/api/react-query.provider';
 import { SocketProvider } from '@/shared/socket/socket.provider';
+import { AudioProvider } from '@/shared/providers/AudioProvider';
 
 import { ErrorBoundary } from '@/shared/components/ErrorBoundary';
 
@@ -33,7 +34,9 @@ export default function RootLayout({
       >
         <ErrorBoundary>
           <ReactQueryProvider>
-            <SocketProvider>{children}</SocketProvider>
+            <AudioProvider>
+              <SocketProvider>{children}</SocketProvider>
+            </AudioProvider>
           </ReactQueryProvider>
         </ErrorBoundary>
       </body>

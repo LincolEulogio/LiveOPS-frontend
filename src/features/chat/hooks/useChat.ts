@@ -1,8 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { chatService } from '../api/chat.service';
+import { useEffect, useCallback, useState } from 'react';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { useEffect, useState, useCallback } from 'react';
+import { useAudio } from '@/shared/providers/AudioProvider';
+import { chatService } from '../api/chat.service';
 import {
     Command,
     CommandTemplate,
@@ -17,7 +18,11 @@ import {
 export const useChat = (productionId: string) => {
     const queryClient = useQueryClient();
     const { socket, isConnected } = useSocket();
+    const { playNotification } = useAudio();
     const user = useAuthStore((state) => state.user);
+
+    const [unreadCount, setUnreadCount] = useState(0);
+    const [typingUsers, setTypingUsers] = useState<Record<string, string>>({});
 
     // 1. Fetch history and templates via React Query
     const { data: history = [], isLoading: isLoadingHistory } = useQuery({
@@ -73,23 +78,62 @@ export const useChat = (productionId: string) => {
             if (message.productionId === productionId) {
                 queryClient.setQueryData(['chat-messages', productionId], (old: ChatMessage[] = []) => {
                     if (old.some(m => m.id === message.id)) return old;
+
+                    // Trigger audio and unread count if it's not our own message and not a system message
+                    if (message.userId && message.userId !== user?.id) {
+                        playNotification();
+                        setUnreadCount(prev => prev + 1);
+                    }
+
                     return [...old, message];
                 });
+
+                // Clear typing indicator for this user when message arrives
+                if (message.userId) {
+                    setTypingUsers(prev => {
+                        const next = { ...prev };
+                        delete next[message.userId!];
+                        return next;
+                    });
+                }
             }
+        };
+
+        const handleTyping = (data: { userId: string; userName: string; isTyping: boolean }) => {
+            setTypingUsers(prev => {
+                const next = { ...prev };
+                if (data.isTyping) {
+                    next[data.userId] = data.userName;
+                } else {
+                    delete next[data.userId];
+                }
+                return next;
+            });
         };
 
         socket.on('command.received', handleCommandReceived);
         socket.on('command.ack_received', handleAckReceived);
         socket.on('chat.received', handleChatReceived);
+        socket.on('chat.typing', handleTyping);
 
         return () => {
             socket.off('command.received', handleCommandReceived);
             socket.off('command.ack_received', handleAckReceived);
             socket.off('chat.received', handleChatReceived);
+            socket.off('chat.typing', handleTyping);
         };
-    }, [socket, productionId, queryClient]);
+    }, [socket, productionId, queryClient, user, playNotification]);
 
     // 3. Actions
+    const setTyping = useCallback((isTyping: boolean) => {
+        if (!socket || !isConnected || !user) return;
+        socket.emit('chat.typing', {
+            productionId,
+            userId: user.id,
+            userName: user.name || 'User',
+            isTyping,
+        });
+    }, [socket, isConnected, productionId, user]);
     const sendChatMessage = useCallback((message: string) => {
         if (!socket || !isConnected || !user) return;
 
@@ -199,6 +243,10 @@ export const useChat = (productionId: string) => {
         chatHistory,
         templates,
         isLoading: isLoadingHistory || isLoadingTemplates || isLoadingChat,
+        unreadCount,
+        typingUsers,
+        setTyping,
+        resetUnread: () => setUnreadCount(0),
         sendCommand,
         sendChatMessage,
         ackCommand,

@@ -1,33 +1,55 @@
 'use client';
 
 import { useChat } from '../hooks/useChat';
-import { MessageSquare, Send, User, Clock, Hash, ChevronRight, ChevronLeft } from 'lucide-react';
+import { MessageSquare, Send, User, Clock, Hash, ChevronRight, ChevronLeft, Terminal, Info } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/shared/utils/cn';
 import { useAuthStore } from '@/features/auth/store/auth.store';
+import { useSocket } from '@/shared/socket/socket.provider';
 
 interface Props {
     productionId: string;
 }
 
 export const ChatPanel = ({ productionId }: Props) => {
-    const { chatHistory, sendChatMessage, isConnected, isLoading } = useChat(productionId);
+    const { socket } = useSocket();
+    const { chatHistory, sendChatMessage, isConnected, isLoading, unreadCount, resetUnread, typingUsers, setTyping } = useChat(productionId);
     const currentUser = useAuthStore((state) => state.user);
     const [message, setMessage] = useState('');
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false); // Start closed to show off the unread badge if messages come in
     const scrollRef = useRef<HTMLDivElement>(null);
+    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Auto-scroll to bottom
+    // Reset unread when opened
     useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        if (isOpen && unreadCount > 0) {
+            resetUnread();
         }
-    }, [chatHistory, isOpen]);
+    }, [isOpen, unreadCount, resetUnread]);
+
+    const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setMessage(e.target.value);
+
+        if (!socket || !isConnected) return;
+
+        // Emit typing
+        setTyping(true);
+
+        // Clear existing timeout
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+        // Set timeout to stop typing
+        typingTimeoutRef.current = setTimeout(() => {
+            setTyping(false);
+        }, 2000);
+    };
 
     const handleSend = () => {
         if (!message.trim()) return;
         sendChatMessage(message.trim());
         setMessage('');
+        setTyping(false);
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -51,6 +73,13 @@ export const ChatPanel = ({ productionId }: Props) => {
                 )}
             >
                 {isOpen ? <ChevronRight size={16} className="group-hover:scale-125 transition-transform" /> : <ChevronLeft size={16} className="group-hover:scale-125 transition-transform" />}
+
+                {/* Unread Badge */}
+                {!isOpen && unreadCount > 0 && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center border-2 border-stone-950 animate-bounce">
+                        <span className="text-[9px] font-black text-white">{unreadCount > 9 ? '9+' : unreadCount}</span>
+                    </div>
+                )}
             </button>
 
             <div className="flex-1 bg-stone-950/90 backdrop-blur-2xl border-l border-stone-800 flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)]">
@@ -83,7 +112,22 @@ export const ChatPanel = ({ productionId }: Props) => {
                     )}
 
                     {chatHistory.map((msg, i) => {
+                        const isSystem = !msg.userId;
                         const isMe = msg.userId === currentUser?.id;
+
+                        if (isSystem) {
+                            return (
+                                <div key={msg.id} className="flex justify-center py-1 animate-in fade-in zoom-in-95 duration-500">
+                                    <div className="bg-stone-900/50 border border-stone-800/50 rounded-full px-3 py-1 flex items-center gap-2">
+                                        <Terminal size={10} className="text-stone-500" />
+                                        <span className="text-[10px] font-bold text-stone-400 tracking-tight italic">
+                                            {msg.message}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        }
+
                         return (
                             <div
                                 key={msg.id}
@@ -112,11 +156,25 @@ export const ChatPanel = ({ productionId }: Props) => {
                 </div>
 
                 {/* Input Area */}
-                <div className="p-4 bg-stone-900/40 border-t border-stone-800/50">
+                <div className="p-4 bg-stone-900/40 border-t border-stone-800/50 relative">
+                    {/* Typing Indicator */}
+                    {Object.keys(typingUsers).length > 0 && (
+                        <div className="absolute top-[-24px] left-4 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                            <div className="flex gap-1">
+                                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce" />
+                            </div>
+                            <span className="text-[9px] font-bold text-stone-500 italic">
+                                {Object.values(typingUsers).join(', ')} {Object.keys(typingUsers).length === 1 ? 'está escribiendo...' : 'están escribiendo...'}
+                            </span>
+                        </div>
+                    )}
+
                     <div className="relative">
                         <textarea
                             value={message}
-                            onChange={(e) => setMessage(e.target.value)}
+                            onChange={handleMessageChange}
                             onKeyDown={handleKeyDown}
                             placeholder="Escribe un mensaje..."
                             className="w-full bg-stone-950 border border-stone-800 rounded-2xl px-4 py-3 pr-12 text-xs text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[45px] max-h-[150px]"

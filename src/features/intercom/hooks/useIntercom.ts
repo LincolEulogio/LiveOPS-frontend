@@ -3,9 +3,11 @@ import { useSocket } from '@/shared/socket/socket.provider';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useAppStore } from '@/shared/store/app.store';
 import { useIntercomStore, IntercomAlert } from '../store/intercom.store';
+import { useAudio } from '@/shared/providers/AudioProvider';
 
 export const useIntercom = (forcedUserId?: string) => {
     const { socket, isConnected } = useSocket();
+    const { playAlert } = useAudio();
     const authUser = useAuthStore((state) => state.user);
     // Use forcedUserId if provided (for custom views), otherwise use logged in user
     const user = forcedUserId ? { id: forcedUserId, role: null, globalRole: null } : authUser;
@@ -46,6 +48,7 @@ export const useIntercom = (forcedUserId?: string) => {
 
                 setActiveAlert(alert);
                 addToHistory(alert);
+                playAlert();
 
                 if ('vibrate' in navigator) {
                     navigator.vibrate([200, 100, 200]);

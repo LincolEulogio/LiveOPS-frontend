@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useAppStore } from '@/shared/store/app.store';
 import { authService } from '@/features/auth/api/auth.service';
 import { Guard } from '@/shared/components/Guard';
+import { PresenceBar } from '@/shared/components/PresenceBar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -134,8 +135,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden bg-zinc-950">
-        <header className="h-16 border-b border-stone-800 flex items-center px-6 md:hidden">
-          <span className="font-bold">LiveOPS</span>
+        <header className="h-16 border-b border-stone-800 flex items-center justify-between px-6 bg-stone-950/50 backdrop-blur-md z-30">
+          <div className="flex items-center gap-4">
+            <span className="font-black text-white tracking-tighter md:hidden">LOPS</span>
+            <div className="hidden md:block">
+              {/* Optional: Breadcrumbs or Page Title could go here */}
+            </div>
+          </div>
+          <div className="flex items-center gap-6">
+            <PresenceBar />
+            <div className="h-4 w-[1px] bg-stone-800 hidden md:block" />
+            <div className="hidden md:flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Live System</span>
+            </div>
+          </div>
         </header>
         <div className="flex-1 overflow-y-auto p-6 md:p-8">{children}</div>
       </main>
