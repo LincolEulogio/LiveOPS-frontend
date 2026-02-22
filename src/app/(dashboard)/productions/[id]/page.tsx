@@ -111,6 +111,13 @@ export default function ProductionDetailPage() {
                 <FileText size={20} className="text-indigo-400" />
                 Guion Vivo
               </h2>
+              <Link
+                href={`/productions/${id}/script`}
+                className="flex items-center gap-2 px-3 py-1.5 bg-stone-900 border border-stone-800 rounded-xl text-[10px] font-bold text-stone-300 uppercase tracking-widest hover:bg-stone-800 hover:border-indigo-500/30 transition-all shadow-lg"
+              >
+                <FileText size={14} className="text-indigo-400" />
+                Preparar Guion
+              </Link>
             </div>
             <div className="h-[600px]">
               <ScriptEditor productionId={id} />
