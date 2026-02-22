@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { usePathname } from 'next/navigation';
 import { useAppStore } from '../store/app.store';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { logger } from '../utils/logger';
@@ -104,10 +105,13 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [user?.id, activeProductionId]); // Reconnect when user or production changes
 
+  const pathname = usePathname();
+  const isAuthRoute = pathname === '/login' || pathname === '/register';
+
   return (
     <SocketContext.Provider value={{ socket, isConnected, isConnecting }}>
       {children}
-      {!isConnected && isConnecting && (
+      {!isAuthRoute && !isConnected && isConnecting && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]">
           <div className="bg-stone-900 border border-stone-800 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <Loader2 className="animate-spin text-indigo-500" size={20} />
@@ -118,7 +122,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
           </div>
         </div>
       )}
-      {!isConnected && !isConnecting && (
+      {!isAuthRoute && !isConnected && !isConnecting && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]">
           <div className="bg-red-500/10 border border-red-500/20 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-4">
             <WifiOff className="text-red-500" size={20} />
