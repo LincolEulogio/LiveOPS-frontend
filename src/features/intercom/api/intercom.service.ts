@@ -20,18 +20,18 @@ export interface CreateCommandTemplateDto {
 
 export const intercomService = {
     getTemplates: async (productionId: string): Promise<IntercomTemplate[]> => {
-        const response = await apiClient.get<IntercomTemplate[]>(`/productions/${productionId}/intercom/templates`);
-        return response.data || [];
+        const response = await (apiClient.get(`/productions/${productionId}/intercom/templates`) as any);
+        return response || [];
     },
 
     createTemplate: async (productionId: string, data: CreateCommandTemplateDto): Promise<IntercomTemplate> => {
-        const response = await apiClient.post<IntercomTemplate>(`/productions/${productionId}/intercom/templates`, data);
-        return response.data;
+        const response = await (apiClient.post(`/productions/${productionId}/intercom/templates`, data) as any);
+        return response;
     },
 
     updateTemplate: async (productionId: string, id: string, data: CreateCommandTemplateDto): Promise<IntercomTemplate> => {
-        const response = await apiClient.put<IntercomTemplate>(`/productions/${productionId}/intercom/templates/${id}`, data);
-        return response.data;
+        const response = await (apiClient.put(`/productions/${productionId}/intercom/templates/${id}`, data) as any);
+        return response;
     },
 
     deleteTemplate: async (productionId: string, id: string): Promise<void> => {

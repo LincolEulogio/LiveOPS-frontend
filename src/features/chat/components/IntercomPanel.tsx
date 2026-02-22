@@ -71,7 +71,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                     </h2>
                 </div>
                 <div className="flex items-center gap-2">
-                    <TemplateManager />
+                    <TemplateManager productionId={productionId} />
                     <span className="text-[10px] font-bold text-stone-500 bg-stone-800 px-2 py-0.5 rounded uppercase tracking-tighter">
                         Active: {history.length}
                     </span>

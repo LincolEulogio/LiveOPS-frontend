@@ -227,14 +227,14 @@ export const useChat = (productionId: string) => {
         mutationFn: (dto: Omit<CommandTemplate, 'id' | 'productionId' | 'createdAt' | 'updatedAt'>) =>
             chatService.createTemplate(productionId, dto),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['chat-templates', productionId] });
+            queryClient.invalidateQueries({ queryKey: ['intercom-templates', productionId] });
         },
     });
 
     const deleteTemplateMutation = useMutation({
         mutationFn: (templateId: string) => chatService.deleteTemplate(productionId, templateId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['chat-templates', productionId] });
+            queryClient.invalidateQueries({ queryKey: ['intercom-templates', productionId] });
         },
     });
 

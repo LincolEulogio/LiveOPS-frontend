@@ -37,17 +37,29 @@ export const useIntercomTemplates = (productionId?: string) => {
         templates: query.data || [],
         isLoading: query.isLoading,
         createTemplate: async (data: CreateCommandTemplateDto) => {
+            if (!productionId) {
+                console.error('[useIntercomTemplates] Cannot create template: productionId is missing');
+                throw new Error('No production ID provided');
+            }
             console.log(`[useIntercomTemplates] Creating template for production: ${productionId}`);
             const res = await createMutation.mutateAsync(data);
             console.log(`[useIntercomTemplates] Template created, invalidating query: ['intercom-templates', ${productionId}]`);
             return res;
         },
         updateTemplate: async (args: { id: string; data: CreateCommandTemplateDto }) => {
+            if (!productionId) {
+                console.error('[useIntercomTemplates] Cannot update template: productionId is missing');
+                throw new Error('No production ID provided');
+            }
             const res = await updateMutation.mutateAsync(args);
             console.log(`[useIntercomTemplates] Template updated, invalidating query: ['intercom-templates', ${productionId}]`);
             return res;
         },
         deleteTemplate: async (id: string) => {
+            if (!productionId) {
+                console.error('[useIntercomTemplates] Cannot delete template: productionId is missing');
+                throw new Error('No production ID provided');
+            }
             const res = await deleteMutation.mutateAsync(id);
             console.log(`[useIntercomTemplates] Template deleted, invalidating query: ['intercom-templates', ${productionId}]`);
             return res;
