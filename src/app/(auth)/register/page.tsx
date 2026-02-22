@@ -17,9 +17,13 @@ const registerSchema = z.object({
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
+
 export default function RegisterPage() {
   const router = useRouter();
-  const setAuth = useAuthStore((state) => state.setAuth);
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -34,9 +38,30 @@ export default function RegisterPage() {
     try {
       setError(null);
       await authService.register(data);
+
+      await MySwal.fire({
+        title: 'Registration Successful!',
+        text: 'Your account has been created. Please log in to continue.',
+        icon: 'success',
+        background: '#1c1917',
+        color: '#fff',
+        confirmButtonColor: '#4f46e5',
+        confirmButtonText: 'Go to Login'
+      });
+
       router.push('/login');
     } catch (err: any) {
-      setError(err.message || 'Failed to register');
+      const errorMessage = err.message || 'Failed to register';
+      setError(errorMessage);
+
+      MySwal.fire({
+        title: 'Registration Failed',
+        text: errorMessage,
+        icon: 'error',
+        background: '#1c1917',
+        color: '#fff',
+        confirmButtonColor: '#ef4444',
+      });
     }
   };
 
