@@ -35,7 +35,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     const socketInstance = io(socketUrl, {
       path: '/socket.io/',
       transports: ['websocket'],
-      autoConnect: true,
+      autoConnect: false, // Changed: Don't connect automatically
       reconnectionAttempts: 20,
       reconnectionDelay: 1000,
       query: {
@@ -48,6 +48,11 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     });
 
     const initSocket = () => {
+      // Only connect if we have a user
+      if (useAuthStore.getState().user?.id) {
+        socketInstance.connect();
+      }
+
       socketInstance.on('connect', () => {
         logger.info('Live Alert System: Connected', { id: socketInstance.id });
         setIsConnected(true);
