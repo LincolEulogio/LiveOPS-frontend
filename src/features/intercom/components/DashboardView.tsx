@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useIntercom } from '../hooks/useIntercom';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
@@ -49,7 +49,7 @@ export const DashboardView = () => {
         enabled: !!activeProductionId,
     });
 
-    // Fetch Templates
+    // Fetch Templates - Use activeProductionId or build from URL params if missing
     const { templates = [] } = useIntercomTemplates(activeProductionId || undefined);
 
     // Merge registered users with online status
@@ -86,6 +86,11 @@ export const DashboardView = () => {
             requiresAck: true
         });
     };
+
+    // DEBUG: Log templates to verify they are arriving
+    useEffect(() => {
+        console.log(`[DashboardView] Current templates count: ${templates.length}`, templates);
+    }, [templates]);
 
     return (
         <div className="space-y-6 max-w-[1600px] mx-auto pb-20">
@@ -130,20 +135,6 @@ export const DashboardView = () => {
 
                 <div className="flex items-center gap-3">
                     <TemplateManager />
-                    <div className="flex bg-stone-950 p-1 rounded-xl border border-stone-800">
-                        <button
-                            onClick={() => setViewMode('grid')}
-                            className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-stone-800 text-white shadow-inner' : 'text-stone-600 hover:text-stone-400'}`}
-                        >
-                            <LayoutGrid size={18} />
-                        </button>
-                        <button
-                            onClick={() => setViewMode('list')}
-                            className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-stone-800 text-white shadow-inner' : 'text-stone-600 hover:text-stone-400'}`}
-                        >
-                            <List size={18} />
-                        </button>
-                    </div>
 
                     <button
                         onClick={() => window.open(`/productions/${activeProductionId}/talent`, '_blank')}
@@ -174,7 +165,7 @@ export const DashboardView = () => {
                     <Zap size={14} className="text-stone-500" />
                     <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest whitespace-nowrap">Global Alerts</span>
                 </div>
-                {templates.map(t => (
+                {templates.length > 0 ? templates.map(t => (
                     <button
                         key={t.id}
                         onClick={() => handleMassAlert(t.name)}
@@ -182,7 +173,9 @@ export const DashboardView = () => {
                     >
                         {t.name}
                     </button>
-                ))}
+                )) : (
+                    <span className="text-[10px] font-bold text-stone-700 uppercase tracking-widest px-4 italic">Sin plantillas configuradas</span>
+                )}
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">

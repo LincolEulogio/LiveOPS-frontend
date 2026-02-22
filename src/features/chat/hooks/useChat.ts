@@ -33,7 +33,7 @@ export const useChat = (productionId: string) => {
     });
 
     const { data: templates = [], isLoading: isLoadingTemplates } = useQuery({
-        queryKey: ['chat-templates', productionId],
+        queryKey: ['intercom-templates', productionId],
         queryFn: () => chatService.getTemplates(productionId),
         enabled: !!productionId,
     });

@@ -36,9 +36,22 @@ export const useIntercomTemplates = (productionId?: string) => {
     return {
         templates: query.data || [],
         isLoading: query.isLoading,
-        createTemplate: createMutation.mutateAsync,
-        updateTemplate: updateMutation.mutateAsync,
-        deleteTemplate: deleteMutation.mutateAsync,
+        createTemplate: async (data: CreateCommandTemplateDto) => {
+            console.log(`[useIntercomTemplates] Creating template for production: ${productionId}`);
+            const res = await createMutation.mutateAsync(data);
+            console.log(`[useIntercomTemplates] Template created, invalidating query: ['intercom-templates', ${productionId}]`);
+            return res;
+        },
+        updateTemplate: async (args: { id: string; data: CreateCommandTemplateDto }) => {
+            const res = await updateMutation.mutateAsync(args);
+            console.log(`[useIntercomTemplates] Template updated, invalidating query: ['intercom-templates', ${productionId}]`);
+            return res;
+        },
+        deleteTemplate: async (id: string) => {
+            const res = await deleteMutation.mutateAsync(id);
+            console.log(`[useIntercomTemplates] Template deleted, invalidating query: ['intercom-templates', ${productionId}]`);
+            return res;
+        },
         isMutating: createMutation.isPending || updateMutation.isPending || deleteMutation.isPending,
     };
 };
