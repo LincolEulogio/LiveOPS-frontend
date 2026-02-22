@@ -113,10 +113,19 @@ export const TemplateModal = ({ isOpen, onClose, onSave, template, isMutating }:
                                 <button
                                     type="submit"
                                     disabled={isMutating || !name.trim()}
-                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:bg-stone-800 disabled:shadow-none"
                                 >
-                                    <Save size={16} />
-                                    {template ? 'Guardar Cambios' : 'Crear Plantilla'}
+                                    {isMutating ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                            <span>Procesando...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save size={16} />
+                                            <span>{template ? 'Guardar Cambios' : 'Crear Plantilla'}</span>
+                                        </>
+                                    )}
                                 </button>
                             </form>
                         </motion.div>

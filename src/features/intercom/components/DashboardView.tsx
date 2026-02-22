@@ -152,7 +152,10 @@ export const DashboardView = () => {
                         <ExternalLink size={14} />
                         TALENT VIEW
                     </button>
-                    <button className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-indigo-600/20">
+                    <button
+                        onClick={() => handleMassAlert('TODO READY')}
+                        className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-indigo-600/20"
+                    >
                         TODO READY
                     </button>
                     <button
@@ -163,6 +166,23 @@ export const DashboardView = () => {
                         FULL LIVE
                     </button>
                 </div>
+            </div>
+
+            {/* Mass Alert Quick Access Bar */}
+            <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-2.5 flex items-center gap-3 overflow-x-auto no-scrollbar">
+                <div className="flex items-center gap-2 px-3 border-r border-stone-800 mr-1">
+                    <Zap size={14} className="text-stone-500" />
+                    <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest whitespace-nowrap">Global Alerts</span>
+                </div>
+                {templates.map(t => (
+                    <button
+                        key={t.id}
+                        onClick={() => handleMassAlert(t.name)}
+                        className="px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 hover:border-indigo-500/50 rounded-xl text-[10px] font-black text-white/70 hover:text-white uppercase tracking-widest transition-all whitespace-nowrap active:scale-95 shadow-sm"
+                    >
+                        {t.name}
+                    </button>
+                ))}
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">

@@ -97,7 +97,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         socketInstance.disconnect();
       }
     };
-  }, []); // Only on mount
+  }, [user?.id, activeProductionId]); // Reconnect when user or production changes
 
   return (
     <SocketContext.Provider value={{ socket, isConnected, isConnecting }}>

@@ -17,25 +17,32 @@ export const useIntercom = (forcedUserId?: string) => {
     const [members, setMembers] = useState<any[]>([]);
 
     useEffect(() => {
-        if (!socket || !isConnected) return;
+        if (!socket || !isConnected || !user || !activeProductionId) return;
+
+        // Force identify on connect or change
+        socket.emit('user.identify', {
+            productionId: activeProductionId,
+            userId: user.id,
+            userName: authUser?.name || 'User',
+            roleId: authUser?.role?.id || authUser?.globalRole?.id || '',
+            roleName: authUser?.role?.name || authUser?.globalRole?.name || 'Viewer',
+        });
 
         const handlePresence = (data: { members: any[] }) => {
             setMembers(data.members);
         };
 
         const handleCommand = (command: any) => {
-            console.log(`[Intercom] Command received for production ${activeProductionId}:`, command);
-
-            // Check if this command is for us
+            // Improved targeting logic
             const isTargeted = command.targetUserId
                 ? (user?.id === command.targetUserId)
                 : (!command.targetRoleId ||
                     (authUser?.globalRole?.id === command.targetRoleId) ||
                     (authUser?.role?.id === command.targetRoleId));
 
-            console.log(`[Intercom] Target check (forcedId: ${forcedUserId}): matched=${isTargeted}. MyID=${user?.id}, TargetID=${command.targetUserId}`);
+            const isMeSender = command.senderId === user?.id;
 
-            if (isTargeted) {
+            if (isTargeted && !isMeSender) {
                 const alert: IntercomAlert = {
                     id: command.id,
                     message: command.message,
@@ -53,6 +60,18 @@ export const useIntercom = (forcedUserId?: string) => {
                 if ('vibrate' in navigator) {
                     navigator.vibrate([200, 100, 200]);
                 }
+            } else if (isMeSender) {
+                // If I am the sender, just add to history without playing alert
+                const alert: IntercomAlert = {
+                    id: command.id,
+                    message: command.message,
+                    senderName: 'Yo',
+                    color: command.template?.color || '#3b82f6',
+                    timestamp: command.createdAt,
+                    requiresAck: command.requiresAck,
+                    status: 'SENT',
+                };
+                addToHistory(alert);
             }
         };
 
@@ -69,7 +88,7 @@ export const useIntercom = (forcedUserId?: string) => {
             socket.off('command.received', handleCommand);
             socket.off('command.ack_received', handleAck);
         };
-    }, [socket, isConnected, user, setActiveAlert, addToHistory, updateAlertStatus]);
+    }, [socket, isConnected, user?.id, activeProductionId, setActiveAlert, addToHistory, updateAlertStatus, authUser]);
 
     const sendCommand = useCallback((data: {
         message: string;
@@ -88,7 +107,12 @@ export const useIntercom = (forcedUserId?: string) => {
     }, [socket, isConnected, activeProductionId, user]);
 
     const acknowledgeAlert = useCallback((alertId: string, responseType: string = 'OK') => {
-        if (!socket || !isConnected || !activeProductionId || !user) return;
+        if (!socket || !isConnected || !activeProductionId || !user) {
+            console.error('[Intercom] Cannot acknowledge alert: missing context', { isConnected, activeProductionId, hasUser: !!user });
+            return;
+        }
+
+        console.log(`[Intercom] Acknowledging alert ${alertId} with ${responseType} for user ${user.id}`);
 
         socket.emit('command.ack', {
             commandId: alertId,
@@ -99,7 +123,7 @@ export const useIntercom = (forcedUserId?: string) => {
         });
 
         setActiveAlert(null);
-    }, [socket, isConnected, activeProductionId, user, setActiveAlert]);
+    }, [socket, isConnected, activeProductionId, user?.id, setActiveAlert]);
 
     return {
         sendCommand,
