@@ -89,7 +89,7 @@ export default function AdminRolesPage() {
 
                         <div className="flex justify-between items-start mb-2 relative z-10">
                             <h2 className="text-lg font-bold text-white">{role.name}</h2>
-                            {role.name !== 'ADMIN' && (
+                            {role.name !== 'ADMIN' && role.name !== 'SUPERADMIN' && (
                                 <button
                                     onClick={() => handleDeleteRole(role.id, role.name)}
                                     className="p-1.5 text-stone-500 hover:text-red-400 transition-colors"

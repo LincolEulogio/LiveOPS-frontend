@@ -6,6 +6,7 @@ import { SocketProvider } from '@/shared/socket/socket.provider';
 import { AudioProvider } from '@/shared/providers/AudioProvider';
 
 import { ErrorBoundary } from '@/shared/components/ErrorBoundary';
+import { SetupRedirect } from '@/shared/components/SetupRedirect';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,6 +36,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <ReactQueryProvider>
             <AudioProvider>
+              <SetupRedirect />
               <SocketProvider>{children}</SocketProvider>
             </AudioProvider>
           </ReactQueryProvider>

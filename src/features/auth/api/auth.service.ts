@@ -26,4 +26,8 @@ export const authService = {
       // ignore errors on logout
     }
   },
+
+  async checkSetup(): Promise<{ setupRequired: boolean }> {
+    return apiClient.get('/auth/check-setup');
+  },
 };
