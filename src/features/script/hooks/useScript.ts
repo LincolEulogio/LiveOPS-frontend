@@ -33,11 +33,18 @@ export const useScript = (productionId: string) => {
             awarenessProtocol.applyAwarenessUpdate(awareness, new Uint8Array(data.update), socket);
         };
 
+        // 6. Handle scroll synchronization from director
+        const handleScrollReceived = (data: { scrollPercentage: number }) => {
+            const event = new CustomEvent('script.scroll_remote', { detail: data });
+            window.dispatchEvent(event);
+        };
+
         socket.on('script.sync_response', handleSyncResponse);
         socket.on('script.update_received', handleUpdateReceived);
         socket.on('script.awareness_received', handleAwarenessReceived);
+        socket.on('script.scroll_received', handleScrollReceived);
 
-        // 5. Propagate local doc updates to server
+        // 7. Propagate local doc updates to server
         const onUpdate = (update: Uint8Array, origin: any) => {
             if (origin !== socket) {
                 socket.emit('script.update', {
@@ -47,7 +54,7 @@ export const useScript = (productionId: string) => {
             }
         };
 
-        // 6. Propagate local awareness updates to server
+        // 8. Propagate local awareness updates to server
         const onAwarenessUpdate = ({ added, updated, removed }: any) => {
             const changedClients = added.concat(updated).concat(removed);
             const update = awarenessProtocol.encodeAwarenessUpdate(awareness, changedClients);
@@ -64,14 +71,21 @@ export const useScript = (productionId: string) => {
             socket.off('script.sync_response', handleSyncResponse);
             socket.off('script.update_received', handleUpdateReceived);
             socket.off('script.awareness_received', handleAwarenessReceived);
+            socket.off('script.scroll_received', handleScrollReceived);
             doc.off('update', onUpdate);
             awareness.off('update', onAwarenessUpdate);
         };
     }, [socket, isConnected, productionId, doc, awareness]);
 
+    const syncScroll = useCallback((scrollPercentage: number) => {
+        if (!socket || !isConnected || !productionId) return;
+        socket.emit('script.scroll_sync', { productionId, scrollPercentage });
+    }, [socket, isConnected, productionId]);
+
     return {
         doc,
         awareness,
         isLoaded,
+        syncScroll,
     };
 };

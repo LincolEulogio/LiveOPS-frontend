@@ -5,7 +5,7 @@ import { useProduction } from '@/features/productions/hooks/useProductions';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { StreamingDashboard } from '@/features/streaming/components/StreamingDashboard';
 import { EngineType } from '@/features/streaming/types/streaming.types';
-import { AlertCircle, Server, Settings, Users, Video, Layout, Zap, BarChart3, FileText } from 'lucide-react';
+import { AlertCircle, Server, Settings, Users, Video, Layout, Zap, BarChart3, FileText, Monitor } from 'lucide-react';
 import Link from 'next/link';
 import { Guard } from '@/shared/components/Guard';
 import { TimelineContainer } from '@/features/timeline/components/TimelineContainer';
@@ -104,20 +104,28 @@ export default function ProductionDetailPage() {
 
             <StreamingDashboard productionId={id} engineType={production.engineType as any} />
           </section>
-
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
                 <FileText size={20} className="text-indigo-400" />
                 Guion Vivo
               </h2>
-              <Link
-                href={`/productions/${id}/script`}
-                className="flex items-center gap-2 px-3 py-1.5 bg-stone-900 border border-stone-800 rounded-xl text-[10px] font-bold text-stone-300 uppercase tracking-widest hover:bg-stone-800 hover:border-indigo-500/30 transition-all shadow-lg"
-              >
-                <FileText size={14} className="text-indigo-400" />
-                Preparar Guion
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/productions/${id}/script`}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-stone-900 border border-stone-800 rounded-xl text-[10px] font-bold text-stone-300 uppercase tracking-widest hover:bg-stone-800 hover:border-indigo-500/30 transition-all shadow-lg"
+                >
+                  <FileText size={14} className="text-indigo-400" />
+                  Preparar Guion
+                </Link>
+                <Link
+                  href={`/productions/${id}/prompter`}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-stone-950 border border-stone-800 rounded-xl text-[10px] font-bold text-stone-300 uppercase tracking-widest hover:bg-stone-800 hover:border-emerald-500/30 transition-all shadow-lg"
+                >
+                  <Monitor size={14} className="text-emerald-400" />
+                  Teleprompter
+                </Link>
+              </div>
             </div>
             <div className="h-[600px]">
               <ScriptEditor productionId={id} />
@@ -230,6 +238,6 @@ export default function ProductionDetailPage() {
         </div>
       </div>
       <ChatPanel productionId={id} />
-    </div>
+    </div >
   );
 }

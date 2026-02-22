@@ -6,11 +6,13 @@ import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCaret from '@tiptap/extension-collaboration-caret';
+import { SceneTag } from '../extensions/SceneTag';
 import { useScript } from '../hooks/useScript';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import {
     Bold, Italic, List, ListOrdered,
-    Type, Save, Cloud, CloudOff, AlertCircle
+    Type, Save, Cloud, CloudOff, AlertCircle,
+    Zap
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 
@@ -19,7 +21,7 @@ interface Props {
 }
 
 export const ScriptEditor = ({ productionId }: Props) => {
-    const { doc, awareness, isLoaded } = useScript(productionId);
+    const { doc, awareness, isLoaded, syncScroll } = useScript(productionId);
     const user = useAuthStore((state) => state.user);
 
     const editor = useEditor({
@@ -27,9 +29,10 @@ export const ScriptEditor = ({ productionId }: Props) => {
         extensions: [
             StarterKit,
             Placeholder.configure({
-                placeholder: 'Escribe el guion de la producción aquí...',
+                placeholder: 'Escribe el guion de la producción aquí... Usa [ESCENA:Nombre] para crear disparadores.',
             }),
             CharacterCount,
+            SceneTag,
             Collaboration.configure({
                 document: doc,
             }),
@@ -132,7 +135,14 @@ export const ScriptEditor = ({ productionId }: Props) => {
             </div>
 
             {/* Editor Area */}
-            <div className="flex-1 overflow-y-auto bg-stone-950/30 custom-scrollbar">
+            <div
+                className="flex-1 overflow-y-auto bg-stone-950/30 custom-scrollbar"
+                onScroll={(e) => {
+                    const target = e.currentTarget;
+                    const percentage = target.scrollTop / (target.scrollHeight - target.clientHeight);
+                    syncScroll(percentage);
+                }}
+            >
                 <EditorContent editor={editor} />
             </div>
 
