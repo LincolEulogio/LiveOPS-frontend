@@ -11,11 +11,13 @@ export const productionsService = {
     page?: number;
     limit?: number;
     status?: string;
+    search?: string;
   }): Promise<ProductionListResponse> {
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.append('page', params.page.toString());
     if (params?.limit) searchParams.append('limit', params.limit.toString());
     if (params?.status) searchParams.append('status', params.status);
+    if (params?.search) searchParams.append('search', params.search);
 
     return apiClient.get(`/productions?${searchParams.toString()}`);
   },

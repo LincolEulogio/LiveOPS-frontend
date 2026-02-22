@@ -4,18 +4,44 @@ import { useState } from 'react';
 import { useProductions } from '@/features/productions/hooks/useProductions';
 import { Guard } from '@/shared/components/Guard';
 import Link from 'next/link';
-import { Plus, Server, Video, AlertCircle } from 'lucide-react';
+import { Plus, Server, Video, AlertCircle, Trash2, Search, Edit2 } from 'lucide-react';
 import { EngineType, ProductionStatus } from '@/features/productions/types/production.types';
+import { useDeleteProduction } from '@/features/productions/hooks/useProductions';
+import { showConfirm, showAlert } from '@/shared/utils/swal';
 
 export default function ProductionsListPage() {
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const { data, isLoading, error } = useProductions({
     page,
     limit: 10,
     status: statusFilter || undefined,
+    search: searchTerm || undefined
   });
+
+  const { mutateAsync: deleteProduction, isPending: isDeleting } = useDeleteProduction();
+
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const result = await showConfirm(
+      '¿Eliminar producción?',
+      'Esta acción ocultará la producción de la lista. Podrá ser recuperada por un administrador.',
+      'Sí, eliminar'
+    );
+
+    if (result.isConfirmed) {
+      try {
+        await deleteProduction(id);
+        showAlert('¡Eliminado!', 'La producción ha sido eliminada correctamente.', 'success');
+      } catch (err: any) {
+        showAlert('Error', err.message || 'No se pudo eliminar la producción.', 'error');
+      }
+    }
+  };
 
   const getStatusColor = (status: ProductionStatus) => {
     switch (status) {
@@ -54,22 +80,38 @@ export default function ProductionsListPage() {
         </Guard>
       </div>
 
-      <div className="mb-6 flex gap-2">
-        {['', 'SETUP', 'ACTIVE', 'ARCHIVED'].map((status) => (
-          <button
-            key={status || 'ALL'}
-            onClick={() => {
+      <div className="mb-6 flex flex-col sm:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500" size={18} />
+          <input
+            type="text"
+            placeholder="Search by name or description..."
+            value={searchTerm}
+            onChange={(e) => {
               setPage(1);
-              setStatusFilter(status);
+              setSearchTerm(e.target.value);
             }}
-            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${statusFilter === status
-              ? 'bg-stone-800 text-white'
-              : 'bg-stone-900/50 text-stone-400 hover:bg-stone-800 hover:text-stone-200'
-              }`}
-          >
-            {status || 'All'}
-          </button>
-        ))}
+            className="w-full bg-stone-900 border border-stone-800 rounded-lg py-2 pl-10 pr-4 text-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+          />
+        </div>
+
+        <div className="flex gap-2">
+          {['', 'SETUP', 'ACTIVE', 'ARCHIVED'].map((status) => (
+            <button
+              key={status || 'ALL'}
+              onClick={() => {
+                setPage(1);
+                setStatusFilter(status);
+              }}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${statusFilter === status
+                ? 'bg-indigo-600 text-white'
+                : 'bg-stone-900/50 text-stone-400 hover:bg-stone-800 hover:text-stone-200'
+                }`}
+            >
+              {status || 'All'}
+            </button>
+          ))}
+        </div>
       </div>
 
       {isLoading ? (
@@ -115,11 +157,11 @@ export default function ProductionsListPage() {
               }
               return productions.map((production: any) => (
                 <li key={production.id}>
-                  <Link
-                    href={`/productions/${production.id}`}
-                    className="flex items-center justify-between p-4 hover:bg-stone-800/50 transition-colors group"
-                  >
-                    <div className="flex gap-4 items-center">
+                  <div className="flex items-center justify-between p-4 hover:bg-stone-800/50 transition-colors group">
+                    <Link
+                      href={`/productions/${production.id}`}
+                      className="flex gap-4 items-center flex-1 min-w-0"
+                    >
                       <div className="w-10 h-10 rounded-lg bg-stone-950 flex items-center justify-center border border-stone-800">
                         {getEngineIcon(production.engineType)}
                       </div>
@@ -131,15 +173,36 @@ export default function ProductionsListPage() {
                           {production.description || 'No description provided'}
                         </p>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-4">
+                    </Link>
+
+                    <div className="flex items-center gap-4 ml-4">
                       <span
                         className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${getStatusColor(production.status)}`}
                       >
                         {production.status}
                       </span>
+
+                      <Guard requiredPermissions={['production:manage']}>
+                        <div className="flex items-center gap-1">
+                          <Link
+                            href={`/productions/${production.id}/edit`}
+                            className="p-2 text-stone-500 hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-all"
+                            title="Edit Production"
+                          >
+                            <Edit2 size={16} />
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(production.id, e)}
+                            disabled={isDeleting}
+                            className="p-2 text-stone-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
+                            title="Delete Production"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </Guard>
                     </div>
-                  </Link>
+                  </div>
                 </li>
               ));
             })()}

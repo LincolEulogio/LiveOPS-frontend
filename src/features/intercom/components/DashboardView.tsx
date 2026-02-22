@@ -59,8 +59,9 @@ export const DashboardView = () => {
             const onlineData = onlineMembers.find(m => m.userId === pu.user.id);
 
             // Find last activity in history for this user
-            // Note: History is global, we might want to filter by responder
-            const userAcks = history.filter(h => h.status === 'ACKNOWLEDGED'); // We'd need responder ID in history to be accurate
+            const latestForUser = history
+                .filter(h => h.id.includes(pu.user.id) || h.senderName === pu.user.name) // Rough filter, better if we had specific IDs
+                .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
 
             return {
                 userId: pu.user.id,
@@ -68,7 +69,11 @@ export const DashboardView = () => {
                 roleName: pu.role.name,
                 isOnline,
                 currentStatus: onlineData?.status || 'IDLE',
-                lastAck: undefined // To be implemented with store refinement if needed
+                lastAck: (onlineData?.status && onlineData.status.startsWith('OK:')) ? {
+                    message: onlineData.status,
+                    timestamp: new Date().toISOString(),
+                    type: 'OK'
+                } : undefined
             };
         });
     }, [production, onlineMembers, history]);
@@ -191,9 +196,11 @@ export const DashboardView = () => {
                                                 )}
                                             </div>
                                             <h4 className="text-[11px] font-black text-white uppercase tracking-tight">{item.message}</h4>
-                                            <p className="text-[9px] text-stone-500 uppercase font-bold mt-1">
-                                                To: {item.senderName || 'Crew Member'}
-                                            </p>
+                                            <div className="flex items-center justify-between mt-1">
+                                                <p className="text-[9px] text-stone-500 uppercase font-bold">
+                                                    To: {item.senderName || 'Crew Member'}
+                                                </p>
+                                            </div>
                                             <div
                                                 className="absolute left-0 top-0 bottom-0 w-1 opacity-40"
                                                 style={{ backgroundColor: item.color }}

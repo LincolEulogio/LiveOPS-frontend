@@ -42,6 +42,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         productionId: useAppStore.getState().activeProductionId || '',
         userId: useAuthStore.getState().user?.id || '',
         userName: useAuthStore.getState().user?.name || '',
+        roleId: useAuthStore.getState().user?.role?.id || useAuthStore.getState().user?.globalRole?.id || '',
         roleName: useAuthStore.getState().user?.role?.name || useAuthStore.getState().user?.globalRole?.name || 'Viewer',
       },
     });

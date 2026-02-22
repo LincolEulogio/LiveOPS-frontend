@@ -16,17 +16,29 @@ import {
     MessageSquare
 } from 'lucide-react';
 
+import { useAppStore } from '@/shared/store/app.store';
+
 interface MemberPersonalViewProps {
     userId: string;
     productionId: string;
 }
 
 export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewProps) => {
-    const { acknowledgeAlert, members } = useIntercom();
+    const { acknowledgeAlert, members } = useIntercom(userId);
     const { activeAlert, history } = useIntercomStore();
+    const { setActiveProductionId } = useAppStore();
     const [lastResponse, setLastResponse] = useState<string | null>(null);
 
+    // Sync production context for socket
+    useEffect(() => {
+        if (productionId) {
+            setActiveProductionId(productionId);
+        }
+    }, [productionId, setActiveProductionId]);
+
     // Filter history for this specific user's alerts
+    // We should also check if the current logged in user is the "owner" of this view
+    // or if we should just show alerts for this userId regardless
     const myHistory = history.filter(h =>
         (h.status === 'ACKNOWLEDGED' || h.id === activeAlert?.id)
     );
@@ -46,7 +58,9 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
             <div className="px-6 py-4 border-b border-stone-900 bg-stone-900/50 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">Live Connection</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
+                        View: {members.find(m => m.userId === userId)?.userName || 'Personal Terminal'}
+                    </span>
                 </div>
                 <div className="flex items-center gap-3 opacity-40">
                     <Wifi size={14} />

@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { productionsService } from '../api/productions.service';
 import { CreateProductionDto, UpdateProductionDto } from '../types/production.types';
 
-export const useProductions = (params?: { page?: number; limit?: number; status?: string }) => {
+export const useProductions = (params?: { page?: number; limit?: number; status?: string; search?: string }) => {
   return useQuery({
     queryKey: ['productions', params],
     queryFn: () => productionsService.getProductions(params),

@@ -4,9 +4,12 @@ import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useAppStore } from '@/shared/store/app.store';
 import { useIntercomStore, IntercomAlert } from '../store/intercom.store';
 
-export const useIntercom = () => {
+export const useIntercom = (forcedUserId?: string) => {
     const { socket, isConnected } = useSocket();
-    const user = useAuthStore((state) => state.user);
+    const authUser = useAuthStore((state) => state.user);
+    // Use forcedUserId if provided (for custom views), otherwise use logged in user
+    const user = forcedUserId ? { id: forcedUserId, role: null, globalRole: null } : authUser;
+
     const activeProductionId = useAppStore((state) => state.activeProductionId);
     const { setActiveAlert, addToHistory, updateAlertStatus } = useIntercomStore();
     const [members, setMembers] = useState<any[]>([]);
@@ -19,16 +22,18 @@ export const useIntercom = () => {
         };
 
         const handleCommand = (command: any) => {
+            console.log(`[Intercom] Command received for production ${activeProductionId}:`, command);
+
             // Check if this command is for us
-            // It's for us if:
-            // 1. targetRoleId is null (broadcast)
-            // 2. targetRoleId matches our role in this production
+            const isTargeted = command.targetUserId
+                ? (user?.id === command.targetUserId)
+                : (!command.targetRoleId ||
+                    (authUser?.globalRole?.id === command.targetRoleId) ||
+                    (authUser?.role?.id === command.targetRoleId));
 
-            const isTargeted = !command.targetRoleId ||
-                (user?.globalRole?.id === command.targetRoleId) ||
-                (user?.role?.id === command.targetRoleId);
+            console.log(`[Intercom] Target check (forcedId: ${forcedUserId}): matched=${isTargeted}. MyID=${user?.id}, TargetID=${command.targetUserId}`);
 
-            if (isTargeted && command.senderId !== user?.id) {
+            if (isTargeted) {
                 const alert: IntercomAlert = {
                     id: command.id,
                     message: command.message,
@@ -42,7 +47,6 @@ export const useIntercom = () => {
                 setActiveAlert(alert);
                 addToHistory(alert);
 
-                // Vibrate if supported
                 if ('vibrate' in navigator) {
                     navigator.vibrate([200, 100, 200]);
                 }
