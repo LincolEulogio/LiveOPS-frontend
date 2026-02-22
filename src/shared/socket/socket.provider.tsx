@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAppStore } from '../store/app.store';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 import { logger } from '../utils/logger';
 import { WifiOff, Loader2 } from 'lucide-react';
 
@@ -25,8 +26,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(true);
 
-  // We grab the active productionId from Zustand so we can join its room
   const activeProductionId = useAppStore((state) => state.activeProductionId);
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     const socketUrl = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3000';
@@ -37,12 +38,17 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       autoConnect: true,
       reconnectionAttempts: 20,
       reconnectionDelay: 1000,
+      query: {
+        productionId: useAppStore.getState().activeProductionId || '',
+        userId: useAuthStore.getState().user?.id || '',
+        userName: useAuthStore.getState().user?.name || '',
+        roleName: useAuthStore.getState().user?.role?.name || useAuthStore.getState().user?.globalRole?.name || 'Viewer',
+      },
     });
 
     const initSocket = () => {
-      // Listen for connection
       socketInstance.on('connect', () => {
-        logger.info('WebSocket connected:', { id: socketInstance.id });
+        logger.info('Live Alert System: Connected', { id: socketInstance.id });
         setIsConnected(true);
         setIsConnecting(false);
 
@@ -52,9 +58,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         }
       });
 
-      // Listen for disconnect
       socketInstance.on('disconnect', (reason) => {
-        logger.warn('WebSocket disconnected:', { reason });
+        logger.warn('Live Alert System: Disconnected', { reason });
         setIsConnected(false);
         if (reason === 'io server disconnect' || reason === 'transport close' || reason === 'transport error') {
           setIsConnecting(true);
@@ -62,7 +67,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       });
 
       socketInstance.on('connect_error', (error) => {
-        logger.error('WebSocket connection error:', error);
+        logger.error('Live Alert System: Connection error', error);
         setIsConnecting(true);
       });
 
@@ -71,7 +76,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
     initSocket();
 
-    const unsubscribe = useAppStore.subscribe((state, prevState) => {
+    const unsubscribeApp = useAppStore.subscribe((state, prevState) => {
       const newProductionId = state.activeProductionId;
       const prevProductionId = prevState.activeProductionId;
 
@@ -86,17 +91,16 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     });
 
     return () => {
-      unsubscribe();
+      unsubscribeApp();
       if (socketInstance) {
         socketInstance.disconnect();
       }
     };
-  }, []);
+  }, []); // Only on mount
 
   return (
     <SocketContext.Provider value={{ socket, isConnected, isConnecting }}>
       {children}
-      {/* Global Connection Banner */}
       {!isConnected && isConnecting && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]">
           <div className="bg-stone-900 border border-stone-800 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">

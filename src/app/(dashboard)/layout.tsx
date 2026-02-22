@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { LogOut, User as UserIcon, Server, Users, Shield } from 'lucide-react';
+import { LogOut, User as UserIcon, Server, Users, Shield, Info } from 'lucide-react';
 import Link from 'next/link';
+import { useAppStore } from '@/shared/store/app.store';
 import { authService } from '@/features/auth/api/auth.service';
 import { Guard } from '@/shared/components/Guard';
 
@@ -12,6 +13,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const pathname = usePathname();
   const { token, user, clearAuth, isHydrated } = useAuthStore();
+  const activeProductionId = useAppStore((state) => state.activeProductionId);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -59,6 +61,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           >
             <Server size={18} />
             Productions
+          </Link>
+          <Link
+            href={activeProductionId ? `/productions/${activeProductionId}/intercom` : '/productions'}
+            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/intercom') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+          >
+            <Info size={18} />
+            Live Alert System
           </Link>
           <Link
             href="/profile"
