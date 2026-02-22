@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CrewCard } from './CrewCard';
+import { ProductionSelector } from '@/features/productions/components/ProductionSelector';
 
 export const DashboardView = () => {
     const activeProductionId = useAppStore((state) => state.activeProductionId);
@@ -97,6 +98,12 @@ export const DashboardView = () => {
                         <h1 className="text-xl font-black text-white uppercase tracking-tighter leading-none">Control Operacional</h1>
                         <p className="text-[10px] font-bold text-stone-500 uppercase tracking-widest mt-1">Gestión técnica y de personal en tiempo real</p>
                     </div>
+                </div>
+
+                <div className="hidden lg:block border-l border-stone-800 h-10 mx-2" />
+
+                <div className="flex-1 flex justify-center max-w-sm">
+                    <ProductionSelector />
                 </div>
 
                 <div className="flex items-center gap-3">

@@ -8,7 +8,10 @@ import * as z from 'zod';
 import { useProduction, useUpdateProduction } from '@/features/productions/hooks/useProductions';
 import { EngineType, ProductionStatus } from '@/features/productions/types/production.types';
 import Link from 'next/link';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Users, Plus, X, Shield, Mail } from 'lucide-react';
+import { useUsers } from '@/features/users/hooks/useUsers';
+import { useAssignUser, useRemoveUser } from '@/features/productions/hooks/useProductions';
+import { showAlert } from '@/shared/utils/swal';
 
 const updateProductionSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters'),
@@ -37,6 +40,11 @@ export default function EditProductionPage() {
     const { data: production, isLoading } = useProduction(id);
     const updateMutation = useUpdateProduction();
     const [error, setError] = useState<string | null>(null);
+    const { data: globalUsers } = useUsers();
+    const assignUserMutation = useAssignUser();
+    const removeUserMutation = useRemoveUser();
+    const [selectedEmail, setSelectedEmail] = useState('');
+    const [isManagingTeam, setIsManagingTeam] = useState(false);
 
     const {
         register,
@@ -96,9 +104,39 @@ export default function EditProductionPage() {
                 id,
                 data: formData,
             });
+            showAlert('¡Éxito!', 'Producción actualizada correctamente.', 'success');
             router.push(`/productions/${id}`);
         } catch (err: any) {
             setError(err.response?.data?.message || err.message || 'Failed to update production');
+        }
+    };
+
+    const handleAddMember = async () => {
+        if (!selectedEmail) return;
+        try {
+            const user = globalUsers?.find(u => u.email === selectedEmail);
+            const roleName = user?.globalRole?.name || 'VIEWER';
+
+            setIsManagingTeam(true);
+            await assignUserMutation.mutateAsync({ id, email: selectedEmail, roleName });
+            setSelectedEmail('');
+            showAlert('¡Miembro Añadido!', `Usuario ${selectedEmail} agregado.`, 'success');
+        } catch (err: any) {
+            showAlert('Error', err.message || 'No se pudo añadir al usuario.', 'error');
+        } finally {
+            setIsManagingTeam(false);
+        }
+    };
+
+    const handleRemoveMember = async (userId: string, email: string) => {
+        try {
+            setIsManagingTeam(true);
+            await removeUserMutation.mutateAsync({ id, userId });
+            showAlert('Eliminado', `Usuario ${email} removido.`, 'success');
+        } catch (err: any) {
+            showAlert('Error', err.message || 'No se pudo remover al usuario.', 'error');
+        } finally {
+            setIsManagingTeam(false);
         }
     };
 
@@ -274,6 +312,68 @@ export default function EditProductionPage() {
                         </button>
                     </div>
                 </form>
+
+                <div className="mt-10 pt-10 border-t border-stone-800">
+                    <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+                        <Users size={18} className="text-indigo-400" />
+                        Team Management
+                    </h3>
+
+                    <div className="flex gap-2 mb-6">
+                        <div className="flex-1">
+                            <select
+                                value={selectedEmail}
+                                onChange={(e) => setSelectedEmail(e.target.value)}
+                                className="w-full bg-stone-950 border border-stone-800 rounded-md px-4 py-2 text-sm text-stone-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 appearance-none"
+                            >
+                                <option value="">Select a user to invite...</option>
+                                {globalUsers?.filter(u => !production?.users?.some((pu: any) => pu.userId === u.id)).map(u => (
+                                    <option key={u.id} value={u.email}>
+                                        {u.name || u.email}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={handleAddMember}
+                            disabled={!selectedEmail || isManagingTeam}
+                            className="px-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-sm font-bold shadow-lg shadow-indigo-600/20"
+                        >
+                            <Plus size={18} /> {isManagingTeam ? 'Adding...' : 'Add'}
+                        </button>
+                    </div>
+
+                    <div className="space-y-2 bg-stone-950/50 border border-stone-800 rounded-2xl p-4">
+                        {production?.users?.map((pu: any) => (
+                            <div key={pu.userId} className="flex items-center justify-between py-2 px-3 hover:bg-stone-800/50 rounded-xl transition-colors group">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-xl bg-stone-900 border border-stone-800 flex items-center justify-center text-xs font-black text-stone-500 uppercase">
+                                        {(pu.user.name || pu.user.email).charAt(0)}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold text-white">
+                                            {pu.user.name || pu.user.email}
+                                        </p>
+                                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mt-0.5">
+                                            {pu.role.name} {pu.role.name === 'ADMIN' && ' (Propio)'}
+                                        </p>
+                                    </div>
+                                </div>
+                                {pu.role.name !== 'ADMIN' && (
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveMember(pu.userId, pu.user.email)}
+                                        disabled={isManagingTeam}
+                                        className="w-8 h-8 flex items-center justify-center text-stone-600 hover:text-red-400 hover:bg-red-400/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );
