@@ -1,21 +1,22 @@
-export enum TimelineBlockStatus {
+export enum TimelineStatus {
     PENDING = 'PENDING',
     ACTIVE = 'ACTIVE',
-    COMPLETED = 'COMPLETED',
+    COMPLETED = 'COMPLETED'
 }
 
 export interface TimelineBlock {
     id: string;
     productionId: string;
     title: string;
-    description: string | null;
-    durationMs: number;
+    description?: string;
+    durationMs?: number;
     order: number;
-    status: TimelineBlockStatus;
-    startTime: string | null;
-    endTime: string | null;
-    linkedScene: string | null;
-    intercomTemplateId: string | null;
+    status: TimelineStatus;
+    startTime?: string;
+    endTime?: string;
+    linkedScene?: string;
+    intercomTemplateId?: string;
+    intercomTemplate?: any; // To be typed if needed
     createdAt: string;
     updatedAt: string;
 }

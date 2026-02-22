@@ -24,6 +24,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { CrewCard } from './CrewCard';
 import { ProductionSelector } from '@/features/productions/components/ProductionSelector';
+import { TimelineView } from '../../timeline/components/TimelineView';
 
 export const DashboardView = () => {
     const activeProductionId = useAppStore((state) => state.activeProductionId);
@@ -165,49 +166,40 @@ export const DashboardView = () => {
                     </div>
                 </div>
 
-                {/* Status & Logs Area */}
-                <div className="space-y-6">
-                    {/* Live Tracking Panel */}
-                    <div className="bg-stone-900 border border-stone-800 rounded-3xl flex flex-col shadow-2xl h-[calc(100vh-320px)] sticky top-6">
-                        <div className="p-6 border-b border-stone-800 bg-stone-950/20 flex items-center justify-between">
-                            <h2 className="text-xs font-black text-stone-500 uppercase tracking-widest flex items-center gap-2">
-                                <Clock size={16} className="text-indigo-400" /> Historial Log
+                {/* Right Area: Timeline & Logs */}
+                <div className="xl:col-span-1 space-y-6 flex flex-col h-[calc(100vh-210px)] sticky top-6">
+                    <div className="flex-1 min-h-0 bg-stone-900 border border-stone-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+                        <TimelineView />
+                    </div>
+
+                    {/* Live Tracking Panel (Mini Version) */}
+                    <div className="flex-1 min-h-0 bg-stone-900 border border-stone-800 rounded-3xl flex flex-col shadow-2xl overflow-hidden">
+                        <div className="p-4 border-b border-stone-800 bg-stone-950/20 flex items-center justify-between">
+                            <h2 className="text-[10px] font-black text-stone-500 uppercase tracking-widest flex items-center gap-2">
+                                <Clock size={14} className="text-indigo-400" /> Historial Log
                             </h2>
-                            <button className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Ver Todo</button>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                        <div className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar text-[10px]">
                             <AnimatePresence initial={false}>
                                 {history.length === 0 ? (
-                                    <div className="h-full flex flex-col items-center justify-center text-stone-700 text-center p-8">
-                                        <ShieldAlert size={32} className="mb-4 opacity-20" />
-                                        <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">Sin actividad registrada en esta sesión</p>
+                                    <div className="h-full flex flex-col items-center justify-center text-stone-700 text-center p-4">
+                                        <p className="font-bold uppercase tracking-widest opacity-40">Sin actividad</p>
                                     </div>
                                 ) : (
-                                    history.map((item, idx) => (
+                                    history.slice(0, 50).map((item, idx) => (
                                         <motion.div
                                             key={item.id}
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
-                                            className="bg-stone-950/50 border border-stone-800 p-3 rounded-xl group relative overflow-hidden"
+                                            className="bg-stone-950/50 border border-stone-800 p-2 rounded-lg group relative overflow-hidden"
                                         >
-                                            <div className="flex items-center justify-between mb-2">
-                                                <span className="text-[9px] font-black text-stone-600 uppercase tracking-widest">
-                                                    {new Date(item.timestamp).toLocaleTimeString([], { hour12: true })}
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-[8px] font-black text-stone-600 uppercase tracking-widest">
+                                                    {new Date(item.timestamp).toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' })}
                                                 </span>
-                                                {item.status === 'ACKNOWLEDGED' && (
-                                                    <div className="flex items-center gap-1 text-green-500">
-                                                        <CheckCircle2 size={10} />
-                                                        <span className="text-[8px] font-black tracking-widest">OK</span>
-                                                    </div>
-                                                )}
                                             </div>
-                                            <h4 className="text-[11px] font-black text-white uppercase tracking-tight">{item.message}</h4>
-                                            <div className="flex items-center justify-between mt-1">
-                                                <p className="text-[9px] text-stone-500 uppercase font-bold">
-                                                    To: {item.senderName || 'Crew Member'}
-                                                </p>
-                                            </div>
+                                            <h4 className="text-[10px] font-bold text-white uppercase tracking-tight truncate">{item.message}</h4>
                                             <div
                                                 className="absolute left-0 top-0 bottom-0 w-1 opacity-40"
                                                 style={{ backgroundColor: item.color }}
@@ -216,15 +208,6 @@ export const DashboardView = () => {
                                     ))
                                 )}
                             </AnimatePresence>
-                        </div>
-
-                        {/* Visualization Mode Selector */}
-                        <div className="p-4 border-t border-stone-800 bg-stone-950/20">
-                            <p className="text-[9px] font-black text-stone-600 uppercase tracking-widest text-center mb-3">Modo de Visualización</p>
-                            <div className="grid grid-cols-2 gap-2 p-1 bg-stone-950 rounded-xl border border-stone-800 shadow-inner">
-                                <button className="py-2 bg-indigo-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest shadow-lg">Cuadrícula</button>
-                                <button className="py-2 text-stone-600 hover:text-stone-400 rounded-lg text-[9px] font-black uppercase tracking-widest">Lista</button>
-                            </div>
                         </div>
                     </div>
                 </div>
