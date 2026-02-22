@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const ScriptEditor = ({ productionId }: Props) => {
-    const { doc, awareness, isLoaded, syncScroll } = useScript(productionId);
+    const { doc, awareness, isLoaded, syncScroll, isSyncing, lastSyncTime } = useScript(productionId);
     const user = useAuthStore((state) => state.user);
 
     const editor = useEditor({
@@ -125,11 +125,22 @@ export const ScriptEditor = ({ productionId }: Props) => {
 
                 <div className="flex items-center gap-4 px-4">
                     <div className="flex items-center gap-2">
-                        <Cloud size={14} className="text-emerald-500" />
-                        <span className="text-[10px] font-black text-stone-500 uppercase tracking-tighter">Sincronizado</span>
+                        {isSyncing ? (
+                            <>
+                                <Cloud size={14} className="text-indigo-400 animate-pulse" />
+                                <span className="text-[10px] font-black text-indigo-400 uppercase tracking-tighter">Sincronizando...</span>
+                            </>
+                        ) : (
+                            <>
+                                <Cloud size={14} className="text-emerald-500" />
+                                <span className="text-[10px] font-black text-stone-500 uppercase tracking-tighter">
+                                    {lastSyncTime ? `Sincronizado ${lastSyncTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Sincronizado'}
+                                </span>
+                            </>
+                        )}
                     </div>
                     <div className="text-[10px] font-bold text-stone-600">
-                        {editor?.storage.characterCount.characters()} CARACTERES
+                        {editor?.storage.characterCount.characters() || 0} CARACTERES
                     </div>
                 </div>
             </div>

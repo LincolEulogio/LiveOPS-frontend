@@ -16,7 +16,8 @@ export const useKeyboardShortcuts = (shortcuts: ShortcutMap, enabled: boolean = 
             // Ignore if user is typing in an input or textarea
             const activeElement = document.activeElement;
             const isInput = activeElement instanceof HTMLInputElement ||
-                activeElement instanceof HTMLTextAreaElement;
+                activeElement instanceof HTMLTextAreaElement ||
+                (activeElement instanceof HTMLElement && activeElement.isContentEditable);
 
             if (isInput) return;
 

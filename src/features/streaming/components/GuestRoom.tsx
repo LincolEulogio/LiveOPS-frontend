@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useAuthStore } from '@/features/auth/store/auth.store';
+import { useRouter } from 'next/navigation';
 import {
     Video, VideoOff, Mic, MicOff,
     Settings, Users, DoorOpen,
@@ -27,6 +28,7 @@ interface PeerConnection {
 export const GuestRoom = ({ productionId }: GuestRoomProps) => {
     const { socket, isConnected: isSocketConnected } = useSocket();
     const { user } = useAuthStore();
+    const router = useRouter();
 
     const [localStream, setLocalStream] = useState<MediaStream | null>(null);
     const [peers, setPeers] = useState<Map<string, PeerConnection>>(new Map());
@@ -271,7 +273,10 @@ export const GuestRoom = ({ productionId }: GuestRoomProps) => {
                                 {isCameraOn ? <Video size={20} /> : <VideoOff size={20} />}
                             </button>
                             <div className="w-px h-8 bg-stone-700 mx-2" />
-                            <button className="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-red-600/20 active:scale-95">
+                            <button
+                                onClick={() => router.back()}
+                                className="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-red-600/20 active:scale-95"
+                            >
                                 Salir
                             </button>
                         </div>

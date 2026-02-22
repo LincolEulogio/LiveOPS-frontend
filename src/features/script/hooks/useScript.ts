@@ -8,6 +8,9 @@ export const useScript = (productionId: string) => {
     const [doc] = useState(() => new Y.Doc());
     const [awareness] = useState(() => new awarenessProtocol.Awareness(doc));
     const [isLoaded, setIsLoaded] = useState(false);
+    const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
+    const [isSyncing, setIsSyncing] = useState(false);
+    const syncTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         if (!socket || !isConnected || !productionId) return;
@@ -21,11 +24,12 @@ export const useScript = (productionId: string) => {
                 Y.applyUpdate(doc, new Uint8Array(data.content));
             }
             setIsLoaded(true);
+            setLastSyncTime(new Date());
         };
 
         // 3. Handle updates from other clients
         const handleUpdateReceived = (data: { update: Uint8Array }) => {
-            Y.applyUpdate(doc, new Uint8Array(data.update));
+            Y.applyUpdate(doc, new Uint8Array(data.update), socket);
         };
 
         // 4. Handle awareness updates (cursors/selections) from others
@@ -47,10 +51,17 @@ export const useScript = (productionId: string) => {
         // 7. Propagate local doc updates to server
         const onUpdate = (update: Uint8Array, origin: any) => {
             if (origin !== socket) {
+                setIsSyncing(true);
                 socket.emit('script.update', {
                     productionId,
                     update: Array.from(update),
                 });
+
+                if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
+                syncTimeoutRef.current = setTimeout(() => {
+                    setIsSyncing(false);
+                    setLastSyncTime(new Date());
+                }, 1000);
             }
         };
 
@@ -86,6 +97,8 @@ export const useScript = (productionId: string) => {
         doc,
         awareness,
         isLoaded,
+        isSyncing,
+        lastSyncTime,
         syncScroll,
     };
 };
