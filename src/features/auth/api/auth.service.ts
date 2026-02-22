@@ -11,13 +11,11 @@ export const authService = {
   },
 
   async getProfile(): Promise<any> {
-    const response = await apiClient.get('/auth/profile');
-    return response.data;
+    return apiClient.get('/auth/profile');
   },
 
   async updateProfile(data: { name?: string; password?: string }): Promise<any> {
-    const response = await apiClient.patch('/auth/profile', data);
-    return response.data;
+    return apiClient.patch('/auth/profile', data);
   },
 
   async logout(): Promise<void> {

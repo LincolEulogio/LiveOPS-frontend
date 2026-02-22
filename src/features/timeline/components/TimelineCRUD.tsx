@@ -8,6 +8,11 @@ import { useTimeline } from '../hooks/useTimeline';
 import { X, Clock, Type, AlignLeft, Hash, Video } from 'lucide-react';
 import { useEffect } from 'react';
 
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
+
 const blockSchema = z.object({
     title: z.string().min(1, 'Title is required'),
     description: z.string().optional(),
@@ -53,6 +58,8 @@ export const TimelineCRUD = ({
         defaultValues: {
             title: '',
             description: '',
+            source: '',
+            notes: '',
             durationMs: 300000, // 5 minutes default
             linkedScene: '',
         },
@@ -84,12 +91,46 @@ export const TimelineCRUD = ({
         try {
             if (editingBlock) {
                 await updateBlock({ id: editingBlock.id, data: data });
+                await MySwal.fire({
+                    title: '¡Actualizado!',
+                    text: 'El bloque ha sido actualizado correctamente.',
+                    icon: 'success',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    background: '#1c1917',
+                    color: '#fff'
+                });
             } else {
                 await createBlock({ ...data, order: nextOrder });
+                await MySwal.fire({
+                    title: '¡Creado!',
+                    text: 'Nuevo bloque añadido a la escaleta.',
+                    icon: 'success',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    background: '#1c1917',
+                    color: '#fff'
+                });
             }
             onClose();
-        } catch (err) {
-            console.error('Failed to save block:', err);
+        } catch (err: any) {
+            console.error('Detailed Save Error:', err);
+            const errorMessage = err.response?.data?.message || err.message || 'Error desconocido al guardar el bloque';
+
+            await MySwal.fire({
+                title: 'Error al guardar',
+                text: errorMessage,
+                icon: 'error',
+                background: '#1c1917',
+                color: '#fff',
+                confirmButtonColor: '#4f46e5'
+            });
         }
     };
 
@@ -107,7 +148,7 @@ export const TimelineCRUD = ({
             <div className="relative w-full max-w-lg bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
                 <div className="flex items-center justify-between p-6 border-b border-stone-800">
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        {editingBlock ? 'Edit Block' : 'Add Timeline Block'}
+                        {editingBlock ? 'Editar Bloque' : 'Añadir Bloque a Escaleta'}
                     </h2>
                     <button
                         onClick={onClose}
@@ -121,12 +162,12 @@ export const TimelineCRUD = ({
                     <div className="space-y-2">
                         <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
                             <Type size={16} className="text-indigo-400" />
-                            Title
+                            Título
                         </label>
                         <input
                             {...register('title')}
                             className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all"
-                            placeholder="e.g., Intro & Welcome"
+                            placeholder="Ej: Intro y Bienvenida"
                         />
                         {errors.title && <p className="text-xs text-red-400">{errors.title.message}</p>}
                     </div>
@@ -134,13 +175,13 @@ export const TimelineCRUD = ({
                     <div className="space-y-2">
                         <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
                             <AlignLeft size={16} className="text-indigo-400" />
-                            Description
+                            Descripción
                         </label>
                         <textarea
                             {...register('description')}
                             rows={3}
                             className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none"
-                            placeholder="Add some details about this segment..."
+                            placeholder="Detalles del segmento..."
                         />
                     </div>
 
@@ -148,7 +189,7 @@ export const TimelineCRUD = ({
                         <div className="space-y-2">
                             <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
                                 <Clock size={16} className="text-indigo-400" />
-                                Duration (ms)
+                                Duración (ms)
                             </label>
                             <input
                                 type="number"
@@ -160,12 +201,12 @@ export const TimelineCRUD = ({
                         <div className="space-y-2">
                             <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
                                 <Video size={16} className="text-indigo-400" />
-                                Source / Fuente
+                                Fuente
                             </label>
                             <input
                                 {...register('source')}
                                 className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
-                                placeholder="e.g. CAM 1, VTR"
+                                placeholder="Ej: CAM 1, VTR"
                             />
                         </div>
                     </div>
@@ -173,25 +214,25 @@ export const TimelineCRUD = ({
                     <div className="space-y-2">
                         <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
                             <Hash size={16} className="text-indigo-400" />
-                            Linked Scene (Automation)
+                            Escena Vinculada (OBS)
                         </label>
                         <input
                             {...register('linkedScene')}
                             className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
-                            placeholder="OBS Scene Name"
+                            placeholder="Nombre exacto en OBS"
                         />
                     </div>
 
                     <div className="space-y-2">
                         <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
                             <AlignLeft size={16} className="text-indigo-400" />
-                            Internal Notes
+                            Notas Internas
                         </label>
                         <textarea
                             {...register('notes')}
                             rows={2}
                             className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all resize-none"
-                            placeholder="Private notes for the team..."
+                            placeholder="Notas privadas para el equipo..."
                         />
                     </div>
 
@@ -201,14 +242,14 @@ export const TimelineCRUD = ({
                             onClick={onClose}
                             className="flex-1 px-4 py-2.5 bg-stone-950 hover:bg-stone-800 text-white font-semibold rounded-xl border border-stone-800 transition-all"
                         >
-                            Cancel
+                            Cancelar
                         </button>
                         <button
                             type="submit"
                             disabled={isSubmitting}
                             className="flex-[2] bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/20"
                         >
-                            {isSubmitting ? 'Saving...' : editingBlock ? 'Update Block' : 'Create Block'}
+                            {isSubmitting ? 'Guardando...' : editingBlock ? 'Actualizar' : 'Crear Bloque'}
                         </button>
                     </div>
                 </form>
