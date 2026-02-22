@@ -40,9 +40,12 @@ export const useIntercom = (forcedUserId?: string) => {
                     (authUser?.globalRole?.id === command.targetRoleId) ||
                     (authUser?.role?.id === command.targetRoleId));
 
-            const isMeSender = command.senderId === user?.id;
+            const isMeSender = command.senderId === authUser?.id;
 
-            if (isTargeted && !isMeSender) {
+            // In forced/talent view, we allow seeing our own alerts for testing/monitoring
+            const shouldShowAlert = isTargeted && (!isMeSender || !!forcedUserId);
+
+            if (shouldShowAlert) {
                 const alert: IntercomAlert = {
                     id: command.id,
                     message: command.message,
