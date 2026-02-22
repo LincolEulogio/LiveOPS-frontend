@@ -40,7 +40,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
     const userRole = currentUserProdRelation?.role || user?.globalRole;
 
     // Simple permission resolution for Phase 2
-    const isAdmin = userRole?.name === 'ADMIN' || userRole?.name === 'DIRECTOR';
+    const isAdmin = userRole?.name === 'ADMIN' || userRole?.name === 'DIRECTOR' || userRole?.name === 'SUPERADMIN';
     const isOperator = userRole?.name === 'OPERATOR' || isAdmin;
 
     const canControl = isOperator;

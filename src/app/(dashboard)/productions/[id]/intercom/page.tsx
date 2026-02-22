@@ -25,7 +25,7 @@ export default function IntercomPage() {
 
         // Default view based on role
         const roleName = (user.role?.name || user.globalRole?.name || '').toUpperCase();
-        if (['ADMIN', 'OPERATOR'].includes(roleName)) {
+        if (['ADMIN', 'OPERATOR', 'SUPERADMIN'].includes(roleName)) {
             setViewMode('dashboard');
         } else {
             setViewMode('device');

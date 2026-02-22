@@ -33,10 +33,8 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormValues) => {
     try {
       setError(null);
-      // For simplicity in this codebase, we assume register auto-logins and returns the same token payload
-      const response = await authService.register(data);
-      setAuth(response.accessToken, response.user);
-      router.push('/profile');
+      await authService.register(data);
+      router.push('/login');
     } catch (err: any) {
       setError(err.message || 'Failed to register');
     }

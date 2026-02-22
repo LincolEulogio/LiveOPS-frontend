@@ -360,7 +360,7 @@ export default function EditProductionPage() {
                                         </p>
                                     </div>
                                 </div>
-                                {pu.role.name !== 'ADMIN' && (
+                                {pu.role.name !== 'ADMIN' && pu.role.name !== 'SUPERADMIN' && (
                                     <button
                                         type="button"
                                         onClick={() => handleRemoveMember(pu.userId, pu.user.email)}

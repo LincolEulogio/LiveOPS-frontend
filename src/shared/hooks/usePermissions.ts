@@ -18,7 +18,11 @@ export function usePermissions(requiredPermissions: string[]) {
   const allActions = [...new Set([...globalActions, ...prodActions as any])];
 
   // 2. Admin bypass by name
-  if (user.globalRole?.name === 'ADMIN' || user.role?.name === 'ADMIN') {
+  const isSystemAdmin =
+    ['ADMIN', 'SUPERADMIN'].includes(user.globalRole?.name?.toUpperCase() || '') ||
+    ['ADMIN', 'SUPERADMIN'].includes(user.role?.name?.toUpperCase() || '');
+
+  if (isSystemAdmin) {
     return true;
   }
 
