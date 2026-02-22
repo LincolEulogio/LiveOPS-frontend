@@ -44,6 +44,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
     );
 
     const handleRespond = (type: string) => {
+        console.log(`[MemberPersonalView] Sending response: ${type} for alert: ${activeAlert?.id}`);
         if (activeAlert) {
             acknowledgeAlert(activeAlert.id, type);
             setLastResponse(type);
@@ -81,7 +82,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                             className="w-full max-w-md bg-stone-900 border-2 border-indigo-500/50 rounded-[40px] p-8 shadow-2xl shadow-indigo-500/10 flex flex-col items-center text-center relative z-10"
                         >
                             <div
-                                className="absolute inset-0 opacity-5 rounded-[40px]"
+                                className="absolute inset-0 opacity-5 rounded-[40px] pointer-events-none"
                                 style={{ backgroundColor: activeAlert.color }}
                             />
 
@@ -98,30 +99,69 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                             </h1>
 
                             {/* Response Grid */}
-                            <div className="grid grid-cols-2 gap-4 w-full">
+                            <div className="grid grid-cols-2 gap-3 w-full mb-6">
                                 <button
                                     onClick={() => handleRespond('OK')}
-                                    className="py-6 bg-green-600 hover:bg-green-500 text-white rounded-3xl font-black uppercase tracking-widest text-lg shadow-xl shadow-green-600/20 active:scale-95 transition-all"
+                                    className="py-5 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-green-600/20 active:scale-95 transition-all"
                                 >
                                     OK
                                 </button>
                                 <button
-                                    onClick={() => handleRespond('PROBLEMA')}
-                                    className="py-6 bg-red-600 hover:bg-red-500 text-white rounded-3xl font-black uppercase tracking-widest text-lg shadow-xl shadow-red-600/20 active:scale-95 transition-all"
+                                    onClick={() => handleRespond('COPIADO')}
+                                    className="py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-indigo-600/20 active:scale-95 transition-all"
+                                >
+                                    COPIADO
+                                </button>
+                                <button
+                                    onClick={() => handleRespond('FALA')}
+                                    className="py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-red-600/20 active:scale-95 transition-all"
                                 >
                                     FALA
                                 </button>
                                 <button
+                                    onClick={() => handleRespond('DUDA')}
+                                    className="py-5 bg-amber-500 hover:bg-amber-400 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-amber-500/20 active:scale-95 transition-all"
+                                >
+                                    DUDA
+                                </button>
+                                <button
                                     onClick={() => handleRespond('LISTO')}
-                                    className="py-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-3xl font-black uppercase tracking-widest text-sm shadow-xl shadow-indigo-600/20 active:scale-95 transition-all"
+                                    className="py-4 bg-stone-800 hover:bg-stone-700 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] active:scale-95 transition-all border border-stone-700"
                                 >
                                     LISTO
                                 </button>
                                 <button
                                     onClick={() => handleRespond('CHECK')}
-                                    className="py-6 bg-stone-800 hover:bg-stone-700 text-white rounded-3xl font-black uppercase tracking-widest text-sm active:scale-95 transition-all"
+                                    className="py-4 bg-stone-800 hover:bg-stone-700 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] active:scale-95 transition-all border border-stone-700"
                                 >
                                     CHECK
+                                </button>
+                            </div>
+
+                            {/* Custom Response Input */}
+                            <div className="w-full flex gap-2">
+                                <input
+                                    type="text"
+                                    placeholder="Mensaje personalizado..."
+                                    className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-white placeholder:text-stone-600 focus:outline-none focus:border-indigo-500/50 transition-all"
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleRespond((e.target as HTMLInputElement).value);
+                                            (e.target as HTMLInputElement).value = '';
+                                        }
+                                    }}
+                                />
+                                <button
+                                    onClick={(e) => {
+                                        const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                                        if (input.value.trim()) {
+                                            handleRespond(input.value);
+                                            input.value = '';
+                                        }
+                                    }}
+                                    className="p-3 bg-white text-black rounded-xl hover:bg-stone-200 active:scale-95 transition-all shadow-lg"
+                                >
+                                    <Send size={16} />
                                 </button>
                             </div>
                         </motion.div>

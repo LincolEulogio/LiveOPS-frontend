@@ -109,7 +109,7 @@ export const DeviceView = () => {
                     <motion.div
                         animate={{ opacity: [0.1, 0.3, 0.1] }}
                         transition={{ duration: 1, repeat: Infinity }}
-                        className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.2)_1px,transparent_1px)] bg-[size:20px_20px]"
+                        className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.2)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none"
                     />
                 )}
 
