@@ -20,22 +20,22 @@ class Logger {
         return Logger.instance;
     }
 
-    private formatMessage(level: LogLevel, message: string, context?: any) {
+    private formatMessage(level: LogLevel, message: string, context?: unknown) {
         const timestamp = new Date().toISOString();
         return `[${timestamp}] [${level.toUpperCase()}] ${message}`;
     }
 
-    public info(message: string, context?: any) {
+    public info(message: string, context?: unknown) {
         const formatted = this.formatMessage('info', message);
         console.info(formatted, context || '');
     }
 
-    public warn(message: string, context?: any) {
+    public warn(message: string, context?: unknown) {
         const formatted = this.formatMessage('warn', message);
         console.warn(formatted, context || '');
     }
 
-    public error(message: string, error?: Error | any, context?: any) {
+    public error(message: string, error?: Error | unknown, context?: unknown) {
         const formatted = this.formatMessage('error', message);
         console.error(formatted, {
             error: error instanceof Error ? {
@@ -52,7 +52,7 @@ class Logger {
         }
     }
 
-    public debug(message: string, context?: any) {
+    public debug(message: string, context?: unknown) {
         if (this.isProduction) return;
         const formatted = this.formatMessage('debug', message);
         console.debug(formatted, context || '');

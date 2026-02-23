@@ -6,6 +6,33 @@ import { useIntercomStore, IntercomAlert } from '../store/intercom.store';
 import { useAudio } from '@/shared/providers/AudioProvider';
 import { useQueryClient } from '@tanstack/react-query';
 
+interface IntercomMember {
+    userId: string;
+    userName: string;
+    roleId: string;
+    roleName: string;
+    lastSeen: string;
+    status: string;
+}
+
+interface IntercomCommandReceived {
+    id: string;
+    message: string;
+    senderId: string;
+    sender: { id: string; name: string };
+    targetUserId?: string;
+    targetRoleId?: string;
+    template?: { color: string };
+    createdAt: string;
+    requiresAck: boolean;
+}
+
+interface IntercomAck {
+    commandId: string;
+    responderId: string;
+    response: string;
+}
+
 export const useIntercom = (forcedUserId?: string) => {
     const { socket, isConnected } = useSocket();
     const { playAlert } = useAudio();
@@ -16,7 +43,7 @@ export const useIntercom = (forcedUserId?: string) => {
 
     const activeProductionId = useAppStore((state) => state.activeProductionId);
     const { setActiveAlert, addToHistory, updateAlertStatus } = useIntercomStore();
-    const [members, setMembers] = useState<any[]>([]);
+    const [members, setMembers] = useState<IntercomMember[]>([]);
 
     useEffect(() => {
         if (!socket || !isConnected || !user || !activeProductionId) return;
@@ -30,11 +57,11 @@ export const useIntercom = (forcedUserId?: string) => {
             roleName: authUser?.role?.name || authUser?.globalRole?.name || 'Viewer',
         });
 
-        const handlePresence = (data: { members: any[] }) => {
+        const handlePresence = (data: { members: IntercomMember[] }) => {
             setMembers(data.members);
         };
 
-        const handleCommand = (command: any) => {
+        const handleCommand = (command: IntercomCommandReceived) => {
             // Improved targeting logic
             const isTargeted = command.targetUserId
                 ? (user?.id === command.targetUserId)
@@ -89,7 +116,7 @@ export const useIntercom = (forcedUserId?: string) => {
             }
         };
 
-        const handleAck = (response: any) => {
+        const handleAck = (response: IntercomAck) => {
             updateAlertStatus(response.commandId, 'ACKNOWLEDGED', new Date().toISOString());
         };
 

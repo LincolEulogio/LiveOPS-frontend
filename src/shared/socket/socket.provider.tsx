@@ -72,8 +72,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         }
       });
 
-      socketInstance.on('connect_error', (error: any) => {
-        console.error('Socket connect_error details:', error.message, error.description, error.context);
+      socketInstance.on('connect_error', (error: Error) => {
+        console.error('Socket connect_error details:', error.message);
         logger.error('Live Alert System: Connection error', error);
         setIsConnecting(true);
       });

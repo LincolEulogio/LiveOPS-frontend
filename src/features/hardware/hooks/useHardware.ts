@@ -5,12 +5,27 @@ import { useState, useEffect, useCallback } from 'react';
 // Stream Deck Vendor ID for filtering
 const ELGATO_VID = 0x0fd9;
 
+interface WebMIDIDevice {
+    id: string;
+    name?: string;
+    state: string;
+    onmidimessage: ((message: any) => void) | null;
+}
+
+interface WebHIDDevice {
+    productId: number;
+    productName?: string;
+    opened: boolean;
+    open: () => Promise<void>;
+    addEventListener: (type: string, listener: (event: { data: DataView }) => void) => void;
+}
+
 export interface HardwareDevice {
     id: string;
     type: 'hid' | 'midi';
     name: string;
     connected: boolean;
-    rawDevice?: any;
+    rawDevice?: WebMIDIDevice | WebHIDDevice;
 }
 
 export interface HardwareEvent {
@@ -87,13 +102,13 @@ export const useHardware = () => {
         }
 
         try {
-            const hidDevices = await (navigator as any).hid.getDevices();
+            const hidDevices = await (navigator as any).hid.getDevices() as WebHIDDevice[];
 
-            const setupHIDDevice = (device: any) => {
+            const setupHIDDevice = (device: WebHIDDevice) => {
                 if (!device.opened) {
                     device.open().then(() => {
                         console.log(`Opened HID device: ${device.productName}`);
-                        device.addEventListener('inputreport', (event: any) => {
+                        device.addEventListener('inputreport', (event: { data: DataView }) => {
                             const { data } = event;
                             // Basic parsing for Stream Deck (varies by model, this is a generic placeholder)
                             // Usually the first few bytes indicate button state
@@ -117,11 +132,11 @@ export const useHardware = () => {
                                 });
                             }
                         });
-                    }).catch((e: any) => console.error('Failed to open HID device', e));
+                    }).catch((e: Error) => console.error('Failed to open HID device', e));
                 }
             };
 
-            const updateHIDDevices = (devs: any[]) => {
+            const updateHIDDevices = (devs: WebHIDDevice[]) => {
                 const mapped: HardwareDevice[] = devs.map(d => ({
                     id: d.productId.toString(),
                     type: 'hid',
@@ -140,13 +155,13 @@ export const useHardware = () => {
 
             updateHIDDevices(hidDevices);
 
-            (navigator as any).hid.addEventListener('connect', (e: any) => {
+            (navigator as any).hid.addEventListener('connect', () => {
                 // Re-fetch to update list
-                (navigator as any).hid.getDevices().then(updateHIDDevices);
+                (navigator as any).hid.getDevices().then((d: WebHIDDevice[]) => updateHIDDevices(d));
             });
 
-            (navigator as any).hid.addEventListener('disconnect', (e: any) => {
-                (navigator as any).hid.getDevices().then(updateHIDDevices);
+            (navigator as any).hid.addEventListener('disconnect', () => {
+                (navigator as any).hid.getDevices().then((d: WebHIDDevice[]) => updateHIDDevices(d));
             });
 
         } catch (err) {

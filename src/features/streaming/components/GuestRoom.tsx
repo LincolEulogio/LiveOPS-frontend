@@ -15,17 +15,34 @@ import { toast } from 'sonner';
 // Dynamic import for SimplePeer to avoid SSR issues
 const SimplePeer = typeof window !== 'undefined' ? require('simple-peer') : null;
 
-interface GuestRoomProps {
-    productionId: string;
+interface PresenceMember {
+    userId: string;
+    userName: string;
+    roleId: string;
+    roleName: string;
+    lastSeen: string;
+    status: string;
+}
+
+interface SignalData {
+    type: 'offer' | 'answer' | 'pranswer' | 'rollback';
+    sdp?: string;
+    candidate?: unknown;
+}
+
+interface PeerInstance {
+    signal: (data: SignalData | string) => void;
+    on: (event: string, callback: (...args: any[]) => void) => void;
+    destroy: () => void;
 }
 
 interface PeerConnection {
     peerId: string;
-    peer: any;
+    peer: PeerInstance;
     stream?: MediaStream;
 }
 
-export const GuestRoom = ({ productionId }: GuestRoomProps) => {
+export const GuestRoom = ({ productionId }: { productionId: string }) => {
     const { socket, isConnected: isSocketConnected } = useSocket();
     const { user } = useAuthStore();
     const router = useRouter();
@@ -71,7 +88,7 @@ export const GuestRoom = ({ productionId }: GuestRoomProps) => {
     useEffect(() => {
         if (!socket || !isSocketConnected || !localStream) return;
 
-        const handleSignalReceived = (data: { senderUserId: string; signal: any }) => {
+        const handleSignalReceived = (data: { senderUserId: string; signal: SignalData }) => {
             const peerInfo = peersRef.current.get(data.senderUserId);
 
             if (peerInfo) {
@@ -83,7 +100,7 @@ export const GuestRoom = ({ productionId }: GuestRoomProps) => {
             }
         };
 
-        const handlePresenceUpdate = (data: { members: any[] }) => {
+        const handlePresenceUpdate = (data: { members: PresenceMember[] }) => {
             // Find Operators/Directors to connect to
             const targets = data.members.filter(m =>
                 (m.roleName === 'DIRECTOR' || m.roleName === 'OPERATOR') &&
@@ -109,7 +126,7 @@ export const GuestRoom = ({ productionId }: GuestRoomProps) => {
         };
     }, [socket, isSocketConnected, localStream, user?.id]);
 
-    const createPeer = (peerId: string, initiator: boolean, incomingSignal?: any) => {
+    const createPeer = (peerId: string, initiator: boolean, incomingSignal?: SignalData) => {
         if (!localStream || !SimplePeer) return;
 
         console.log(`SimplePeer: Creating peer with ${peerId} (initiator: ${initiator})`);
@@ -120,7 +137,7 @@ export const GuestRoom = ({ productionId }: GuestRoomProps) => {
             stream: localStream,
         });
 
-        peer.on('signal', (signal: any) => {
+        peer.on('signal', (signal: SignalData) => {
             if (socket) {
                 socket.emit('webrtc.signal', {
                     productionId,
@@ -140,7 +157,7 @@ export const GuestRoom = ({ productionId }: GuestRoomProps) => {
             removePeer(peerId);
         });
 
-        peer.on('error', (err: any) => {
+        peer.on('error', (err: Error) => {
             console.error('Peer error:', err);
             removePeer(peerId);
         });
