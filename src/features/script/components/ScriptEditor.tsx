@@ -7,6 +7,7 @@ import CharacterCount from '@tiptap/extension-character-count';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCaret from '@tiptap/extension-collaboration-caret';
 import { SceneTag } from '../extensions/SceneTag';
+import { TimelineTag } from '../extensions/TimelineTag';
 import { useScript } from '../hooks/useScript';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import {
@@ -29,10 +30,11 @@ export const ScriptEditor = ({ productionId }: Props) => {
         extensions: [
             StarterKit,
             Placeholder.configure({
-                placeholder: 'Escribe el guion de la producción aquí... Usa [ESCENA:Nombre] para crear disparadores.',
+                placeholder: 'Escribe el guion de la producción aquí... Usa [ESCENA:Nombre] u [BLOCK:Nombre] para crear disparadores.',
             }),
             CharacterCount,
             SceneTag,
+            TimelineTag,
             Collaboration.configure({
                 document: doc,
             }),

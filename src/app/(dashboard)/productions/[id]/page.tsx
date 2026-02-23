@@ -239,6 +239,38 @@ export default function ProductionDetailPage() {
 
           <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
             <div className="flex items-center gap-3 mb-4 text-stone-200">
+              <Share2 className="text-pink-500" size={20} />
+              <h2 className="text-lg font-semibold">Social & Moderation</h2>
+            </div>
+            <p className="text-sm text-stone-500 mb-6 leading-relaxed">
+              Moderate live chats and inject fan comments directly to on-air graphics.
+            </p>
+            <Link
+              href={`/productions/${id}/social`}
+              className="block w-full text-center px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-sm font-semibold rounded-lg transition-all"
+            >
+              Open Social Inbox
+            </Link>
+          </div>
+
+          <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
+            <div className="flex items-center gap-3 mb-4 text-stone-200">
+              <BarChart3 className="text-indigo-400" size={20} />
+              <h2 className="text-lg font-semibold">Analytics</h2>
+            </div>
+            <p className="text-sm text-stone-500 mb-6 leading-relaxed">
+              Generate post-show reports and review livestream telemetry.
+            </p>
+            <Link
+              href={`/productions/${id}/analytics`}
+              className="block w-full text-center px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 text-white text-sm font-semibold rounded-lg transition-all"
+            >
+              View Dashboards
+            </Link>
+          </div>
+
+          <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
+            <div className="flex items-center gap-3 mb-4 text-stone-200">
               <BarChart3 className="text-indigo-400" size={20} />
               <h2 className="text-lg font-semibold">Analytics</h2>
             </div>

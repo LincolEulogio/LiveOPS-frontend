@@ -8,6 +8,7 @@ import { X, Plus, Trash2, Zap, Play, ArrowRight, Settings2, Info, Clock, Bell, M
 import { useEffect, useMemo } from 'react';
 import { cn } from '@/shared/utils/cn';
 import { useQuery } from '@tanstack/react-query';
+import { useSocket } from '@/shared/socket/socket.provider';
 import { intercomService } from '../../intercom/api/intercom.service';
 import { productionsService } from '../../productions/api/productions.service';
 
@@ -37,6 +38,8 @@ interface Props {
 }
 
 const EVENT_TYPES = [
+    { value: 'manual.trigger', label: 'Manual: Trigger as Macro', icon: Play },
+    { value: 'timeline.block.started', label: 'Timeline: Block started', icon: Zap },
     { value: 'timeline.before_end', label: 'Time: Before block ends', icon: Clock },
     { value: 'timeline.updated', label: 'Timeline: Any update', icon: Zap },
     { value: 'obs.scene.changed', label: 'OBS: Scene Changed', icon: Monitor },
@@ -53,6 +56,7 @@ const ACTION_TYPES = [
 ];
 
 export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule }: Props) => {
+    const { socket } = useSocket();
     // Fetch dependencies for selects
     const { data: templates = [] } = useQuery({
         queryKey: ['intercom-templates', productionId],
@@ -126,6 +130,22 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
             });
         }
     }, [editingRule, reset, isOpen]);
+
+    const handleTest = async () => {
+        const values = watch();
+        if (!socket) return;
+
+        // Emit a temporary event to trigger this specific rule's actions
+        // In a real system, we'd have a backend endpoint for this, 
+        // but for now we'll simulate the triggers.
+        socket.emit('rule.test', {
+            productionId,
+            rule: {
+                ...values,
+                id: editingRule?.id || 'new-rule-test',
+            }
+        });
+    };
 
     if (!isOpen) return null;
 
@@ -367,6 +387,13 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         Actions run sequentially. Time triggers are evaluated every second.
                     </div>
                     <div className="flex gap-3">
+                        <button
+                            type="button"
+                            onClick={handleTest}
+                            className="px-6 py-2.5 text-xs font-bold text-indigo-400 hover:bg-indigo-500/10 rounded-2xl transition-all uppercase tracking-widest border border-indigo-500/30 flex items-center gap-2"
+                        >
+                            <Zap size={14} /> Test Rule
+                        </button>
                         <button
                             type="button"
                             onClick={onClose}

@@ -23,6 +23,7 @@ export const useChat = (productionId: string) => {
 
     const [unreadCount, setUnreadCount] = useState(0);
     const [typingUsers, setTypingUsers] = useState<Record<string, string>>({});
+    const [members, setMembers] = useState<any[]>([]);
 
     // 1. Fetch history and templates via React Query
     const { data: history = [], isLoading: isLoadingHistory } = useQuery({
@@ -111,16 +112,22 @@ export const useChat = (productionId: string) => {
             });
         };
 
+        const handlePresence = (data: { members: any[] }) => {
+            setMembers(data.members);
+        };
+
         socket.on('command.received', handleCommandReceived);
         socket.on('command.ack_received', handleAckReceived);
         socket.on('chat.received', handleChatReceived);
         socket.on('chat.typing', handleTyping);
+        socket.on('presence.update', handlePresence);
 
         return () => {
             socket.off('command.received', handleCommandReceived);
             socket.off('command.ack_received', handleAckReceived);
             socket.off('chat.received', handleChatReceived);
             socket.off('chat.typing', handleTyping);
+            socket.off('presence.update', handlePresence);
         };
     }, [socket, productionId, queryClient, user, playNotification]);
 
@@ -245,6 +252,7 @@ export const useChat = (productionId: string) => {
         isLoading: isLoadingHistory || isLoadingTemplates || isLoadingChat,
         unreadCount,
         typingUsers,
+        members,
         setTyping,
         resetUnread: () => setUnreadCount(0),
         sendCommand,

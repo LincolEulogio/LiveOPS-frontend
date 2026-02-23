@@ -50,6 +50,10 @@ export const RundownTable = ({
         return Math.max(0, end - start);
     };
 
+    const totalRemainingMs = blocks
+        .filter(b => b.status === TimelineStatus.PENDING)
+        .reduce((sum, b) => sum + (b.durationMs || 0), 0);
+
     return (
         <div className="w-full overflow-hidden rounded-xl border border-stone-800 bg-stone-950/40 backdrop-blur-md">
             <table className="w-full text-left border-collapse">
@@ -60,7 +64,12 @@ export const RundownTable = ({
                         <th className="px-4 py-3 text-[10px] font-black text-stone-500 uppercase tracking-[0.2em]">Fuente</th>
                         <th className="px-4 py-3 text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] text-center">Planif.</th>
                         <th className="px-4 py-3 text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] text-center">Efectivo</th>
-                        <th className="px-4 py-3 text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] text-right">Estado / Acciones</th>
+                        <th className="px-4 py-3 text-right">
+                            <div className="inline-flex items-center gap-2 bg-stone-800/50 px-3 py-1 rounded-md border border-stone-700/50">
+                                <span className="text-[9px] font-black text-stone-500 uppercase tracking-widest">Restante:</span>
+                                <span className="text-xs font-mono font-bold text-indigo-400">{formatDuration(totalRemainingMs)}</span>
+                            </div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-800/50">

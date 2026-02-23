@@ -4,9 +4,10 @@ import { useAutomation } from '../hooks/useAutomation';
 import { RuleList } from './RuleList';
 import { ExecutionLogs } from './ExecutionLogs';
 import { RuleEditor } from './RuleEditor';
+import { HardwareManager } from '../../hardware/components/HardwareManager';
 import { useState } from 'react';
 import { Rule } from '../types/automation.types';
-import { Zap, History, Plus, Ghost } from 'lucide-react';
+import { Zap, History, Plus, Ghost, Play } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 
 interface Props {
@@ -21,12 +22,17 @@ export const AutomationDashboard = ({ productionId }: Props) => {
         createRule,
         updateRule,
         toggleRule,
-        deleteRule
+        deleteRule,
+        triggerRule,
     } = useAutomation(productionId);
+
+    const manualMacros = rules.filter(r =>
+        r.isEnabled && r.triggers.some(t => t.eventType === 'manual.trigger')
+    );
 
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [editingRule, setEditingRule] = useState<Rule | undefined>();
-    const [activeTab, setActiveTab] = useState<'rules' | 'history'>('rules');
+    const [activeTab, setActiveTab] = useState<'rules' | 'history' | 'hardware'>('rules');
 
     const handleCreate = () => {
         setEditingRule(undefined);
@@ -63,6 +69,28 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                 </button>
             </div>
 
+            {/* Manual Macros Quick Bar */}
+            {manualMacros.length > 0 && (
+                <div className="bg-stone-900/40 border border-stone-800 rounded-2xl p-4 flex items-center gap-4 overflow-x-auto no-scrollbar">
+                    <div className="flex items-center gap-2 pr-4 border-r border-stone-800 shrink-0">
+                        <Zap size={16} className="text-amber-400" />
+                        <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest">Macros Rápidas</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        {manualMacros.map(macro => (
+                            <button
+                                key={macro.id}
+                                onClick={() => triggerRule(macro)}
+                                className="flex items-center gap-2 bg-stone-800 hover:bg-stone-700 text-stone-200 px-4 py-2 rounded-xl text-xs font-bold transition-all border border-stone-700 whitespace-nowrap active:scale-95 active:bg-indigo-600 active:border-indigo-500 group"
+                            >
+                                <Play size={12} className="text-indigo-400 group-active:text-white" fill="currentColor" />
+                                {macro.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+
             {/* Main Tabs */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                 <div className="lg:col-span-2 space-y-6">
@@ -87,9 +115,19 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                             Activity History
                             {activeTab === 'history' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]"></div>}
                         </button>
+                        <button
+                            onClick={() => setActiveTab('hardware')}
+                            className={cn(
+                                "pb-4 text-xs font-bold uppercase tracking-[0.2em] transition-all relative",
+                                activeTab === 'hardware' ? "text-indigo-400" : "text-stone-500 hover:text-stone-300"
+                            )}
+                        >
+                            Hardware Config
+                            {activeTab === 'hardware' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]"></div>}
+                        </button>
                     </div>
 
-                    <div className={cn("space-y-6", activeTab !== 'rules' && "hidden lg:block")}>
+                    <div className={cn("space-y-6", activeTab === 'rules' ? 'block' : 'hidden')}>
                         <RuleList
                             rules={rules}
                             onEdit={handleEdit}
@@ -97,10 +135,14 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                             onToggle={(id, isEnabled) => toggleRule({ id, isEnabled })}
                         />
                     </div>
+
+                    <div className={cn("space-y-6", activeTab === 'hardware' ? 'block' : 'hidden')}>
+                        <HardwareManager productionId={productionId} />
+                    </div>
                 </div>
 
                 {/* Floating Sidebar for Logs */}
-                <div className={cn("space-y-6", activeTab !== 'history' && "hidden lg:block")}>
+                <div className={cn("space-y-6", activeTab !== 'history' && activeTab !== 'hardware' && "hidden lg:block")}>
                     <div className="bg-stone-900 border border-stone-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden h-[600px] flex flex-col">
                         <div className="absolute top-0 right-0 p-8 opacity-[0.02] pointer-events-none">
                             <History size={120} />

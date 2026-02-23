@@ -1,9 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { automationService } from '../api/automation.service';
-import { CreateRuleDto, UpdateRuleDto } from '../types/automation.types';
+import { CreateRuleDto, UpdateRuleDto, Rule } from '../types/automation.types';
+import { useSocket } from '@/shared/socket/socket.provider';
 
 export const useAutomation = (productionId: string) => {
     const queryClient = useQueryClient();
+    const { socket } = useSocket();
 
     // 1. Fetch rules
     const { data: rules = [], isLoading: isLoadingRules } = useQuery({
@@ -51,6 +53,15 @@ export const useAutomation = (productionId: string) => {
         },
     });
 
+    const triggerRule = (rule: Rule) => {
+        if (!socket) return;
+        socket.emit('manual.trigger', {
+            productionId,
+            ruleId: rule.id,
+            ruleName: rule.name,
+        });
+    };
+
     return {
         rules,
         logs,
@@ -59,6 +70,7 @@ export const useAutomation = (productionId: string) => {
         updateRule: updateMutation.mutateAsync,
         toggleRule: toggleMutation.mutateAsync,
         deleteRule: deleteMutation.mutateAsync,
+        triggerRule,
         isMutating: createMutation.isPending || updateMutation.isPending || toggleMutation.isPending || deleteMutation.isPending,
     };
 };

@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { apiClient as api } from '@/shared/api/api.client';
 import { useSocket } from '@/shared/socket/socket.provider';
 import {
     Activity, Zap, Cpu, BarChart3, Info, AlertTriangle,
@@ -36,6 +38,30 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
     const { socket, isConnected } = useSocket();
     const [history, setHistory] = useState<HealthStats[]>([]);
     const [latest, setLatest] = useState<HealthStats | null>(null);
+
+    const { data: historicalData } = useQuery<any[]>({
+        queryKey: ['analytics', productionId, 'telemetry', 'short'],
+        queryFn: async () => {
+            const res = await api.get(`/productions/${productionId}/analytics/telemetry?minutes=10`);
+            return res.data;
+        },
+        enabled: !!productionId,
+    });
+
+    useEffect(() => {
+        if (historicalData && history.length === 0) {
+            setHistory(historicalData.map(d => ({
+                productionId,
+                engineType: 'History',
+                cpuUsage: d.cpuUsage,
+                fps: d.fps,
+                bitrate: d.bitrate,
+                skippedFrames: d.droppedFrames || 0,
+                totalFrames: 1,
+                timestamp: d.timestamp
+            })));
+        }
+    }, [historicalData]);
 
     useEffect(() => {
         if (!socket || !isConnected) return;

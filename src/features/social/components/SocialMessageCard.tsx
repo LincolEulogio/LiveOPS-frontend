@@ -1,0 +1,97 @@
+import { SocialMessage } from '../hooks/useSocial';
+import { cn } from '@/shared/utils/cn';
+import { Check, X, Tv } from 'lucide-react';
+
+interface Props {
+    message: SocialMessage;
+    onApprove?: (id: string) => void;
+    onReject?: (id: string) => void;
+    onSendToAir?: (id: string) => void;
+    className?: string;
+}
+
+export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, className }: Props) => {
+
+    const isTwitch = message.platform === 'twitch';
+
+    return (
+        <div className={cn(
+            "p-4 rounded-xl border transition-all relative overflow-hidden group",
+            message.status === 'pending' ? "bg-stone-800/50 border-stone-700" :
+                message.status === 'approved' ? "bg-emerald-900/20 border-emerald-500/30" :
+                    message.status === 'on-air' ? "bg-indigo-900/40 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]" :
+                        "bg-red-900/10 border-red-500/20 opacity-50",
+            className
+        )}>
+            {message.status === 'on-air' && (
+                <div className="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-white text-[9px] font-bold uppercase tracking-widest rounded-bl-lg">
+                    On Air
+                </div>
+            )}
+
+            <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-stone-700 flex shrink-0 items-center justify-center overflow-hidden border border-stone-600">
+                    {message.avatarUrl ? (
+                        <img src={message.avatarUrl} alt={message.author} className="w-full h-full object-cover" />
+                    ) : (
+                        <span className="text-sm font-bold text-stone-400">{message.author.charAt(0).toUpperCase()}</span>
+                    )}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="font-bold text-sm text-stone-200 truncate">{message.author}</span>
+                        <span className={cn(
+                            "text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded",
+                            isTwitch ? "bg-purple-500/20 text-purple-400" : "bg-red-500/20 text-red-400"
+                        )}>
+                            {message.platform}
+                        </span>
+                        <span className="text-[10px] text-stone-500 ml-auto">
+                            {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                    </div>
+                    <p className="text-sm text-stone-300 break-words leading-relaxed">
+                        {message.content}
+                    </p>
+                </div>
+            </div>
+
+            {/* Actions for Pending */}
+            {message.status === 'pending' && (
+                <div className="mt-4 flex gap-2 pt-3 border-t border-stone-700/50">
+                    <button
+                        onClick={() => onApprove?.(message.id)}
+                        className="flex-1 flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                    >
+                        <Check size={14} /> Approve
+                    </button>
+                    <button
+                        onClick={() => onReject?.(message.id)}
+                        className="flex-1 flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                    >
+                        <X size={14} /> Reject
+                    </button>
+                </div>
+            )}
+
+            {/* Actions for Approved */}
+            {message.status === 'approved' && (
+                <div className="mt-4 flex gap-2 pt-3 border-t border-emerald-500/20 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                        onClick={() => onSendToAir?.(message.id)}
+                        className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-bold shadow-lg transition-all"
+                    >
+                        <Tv size={14} /> Send to Graphics
+                    </button>
+                    <button
+                        onClick={() => onReject?.(message.id)}
+                        className="px-3 flex items-center justify-center bg-stone-800 hover:bg-red-500/20 text-stone-400 hover:text-red-400 py-1.5 rounded-lg transition-colors"
+                    >
+                        <X size={14} />
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+};

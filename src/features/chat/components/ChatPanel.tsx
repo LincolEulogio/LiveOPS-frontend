@@ -13,10 +13,22 @@ interface Props {
 
 export const ChatPanel = ({ productionId }: Props) => {
     const { socket } = useSocket();
-    const { chatHistory, sendChatMessage, isConnected, isLoading, unreadCount, resetUnread, typingUsers, setTyping } = useChat(productionId);
+    const {
+        chatHistory,
+        sendChatMessage,
+        isConnected,
+        isLoading,
+        unreadCount,
+        resetUnread,
+        typingUsers,
+        setTyping,
+        members
+    } = useChat(productionId);
     const currentUser = useAuthStore((state) => state.user);
     const [message, setMessage] = useState('');
-    const [isOpen, setIsOpen] = useState(false); // Start closed to show off the unread badge if messages come in
+    const [isOpen, setIsOpen] = useState(false);
+    const [suggestions, setSuggestions] = useState<{ type: 'user' | 'command', id: string, name: string }[] | null>(null);
+    const [selectedIndex, setSelectedIndex] = useState(0);
     const scrollRef = useRef<HTMLDivElement>(null);
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -28,20 +40,48 @@ export const ChatPanel = ({ productionId }: Props) => {
     }, [isOpen, unreadCount, resetUnread]);
 
     const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setMessage(e.target.value);
+        const val = e.target.value;
+        setMessage(val);
 
         if (!socket || !isConnected) return;
 
-        // Emit typing
+        // --- Suggestions Logic ---
+        const lastChar = val[val.length - 1];
+        const lastWord = val.split(' ').pop() || '';
+
+        if (lastWord.startsWith('@')) {
+            const query = lastWord.slice(1).toLowerCase();
+            const matchingUsers = members
+                .filter(m => m.userId !== currentUser?.id && m.userName.toLowerCase().includes(query))
+                .map(m => ({ type: 'user' as const, id: m.userId, name: m.userName }));
+            setSuggestions(matchingUsers.length > 0 ? matchingUsers : null);
+            setSelectedIndex(0);
+        } else if (lastWord.startsWith('/')) {
+            const query = lastWord.slice(1).toLowerCase();
+            const commands = [
+                { type: 'command' as const, id: 'alert', name: '/alert <mensaje>' },
+                { type: 'command' as const, id: 'clear', name: '/clear' },
+            ].filter(c => c.id.includes(query));
+            setSuggestions(commands.length > 0 ? commands : null);
+            setSelectedIndex(0);
+        } else {
+            setSuggestions(null);
+        }
+
+        // --- Typing Indicator ---
         setTyping(true);
-
-        // Clear existing timeout
         if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-
-        // Set timeout to stop typing
         typingTimeoutRef.current = setTimeout(() => {
             setTyping(false);
         }, 2000);
+    };
+
+    const applySuggestion = (suggestion: { type: 'user' | 'command', id: string, name: string }) => {
+        const words = message.split(' ');
+        words.pop();
+        const replacement = suggestion.type === 'user' ? `@${suggestion.name} ` : `${suggestion.name.split(' ')[0]} `;
+        setMessage(words.join(' ') + (words.length > 0 ? ' ' : '') + replacement);
+        setSuggestions(null);
     };
 
     const handleSend = () => {
@@ -53,8 +93,31 @@ export const ChatPanel = ({ productionId }: Props) => {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (suggestions) {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                setSelectedIndex(prev => (prev + 1) % suggestions.length);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                setSelectedIndex(prev => (prev - 1 + suggestions.length) % suggestions.length);
+            } else if (e.key === 'Enter' || e.key === 'Tab') {
+                e.preventDefault();
+                applySuggestion(suggestions[selectedIndex]);
+            } else if (e.key === 'Escape') {
+                setSuggestions(null);
+            }
+            return;
+        }
+
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
+            if (message === '/clear') {
+                // Special local command
+                // Note: We'd need to update useChat to allow clearing locally
+                // For now just empty state if we had it, but history comes from queryClient
+                setMessage('');
+                return;
+            }
             handleSend();
         }
     };
@@ -148,7 +211,21 @@ export const ChatPanel = ({ productionId }: Props) => {
                                         ? "bg-indigo-600 text-white rounded-tr-none"
                                         : "bg-stone-900 text-stone-200 border border-stone-800 rounded-tl-none"
                                 )}>
-                                    {msg.message}
+                                    {msg.message.split(' ').map((word, idx) => {
+                                        if (word.startsWith('@') && word.length > 1) {
+                                            const name = word.slice(1);
+                                            const isMeMentioned = name === currentUser?.name;
+                                            return (
+                                                <span key={idx} className={cn(
+                                                    "font-black px-1 rounded",
+                                                    isMeMentioned ? "bg-yellow-400 text-black shadow-lg" : "text-indigo-300"
+                                                )}>
+                                                    {word}{' '}
+                                                </span>
+                                            );
+                                        }
+                                        return word + ' ';
+                                    })}
                                 </div>
                             </div>
                         );
@@ -168,6 +245,25 @@ export const ChatPanel = ({ productionId }: Props) => {
                             <span className="text-[9px] font-bold text-stone-500 italic">
                                 {Object.values(typingUsers).join(', ')} {Object.keys(typingUsers).length === 1 ? 'está escribiendo...' : 'están escribiendo...'}
                             </span>
+                        </div>
+                    )}
+
+                    {/* Suggestions Popup */}
+                    {suggestions && (
+                        <div className="absolute bottom-full left-4 w-[calc(100%-32px)] bg-stone-900 border border-stone-800 rounded-xl overflow-hidden shadow-2xl mb-2 animate-in slide-in-from-bottom-2 duration-200 z-50">
+                            {suggestions.map((s, i) => (
+                                <button
+                                    key={s.id}
+                                    onClick={() => applySuggestion(s)}
+                                    className={cn(
+                                        "w-full px-4 py-2 flex items-center gap-3 text-left transition-colors",
+                                        i === selectedIndex ? "bg-indigo-600 text-white" : "text-stone-400 hover:bg-stone-800"
+                                    )}
+                                >
+                                    {s.type === 'user' ? <User size={14} /> : <Terminal size={14} />}
+                                    <span className="text-xs font-bold">{s.name}</span>
+                                </button>
+                            ))}
                         </div>
                     )}
 
