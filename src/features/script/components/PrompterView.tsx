@@ -67,13 +67,22 @@ export const PrompterView = ({ productionId }: Props) => {
 
     // Restore scroll position on mount
     useEffect(() => {
+        if (!editor || !containerRef.current) return;
+
         const savedScroll = localStorage.getItem(`prompter_scroll_${productionId}`);
-        if (savedScroll && containerRef.current && editor) {
+        if (savedScroll) {
             const pos = parseFloat(savedScroll);
             scrollPosRef.current = pos;
-            containerRef.current.scrollTop = pos;
+
+            // Usamos un pequeño delay para asegurar que Tiptap haya terminado de renderizar y calcular alturas
+            const timer = setTimeout(() => {
+                if (containerRef.current) {
+                    containerRef.current.scrollTop = pos;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
         }
-    }, [productionId, editor]); // Wait for editor to be ready to ensure content height is correct
+    }, [productionId, editor]);
 
     useEffect(() => {
         if (!doc || !editor) return;
@@ -151,7 +160,7 @@ export const PrompterView = ({ productionId }: Props) => {
                 </div>
 
                 {/* Main Content */}
-                <div className="max-w-4xl mx-auto px-16 pt-[33vh] pb-[66vh] relative z-20 w-full font-sans font-bold tracking-wide">
+                <div className="max-w-4xl mx-auto px-16 pt-[15vh] pb-[75vh] relative z-20 w-full font-sans font-bold tracking-wide">
                     <style dangerouslySetInnerHTML={{
                         __html: `
                         .prompter-content p { margin-bottom: 1em; opacity: 0.9; }
@@ -165,7 +174,7 @@ export const PrompterView = ({ productionId }: Props) => {
             </div>
 
             {/* Guía de Lectura FIJA (Nivel de Ojos) */}
-            <div className="absolute top-1/2 left-0 right-0 z-30 pointer-events-none">
+            <div className="absolute top-1/2 left-0 right-0 z-30 pointer-events-none -translate-y-1/2">
                 <div className="max-w-4xl mx-auto px-16">
                     <div
                         onClick={resetToTop}
@@ -174,12 +183,12 @@ export const PrompterView = ({ productionId }: Props) => {
                     />
                 </div>
             </div>
-            {/* Flecha fija en el borde */}
-            <div className="absolute top-1/2 left-4 -mt-3 z-50 pointer-events-none">
+            {/* Flecha fija en el borde (Triángulo) */}
+            <div className="absolute top-1/2 left-2 z-50 pointer-events-none -translate-y-1/2">
                 <div
                     onClick={resetToTop}
                     title="Reiniciar Guion"
-                    className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[16px] border-l-red-600 border-b-[12px] border-b-transparent cursor-pointer pointer-events-auto hover:scale-110 transition-transform active:scale-90 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                    className="w-0 h-0 border-y-[10px] border-y-transparent border-l-[14px] border-l-red-600 cursor-pointer pointer-events-auto hover:scale-125 transition-transform active:scale-90 shadow-[0_0_10px_rgba(220,38,38,0.4)]"
                 />
             </div>
 
