@@ -99,129 +99,149 @@ export const PrompterView = ({ productionId }: Props) => {
         }
     };
 
+    const resetToTop = () => {
+        if (containerRef.current) {
+            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+            scrollPosRef.current = 0;
+            setIsPlaying(false);
+            setScrollSpeed(0);
+        }
+    };
+
     if (!editor) {
         return <div className="h-screen bg-black flex items-center justify-center text-stone-500 font-mono text-xl">CONNECTING SCRIPT...</div>;
     }
 
     return (
-        <div
-            ref={containerRef}
-            onScroll={handleScroll}
-            className="h-[calc(100vh-140px)] bg-stone-950 text-white overflow-y-auto overflow-x-hidden relative rounded-3xl border border-stone-800 shadow-2xl transition-all"
-            style={{ fontSize: `${fontSize}px`, lineHeight: 1.4 }}
-        >
-            {/* Header / Back Link */}
-            <div className="sticky top-0 left-0 right-0 p-4 z-40 bg-stone-950/80 backdrop-blur-md border-b border-stone-800 flex items-center justify-between">
-                <Link
-                    href={`/productions/${productionId}`}
-                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-stone-500 hover:text-indigo-400 transition-colors"
-                >
-                    <ArrowLeft size={14} /> Back to Dashboard
-                </Link>
-                <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] font-black text-stone-600 uppercase tracking-widest">Prompter Mode</span>
-                </div>
-            </div>
+        <div className="h-[calc(100vh-140px)] bg-stone-950 rounded-3xl border border-stone-800 shadow-2xl relative overflow-hidden group">
 
-            {/* Scroll Indication Line (Eye Level) */}
-            <div className="absolute top-1/2 left-0 right-0 h-1 bg-red-600/30 z-0 pointer-events-none" />
-            <div className="absolute top-1/2 left-4 -mt-3 w-0 h-0 border-t-[12px] border-t-transparent border-l-[16px] border-l-red-600 border-b-[12px] border-b-transparent z-10 opacity-50" />
-
-            {/* Main Content */}
-            <div className="max-w-4xl mx-auto px-16 pt-[33vh] pb-[66vh] relative z-10 w-full font-sans font-bold tracking-wide">
-                <style dangerouslySetInnerHTML={{
-                    __html: `
-                    .prompter-content p { margin-bottom: 1em; opacity: 0.9; }
-                    .prompter-content h1, .prompter-content h2, .prompter-content h3 { color: #facc15; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1.5em; margin-bottom: 0.5em; opacity: 1; }
-                    .prompter-content [data-type="timelineBlock"] { display: inline-block; padding: 0.2em 0.5em; background: #dc2626; color: white; border-radius: 0.2em; text-transform: uppercase; font-size: 0.8em; margin: 1em 0; border: 4px solid #991b1b; }
-                    .prompter-content strong { color: #60a5fa; }
-                    .prompter-content em { color: #34d399; font-style: normal; text-decoration: underline; }
-                `}} />
-                <EditorContent editor={editor} className="prompter-content outline-none" />
-            </div>
-
-            {/* Controls (Fade out when not hovering) */}
-            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900/90 border border-stone-700 p-4 rounded-2xl flex items-center gap-6 opacity-20 hover:opacity-100 transition-opacity z-50 shadow-2xl backdrop-blur-md">
-
-                <div className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Size</span>
+            {/* Capa de Scroll para el Contenido */}
+            <div
+                ref={containerRef}
+                onScroll={handleScroll}
+                className="absolute inset-0 overflow-y-auto overflow-x-hidden z-10 scroll-smooth text-white"
+                style={{ fontSize: `${fontSize}px`, lineHeight: 1.4 }}
+            >
+                {/* Header / Back Link (Scrolls with content or could be sticky) */}
+                <div className="sticky top-0 left-0 right-0 p-4 z-40 bg-stone-950/80 backdrop-blur-md border-b border-stone-800 flex items-center justify-between">
+                    <Link
+                        href={`/productions/${productionId}`}
+                        className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-stone-500 hover:text-indigo-400 transition-colors"
+                    >
+                        <ArrowLeft size={14} /> Back to Dashboard
+                    </Link>
                     <div className="flex items-center gap-2">
-                        <button
-                            onClick={() => setFontSize(f => Math.max(24, f - 4))}
-                            className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-300 transition-colors"
-                        >
-                            <Minus size={14} />
-                        </button>
-                        <span className="w-12 text-center text-sm font-mono text-white">{fontSize}</span>
-                        <button
-                            onClick={() => setFontSize(f => Math.min(150, f + 4))}
-                            className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-300 transition-colors"
-                        >
-                            <Plus size={14} />
-                        </button>
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[10px] font-black text-stone-600 uppercase tracking-widest">Prompter Mode</span>
                     </div>
                 </div>
 
-                <div className="w-px h-10 bg-stone-700" />
+                {/* Main Content */}
+                <div className="max-w-4xl mx-auto px-16 pt-[33vh] pb-[66vh] relative z-20 w-full font-sans font-bold tracking-wide">
+                    <style dangerouslySetInnerHTML={{
+                        __html: `
+                        .prompter-content p { margin-bottom: 1em; opacity: 0.9; }
+                        .prompter-content h1, .prompter-content h2, .prompter-content h3 { color: #facc15; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1.5em; margin-bottom: 0.5em; opacity: 1; }
+                        .prompter-content [data-type="timelineBlock"] { display: inline-block; padding: 0.2em 0.5em; background: #dc2626; color: white; border-radius: 0.2em; text-transform: uppercase; font-size: 0.8em; margin: 1em 0; border: 4px solid #991b1b; }
+                        .prompter-content strong { color: #60a5fa; }
+                        .prompter-content em { color: #34d399; font-style: normal; text-decoration: underline; }
+                    `}} />
+                    <EditorContent editor={editor} className="prompter-content outline-none" />
+                </div>
+            </div>
 
-                <div className="flex items-center gap-3">
+            {/* Guía de Lectura FIJA (Nivel de Ojos) */}
+            <div className="absolute top-1/2 left-0 right-0 z-30 pointer-events-none">
+                <div
+                    onClick={resetToTop}
+                    title="Reiniciar Guion"
+                    className="h-1 bg-red-600/30 cursor-pointer pointer-events-auto hover:bg-red-600/50 transition-colors"
+                />
+                <div
+                    onClick={resetToTop}
+                    title="Reiniciar Guion"
+                    className="absolute -top-2.5 left-4 w-0 h-0 border-t-[12px] border-t-transparent border-l-[16px] border-l-red-600 border-b-[12px] border-b-transparent cursor-pointer pointer-events-auto hover:scale-110 transition-transform active:scale-90 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                />
+            </div>
+
+            {/* Controles Laterales (Verticales) */}
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-stone-900/90 border border-stone-700 p-3 rounded-2xl flex flex-col items-center gap-4 opacity-5 group-hover:opacity-100 transition-opacity z-50 shadow-2xl backdrop-blur-md">
+
+                {/* Font Size */}
+                <div className="flex flex-col items-center gap-1">
+                    <button
+                        onClick={() => setFontSize(f => Math.min(150, f + 4))}
+                        className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-400 transition-colors"
+                    >
+                        <Plus size={14} />
+                    </button>
+                    <span className="text-[10px] font-mono text-stone-500 py-1">{fontSize}</span>
+                    <button
+                        onClick={() => setFontSize(f => Math.max(24, f - 4))}
+                        className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-400 transition-colors"
+                    >
+                        <Minus size={14} />
+                    </button>
+                </div>
+
+                <div className="w-8 h-px bg-stone-700" />
+
+                {/* Playback */}
+                <div className="flex flex-col items-center gap-3">
+                    <button
+                        onClick={() => {
+                            setScrollSpeed(s => Math.min(10, s === 0 ? 1 : s + 0.5));
+                            setIsPlaying(true);
+                        }}
+                        className="p-2.5 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-400 transition-colors"
+                        title="Increase Speed"
+                    >
+                        <FastForward size={18} className="rotate-90" />
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            if (!isPlaying && scrollSpeed === 0) setScrollSpeed(2.0);
+                            setIsPlaying(!isPlaying);
+                        }}
+                        className={cn(
+                            "w-12 h-12 flex items-center justify-center rounded-xl shadow-lg transition-all",
+                            isPlaying ? "bg-red-500 hover:bg-red-600 text-white" : "bg-emerald-500 hover:bg-emerald-600 text-white"
+                        )}
+                        title={isPlaying ? "Pause" : "Play"}
+                    >
+                        {isPlaying ? <Pause size={24} /> : <Play size={24} className="translate-x-0.5" />}
+                    </button>
+
                     <button
                         onClick={() => {
                             const nextSpeed = Math.max(0, scrollSpeed - 0.5);
                             setScrollSpeed(nextSpeed);
                             if (nextSpeed === 0) setIsPlaying(false);
                         }}
-                        className="p-3 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-300 transition-colors"
+                        className="p-2.5 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-400 transition-colors"
                         title="Reduce Speed"
                     >
-                        <Rewind size={20} />
-                    </button>
-
-                    <button
-                        onClick={() => {
-                            if (!isPlaying && scrollSpeed === 0) {
-                                setScrollSpeed(2.0); // Default start speed
-                            }
-                            setIsPlaying(!isPlaying);
-                        }}
-                        className={cn(
-                            "w-14 h-14 flex items-center justify-center rounded-2xl shadow-lg transition-all",
-                            isPlaying ? "bg-red-500 hover:bg-red-600 text-white" : "bg-emerald-500 hover:bg-emerald-600 text-white"
-                        )}
-                        title={isPlaying ? "Pause" : "Play"}
-                    >
-                        {isPlaying ? <Pause size={28} /> : <Play size={28} className="translate-x-0.5" />}
-                    </button>
-
-                    <button
-                        onClick={() => {
-                            setScrollSpeed(s => Math.min(10, s === 0 ? 1 : s + 0.5));
-                            setIsPlaying(true);
-                        }}
-                        className="p-3 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-300 transition-colors"
-                        title="Increase Speed"
-                    >
-                        <FastForward size={20} />
+                        <Rewind size={18} className="rotate-90" />
                     </button>
                 </div>
 
-                <div className="w-px h-10 bg-stone-700" />
+                <div className="w-8 h-px bg-stone-700" />
 
-                <div className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Speed</span>
-                    <span className="w-12 text-center text-sm font-mono text-emerald-400">{scrollSpeed.toFixed(1)}x</span>
+                {/* Status & Tools */}
+                <div className="flex flex-col items-center gap-3">
+                    <div className="flex flex-col items-center">
+                        <span className="text-[8px] font-black text-stone-600 uppercase">SPD</span>
+                        <span className="text-[10px] font-mono text-emerald-500">{scrollSpeed.toFixed(1)}</span>
+                    </div>
+
+                    <button
+                        onClick={toggleFullscreen}
+                        className="p-2.5 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-400 transition-colors"
+                    >
+                        {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+                    </button>
                 </div>
-
-                <div className="w-px h-10 bg-stone-700" />
-
-                <button
-                    onClick={toggleFullscreen}
-                    className="p-3 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-300"
-                >
-                    {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
-                </button>
-
             </div>
         </div>
     );
