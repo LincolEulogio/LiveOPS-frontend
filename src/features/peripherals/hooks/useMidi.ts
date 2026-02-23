@@ -10,9 +10,9 @@ interface MidiMessage {
 }
 
 export const useMidi = (onMidiMessage: (msg: MidiMessage) => void) => {
-    const [access, setAccess] = useState<MIDIAccess | null>(null);
+    const [access, setAccess] = useState<any>(null);
     const [isSupported, setIsSupported] = useState(false);
-    const [inputs, setInputs] = useState<MIDIInput[]>([]);
+    const [inputs, setInputs] = useState<any[]>([]);
 
     const onMidiMessageRef = useRef(onMidiMessage);
     onMidiMessageRef.current = onMidiMessage;
@@ -34,13 +34,13 @@ export const useMidi = (onMidiMessage: (msg: MidiMessage) => void) => {
         if (!isSupported) return;
 
         try {
-            const midiAccess = await navigator.requestMIDIAccess();
+            const midiAccess: any = await navigator.requestMIDIAccess();
             setAccess(midiAccess);
 
-            const midiInputs = Array.from(midiAccess.inputs.values());
+            const midiInputs: any[] = Array.from(midiAccess.inputs.values());
             setInputs(midiInputs);
 
-            midiInputs.forEach(input => {
+            midiInputs.forEach((input: any) => {
                 input.onmidimessage = handleMidiMessage;
             });
 

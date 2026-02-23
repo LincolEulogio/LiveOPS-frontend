@@ -8,20 +8,21 @@ import { useScript } from '../hooks/useScript';
 import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, FastForward, Rewind, Maximize, Minimize } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import * as Y from 'yjs';
 
 interface Props {
     productionId: string;
 }
 
 export const PrompterView = ({ productionId }: Props) => {
-    const { doc, provider } = useScript(productionId);
+    const { doc, awareness } = useScript(productionId);
     const [fontSize, setFontSize] = useState(72);
     const [scrollSpeed, setScrollSpeed] = useState(0); // pixels per frame
     const [isPlaying, setIsPlaying] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
-    const requestRef = useRef<number>();
+    const requestRef = useRef<number | undefined>(undefined);
 
     const editor = useEditor({
         extensions: [
@@ -37,11 +38,11 @@ export const PrompterView = ({ productionId }: Props) => {
                 class: 'prose prose-invert prose-p:my-8 prose-headings:my-12 prose-h1:text-[1.5em] prose-h2:text-[1.3em] max-w-none focus:outline-none',
             },
         },
-    }, [provider]);
+    }, [awareness, doc]);
 
     useEffect(() => {
         if (!doc || !editor) return;
-        const state = doc.get('default', window.Y?.XmlFragment);
+        const state = doc.get('default', Y.XmlFragment);
         // Relying on Collaboration extension to auto-sync instead of manual setContent
     }, [doc, editor]);
 
