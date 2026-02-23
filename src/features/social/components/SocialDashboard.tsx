@@ -64,8 +64,8 @@ export const SocialDashboard = ({ productionId }: Props) => {
                                 <SocialMessageCard
                                     key={msg.id}
                                     message={msg}
-                                    onApprove={(id) => updateStatus({ id, status: 'approved' })}
-                                    onReject={(id) => updateStatus({ id, status: 'rejected' })}
+                                    onApprove={(id) => updateStatus({ id, status: 'APPROVED' })}
+                                    onReject={(id) => updateStatus({ id, status: 'REJECTED' })}
                                 />
                             ))
                         )}
@@ -89,8 +89,8 @@ export const SocialDashboard = ({ productionId }: Props) => {
                                 <SocialMessageCard
                                     key={msg.id}
                                     message={msg}
-                                    onSendToAir={(id) => updateStatus({ id, status: 'on-air' })}
-                                    onReject={(id) => updateStatus({ id, status: 'rejected' })}
+                                    onSendToAir={(id) => updateStatus({ id, status: 'ON_AIR' })}
+                                    onReject={(id) => updateStatus({ id, status: 'REJECTED' })}
                                 />
                             ))
                         )}
@@ -115,7 +115,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
                                 </div>
 
                                 <button
-                                    onClick={() => updateStatus({ id: onAirMessage.id, status: 'approved' })}
+                                    onClick={() => updateStatus({ id: onAirMessage.id, status: 'APPROVED' })}
                                     className="w-full py-3 bg-stone-800 hover:bg-stone-700 text-stone-300 font-bold text-sm rounded-xl transition-colors"
                                 >
                                     Remove from Screen
