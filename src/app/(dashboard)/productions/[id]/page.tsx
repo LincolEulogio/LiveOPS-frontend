@@ -5,7 +5,7 @@ import { useProduction } from '@/features/productions/hooks/useProductions';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { StreamingDashboard } from '@/features/streaming/components/StreamingDashboard';
 import { EngineType } from '@/features/streaming/types/streaming.types';
-import { AlertCircle, Server, Settings, Users, Video, Layout, Zap, BarChart3, FileText, Monitor, Share2, Bell } from 'lucide-react';
+import { AlertCircle, Server, Settings, Users, Video, Layout, Zap, BarChart3, FileText, Monitor, Share2, Bell, Activity, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { Guard } from '@/shared/components/Guard';
 import { TimelineContainer } from '@/features/timeline/components/TimelineContainer';

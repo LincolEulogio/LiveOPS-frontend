@@ -9,6 +9,7 @@ import { useAppStore } from '@/shared/store/app.store';
 import { authService } from '@/features/auth/api/auth.service';
 import { Guard } from '@/shared/components/Guard';
 import { PresenceBar } from '@/shared/components/PresenceBar';
+import { CommandPalette } from '@/shared/components/CommandPalette';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -151,6 +152,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
           </div>
         </header>
+        <CommandPalette />
         <div className="flex-1 overflow-y-auto p-6 md:p-8">{children}</div>
       </main>
     </div>
