@@ -31,12 +31,11 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
-    const socketUrl = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3000';
+    const socketUrl = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:4000';
 
     const socketInstance = io(socketUrl, {
       path: '/socket.io/',
-      transports: ['websocket'],
-      autoConnect: false, // Changed: Don't connect automatically
+      autoConnect: false, // Don't connect automatically
       reconnectionAttempts: 20,
       reconnectionDelay: 1000,
       query: {
@@ -73,7 +72,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         }
       });
 
-      socketInstance.on('connect_error', (error) => {
+      socketInstance.on('connect_error', (error: any) => {
+        console.error('Socket connect_error details:', error.message, error.description, error.context);
         logger.error('Live Alert System: Connection error', error);
         setIsConnecting(true);
       });
