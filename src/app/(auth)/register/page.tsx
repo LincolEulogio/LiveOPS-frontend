@@ -48,9 +48,11 @@ export default function RegisterPage() {
         title: 'Registration Successful!',
         text: 'Your account has been created. Please log in to continue.',
         icon: 'success',
-        background: '#1c1917',
-        color: '#fff',
-        confirmButtonColor: '#4f46e5',
+        customClass: {
+          popup: 'bg-card-bg text-foreground border border-card-border rounded-xl',
+          confirmButton: 'bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg'
+        },
+        buttonsStyling: false,
         confirmButtonText: 'Go to Login'
       });
 
@@ -63,9 +65,11 @@ export default function RegisterPage() {
         title: 'Registration Failed',
         text: errorMessage,
         icon: 'error',
-        background: '#1c1917',
-        color: '#fff',
-        confirmButtonColor: '#ef4444',
+        customClass: {
+          popup: 'bg-card-bg text-foreground border border-card-border rounded-xl',
+          confirmButton: 'bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg'
+        },
+        buttonsStyling: false,
       });
     }
   };
@@ -82,7 +86,7 @@ export default function RegisterPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-muted-foreground mb-1">Name</label>
+          <label className="block text-sm font-medium text-muted mb-1">Name</label>
           <input
             {...register('name')}
             type="text"
@@ -93,7 +97,7 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-muted-foreground mb-1">Email</label>
+          <label className="block text-sm font-medium text-muted mb-1">Email</label>
           <input
             {...register('email')}
             type="email"
@@ -104,7 +108,7 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-muted-foreground mb-1">Password</label>
+          <label className="block text-sm font-medium text-muted mb-1">Password</label>
           <input
             {...register('password')}
             type="password"
