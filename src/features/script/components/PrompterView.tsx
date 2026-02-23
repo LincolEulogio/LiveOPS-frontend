@@ -2,6 +2,7 @@
 
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
 import Collaboration from '@tiptap/extension-collaboration';
 import { TimelineTag } from '../extensions/TimelineTag';
 import { useScript } from '../hooks/useScript';
@@ -50,7 +51,12 @@ export const PrompterView = ({ productionId }: Props) => {
 
     const editor = useEditor({
         extensions: [
-            StarterKit,
+            StarterKit.configure({
+                heading: {
+                    levels: [1, 2, 3, 4, 5, 6],
+                },
+            }),
+            Underline,
             TimelineTag,
             Collaboration.configure({
                 document: doc,
@@ -60,7 +66,7 @@ export const PrompterView = ({ productionId }: Props) => {
         immediatelyRender: false, // Fix for SSR hydration
         editorProps: {
             attributes: {
-                class: 'prose prose-invert prose-p:my-8 prose-headings:my-12 prose-h1:text-[1.5em] prose-h2:text-[1.3em] max-w-none focus:outline-none',
+                class: 'prose dark:prose-invert prose-p:my-8 prose-headings:my-12 prose-h1:text-[1.5em] prose-h2:text-[1.3em] max-w-none focus:outline-none',
             },
         },
     }, [awareness, doc]);
@@ -174,7 +180,7 @@ export const PrompterView = ({ productionId }: Props) => {
                     <style dangerouslySetInnerHTML={{
                         __html: `
                         .prompter-content p { margin-bottom: 1em; opacity: 0.9; }
-                        .prompter-content h1, .prompter-content h2, .prompter-content h3 { color: #facc15; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1.5em; margin-bottom: 0.5em; opacity: 1; }
+                        .prompter-content h1, .prompter-content h2, .prompter-content h3, .prompter-content h4, .prompter-content h5, .prompter-content h6 { color: #facc15; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1.5em; margin-bottom: 0.5em; opacity: 1; }
                         .prompter-content [data-type="timelineBlock"] { display: inline-block; padding: 0.2em 0.5em; background: #dc2626; color: white; border-radius: 0.2em; text-transform: uppercase; font-size: 0.8em; margin: 1em 0; border: 4px solid #991b1b; }
                         .prompter-content strong { color: #60a5fa; }
                         .prompter-content em { color: #34d399; font-style: normal; text-decoration: underline; }
@@ -229,7 +235,7 @@ export const PrompterView = ({ productionId }: Props) => {
                             setScrollSpeed(s => Math.min(10, s === 0 ? 1 : s + 0.5));
                             setIsPlaying(true);
                         }}
-                        className="p-2.5 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-400 transition-colors"
+                        className="p-2.5 bg-card-bg hover:bg-card-border border border-card-border rounded-xl text-muted hover:text-foreground transition-colors"
                         title="Increase Speed"
                     >
                         <FastForward size={18} className="rotate-90" />
