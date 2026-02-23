@@ -151,7 +151,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-8">
             <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="absolute inset-0 bg-stone-950/80 backdrop-blur-md"
+                className="absolute inset-0 bg-background/80 backdrop-blur-md"
                 onClick={onClose}
             />
 
@@ -159,37 +159,37 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-7xl bg-stone-900 border border-stone-800 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col h-[90vh] md:h-auto md:max-h-[90vh]"
+                className="relative w-full max-w-7xl bg-card-bg border border-card-border rounded-[2rem] shadow-2xl overflow-hidden flex flex-col h-[90vh] md:h-auto md:max-h-[90vh]"
             >
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 md:p-8 border-b border-stone-800 bg-stone-950">
+                <div className="flex items-center justify-between p-6 md:p-8 border-b border-card-border bg-background">
                     <div className="flex items-center gap-4">
                         <div className="p-3 bg-indigo-500/10 rounded-2xl text-indigo-400">
                             <Zap size={28} />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-black text-white tracking-tight">
+                            <h2 className="text-2xl font-black text-foreground tracking-tight">
                                 {editingRule ? 'Edit Automation' : 'New Automation'}
                             </h2>
-                            <div className="flex gap-2 items-center mt-1 text-xs font-bold text-stone-500 uppercase tracking-widest">
+                            <div className="flex gap-2 items-center mt-1 text-xs font-bold text-muted uppercase tracking-widest">
                                 <span>Production</span>
-                                <span className="w-1 h-1 rounded-full bg-stone-700" />
+                                <span className="w-1 h-1 rounded-full bg-card-border" />
                                 <span className="text-indigo-400">Rule Builder</span>
                             </div>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-2 text-stone-500 hover:text-white hover:bg-stone-800 rounded-xl transition-all">
+                    <button onClick={onClose} className="p-2 text-muted hover:text-foreground hover:bg-card-border rounded-xl transition-all">
                         <X size={24} />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit(onSave)} className="flex-1 overflow-y-auto bg-stone-950 custom-scrollbar flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-stone-800">
+                <form onSubmit={handleSubmit(onSave)} className="flex-1 overflow-y-auto bg-background custom-scrollbar flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-card-border">
                     {/* Visual Canvas (Left) */}
-                    <div className="flex-1 p-8 bg-[radial-gradient(#292524_1px,transparent_1px)] [background-size:24px_24px] overflow-y-auto relative min-h-[500px] flex gap-12 flex-col items-center">
+                    <div className="flex-1 p-8 bg-[radial-gradient(var(--card-border)_1px,transparent_1px)] [background-size:24px_24px] overflow-y-auto relative min-h-[500px] flex gap-12 flex-col items-center">
 
                         {/* Trigger Nodes */}
                         <div className="w-full max-w-sm space-y-4 relative z-10">
-                            <h3 className="text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] text-center mb-6">Trigger Event</h3>
+                            <h3 className="text-[10px] font-black text-muted uppercase tracking-[0.2em] text-center mb-6">Trigger Event</h3>
 
                             <AnimatePresence mode="popLayout">
                                 {triggerFields.map((field, index) => {
@@ -205,8 +205,8 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                             exit={{ opacity: 0, scale: 0.9 }}
                                             key={field.id}
                                             className={cn(
-                                                "group p-5 rounded-2xl border bg-stone-900 shadow-xl cursor-pointer transition-all",
-                                                activeNodeIndex === -1 ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-stone-700 hover:border-stone-500"
+                                                "group p-5 rounded-2xl border bg-card-bg shadow-xl cursor-pointer transition-all",
+                                                activeNodeIndex === -1 ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-card-border hover:border-indigo-500/50"
                                             )}
                                             onClick={() => setActiveNodeIndex(-1)}
                                         >
@@ -216,12 +216,12 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                         <Icon size={20} />
                                                     </div>
                                                     <div>
-                                                        <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">When</p>
-                                                        <p className="text-sm font-bold text-white leading-tight">{eTypeDef.label}</p>
+                                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">When</p>
+                                                        <p className="text-sm font-bold text-foreground leading-tight">{eTypeDef.label}</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <button type="button" onClick={(e) => { e.stopPropagation(); removeTrigger(index); }} className="p-1.5 text-stone-500 hover:text-red-400 hover:bg-stone-800 rounded-lg">
+                                                    <button type="button" onClick={(e) => { e.stopPropagation(); removeTrigger(index); }} className="p-1.5 text-muted hover:text-red-400 hover:bg-card-border rounded-lg">
                                                         <Trash2 size={14} />
                                                     </button>
                                                 </div>
@@ -234,7 +234,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
 
                         {/* Action Pipeline */}
                         <div className="flex-1 w-full max-w-sm space-y-4 relative z-10">
-                            <h3 className="text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] text-center mb-6">Action Sequence</h3>
+                            <h3 className="text-[10px] font-black text-muted uppercase tracking-[0.2em] text-center mb-6">Action Sequence</h3>
 
                             <AnimatePresence mode="popLayout">
                                 {actionFields.map((field, index) => {
@@ -252,28 +252,28 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                             className="relative"
                                         >
                                             {/* Connector Line */}
-                                            <div className="absolute -top-6 left-1/2 w-0.5 h-6 bg-stone-700 -translate-x-1/2"></div>
+                                            <div className="absolute -top-6 left-1/2 w-0.5 h-6 bg-card-border -translate-x-1/2"></div>
 
                                             <div
                                                 className={cn(
-                                                    "group p-5 rounded-2xl border bg-stone-900 shadow-xl cursor-pointer transition-all",
-                                                    activeNodeIndex === index ? `border-indigo-500 ring-2 ring-indigo-500/20` : `border-stone-700 hover:border-stone-500`
+                                                    "group p-5 rounded-2xl border bg-card-bg shadow-xl cursor-pointer transition-all",
+                                                    activeNodeIndex === index ? `border-indigo-500 ring-2 ring-indigo-500/20` : `border-card-border hover:border-indigo-500/50`
                                                 )}
                                                 onClick={() => setActiveNodeIndex(index)}
                                             >
                                                 <div className="flex items-start justify-between">
                                                     <div className="flex items-center gap-3">
                                                         <div className={cn("p-2 rounded-xl border flex items-center justify-center shrink-0", aTypeDef.color)}>
-                                                            <span className="absolute -top-2 -left-2 w-5 h-5 bg-stone-800 border border-stone-700 rounded-full flex items-center justify-center text-[9px] font-black text-white">{index + 1}</span>
+                                                            <span className="absolute -top-2 -left-2 w-5 h-5 bg-card-border border border-card-border/50 rounded-full flex items-center justify-center text-[9px] font-black text-foreground">{index + 1}</span>
                                                             <Icon size={20} />
                                                         </div>
                                                         <div>
-                                                            <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Then do</p>
-                                                            <p className="text-sm font-bold text-white leading-tight">{aTypeDef.label}</p>
+                                                            <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Then do</p>
+                                                            <p className="text-sm font-bold text-foreground leading-tight">{aTypeDef.label}</p>
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <button type="button" onClick={(e) => { e.stopPropagation(); removeAction(index); if (activeNodeIndex === index) setActiveNodeIndex(null); }} className="p-1.5 text-stone-500 hover:text-red-400 hover:bg-stone-800 rounded-lg">
+                                                        <button type="button" onClick={(e) => { e.stopPropagation(); removeAction(index); if (activeNodeIndex === index) setActiveNodeIndex(null); }} className="p-1.5 text-muted hover:text-red-400 hover:bg-card-border rounded-lg">
                                                             <Trash2 size={14} />
                                                         </button>
                                                     </div>
@@ -286,35 +286,35 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
 
                             {/* Add Action Node */}
                             <motion.div layout className="relative pt-6">
-                                <div className="absolute top-0 left-1/2 w-0.5 h-6 bg-stone-800 -translate-x-1/2"></div>
+                                <div className="absolute top-0 left-1/2 w-0.5 h-6 bg-card-border -translate-x-1/2"></div>
                                 <button
                                     type="button"
                                     onClick={() => {
                                         appendAction({ actionType: 'obs.changeScene', order: actionFields.length, payload: {} });
                                         setActiveNodeIndex(actionFields.length); // auto select new node
                                     }}
-                                    className="w-full border-2 border-dashed border-stone-800 hover:border-indigo-500/50 bg-stone-900/30 hover:bg-stone-900/80 p-4 rounded-2xl flex items-center justify-center gap-2 transition-all group"
+                                    className="w-full border-2 border-dashed border-card-border hover:border-indigo-500/50 bg-card-bg/30 hover:bg-card-bg/80 p-4 rounded-2xl flex items-center justify-center gap-2 transition-all group"
                                 >
-                                    <div className="w-8 h-8 rounded-full bg-stone-800 group-hover:bg-indigo-500/20 text-stone-500 group-hover:text-indigo-400 flex items-center justify-center transition-colors">
+                                    <div className="w-8 h-8 rounded-full bg-card-border group-hover:bg-indigo-500/20 text-muted group-hover:text-indigo-400 flex items-center justify-center transition-colors">
                                         <Plus size={16} />
                                     </div>
-                                    <span className="text-sm font-bold text-stone-500 group-hover:text-indigo-400 transition-colors uppercase tracking-widest">Add Action</span>
+                                    <span className="text-sm font-bold text-muted group-hover:text-indigo-400 transition-colors uppercase tracking-widest">Add Action</span>
                                 </button>
                             </motion.div>
                         </div>
                     </div>
 
                     {/* Configuration Panel (Right) */}
-                    <div className="w-full md:w-[400px] shrink-0 bg-stone-900 flex flex-col relative z-20">
+                    <div className="w-full md:w-[400px] shrink-0 bg-card-bg flex flex-col relative z-20">
                         {/* Global Settings */}
-                        <div className="p-6 border-b border-stone-800 bg-stone-950/50">
-                            <h3 className="text-xs font-black text-stone-500 uppercase tracking-[0.2em] mb-4">Rule Settings</h3>
+                        <div className="p-6 border-b border-card-border bg-background/50">
+                            <h3 className="text-xs font-black text-muted uppercase tracking-[0.2em] mb-4">Rule Settings</h3>
                             <div className="space-y-4">
                                 <div>
                                     <input
                                         {...register('name')}
                                         placeholder="Rule Name"
-                                        className="w-full bg-transparent text-xl font-bold text-white placeholder:text-stone-700 outline-none pb-1 border-b border-stone-800 focus:border-indigo-500 transition-colors"
+                                        className="w-full bg-transparent text-xl font-bold text-foreground placeholder:text-muted/50 outline-none pb-1 border-b border-card-border focus:border-indigo-500 transition-colors"
                                     />
                                     {errors.name && <p className="text-[10px] text-red-500 font-bold uppercase mt-1 tracking-widest">{errors.name.message}</p>}
                                 </div>
@@ -322,61 +322,61 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                     <input
                                         {...register('description')}
                                         placeholder="Optional description..."
-                                        className="w-full bg-transparent text-sm text-stone-400 placeholder:text-stone-700 outline-none"
+                                        className="w-full bg-transparent text-sm text-foreground placeholder:text-muted/50 outline-none"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* Node Inspector */}
-                        <div className="flex-1 overflow-y-auto p-6 custom-scrollbar bg-stone-900">
+                        <div className="flex-1 overflow-y-auto p-6 custom-scrollbar bg-card-bg">
                             <AnimatePresence mode="wait">
                                 {activeNodeIndex === null ? (
                                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full flex flex-col items-center justify-center text-center opacity-50">
-                                        <Settings2 size={48} className="text-stone-700 mb-4" />
-                                        <p className="text-sm text-stone-500 font-bold">Select a node to configure</p>
+                                        <Settings2 size={48} className="text-muted mb-4" />
+                                        <p className="text-sm text-muted font-bold">Select a node to configure</p>
                                     </motion.div>
                                 ) : activeNodeIndex === -1 ? (
                                     // TRIGGER CONFIG
                                     <motion.div key="trigger-config" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-                                        <div className="flex items-center gap-3 border-b border-stone-800 pb-4">
+                                        <div className="flex items-center gap-3 border-b border-card-border pb-4">
                                             <div className="p-2 bg-amber-500/10 text-amber-400 rounded-xl"><Zap size={20} /></div>
                                             <div>
-                                                <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">Configuring</p>
-                                                <h4 className="font-bold text-white">Trigger Node</h4>
+                                                <p className="text-[10px] font-black text-muted uppercase tracking-widest">Configuring</p>
+                                                <h4 className="font-bold text-foreground">Trigger Node</h4>
                                             </div>
                                         </div>
 
                                         {triggerFields.map((field, index) => (
                                             <div key={field.id} className="space-y-5">
                                                 <div className="space-y-2">
-                                                    <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Select Event Type</label>
+                                                    <label className="text-[10px] font-bold text-muted uppercase tracking-widest">Select Event Type</label>
                                                     <select
                                                         {...register(`triggers.${index}.eventType`)}
-                                                        className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                        className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-sm text-foreground focus:ring-2 focus:ring-indigo-500 outline-none"
                                                     >
                                                         {EVENT_TYPES.map(e => <option key={e.value} value={e.value}>{e.label}</option>)}
                                                     </select>
                                                 </div>
 
                                                 {watchedTriggers[index]?.eventType === 'timeline.before_end' && (
-                                                    <div className="space-y-2 p-4 bg-stone-800/20 rounded-xl border border-stone-800">
-                                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Pre-roll Time (Seconds)</label>
+                                                    <div className="space-y-2 p-4 bg-card-border/20 rounded-xl border border-card-border">
+                                                        <label className="text-[10px] font-bold text-muted uppercase tracking-widest">Pre-roll Time (Seconds)</label>
                                                         <input
                                                             type="number"
                                                             {...register(`triggers.${index}.condition.secondsBefore`, { valueAsNumber: true })}
-                                                            className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                            className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-foreground focus:ring-2 focus:ring-indigo-500 outline-none"
                                                         />
                                                     </div>
                                                 )}
 
                                                 {watchedTriggers[index]?.eventType === 'obs.scene.changed' && (
-                                                    <div className="space-y-2 p-4 bg-stone-800/20 rounded-xl border border-stone-800">
-                                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Target Scene Name (Optional)</label>
+                                                    <div className="space-y-2 p-4 bg-card-border/20 rounded-xl border border-card-border">
+                                                        <label className="text-[10px] font-bold text-muted uppercase tracking-widest">Target Scene Name (Optional)</label>
                                                         <input
                                                             placeholder="Leave blank for any scene..."
                                                             {...register(`triggers.${index}.condition.sceneName`)}
-                                                            className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                            className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-foreground focus:ring-2 focus:ring-indigo-500 outline-none"
                                                         />
                                                     </div>
                                                 )}
@@ -386,76 +386,76 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                 ) : (
                                     // ACTION CONFIG
                                     <motion.div key={`action-config-${activeNodeIndex}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-                                        <div className="flex items-center gap-3 border-b border-stone-800 pb-4">
+                                        <div className="flex items-center gap-3 border-b border-card-border pb-4">
                                             <div className="p-2 bg-indigo-500/10 text-indigo-400 rounded-xl"><Play size={20} /></div>
                                             <div>
-                                                <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">Configuring Action</p>
-                                                <h4 className="font-bold text-white">Step {activeNodeIndex + 1}</h4>
+                                                <p className="text-[10px] font-black text-muted uppercase tracking-widest">Configuring Action</p>
+                                                <h4 className="font-bold text-foreground">Step {activeNodeIndex + 1}</h4>
                                             </div>
                                         </div>
 
                                         <div className="space-y-5">
                                             <div className="space-y-2">
-                                                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Action Type</label>
+                                                <label className="text-[10px] font-bold text-muted uppercase tracking-widest">Action Type</label>
                                                 <select
                                                     {...register(`actions.${activeNodeIndex}.actionType`)}
-                                                    className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                    className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-sm text-foreground focus:ring-2 focus:ring-indigo-500 outline-none"
                                                 >
                                                     {ACTION_TYPES.map(a => <option key={a.value} value={a.value}>{a.label}</option>)}
                                                 </select>
                                             </div>
 
                                             {watchedActions[activeNodeIndex]?.actionType === 'intercom.send' && (
-                                                <div className="space-y-4 p-4 bg-stone-800/20 rounded-xl border border-stone-800">
+                                                <div className="space-y-4 p-4 bg-card-border/20 rounded-xl border border-card-border">
                                                     <div className="space-y-2">
-                                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Alert Template</label>
+                                                        <label className="text-[10px] font-bold text-muted uppercase tracking-widest">Alert Template</label>
                                                         <select
                                                             {...register(`actions.${activeNodeIndex}.payload.templateId`)}
-                                                            className="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2 text-sm text-foreground focus:ring-2 focus:ring-indigo-500 outline-none"
                                                         >
                                                             <option value="">Custom Message Only</option>
                                                             {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                                                         </select>
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Target Role</label>
+                                                        <label className="text-[10px] font-bold text-muted uppercase tracking-widest">Target Role</label>
                                                         <select
                                                             {...register(`actions.${activeNodeIndex}.payload.targetRoleId`)}
-                                                            className="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2 text-sm text-foreground focus:ring-2 focus:ring-indigo-500 outline-none"
                                                         >
                                                             <option value="">Broadcast (All)</option>
                                                             {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                                                         </select>
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Message Override</label>
+                                                        <label className="text-[10px] font-bold text-muted uppercase tracking-widest">Message Override</label>
                                                         <input
                                                             placeholder="Dynamic alert text..."
                                                             {...register(`actions.${activeNodeIndex}.payload.message`)}
-                                                            className="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2 text-sm text-foreground focus:ring-2 focus:ring-indigo-500 outline-none"
                                                         />
                                                     </div>
                                                 </div>
                                             )}
 
                                             {watchedActions[activeNodeIndex]?.actionType === 'obs.changeScene' && (
-                                                <div className="space-y-2 p-4 bg-stone-800/20 rounded-xl border border-stone-800">
-                                                    <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Target Scene Name</label>
+                                                <div className="space-y-2 p-4 bg-card-border/20 rounded-xl border border-card-border">
+                                                    <label className="text-[10px] font-bold text-muted uppercase tracking-widest">Target Scene Name</label>
                                                     <input
                                                         placeholder="Exact scene name..."
                                                         {...register(`actions.${activeNodeIndex}.payload.sceneName`)}
-                                                        className="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                        className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-foreground focus:ring-2 focus:ring-indigo-500 outline-none"
                                                     />
                                                 </div>
                                             )}
 
                                             {watchedActions[activeNodeIndex]?.actionType === 'vmix.changeInput' && (
-                                                <div className="space-y-2 p-4 bg-stone-800/20 rounded-xl border border-stone-800">
-                                                    <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Input Name / Number</label>
+                                                <div className="space-y-2 p-4 bg-card-border/20 rounded-xl border border-card-border">
+                                                    <label className="text-[10px] font-bold text-muted uppercase tracking-widest">Input Name / Number</label>
                                                     <input
                                                         placeholder="e.g. 1"
                                                         {...register(`actions.${activeNodeIndex}.payload.input`)}
-                                                        className="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                        className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-foreground focus:ring-2 focus:ring-indigo-500 outline-none"
                                                     />
                                                 </div>
                                             )}
@@ -468,7 +468,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                 </form>
 
                 {/* Footer */}
-                <div className="p-4 md:p-6 border-t border-stone-800 bg-stone-950 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div className="p-4 md:p-6 border-t border-card-border bg-background flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div className="flex items-center gap-2">
                         <button
                             type="button"
@@ -478,7 +478,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         >
                             <Zap size={20} />
                         </button>
-                        <div className="text-[10px] font-bold text-stone-500 uppercase tracking-widest hidden md:block">
+                        <div className="text-[10px] font-bold text-muted uppercase tracking-widest hidden md:block">
                             {actionFields.length} actions configured
                         </div>
                     </div>
@@ -486,7 +486,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-6 py-3 shrink-0 text-xs font-bold text-stone-400 hover:text-white transition-all uppercase tracking-widest rounded-xl hover:bg-stone-800"
+                            className="px-6 py-3 shrink-0 text-xs font-bold text-muted hover:text-foreground transition-all uppercase tracking-widest rounded-xl hover:bg-card-border"
                         >
                             Cancel
                         </button>

@@ -177,7 +177,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                         {view === 'form' ? (
                                             <button
                                                 onClick={() => setView('list')}
-                                                className="p-2 text-stone-500 hover:text-indigo-400 transition-colors"
+                                                className="p-2 text-muted hover:text-indigo-400 transition-colors"
                                                 title="Ver Lista"
                                             >
                                                 <List size={20} />
@@ -228,7 +228,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                     </div>
 
                                                     <div className="space-y-4">
-                                                        <label className="flex items-center gap-2 text-[10px] font-black text-stone-500 uppercase tracking-widest">
+                                                        <label className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest">
                                                             <Palette size={12} />
                                                             Identificador Visual (Color)
                                                         </label>
@@ -238,7 +238,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                                     key={c}
                                                                     type="button"
                                                                     onClick={() => setColor(c)}
-                                                                    className={`h-8 rounded-lg transition-all ${color === c ? 'ring-2 ring-white ring-offset-4 ring-offset-stone-950 scale-110 shadow-lg' : 'hover:scale-105 hover:opacity-80'}`}
+                                                                    className={`h-8 rounded-lg transition-all ${color === c ? 'ring-2 ring-white ring-offset-4 ring-offset-background scale-110 shadow-lg' : 'hover:scale-105 hover:opacity-80'}`}
                                                                     style={{ backgroundColor: c }}
                                                                 />
                                                             ))}

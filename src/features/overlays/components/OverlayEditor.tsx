@@ -85,9 +85,9 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
             </div>
 
             {/* Canvas Area */}
-            <div className="flex-1 bg-stone-950 flex flex-col relative overflow-hidden">
-                <div className="p-4 border-b border-stone-900 flex justify-between items-center">
-                    <span className="text-xs font-bold text-stone-500 uppercase tracking-widest">Viewport (1920x1080)</span>
+            <div className="flex-1 bg-background flex flex-col relative overflow-hidden">
+                <div className="p-4 border-b border-card-border flex justify-between items-center">
+                    <span className="text-xs font-bold text-muted uppercase tracking-widest">Viewport (1920x1080)</span>
                     <input
                         type="range" min="0.1" max="1" step="0.1"
                         value={zoom} onChange={e => setZoom(parseFloat(e.target.value))}
@@ -97,7 +97,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
 
                 <div className="flex-1 flex items-center justify-center p-20 overflow-auto">
                     <div
-                        className="bg-stone-900 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
+                        className="bg-card-bg shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
                         style={{
                             width: config.width,
                             height: config.height,
@@ -149,7 +149,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                 onClick={() => setSelectedLayerId(l.id)}
                                 className={cn(
                                     "flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all",
-                                    selectedLayerId === l.id ? "bg-indigo-500/20 text-indigo-300" : "text-stone-400 hover:bg-stone-800"
+                                    selectedLayerId === l.id ? "bg-indigo-500/20 text-indigo-300" : "text-muted hover:bg-card-border"
                                 )}
                             >
                                 {l.type === 'text' ? <Type size={14} /> : l.type === 'image' ? <ImageIcon size={14} /> : <Box size={14} />}
@@ -194,30 +194,30 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                         type="text"
                                         value={selectedLayer.content}
                                         onChange={e => updateLayer(selectedLayer.id, { content: e.target.value })}
-                                        className="w-full bg-stone-950 border border-stone-800 rounded-lg p-2 text-xs"
+                                        className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
                                     />
                                 )}
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[9px] text-stone-500 font-bold uppercase">Colors</label>
+                                <label className="text-[9px] text-muted font-bold uppercase">Colors</label>
                                 <div className="flex gap-2">
                                     <input type="color" value={selectedLayer.style.color} onChange={e => updateLayer(selectedLayer.id, { style: { ...selectedLayer.style, color: e.target.value } })} className="w-8 h-8 rounded overflow-hidden" />
                                     <input type="color" value={selectedLayer.style.backgroundColor?.substring(0, 7) || '#000000'} onChange={e => updateLayer(selectedLayer.id, { style: { ...selectedLayer.style, backgroundColor: e.target.value + '88' } })} className="w-8 h-8 rounded overflow-hidden" />
                                 </div>
                             </div>
 
-                            <div className="space-y-4 pt-4 border-t border-stone-800">
+                            <div className="space-y-4 pt-4 border-t border-card-border">
                                 <label className="text-[9px] text-indigo-400 font-black uppercase tracking-widest">Connect to Live Data</label>
                                 <div className="space-y-3">
                                     <div className="space-y-1">
-                                        <label className="text-[9px] text-stone-500 font-bold uppercase">Data Source</label>
+                                        <label className="text-[9px] text-muted font-bold uppercase">Data Source</label>
                                         <select
                                             value={selectedLayer.binding?.source || ''}
                                             onChange={e => updateLayer(selectedLayer.id, {
                                                 binding: e.target.value ? { source: e.target.value as any, field: '' } : undefined
                                             })}
-                                            className="w-full bg-stone-950 border border-stone-800 rounded-lg p-2 text-xs"
+                                            className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
                                         >
                                             <option value="">Static (No Binding)</option>
                                             <option value="rundown">Rundown / Escaleta</option>
@@ -229,7 +229,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                     {selectedLayer.binding && (
                                         <>
                                             <div className="space-y-1">
-                                                <label className="text-[9px] text-stone-500 font-bold uppercase">Field</label>
+                                                <label className="text-[9px] text-muted font-bold uppercase">Field</label>
                                                 <input
                                                     type="text"
                                                     placeholder="e.g. active_block_title"
@@ -237,30 +237,30 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                                     onChange={e => updateLayer(selectedLayer.id, {
                                                         binding: { ...selectedLayer.binding!, field: e.target.value }
                                                     })}
-                                                    className="w-full bg-stone-950 border border-stone-800 rounded-lg p-2 text-xs"
+                                                    className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
                                                 />
                                             </div>
                                             <div className="grid grid-cols-2 gap-2">
                                                 <div className="space-y-1">
-                                                    <label className="text-[9px] text-stone-500 font-bold uppercase">Prefix</label>
+                                                    <label className="text-[9px] text-muted font-bold uppercase">Prefix</label>
                                                     <input
                                                         type="text"
                                                         value={selectedLayer.binding.prefix || ''}
                                                         onChange={e => updateLayer(selectedLayer.id, {
                                                             binding: { ...selectedLayer.binding!, prefix: e.target.value }
                                                         })}
-                                                        className="w-full bg-stone-950 border border-stone-800 rounded-lg p-2 text-xs"
+                                                        className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
                                                     />
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <label className="text-[9px] text-stone-500 font-bold uppercase">Suffix</label>
+                                                    <label className="text-[9px] text-muted font-bold uppercase">Suffix</label>
                                                     <input
                                                         type="text"
                                                         value={selectedLayer.binding.suffix || ''}
                                                         onChange={e => updateLayer(selectedLayer.id, {
                                                             binding: { ...selectedLayer.binding!, suffix: e.target.value }
                                                         })}
-                                                        className="w-full bg-stone-950 border border-stone-800 rounded-lg p-2 text-xs"
+                                                        className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
                                                     />
                                                 </div>
                                             </div>
@@ -269,14 +269,14 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                 </div>
                             </div>
 
-                            <div className="pt-4 border-t border-stone-800">
+                            <div className="pt-4 border-t border-card-border">
                                 <button onClick={() => deleteLayer(selectedLayer.id)} className="w-full p-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-widest">
                                     Delete Layer
                                 </button>
                             </div>
                         </div>
                     ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-stone-600 italic text-center p-10">
+                        <div className="h-full flex flex-col items-center justify-center text-muted italic text-center p-10">
                             <Plus size={32} className="mb-4 opacity-10" />
                             <p className="text-xs">Select a layer to edit properties or add a new one from the left.</p>
                         </div>

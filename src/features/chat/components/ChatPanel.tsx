@@ -131,7 +131,7 @@ export const ChatPanel = ({ productionId }: Props) => {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
-                    "absolute left-[-32px] top-1/2 -translate-y-1/2 w-8 h-16 bg-stone-900 border-l border-y border-stone-800 rounded-l-xl flex items-center justify-center text-stone-500 hover:text-white transition-colors group shadow-2xl",
+                    "absolute left-[-32px] top-1/2 -translate-y-1/2 w-8 h-16 bg-card-bg border-l border-y border-card-border rounded-l-xl flex items-center justify-center text-muted hover:text-foreground transition-colors group shadow-2xl",
                     !isOpen && "left-[-40px] opacity-100"
                 )}
             >
@@ -139,22 +139,22 @@ export const ChatPanel = ({ productionId }: Props) => {
 
                 {/* Unread Badge */}
                 {!isOpen && unreadCount > 0 && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center border-2 border-stone-950 animate-bounce">
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center border-2 border-background animate-bounce">
                         <span className="text-[9px] font-black text-white">{unreadCount > 9 ? '9+' : unreadCount}</span>
                     </div>
                 )}
             </button>
 
-            <div className="flex-1 bg-stone-950/90 backdrop-blur-2xl border-l border-stone-800 flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="flex-1 bg-background/90 backdrop-blur-2xl border-l border-card-border flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)]">
                 {/* Header */}
-                <div className="p-4 border-b border-stone-800/50 bg-stone-900/30 flex items-center justify-between">
+                <div className="p-4 border-b border-card-border/50 bg-card-bg/30 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-indigo-500/10 rounded-xl">
                             <MessageSquare size={18} className="text-indigo-400" />
                         </div>
                         <div>
-                            <h3 className="text-xs font-black text-white uppercase tracking-widest">Team Chat</h3>
-                            <p className="text-[9px] text-stone-500 font-bold uppercase tracking-tighter flex items-center gap-1">
+                            <h3 className="text-xs font-black text-foreground uppercase tracking-widest">Team Chat</h3>
+                            <p className="text-[9px] text-muted font-bold uppercase tracking-tighter flex items-center gap-1">
                                 <span className={cn("w-1.5 h-1.5 rounded-full", isConnected ? "bg-emerald-500" : "bg-red-500")} />
                                 {isConnected ? "En línea" : "Desconectado"}
                             </p>
@@ -165,12 +165,12 @@ export const ChatPanel = ({ productionId }: Props) => {
                 {/* Messages Container */}
                 <div
                     ref={scrollRef}
-                    className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-stone-800"
+                    className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-card-border"
                 >
                     {chatHistory.length === 0 && !isLoading && (
                         <div className="h-full flex flex-col items-center justify-center text-center opacity-30 select-none">
-                            <Hash size={40} className="text-stone-700 mb-2" />
-                            <p className="text-[10px] font-black uppercase tracking-widest text-stone-500">Sin mensajes aún</p>
+                            <Hash size={40} className="text-muted/50 mb-2" />
+                            <p className="text-[10px] font-black uppercase tracking-widest text-muted">Sin mensajes aún</p>
                         </div>
                     )}
 
@@ -181,9 +181,9 @@ export const ChatPanel = ({ productionId }: Props) => {
                         if (isSystem) {
                             return (
                                 <div key={msg.id} className="flex justify-center py-1 animate-in fade-in zoom-in-95 duration-500">
-                                    <div className="bg-stone-900/50 border border-stone-800/50 rounded-full px-3 py-1 flex items-center gap-2">
-                                        <Terminal size={10} className="text-stone-500" />
-                                        <span className="text-[10px] font-bold text-stone-400 tracking-tight italic">
+                                    <div className="bg-card-bg/50 border border-card-border/50 rounded-full px-3 py-1 flex items-center gap-2">
+                                        <Terminal size={10} className="text-muted" />
+                                        <span className="text-[10px] font-bold text-muted tracking-tight italic">
                                             {msg.message}
                                         </span>
                                     </div>
@@ -200,8 +200,8 @@ export const ChatPanel = ({ productionId }: Props) => {
                                 )}
                             >
                                 <div className="flex items-center gap-2 mb-1 px-1">
-                                    {!isMe && <span className="text-[10px] font-black text-stone-500 uppercase">{msg.user?.name}</span>}
-                                    <span className="text-[8px] text-stone-600 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                    {!isMe && <span className="text-[10px] font-black text-muted uppercase">{msg.user?.name}</span>}
+                                    <span className="text-[8px] text-muted font-bold opacity-0 group-hover:opacity-100 transition-opacity">
                                         {new Date(msg.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </div>
@@ -209,7 +209,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                                     "px-3 py-2 rounded-2xl text-sm leading-snug break-words shadow-sm",
                                     isMe
                                         ? "bg-indigo-600 text-white rounded-tr-none"
-                                        : "bg-stone-900 text-stone-200 border border-stone-800 rounded-tl-none"
+                                        : "bg-card-bg text-foreground border border-card-border rounded-tl-none"
                                 )}>
                                     {msg.message.split(' ').map((word, idx) => {
                                         if (word.startsWith('@') && word.length > 1) {
@@ -233,7 +233,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                 </div>
 
                 {/* Input Area */}
-                <div className="p-4 bg-stone-900/40 border-t border-stone-800/50 relative">
+                <div className="p-4 bg-card-bg/40 border-t border-card-border/50 relative">
                     {/* Typing Indicator */}
                     {Object.keys(typingUsers).length > 0 && (
                         <div className="absolute top-[-24px] left-4 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -242,7 +242,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                                 <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
                                 <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce" />
                             </div>
-                            <span className="text-[9px] font-bold text-stone-500 italic">
+                            <span className="text-[9px] font-bold text-muted italic">
                                 {Object.values(typingUsers).join(', ')} {Object.keys(typingUsers).length === 1 ? 'está escribiendo...' : 'están escribiendo...'}
                             </span>
                         </div>
@@ -250,14 +250,14 @@ export const ChatPanel = ({ productionId }: Props) => {
 
                     {/* Suggestions Popup */}
                     {suggestions && (
-                        <div className="absolute bottom-full left-4 w-[calc(100%-32px)] bg-stone-900 border border-stone-800 rounded-xl overflow-hidden shadow-2xl mb-2 animate-in slide-in-from-bottom-2 duration-200 z-50">
+                        <div className="absolute bottom-full left-4 w-[calc(100%-32px)] bg-card-bg border border-card-border rounded-xl overflow-hidden shadow-2xl mb-2 animate-in slide-in-from-bottom-2 duration-200 z-50">
                             {suggestions.map((s, i) => (
                                 <button
                                     key={s.id}
                                     onClick={() => applySuggestion(s)}
                                     className={cn(
                                         "w-full px-4 py-2 flex items-center gap-3 text-left transition-colors",
-                                        i === selectedIndex ? "bg-indigo-600 text-white" : "text-stone-400 hover:bg-stone-800"
+                                        i === selectedIndex ? "bg-indigo-600 text-white" : "text-muted hover:bg-card-border"
                                     )}
                                 >
                                     {s.type === 'user' ? <User size={14} /> : <Terminal size={14} />}
@@ -273,7 +273,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                             onChange={handleMessageChange}
                             onKeyDown={handleKeyDown}
                             placeholder="Escribe un mensaje..."
-                            className="w-full bg-stone-950 border border-stone-800 rounded-2xl px-4 py-3 pr-12 text-xs text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[45px] max-h-[150px]"
+                            className="w-full bg-background border border-card-border rounded-2xl px-4 py-3 pr-12 text-xs text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[45px] max-h-[150px]"
                             rows={1}
                         />
                         <button
@@ -283,15 +283,15 @@ export const ChatPanel = ({ productionId }: Props) => {
                                 "absolute right-2 bottom-2 p-2 rounded-xl transition-all",
                                 message.trim()
                                     ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 hover:scale-105 active:scale-95"
-                                    : "text-stone-700 cursor-not-allowed"
+                                    : "text-muted/50 cursor-not-allowed"
                             )}
                         >
                             <Send size={16} />
                         </button>
                     </div>
                     <div className="flex items-center justify-between mt-2 px-1">
-                        <p className="text-[8px] text-stone-600 font-bold uppercase tracking-widest">Internal Comms Only</p>
-                        <p className="text-[8px] text-stone-600 font-bold italic tracking-tighter">Enter to send</p>
+                        <p className="text-[8px] text-muted font-bold uppercase tracking-widest">Internal Comms Only</p>
+                        <p className="text-[8px] text-muted font-bold italic tracking-tighter">Enter to send</p>
                     </div>
                 </div>
             </div>

@@ -193,9 +193,9 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                     );
                 })}
                 {templates.length === 0 && (
-                    <div className="col-span-2 flex flex-col items-center justify-center py-8 opacity-30 border border-dashed border-stone-800 rounded-2xl">
-                        <Zap size={16} className="text-stone-700 mb-2" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-stone-700">Sin Plantillas</span>
+                    <div className="col-span-2 flex flex-col items-center justify-center py-8 opacity-30 border border-dashed border-card-border rounded-2xl">
+                        <Zap size={16} className="text-muted mb-2" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-muted">Sin Plantillas</span>
                     </div>
                 )}
             </div>

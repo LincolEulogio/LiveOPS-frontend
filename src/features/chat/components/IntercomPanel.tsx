@@ -136,7 +136,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                             "absolute right-2 top-1.5 p-2 rounded-lg transition-all",
                             message.trim()
                                 ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 hover:scale-105"
-                                : "text-stone-700 cursor-not-allowed"
+                                : "text-muted/50 cursor-not-allowed"
                         )}
                     >
                         <Send size={16} />
