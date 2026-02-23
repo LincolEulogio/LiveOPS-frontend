@@ -17,7 +17,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
     return (
         <div className={cn(
             "p-4 rounded-xl border transition-all relative overflow-hidden group",
-            message.status === 'PENDING' ? "bg-stone-800/50 border-stone-700" :
+            message.status === 'PENDING' ? "bg-background border-card-border" :
                 message.status === 'APPROVED' ? "bg-emerald-900/20 border-emerald-500/30" :
                     message.status === 'ON_AIR' ? "bg-indigo-900/40 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]" :
                         "bg-red-900/10 border-red-500/20 opacity-50",
@@ -30,28 +30,28 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
             )}
 
             <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-stone-700 flex shrink-0 items-center justify-center overflow-hidden border border-stone-600">
+                <div className="w-10 h-10 rounded-full bg-card-bg flex shrink-0 items-center justify-center overflow-hidden border border-card-border">
                     {message.authorAvatar ? (
                         <img src={message.authorAvatar} alt={message.author} className="w-full h-full object-cover" />
                     ) : (
-                        <span className="text-sm font-bold text-stone-400">{message.author.charAt(0).toUpperCase()}</span>
+                        <span className="text-sm font-bold text-muted">{message.author.charAt(0).toUpperCase()}</span>
                     )}
                 </div>
 
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="font-bold text-sm text-stone-200 truncate">{message.author}</span>
+                        <span className="font-bold text-sm text-foreground truncate">{message.author}</span>
                         <span className={cn(
                             "text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded",
                             isTwitch ? "bg-purple-500/20 text-purple-400" : "bg-red-500/20 text-red-400"
                         )}>
                             {message.platform}
                         </span>
-                        <span className="text-[10px] text-stone-500 ml-auto">
+                        <span className="text-[10px] text-muted ml-auto">
                             {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                     </div>
-                    <p className="text-sm text-stone-300 break-words leading-relaxed">
+                    <p className="text-sm text-foreground break-words leading-relaxed">
                         {message.content}
                     </p>
                 </div>
@@ -59,7 +59,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
 
             {/* Actions for Pending */}
             {message.status === 'PENDING' && (
-                <div className="mt-4 flex gap-2 pt-3 border-t border-stone-700/50">
+                <div className="mt-4 flex gap-2 pt-3 border-t border-card-border">
                     <button
                         onClick={() => onApprove?.(message.id)}
                         className="flex-1 flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 py-1.5 rounded-lg text-xs font-bold transition-colors"
@@ -86,7 +86,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
                     </button>
                     <button
                         onClick={() => onReject?.(message.id)}
-                        className="px-3 flex items-center justify-center bg-stone-800 hover:bg-red-500/20 text-stone-400 hover:text-red-400 py-1.5 rounded-lg transition-colors"
+                        className="px-3 flex items-center justify-center bg-card-bg hover:bg-red-500/20 text-muted hover:text-red-400 py-1.5 rounded-lg border border-card-border transition-colors"
                     >
                         <X size={14} />
                     </button>

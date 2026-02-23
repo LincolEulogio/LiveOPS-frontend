@@ -1,31 +1,58 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+}
+
 :root {
-  --background: #fafaf9; /* stone-50 */
-  --foreground: #0c0a09; /* stone-950 */
-  --card-bg: #f5f5f4;    /* stone-100 */
-  --card-border: #e7e5e4; /* stone-200 */
-  --accent: #6366f1;     /* indigo-500 */
+  --background: #fafaf9;
+  /* stone-50 */
+  --foreground: #0c0a09;
+  /* stone-950 */
+  --card-bg: #f5f5f4;
+  /* stone-100 */
+  --card-border: #e7e5e4;
+  /* stone-200 */
+  --accent: #6366f1;
+  /* indigo-500 */
   --accent-foreground: #ffffff;
-  --muted: #a8a29e;      /* stone-400 */
+  --muted: #a8a29e;
+  /* stone-400 */
 }
 
 .dark {
-  --background: #0c0a09; /* stone-950 */
-  --foreground: #fafaf9; /* stone-50 */
-  --card-bg: #1c1917;    /* stone-900 */
-  --card-border: #292524; /* stone-800 */
-  --accent: #6366f1;     /* indigo-500 */
+  --background: #0c0a09;
+  /* stone-950 */
+  --foreground: #fafaf9;
+  /* stone-50 */
+  --card-bg: #1c1917;
+  /* stone-900 */
+  --card-border: #292524;
+  /* stone-800 */
+  --accent: #6366f1;
+  /* indigo-500 */
   --accent-foreground: #ffffff;
-  --muted: #57534e;      /* stone-600 */
+  --muted: #57534e;
+  /* stone-600 */
 }
 
 .production {
-  --background: #000000; /* pure black for zero glare */
-  --foreground: #ffffff; 
-  --card-bg: #0a0a0a;    /* ultra dark gray */
-  --card-border: #1a1a1a; 
-  --accent: #818cf8;     /* indigo-400 for better visibility in pure black */
+  --background: #000000;
+  /* pure black for zero glare */
+  --foreground: #ffffff;
+  --card-bg: #0a0a0a;
+  /* ultra dark gray */
+  --card-border: #1a1a1a;
+  --accent: #818cf8;
+  /* indigo-400 for better visibility in pure black */
   --accent-foreground: #ffffff;
   --muted: #404040;
 }

@@ -25,20 +25,20 @@ export const HealthMonitor = ({ productionId }: Props) => {
 
     if (!lastStats && history.length === 0) {
         return (
-            <div className="p-6 bg-stone-900/50 border border-stone-800 rounded-3xl flex flex-col items-center justify-center text-center space-y-3">
-                <Activity className="text-stone-700 animate-pulse" size={32} />
-                <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">Esperando telemetría...</p>
+            <div className="p-6 bg-card-bg/50 border border-card-border rounded-3xl flex flex-col items-center justify-center text-center space-y-3">
+                <Activity className="text-muted animate-pulse" size={32} />
+                <p className="text-[10px] font-black text-muted uppercase tracking-widest">Esperando telemetría...</p>
             </div>
         );
     }
 
     return (
-        <div className="bg-stone-900/50 border border-stone-800 rounded-3xl overflow-hidden flex flex-col shadow-2xl">
+        <div className="bg-card-bg/50 border border-card-border rounded-3xl overflow-hidden flex flex-col shadow-2xl">
             {/* Header */}
-            <div className="p-4 border-b border-stone-800 bg-stone-950/20 flex items-center justify-between">
+            <div className="p-4 border-b border-card-border bg-background/20 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <Activity size={16} className={cn(isHealthy ? "text-emerald-400" : "text-amber-400 animate-pulse")} />
-                    <h2 className="text-[10px] font-black text-stone-500 uppercase tracking-widest">Estado del Stream</h2>
+                    <h2 className="text-[10px] font-black text-muted uppercase tracking-widest">Estado del Stream</h2>
                 </div>
                 <div className={cn(
                     "px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-tighter",
@@ -50,21 +50,21 @@ export const HealthMonitor = ({ productionId }: Props) => {
 
             {/* Metrics Grid */}
             <div className="p-4 grid grid-cols-2 gap-3">
-                <div className="bg-stone-950/40 border border-stone-800 p-3 rounded-2xl">
+                <div className="bg-background/40 border border-card-border p-3 rounded-2xl">
                     <div className="flex items-center gap-2 mb-1">
                         <Cpu size={12} className="text-indigo-400" />
-                        <span className="text-[8px] font-bold text-stone-500 uppercase tracking-widest">CPU Engine</span>
+                        <span className="text-[8px] font-bold text-muted uppercase tracking-widest">CPU Engine</span>
                     </div>
-                    <p className="text-xl font-black text-white">
+                    <p className="text-xl font-black text-foreground">
                         {lastStats?.cpuUsage !== undefined ? lastStats.cpuUsage.toFixed(1) : '--'}%
                     </p>
                 </div>
-                <div className="bg-stone-950/40 border border-stone-800 p-3 rounded-2xl">
+                <div className="bg-background/40 border border-card-border p-3 rounded-2xl">
                     <div className="flex items-center gap-2 mb-1">
                         <Zap size={12} className="text-amber-400" />
-                        <span className="text-[8px] font-bold text-stone-500 uppercase tracking-widest">FPS Reales</span>
+                        <span className="text-[8px] font-bold text-muted uppercase tracking-widest">FPS Reales</span>
                     </div>
-                    <p className="text-xl font-black text-white">
+                    <p className="text-xl font-black text-foreground">
                         {lastStats?.fps !== undefined ? lastStats.fps.toFixed(0) : '--'}
                     </p>
                 </div>
@@ -82,7 +82,7 @@ export const HealthMonitor = ({ productionId }: Props) => {
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#262626" vertical={false} />
                         <Tooltip
-                            contentStyle={{ backgroundColor: '#0c0a09', border: '1px solid #292524', borderRadius: '8px', fontSize: '10px' }}
+                            contentStyle={{ backgroundColor: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '8px', fontSize: '10px' }}
                             itemStyle={{ color: '#818cf8' }}
                         />
                         <Area

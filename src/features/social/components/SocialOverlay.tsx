@@ -79,7 +79,7 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                         initial={{ opacity: 0, y: 100, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-                        className="relative flex items-center max-w-4xl"
+                        className="relative flex items-center max-w-7xl"
                     >
                         <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl rounded-[32px] border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)]" />
                         <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[34px] opacity-20 blur-sm animate-pulse" />
@@ -90,8 +90,8 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                                     {activeMessage.authorAvatar ? (
                                         <img src={activeMessage.authorAvatar} alt={activeMessage.author} className="w-full h-full object-cover" />
                                     ) : (
-                                        <div className="w-full h-full bg-stone-800 flex items-center justify-center">
-                                            <span className="text-2xl font-black text-stone-600">
+                                        <div className="w-full h-full bg-card-bg flex items-center justify-center">
+                                            <span className="text-2xl font-black text-muted">
                                                 {activeMessage.author.charAt(0).toUpperCase()}
                                             </span>
                                         </div>
@@ -116,7 +116,7 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                                     </h3>
                                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,1)]" />
                                 </div>
-                                <p className="text-2xl font-bold text-stone-200 leading-tight">
+                                <p className="text-2xl font-bold text-foreground leading-tight">
                                     {activeMessage.content}
                                 </p>
                             </div>

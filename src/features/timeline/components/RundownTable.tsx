@@ -55,24 +55,24 @@ export const RundownTable = ({
         .reduce((sum, b) => sum + (b.durationMs || 0), 0);
 
     return (
-        <div className="w-full overflow-hidden rounded-xl border border-stone-800 bg-stone-950/40 backdrop-blur-md">
+        <div className="w-full overflow-hidden rounded-xl border border-card-border bg-card-bg/40 backdrop-blur-md">
             <table className="w-full text-left border-collapse">
                 <thead>
-                    <tr className="bg-stone-900/50 border-b border-stone-800">
-                        <th className="px-4 py-3 text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] w-12">#</th>
-                        <th className="px-4 py-3 text-[10px] font-black text-stone-500 uppercase tracking-[0.2em]">Bloque / Título</th>
-                        <th className="px-4 py-3 text-[10px] font-black text-stone-500 uppercase tracking-[0.2em]">Fuente</th>
-                        <th className="px-4 py-3 text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] text-center">Planif.</th>
-                        <th className="px-4 py-3 text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] text-center">Efectivo</th>
+                    <tr className="bg-background/50 border-b border-card-border">
+                        <th className="px-4 py-3 text-[10px] font-black text-muted uppercase tracking-[0.2em] w-12">#</th>
+                        <th className="px-4 py-3 text-[10px] font-black text-muted uppercase tracking-[0.2em]">Bloque / Título</th>
+                        <th className="px-4 py-3 text-[10px] font-black text-muted uppercase tracking-[0.2em]">Fuente</th>
+                        <th className="px-4 py-3 text-[10px] font-black text-muted uppercase tracking-[0.2em] text-center">Planif.</th>
+                        <th className="px-4 py-3 text-[10px] font-black text-muted uppercase tracking-[0.2em] text-center">Efectivo</th>
                         <th className="px-4 py-3 text-right">
-                            <div className="inline-flex items-center gap-2 bg-stone-800/50 px-3 py-1 rounded-md border border-stone-700/50">
-                                <span className="text-[9px] font-black text-stone-500 uppercase tracking-widest">Restante:</span>
+                            <div className="inline-flex items-center gap-2 bg-background/50 px-3 py-1 rounded-md border border-card-border/50">
+                                <span className="text-[9px] font-black text-muted uppercase tracking-widest">Restante:</span>
                                 <span className="text-xs font-mono font-bold text-indigo-400">{formatDuration(totalRemainingMs)}</span>
                             </div>
                         </th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-stone-800/50">
+                <tbody className="divide-y divide-card-border/50">
                     {blocks.map((block, index) => {
                         const effective = calculateEffective(block);
                         const isOvertime = block.status === TimelineStatus.ACTIVE &&
@@ -87,7 +87,7 @@ export const RundownTable = ({
                                 key={block.id}
                                 className={cn(
                                     "group transition-colors relative",
-                                    block.status === TimelineStatus.ACTIVE ? "bg-indigo-500/5" : "hover:bg-white/[0.02]",
+                                    block.status === TimelineStatus.ACTIVE ? "bg-indigo-500/5" : "hover:bg-foreground/[0.02]",
                                     inProgram && "bg-red-500/10",
                                     inPreview && "bg-emerald-500/10"
                                 )}
@@ -95,19 +95,19 @@ export const RundownTable = ({
                                 {/* Tally Indicator Border */}
                                 {inProgram && <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-600 shadow-[2px_0_10px_rgba(220,38,38,0.5)]" />}
                                 {inPreview && <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-600" />}
-                                <td className="px-4 py-4 text-xs font-mono text-stone-600">
+                                <td className="px-4 py-4 text-xs font-mono text-muted">
                                     {(index + 1).toString().padStart(2, '0')}
                                 </td>
                                 <td className="px-4 py-4">
                                     <div className="flex flex-col">
                                         <span className={cn(
                                             "font-bold text-sm tracking-tight",
-                                            block.status === TimelineStatus.ACTIVE ? "text-indigo-400" : "text-stone-200"
+                                            block.status === TimelineStatus.ACTIVE ? "text-indigo-400" : "text-foreground"
                                         )}>
                                             {block.title}
                                         </span>
                                         {block.description && (
-                                            <span className="text-[10px] text-stone-500 line-clamp-1">{block.description}</span>
+                                            <span className="text-[10px] text-muted line-clamp-1">{block.description}</span>
                                         )}
                                     </div>
                                 </td>
@@ -115,18 +115,18 @@ export const RundownTable = ({
                                     <div className="flex items-center gap-2">
                                         <div className={cn(
                                             "w-2 h-2 rounded-full",
-                                            inProgram ? "bg-red-500 animate-pulse" : inPreview ? "bg-emerald-500" : "bg-stone-700"
+                                            inProgram ? "bg-red-500 animate-pulse" : inPreview ? "bg-emerald-500" : "bg-muted"
                                         )} />
                                         <span className={cn(
                                             "text-xs font-bold uppercase",
-                                            inProgram ? "text-red-400" : inPreview ? "text-emerald-400" : "text-stone-400"
+                                            inProgram ? "text-red-400" : inPreview ? "text-emerald-400" : "text-muted"
                                         )}>
                                             {block.source || '---'}
                                         </span>
                                     </div>
                                 </td>
                                 <td className="px-4 py-4 text-center">
-                                    <span className="text-xs font-mono text-stone-500">
+                                    <span className="text-xs font-mono text-muted">
                                         {block.durationMs && block.durationMs > 0 ? formatDuration(block.durationMs) : 'MANUAL'}
                                     </span>
                                 </td>
@@ -135,7 +135,7 @@ export const RundownTable = ({
                                         "inline-flex items-center gap-1.5 px-2 py-1 rounded-md font-mono text-xs font-bold",
                                         block.status === TimelineStatus.ACTIVE
                                             ? isOvertime ? "bg-red-500/20 text-red-400" : "bg-indigo-500/20 text-indigo-400"
-                                            : block.status === TimelineStatus.COMPLETED ? "text-stone-400" : "text-stone-700"
+                                            : block.status === TimelineStatus.COMPLETED ? "text-muted" : "text-foreground"
                                     )}>
                                         <Clock size={10} />
                                         {formatDuration(effective)}
@@ -165,24 +165,24 @@ export const RundownTable = ({
                                         {block.status !== TimelineStatus.PENDING && canControl && (
                                             <button
                                                 onClick={() => onReset(block.id)}
-                                                className="p-2 bg-stone-900 border border-stone-800 text-stone-500 hover:text-orange-400 rounded-lg transition-all"
+                                                className="p-2 bg-background border border-card-border text-muted hover:text-orange-400 rounded-lg transition-all"
                                                 title="Resetear"
                                             >
                                                 <RotateCcw size={14} />
                                             </button>
                                         )}
-                                        <div className="w-px h-4 bg-stone-800 mx-1" />
+                                        <div className="w-px h-4 bg-card-border mx-1" />
                                         {canEdit && (
                                             <>
                                                 <button
                                                     onClick={() => onEdit(block)}
-                                                    className="p-2 text-stone-500 hover:text-white hover:bg-stone-800 rounded-lg transition-all"
+                                                    className="p-2 text-muted hover:text-foreground hover:bg-card-border rounded-lg transition-all"
                                                 >
                                                     <Edit2 size={14} />
                                                 </button>
                                                 <button
                                                     onClick={() => onDelete(block.id)}
-                                                    className="p-2 text-stone-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
+                                                    className="p-2 text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
                                                 >
                                                     <Trash2 size={14} />
                                                 </button>
@@ -197,7 +197,7 @@ export const RundownTable = ({
             </table>
 
             {blocks.length === 0 && (
-                <div className="py-20 flex flex-col items-center justify-center text-stone-600">
+                <div className="py-20 flex flex-col items-center justify-center text-muted">
                     <Tag size={40} className="mb-4 opacity-20" />
                     <p className="text-sm font-bold uppercase tracking-widest opacity-40">No hay bloques en la escaleta</p>
                 </div>

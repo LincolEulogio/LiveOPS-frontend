@@ -51,7 +51,7 @@ export const TimelineView = () => {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-stone-500">
+            <div className="flex flex-col items-center justify-center h-full gap-4 text-muted">
                 <Loader2 className="animate-spin text-indigo-500" size={32} />
                 <p className="text-xs font-bold uppercase tracking-widest">Loading Escaleta...</p>
             </div>
@@ -63,14 +63,14 @@ export const TimelineView = () => {
     return (
         <div className="flex flex-col h-full overflow-hidden">
             {/* Header */}
-            <div className="p-6 border-b border-stone-800/50 bg-stone-900/20">
+            <div className="p-6 border-b border-card-border/50 bg-card-bg/20">
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                         <ListTree size={18} className="text-indigo-400" />
-                        <h2 className="text-sm font-black text-white uppercase tracking-widest">Escaleta</h2>
+                        <h2 className="text-sm font-black text-foreground uppercase tracking-widest">Escaleta</h2>
                     </div>
                 </div>
-                <p className="text-[10px] text-stone-500 font-medium leading-relaxed">
+                <p className="text-[10px] text-muted font-medium leading-relaxed">
                     Track your show segments and trigger automated actions.
                 </p>
 
@@ -82,13 +82,13 @@ export const TimelineView = () => {
                                 <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">On Air Now</span>
                                 <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                             </div>
-                            <h3 className="text-sm font-bold text-white truncate">{activeBlock.title}</h3>
+                            <h3 className="text-sm font-bold text-foreground truncate">{activeBlock.title}</h3>
                         </div>
                     ) : (
                         <button
                             onClick={() => blocks.length > 0 && startBlock(blocks[0].id)}
                             disabled={blocks.length === 0 || isMutating}
-                            className="w-full flex items-center justify-center gap-2 py-3 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-xl transition-all font-bold text-xs uppercase tracking-widest disabled:opacity-50"
+                            className="w-full flex items-center justify-center gap-2 py-3 bg-card-border hover:bg-card-bg text-foreground rounded-xl transition-all font-bold text-xs uppercase tracking-widest disabled:opacity-50"
                         >
                             <PlayCircle size={16} />
                             Start Show
@@ -101,11 +101,11 @@ export const TimelineView = () => {
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3 custom-scrollbar">
                 {blocks.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-                        <div className="w-12 h-12 rounded-2xl bg-stone-900 border border-stone-800 flex items-center justify-center text-stone-600 mb-4">
+                        <div className="w-12 h-12 rounded-2xl bg-card-bg border border-card-border flex items-center justify-center text-muted mb-4">
                             <ListTree size={24} />
                         </div>
-                        <p className="text-sm font-bold text-stone-400 mb-1">No blocks yet</p>
-                        <p className="text-[10px] text-stone-600 uppercase font-bold tracking-tight">
+                        <p className="text-sm font-bold text-muted mb-1">No blocks yet</p>
+                        <p className="text-[10px] text-muted uppercase font-bold tracking-tight">
                             Build your show rundown to stay organized.
                         </p>
                     </div>
@@ -126,7 +126,7 @@ export const TimelineView = () => {
             </div>
 
             {/* Footer / Actions */}
-            <div className="p-4 border-t border-stone-800/50 bg-stone-900/20">
+            <div className="p-4 border-t border-card-border/50 bg-card-bg/20">
                 <button
                     onClick={handleAddBlock}
                     disabled={isMutating}

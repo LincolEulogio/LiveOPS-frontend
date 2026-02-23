@@ -36,7 +36,7 @@ export const TalentView = ({ productionId }: Props) => {
             {/* Back Button */}
             <Link
                 href={`/productions/${productionId}`}
-                className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 px-4 py-2 bg-stone-900 border border-stone-800 rounded-xl text-stone-400 hover:text-white hover:bg-stone-800 transition-all font-bold uppercase tracking-widest text-xs z-50"
+                className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 px-4 py-2 bg-card-bg border border-card-border rounded-xl text-muted hover:text-foreground hover:bg-card-border transition-all font-bold uppercase tracking-widest text-xs z-50"
             >
                 <ChevronLeft size={16} /> Volver
             </Link>
@@ -56,12 +56,12 @@ export const TalentView = ({ productionId }: Props) => {
                                 <div className="px-4 py-1.5 bg-emerald-500 text-black font-black text-xl uppercase tracking-widest rounded-lg">
                                     AL AIRE
                                 </div>
-                                <h2 className="text-2xl font-bold text-stone-500 uppercase tracking-widest">
+                                <h2 className="text-2xl font-bold text-muted uppercase tracking-widest">
                                     Bloque Actual
                                 </h2>
                             </div>
                             <div className="text-right">
-                                <p className="text-stone-500 text-sm font-bold uppercase tracking-widest mb-1">Hora Local</p>
+                                <p className="text-muted text-sm font-bold uppercase tracking-widest mb-1">Hora Local</p>
                                 <DigitalClock />
                             </div>
                         </div>
@@ -89,7 +89,7 @@ export const TalentView = ({ productionId }: Props) => {
                                     </h3>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-stone-500 text-lg font-bold uppercase tracking-widest mb-1">Duración</p>
+                                    <p className="text-muted text-lg font-bold uppercase tracking-widest mb-1">Duración</p>
                                     <p className="text-4xl font-black">{((nextBlock.durationMs ?? 0) / 60000).toFixed(0)} MIN</p>
                                 </div>
                             </div>
@@ -105,12 +105,12 @@ export const TalentView = ({ productionId }: Props) => {
                         <h1 className="text-8xl font-black uppercase tracking-tighter">
                             Standby
                         </h1>
-                        <p className="text-4xl text-stone-500 font-bold uppercase tracking-widest">
+                        <p className="text-4xl text-muted font-bold uppercase tracking-widest">
                             Esperando inicio de producción
                         </p>
 
                         {nextBlock && (
-                            <div className="bg-white/5 border-2 border-white/10 rounded-[3rem] p-12 w-full max-w-4xl">
+                            <div className="bg-white/5 border-2 border-white/10 rounded-[3rem] p-12 w-full max-w-7xl">
                                 <p className="text-indigo-400 text-2xl font-black uppercase tracking-[0.3em] mb-4">PRIMER BLOQUE</p>
                                 <h2 className="text-6xl font-black uppercase">{nextBlock.title}</h2>
                             </div>

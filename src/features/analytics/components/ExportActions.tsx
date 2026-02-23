@@ -64,15 +64,15 @@ export const ExportActions = ({ productionId }: Props) => {
     };
 
     return (
-        <div className="flex flex-col gap-4 p-6 bg-stone-900 border border-stone-800 rounded-3xl shadow-xl">
+        <div className="flex flex-col gap-4 p-6 bg-card-bg border border-card-border rounded-3xl shadow-xl">
             <div className="flex items-center gap-3 mb-2">
                 <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400">
                     <Download size={18} />
                 </div>
-                <h2 className="text-sm font-bold text-white uppercase tracking-widest">Data Export</h2>
+                <h2 className="text-sm font-bold text-foreground uppercase tracking-widest">Data Export</h2>
             </div>
 
-            <p className="text-[10px] text-stone-500 leading-relaxed">
+            <p className="text-[10px] text-muted leading-relaxed">
                 Download the complete production history for post-production analysis or billing compliance.
             </p>
 
@@ -80,29 +80,29 @@ export const ExportActions = ({ productionId }: Props) => {
                 <button
                     onClick={() => handleExport('csv')}
                     disabled={isExporting}
-                    className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-stone-950 hover:bg-stone-800 border border-stone-800 rounded-2xl transition-all group"
+                    className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-background hover:bg-card-border border border-card-border rounded-2xl transition-all group"
                 >
                     <div className="flex items-center gap-3">
                         <FileSpreadsheet size={16} className="text-emerald-500 group-hover:scale-110 transition-transform" />
-                        <span className="text-xs font-bold text-stone-300 uppercase tracking-wider">Spreadsheet (CSV)</span>
+                        <span className="text-xs font-bold text-muted uppercase tracking-wider">Spreadsheet (CSV)</span>
                     </div>
-                    {isExporting ? <Loader2 size={14} className="animate-spin text-stone-600" /> : <FileDown size={14} className="text-stone-600" />}
+                    {isExporting ? <Loader2 size={14} className="animate-spin text-muted" /> : <FileDown size={14} className="text-muted" />}
                 </button>
 
                 <button
                     onClick={() => handleExport('json')}
                     disabled={isExporting}
-                    className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-stone-950 hover:bg-stone-800 border border-stone-800 rounded-2xl transition-all group"
+                    className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-background hover:bg-card-border border border-card-border rounded-2xl transition-all group"
                 >
                     <div className="flex items-center gap-3">
                         <FileDown size={16} className="text-indigo-400 group-hover:scale-110 transition-transform" />
-                        <span className="text-xs font-bold text-stone-300 uppercase tracking-wider">Raw Data (JSON)</span>
+                        <span className="text-xs font-bold text-muted uppercase tracking-wider">Raw Data (JSON)</span>
                     </div>
-                    {isExporting ? <Loader2 size={14} className="animate-spin text-stone-600" /> : <FileDown size={14} className="text-stone-600" />}
+                    {isExporting ? <Loader2 size={14} className="animate-spin text-muted" /> : <FileDown size={14} className="text-muted" />}
                 </button>
             </div>
 
-            <div className="mt-2 text-[9px] text-stone-600 italic text-center">
+            <div className="mt-2 text-[9px] text-muted italic text-center">
                 Includes all scene changes, commands, and engine states.
             </div>
         </div>

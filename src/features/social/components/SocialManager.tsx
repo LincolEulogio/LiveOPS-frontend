@@ -50,22 +50,22 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-xl">
+        <div className="flex flex-col h-full bg-card-bg border border-card-border rounded-2xl overflow-hidden shadow-xl">
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-stone-800 bg-stone-900/50">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-card-border bg-card-bg/50">
                 <div className="flex items-center gap-2">
                     <Share2 size={18} className="text-indigo-400" />
-                    <h2 className="text-sm font-bold text-white uppercase tracking-wider">Moderation</h2>
+                    <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">Moderation</h2>
                 </div>
                 <div className="flex items-center gap-2">
                     <button
                         onClick={handleSimulate}
-                        className="text-[10px] font-bold bg-stone-800 hover:bg-stone-700 text-stone-400 px-3 py-1.5 rounded-lg border border-stone-700 transition-all"
+                        className="text-[10px] font-bold bg-card-bg hover:bg-card-border text-foreground px-3 py-1.5 rounded-lg border border-card-border transition-all"
                     >
                         SIMULATE
                     </button>
                     <div className="relative group/filter">
-                        <Filter size={14} className="text-stone-500 group-hover/filter:text-stone-300 transition-colors" />
+                        <Filter size={14} className="text-muted group-hover/filter:text-foreground transition-colors" />
                         <select
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
@@ -81,8 +81,8 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
             </div>
 
             {/* active overlay status */}
-            <div className="px-5 py-3 bg-indigo-500/5 border-b border-stone-800 flex items-center justify-between min-h-[48px]">
-                <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest">On Air Graphics</span>
+            <div className="px-5 py-3 bg-indigo-500/5 border-b border-card-border flex items-center justify-between min-h-[48px]">
+                <span className="text-[10px] font-black text-muted uppercase tracking-widest">On Air Graphics</span>
                 {onAirMessage ? (
                     <div className="flex items-center gap-2">
                         <span className="text-[10px] font-bold text-indigo-400 truncate max-w-[120px]">{onAirMessage.author}</span>
@@ -92,7 +92,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                         </button>
                     </div>
                 ) : (
-                    <span className="text-[10px] font-bold text-stone-600 uppercase tracking-tighter">Overlay Idle</span>
+                    <span className="text-[10px] font-bold text-muted uppercase tracking-tighter">Overlay Idle</span>
                 )}
             </div>
 
@@ -109,22 +109,22 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                                 "group relative p-3 rounded-xl border transition-all",
                                 msg.status === 'ON_AIR'
                                     ? "bg-indigo-500/10 border-indigo-500/50 shadow-lg shadow-indigo-500/5"
-                                    : msg.status === 'APPROVED' ? "bg-emerald-500/5 border-emerald-500/20" : "bg-stone-950 border-stone-800 hover:border-stone-700"
+                                    : msg.status === 'APPROVED' ? "bg-emerald-500/5 border-emerald-500/20" : "bg-background border-card-border hover:border-indigo-500/50"
                             )}
                         >
                             <div className="flex gap-3">
                                 <div className="relative flex-shrink-0">
-                                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-stone-800 border border-stone-700">
+                                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-card-bg border border-card-border">
                                         {msg.authorAvatar ? (
                                             <img src={msg.authorAvatar} alt={msg.author} className="w-full h-full object-cover" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center font-bold text-stone-500 text-xs">
+                                            <div className="w-full h-full flex items-center justify-center font-bold text-muted text-xs">
                                                 {msg.author.charAt(0).toUpperCase()}
                                             </div>
                                         )}
                                     </div>
                                     <div className={cn(
-                                        "absolute -bottom-1 -right-1 p-0.5 rounded border border-stone-900 shadow-sm transition-colors",
+                                        "absolute -bottom-1 -right-1 p-0.5 rounded border border-card-bg shadow-sm transition-colors",
                                         msg.platform.toLowerCase() === 'youtube' && "bg-red-600",
                                         msg.platform.toLowerCase() === 'twitch' && "bg-purple-600",
                                         msg.platform.toLowerCase() === 'facebook' && "bg-blue-600",
@@ -137,10 +137,10 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
 
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between mb-1">
-                                        <span className="text-xs font-bold text-stone-200 truncate">{msg.author}</span>
-                                        <span className="text-[9px] font-medium text-stone-600">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                        <span className="text-xs font-bold text-foreground truncate">{msg.author}</span>
+                                        <span className="text-[9px] font-medium text-muted">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                     </div>
-                                    <p className="text-xs text-stone-400 line-clamp-2 leading-relaxed">
+                                    <p className="text-xs text-foreground line-clamp-2 leading-relaxed">
                                         {msg.content}
                                     </p>
                                 </div>
@@ -181,10 +181,10 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
 
                 {!isLoading && messages.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-12 text-center gap-4 opacity-40">
-                        <div className="p-4 bg-stone-800/50 rounded-full">
-                            <MessageSquare size={24} className="text-stone-500" />
+                        <div className="p-4 bg-card-bg/50 rounded-full">
+                            <MessageSquare size={24} className="text-muted" />
                         </div>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-stone-600">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-muted/50">
                             No messages received
                         </p>
                     </div>

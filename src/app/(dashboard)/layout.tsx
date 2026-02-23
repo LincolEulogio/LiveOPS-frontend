@@ -10,6 +10,7 @@ import { authService } from '@/features/auth/api/auth.service';
 import { Guard } from '@/shared/components/Guard';
 import { PresenceBar } from '@/shared/components/PresenceBar';
 import { CommandPalette } from '@/shared/components/CommandPalette';
+import { ThemeSwitcher } from '@/shared/components/ThemeSwitcher';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -39,18 +40,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   // Prevent hydration mismatch or flashing protected content
   if (!isMounted || !isHydrated || !token) {
     return (
-      <div className="min-h-screen bg-stone-950 flex items-center justify-center">
-        <span className="text-stone-500">Loading...</span>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <span className="text-muted">Loading...</span>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-stone-950 text-stone-100 overflow-hidden">
+    <div className="flex h-screen bg-background text-foreground overflow-hidden">
       {/* Sidebar Skeleton */}
-      <aside className="w-64 border-r border-stone-800 bg-stone-950 flex flex-col hidden md:flex">
-        <div className="h-16 flex items-center px-6 border-b border-stone-800">
-          <Link href="/profile" className="text-lg font-bold text-white tracking-tight">
+      <aside className="w-64 border-r border-card-border bg-background flex flex-col hidden md:flex">
+        <div className="h-16 flex items-center px-6 border-b border-card-border">
+          <Link href="/profile" className="text-lg font-bold text-foreground tracking-tight">
             LiveOPS
           </Link>
         </div>
@@ -59,14 +60,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Navigation Items placeholder */}
           <Link
             href="/productions"
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/productions') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/productions') ? 'bg-card-bg text-foreground' : 'text-muted hover:text-foreground hover:bg-card-bg'}`}
           >
             <Server size={18} />
             Productions
           </Link>
           <Link
             href={activeProductionId ? `/productions/${activeProductionId}/intercom` : '/productions'}
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/intercom') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/intercom') ? 'bg-card-bg text-foreground' : 'text-muted hover:text-foreground hover:bg-card-bg'}`}
           >
             <Info size={18} />
             Operational Hub
@@ -74,7 +75,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {activeProductionId && (
             <Link
               href={`/productions/${activeProductionId}/overlays`}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/overlays') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/overlays') ? 'bg-card-bg text-foreground' : 'text-muted hover:text-foreground hover:bg-card-bg'}`}
             >
               <Layers size={18} />
               Graphics Constructor
@@ -83,7 +84,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {activeProductionId && (
             <Link
               href={`/productions/${activeProductionId}/guest`}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/guest') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/guest') ? 'bg-card-bg text-foreground' : 'text-muted hover:text-foreground hover:bg-card-bg'}`}
             >
               <Users size={18} />
               Guest Panel
@@ -91,7 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           )}
           <Link
             href="/profile"
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname === '/profile' ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname === '/profile' ? 'bg-card-bg text-foreground' : 'text-muted hover:text-foreground hover:bg-card-bg'}`}
           >
             <UserIcon size={18} />
             Profile
@@ -99,15 +100,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           {/* Admin Section */}
           <Guard requiredPermissions={['user:manage', 'role:manage']}>
-            <div className="pt-4 pb-1 mt-4 border-t border-stone-800/50">
-              <p className="px-3 text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-1">Administration</p>
+            <div className="pt-4 pb-1 mt-4 border-t border-card-border/50">
+              <p className="px-3 text-[10px] font-bold text-muted uppercase tracking-widest mb-1">Administration</p>
             </div>
           </Guard>
 
           <Guard requiredPermissions={['user:manage']}>
             <Link
               href="/admin/users"
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/users') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/users') ? 'bg-card-bg text-foreground' : 'text-muted hover:text-foreground hover:bg-card-bg'}`}
             >
               <Users size={18} />
               Global Users
@@ -117,7 +118,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Guard requiredPermissions={['role:manage']}>
             <Link
               href="/admin/roles"
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/roles') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/roles') ? 'bg-card-bg text-foreground' : 'text-muted hover:text-foreground hover:bg-card-bg'}`}
             >
               <Shield size={18} />
               Roles & Permissions
@@ -125,15 +126,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </Guard>
         </nav>
 
-        <div className="p-4 border-t border-stone-800 bg-stone-900/50">
+        <div className="p-4 border-t border-card-border bg-background/50">
           <div className="flex items-center gap-3 px-3 py-2 mb-2 group">
-            <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-600/20 text-white group-hover:scale-105 transition-transform">
               {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white truncate">{user?.name || 'User'}</p>
+              <p className="text-sm font-semibold text-foreground truncate">{user?.name || 'User'}</p>
               <div className="flex flex-col">
-                <p className="text-[10px] text-stone-500 truncate">{user?.email}</p>
+                <p className="text-[10px] text-muted truncate">{user?.email}</p>
                 {user?.globalRole && (
                   <p className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mt-0.5">
                     {user.globalRole.name}
@@ -144,7 +145,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 text-stone-400 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 text-muted hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors"
           >
             <LogOut size={18} />
             <span className="text-sm">Sign out</span>
@@ -153,20 +154,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden bg-zinc-950">
-        <header className="h-16 border-b border-stone-800 flex items-center justify-between px-6 bg-stone-950/50 backdrop-blur-md z-30">
+      <main className="flex-1 flex flex-col h-screen overflow-hidden bg-background">
+        <header className="h-16 border-b border-card-border flex items-center justify-between px-6 bg-background/50 backdrop-blur-md z-30">
           <div className="flex items-center gap-4">
-            <span className="font-black text-white tracking-tighter md:hidden">LOPS</span>
+            <span className="font-black text-foreground tracking-tighter md:hidden">LOPS</span>
             <div className="hidden md:block">
               {/* Optional: Breadcrumbs or Page Title could go here */}
             </div>
           </div>
           <div className="flex items-center gap-6">
+            <ThemeSwitcher />
             <PresenceBar />
-            <div className="h-4 w-[1px] bg-stone-800 hidden md:block" />
+            <div className="h-4 w-[1px] bg-card-border hidden md:block" />
             <div className="hidden md:flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Live System</span>
+              <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Live System</span>
             </div>
           </div>
         </header>

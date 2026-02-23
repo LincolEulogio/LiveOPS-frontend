@@ -36,7 +36,7 @@ export const TimelineBlockItem = ({
         switch (block.status) {
             case TimelineStatus.ACTIVE: return 'border-indigo-500 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.2)]';
             case TimelineStatus.COMPLETED: return 'border-emerald-500/50 bg-emerald-500/5 opacity-60';
-            default: return 'border-stone-800 bg-stone-900/40';
+            default: return 'border-card-border bg-card-bg/40';
         }
     };
 
@@ -49,29 +49,29 @@ export const TimelineBlockItem = ({
             <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest">
+                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">
                             #{(block.order + 1).toString().padStart(2, '0')}
                         </span>
-                        <h4 className="text-sm font-bold text-white truncate group-hover:text-indigo-400 transition-colors cursor-pointer" onClick={() => onEdit(block)}>
+                        <h4 className="text-sm font-bold text-foreground truncate group-hover:text-indigo-400 transition-colors cursor-pointer" onClick={() => onEdit(block)}>
                             {block.title}
                         </h4>
                     </div>
                     {block.description && (
-                        <p className="text-xs text-stone-500 line-clamp-1 mb-2">
+                        <p className="text-xs text-muted line-clamp-1 mb-2">
                             {block.description}
                         </p>
                     )}
 
                     <div className="flex items-center gap-3 mt-auto">
-                        <div className="flex items-center gap-1.5 text-stone-400">
-                            <Clock size={12} className="text-stone-600" />
+                        <div className="flex items-center gap-1.5 text-muted">
+                            <Clock size={12} className="text-muted" />
                             <span className="text-[10px] font-mono font-bold uppercase tracking-tighter">
                                 {formatDuration(block.durationMs)}
                             </span>
                         </div>
                         {block.linkedScene && (
-                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-stone-800 border border-stone-700">
-                                <span className="text-[9px] font-bold text-stone-400 uppercase tracking-widest">
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-background border border-card-border">
+                                <span className="text-[9px] font-bold text-muted uppercase tracking-widest">
                                     Scene: {block.linkedScene}
                                 </span>
                             </div>
@@ -106,7 +106,7 @@ export const TimelineBlockItem = ({
                         <button
                             onClick={() => onReset(block.id)}
                             disabled={isMutating}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 transition-all disabled:opacity-50"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-background hover:bg-card-bg text-muted hover:text-foreground border border-card-border transition-all disabled:opacity-50"
                             title="Reset Block"
                         >
                             <RotateCcw size={16} />
@@ -117,7 +117,7 @@ export const TimelineBlockItem = ({
                         <button
                             onClick={() => onEdit(block)}
                             disabled={isMutating}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg text-stone-600 hover:text-indigo-400 hover:bg-indigo-400/10 transition-all disabled:opacity-50"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-indigo-400 hover:bg-indigo-400/10 transition-all disabled:opacity-50"
                             title="Edit Block"
                         >
                             <Edit2 size={16} />
@@ -127,7 +127,7 @@ export const TimelineBlockItem = ({
                             <button
                                 onClick={() => onDelete(block.id)}
                                 disabled={isMutating}
-                                className="w-8 h-8 flex items-center justify-center rounded-lg text-stone-600 hover:text-red-400 hover:bg-red-400/10 transition-all disabled:opacity-50"
+                                className="w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-red-400 hover:bg-red-400/10 transition-all disabled:opacity-50"
                                 title="Delete Block"
                             >
                                 <Trash2 size={16} />

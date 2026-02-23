@@ -54,12 +54,12 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
     };
 
     return (
-        <div className="min-h-screen bg-stone-950 text-white flex flex-col font-sans select-none">
+        <div className="min-h-screen bg-background text-foreground flex flex-col font-sans select-none">
             {/* Top Status Bar (Mobile focused) */}
-            <div className="px-6 py-4 border-b border-stone-900 bg-stone-900/50 flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-card-border bg-background/50 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">
                         View: {members.find(m => m.userId === userId)?.userName || 'Personal Terminal'}
                     </span>
                 </div>
@@ -79,7 +79,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 1.1 }}
-                            className="w-full max-w-md bg-stone-900 border-2 border-indigo-500/50 rounded-[40px] p-8 shadow-2xl shadow-indigo-500/10 flex flex-col items-center text-center relative z-10"
+                            className="w-full max-w-md bg-card-bg border-2 border-indigo-500/50 rounded-[40px] p-8 shadow-2xl shadow-indigo-500/10 flex flex-col items-center text-center relative z-10"
                         >
                             <div
                                 className="absolute inset-0 opacity-5 rounded-[40px] pointer-events-none"
@@ -126,13 +126,13 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                                 </button>
                                 <button
                                     onClick={() => handleRespond('LISTO')}
-                                    className="py-4 bg-stone-800 hover:bg-stone-700 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] active:scale-95 transition-all border border-stone-700"
+                                    className="py-4 bg-background hover:bg-card-border text-muted rounded-2xl font-black uppercase tracking-widest text-[10px] active:scale-95 transition-all border border-card-border"
                                 >
                                     LISTO
                                 </button>
                                 <button
                                     onClick={() => handleRespond('CHECK')}
-                                    className="py-4 bg-stone-800 hover:bg-stone-700 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] active:scale-95 transition-all border border-stone-700"
+                                    className="py-4 bg-background hover:bg-card-border text-muted rounded-2xl font-black uppercase tracking-widest text-[10px] active:scale-95 transition-all border border-card-border"
                                 >
                                     CHECK
                                 </button>
@@ -143,7 +143,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                                 <input
                                     type="text"
                                     placeholder="Mensaje personalizado..."
-                                    className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-white placeholder:text-stone-600 focus:outline-none focus:border-indigo-500/50 transition-all"
+                                    className="flex-1 bg-background/40 border border-card-border rounded-xl px-4 py-3 text-xs font-bold text-foreground placeholder:text-muted focus:outline-none focus:border-indigo-500/50 transition-all"
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
                                             handleRespond((e.target as HTMLInputElement).value);
@@ -159,7 +159,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                                             input.value = '';
                                         }
                                     }}
-                                    className="p-3 bg-white text-black rounded-xl hover:bg-stone-200 active:scale-95 transition-all shadow-lg"
+                                    className="p-3 bg-foreground text-background rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-lg"
                                 >
                                     <Send size={16} />
                                 </button>
@@ -172,21 +172,21 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                             className="flex flex-col items-center text-center space-y-8"
                         >
                             <div className="relative">
-                                <div className="w-32 h-32 rounded-full border border-stone-800 flex items-center justify-center relative overflow-hidden bg-stone-900/20">
-                                    <Clock size={48} className="text-stone-700 animate-pulse" />
+                                <div className="w-32 h-32 rounded-full border border-card-border flex items-center justify-center relative overflow-hidden bg-card-bg/20">
+                                    <Clock size={48} className="text-muted/50 animate-pulse" />
                                     {/* Rotating Ring Decor */}
                                     <div className="absolute inset-0 border-t-2 border-indigo-500/20 rounded-full animate-spin [animation-duration:3s]" />
                                 </div>
-                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-stone-900 border border-stone-800 rounded-full">
-                                    <p className="text-[8px] font-black text-stone-500 uppercase tracking-[0.2em] whitespace-nowrap">Standby Mode</p>
+                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-card-bg border border-card-border rounded-full">
+                                    <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Standby Mode</p>
                                 </div>
                             </div>
 
                             <div>
-                                <h1 className="text-2xl font-black uppercase tracking-[0.4em] mb-3 text-white/90">
+                                <h1 className="text-2xl font-black uppercase tracking-[0.4em] mb-3 text-foreground/90">
                                     Ready for <span className="text-indigo-500">Alerts</span>
                                 </h1>
-                                <p className="text-[10px] font-bold text-stone-600 uppercase tracking-[0.3em] leading-relaxed max-w-[200px] mx-auto">
+                                <p className="text-[10px] font-bold text-muted uppercase tracking-[0.3em] leading-relaxed max-w-[200px] mx-auto">
                                     Esperando instrucciones críticas del operador en tiempo real
                                 </p>
                             </div>
@@ -194,7 +194,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                             {/* Signal Indicator Decor */}
                             <div className="flex gap-1">
                                 {[1, 2, 3, 4, 5].map(i => (
-                                    <div key={i} className={`w-1 h-3 rounded-full ${i <= 4 ? 'bg-indigo-500/40' : 'bg-stone-800'}`} />
+                                    <div key={i} className={`w-1 h-3 rounded-full ${i <= 4 ? 'bg-indigo-500/40' : 'bg-card-border'}`} />
                                 ))}
                             </div>
                         </motion.div>
@@ -208,20 +208,20 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
             </div>
 
             {/* Bottom History Drawer */}
-            <div className="bg-stone-900/80 backdrop-blur-xl border-t border-stone-900 p-6 rounded-t-[40px] max-h-[30vh] overflow-hidden flex flex-col">
+            <div className="bg-card-bg/80 backdrop-blur-xl border-t border-card-border p-6 rounded-t-[40px] max-h-[30vh] overflow-hidden flex flex-col">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 flex items-center gap-2">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted flex items-center gap-2">
                         <MessageSquare size={14} /> Historial Local
                     </h3>
-                    <ChevronRight size={16} className="text-stone-700" />
+                    <ChevronRight size={16} className="text-muted/50" />
                 </div>
 
                 <div className="flex-1 overflow-y-auto space-y-3 custom-scrollbar">
                     {myHistory.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between py-2 border-b border-stone-800/30">
+                        <div key={item.id} className="flex items-center justify-between py-2 border-b border-card-border/30">
                             <div>
-                                <p className="text-[11px] font-bold uppercase tracking-tight text-stone-300">{item.message}</p>
-                                <p className="text-[9px] text-stone-600 font-bold uppercase mt-0.5">{new Date(item.timestamp).toLocaleTimeString()}</p>
+                                <p className="text-[11px] font-bold uppercase tracking-tight text-foreground/80">{item.message}</p>
+                                <p className="text-[9px] text-muted font-bold uppercase mt-0.5">{new Date(item.timestamp).toLocaleTimeString()}</p>
                             </div>
                             {item.status === 'ACKNOWLEDGED' && (
                                 <div className="flex items-center gap-1.5 text-green-500/50">
@@ -232,7 +232,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                         </div>
                     ))}
                     {myHistory.length === 0 && (
-                        <p className="text-center text-stone-800 text-[10px] font-bold uppercase py-4">No hay actividad reciente</p>
+                        <p className="text-center text-muted/50 text-[10px] font-bold uppercase py-4">No hay actividad reciente</p>
                     )}
                 </div>
             </div>

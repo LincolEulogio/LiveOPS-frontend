@@ -159,7 +159,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-4xl bg-stone-900 border border-stone-800 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col h-[90vh] md:h-auto md:max-h-[90vh]"
+                className="relative w-full max-w-7xl bg-stone-900 border border-stone-800 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col h-[90vh] md:h-auto md:max-h-[90vh]"
             >
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 md:p-8 border-b border-stone-800 bg-stone-950">

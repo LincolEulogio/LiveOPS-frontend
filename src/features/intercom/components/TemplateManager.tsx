@@ -66,15 +66,15 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
             console.log(`[TemplateManager] Refetch complete, showing success UI`);
 
             MySwal.fire({
-                title: <p className="text-white font-black uppercase tracking-tighter">Éxito</p>,
-                html: <p className="text-stone-400 text-xs font-bold uppercase tracking-widest">{editingTemplate ? 'Plantilla actualizada' : 'Plantilla creada correctamente'}</p>,
+                title: <p className="text-foreground font-black uppercase tracking-tighter">Éxito</p>,
+                html: <p className="text-muted text-xs font-bold uppercase tracking-widest">{editingTemplate ? 'Plantilla actualizada' : 'Plantilla creada correctamente'}</p>,
                 icon: 'success',
-                background: '#0c0a09',
-                color: '#fff',
+                background: 'var(--card-bg)',
+                color: 'var(--foreground)',
                 showConfirmButton: false,
                 timer: 1500,
                 customClass: {
-                    popup: 'border border-stone-800 rounded-3xl shadow-2xl',
+                    popup: 'border border-card-border rounded-3xl shadow-2xl',
                 }
             });
 
@@ -89,8 +89,8 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                 title: 'Error',
                 text: 'No se pudo guardar la plantilla',
                 icon: 'error',
-                background: '#0c0a09',
-                color: '#fff',
+                background: 'var(--card-bg)',
+                color: 'var(--foreground)',
             });
         }
     };
@@ -102,11 +102,11 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#292524',
+            cancelButtonColor: 'var(--card-border)',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar',
-            background: '#0c0a09',
-            color: '#fff',
+            background: 'var(--card-bg)',
+            color: 'var(--foreground)',
         });
 
         if (result.isConfirmed) {
@@ -115,8 +115,8 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                 MySwal.fire({
                     title: 'Eliminado',
                     icon: 'success',
-                    background: '#0c0a09',
-                    color: '#fff',
+                    background: 'var(--card-bg)',
+                    color: 'var(--foreground)',
                     timer: 1000,
                     showConfirmButton: false
                 });
@@ -125,8 +125,8 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                     title: 'Error',
                     text: 'No se pudo eliminar la plantilla',
                     icon: 'error',
-                    background: '#0c0a09',
-                    color: '#fff',
+                    background: 'var(--card-bg)',
+                    color: 'var(--foreground)',
                 });
             }
         }
@@ -140,7 +140,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                     setView('form');
                     setIsManagerOpen(true);
                 }}
-                className="p-2.5 bg-stone-900 hover:bg-stone-800 border border-stone-800 rounded-xl text-stone-400 hover:text-white transition-all shadow-lg group"
+                className="p-2.5 bg-card-bg hover:bg-card-border/50 border border-card-border rounded-xl text-muted hover:text-foreground transition-all shadow-lg group"
                 title="Nueva Plantilla"
             >
                 <Settings size={18} className="group-hover:rotate-90 transition-transform duration-500" />
@@ -161,15 +161,15 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                                className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-stone-950 border border-stone-800 shadow-[0_40px_100px_rgba(0,0,0,1)] z-[2001] flex flex-col rounded-[24px] overflow-hidden max-h-[85vh]"
+                                className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-background border border-card-border shadow-[0_40px_100px_rgba(0,0,0,1)] z-[2001] flex flex-col rounded-[24px] overflow-hidden max-h-[85vh]"
                             >
                                 {/* Header */}
-                                <div className="p-6 border-b border-stone-800 flex items-center justify-between bg-stone-900 shadow-sm relative z-10">
+                                <div className="p-6 border-b border-card-border flex items-center justify-between bg-card-bg shadow-sm relative z-10">
                                     <div className="flex items-center gap-3">
                                         <div className="p-2 bg-indigo-500/10 rounded-xl">
                                             {view === 'form' ? <Zap size={20} className="text-indigo-400" /> : <List size={20} className="text-indigo-400" />}
                                         </div>
-                                        <h2 className="text-sm font-black text-white uppercase tracking-widest">
+                                        <h2 className="text-sm font-black text-foreground uppercase tracking-widest">
                                             {view === 'list' ? 'Gestionar Plantillas' : editingTemplate ? 'Editar Plantilla' : 'Nueva Plantilla'}
                                         </h2>
                                     </div>
@@ -185,7 +185,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                         ) : (
                                             <button
                                                 onClick={() => { setEditingTemplate(null); setView('form'); }}
-                                                className="p-2 text-stone-500 hover:text-indigo-400 transition-colors"
+                                                className="p-2 text-muted hover:text-indigo-400 transition-colors"
                                                 title="Nueva Plantilla"
                                             >
                                                 <Plus size={20} />
@@ -193,7 +193,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                         )}
                                         <button
                                             onClick={() => setIsManagerOpen(false)}
-                                            className="p-2 text-stone-500 hover:text-white transition-colors"
+                                            className="p-2 text-muted hover:text-foreground transition-colors"
                                         >
                                             <X size={20} />
                                         </button>
@@ -201,7 +201,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                 </div>
 
                                 {/* Body */}
-                                <div className="flex-1 overflow-y-auto bg-stone-950 custom-scrollbar">
+                                <div className="flex-1 overflow-y-auto bg-background custom-scrollbar">
                                     <AnimatePresence mode="wait">
                                         {view === 'form' ? (
                                             <motion.div
@@ -213,7 +213,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                             >
                                                 <form onSubmit={handleSave} className="space-y-6">
                                                     <div className="space-y-2">
-                                                        <label className="flex items-center gap-2 text-[10px] font-black text-stone-500 uppercase tracking-widest">
+                                                        <label className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest">
                                                             <Type size={12} />
                                                             Texto de la Alerta
                                                         </label>
@@ -223,7 +223,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                             value={name}
                                                             onChange={(e) => setName(e.target.value)}
                                                             placeholder="Ej: Prevenido, Al Aire, Zoom..."
-                                                            className="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white placeholder:text-stone-700 focus:outline-none focus:border-indigo-500 transition-colors font-bold"
+                                                            className="w-full bg-card-bg border border-card-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted focus:outline-none focus:border-indigo-500 transition-colors font-bold"
                                                         />
                                                     </div>
 
@@ -250,7 +250,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                             <button
                                                                 type="button"
                                                                 onClick={() => setView('list')}
-                                                                className="flex-1 py-4 bg-stone-900 hover:bg-stone-800 text-stone-400 rounded-xl font-black text-xs uppercase tracking-widest transition-all border border-stone-800 flex items-center justify-center gap-2"
+                                                                className="flex-1 py-4 bg-card-bg hover:bg-card-border text-muted rounded-xl font-black text-xs uppercase tracking-widest transition-all border border-card-border flex items-center justify-center gap-2"
                                                             >
                                                                 <ChevronLeft size={16} />
                                                                 Volver
@@ -259,7 +259,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                         <button
                                                             type="submit"
                                                             disabled={isMutating || !name.trim()}
-                                                            className="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:bg-stone-800 disabled:shadow-none"
+                                                            className="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:bg-card-border disabled:shadow-none"
                                                         >
                                                             {isMutating ? (
                                                                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -283,8 +283,8 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                             >
                                                 {templates.length === 0 ? (
                                                     <div className="py-20 text-center space-y-4">
-                                                        <Zap size={40} className="text-stone-800 mx-auto" strokeWidth={1} />
-                                                        <p className="text-[10px] font-black text-stone-600 uppercase tracking-widest italic">
+                                                        <Zap size={40} className="text-card-border mx-auto" strokeWidth={1} />
+                                                        <p className="text-[10px] font-black text-muted uppercase tracking-widest italic">
                                                             No hay plantillas configuradas
                                                         </p>
                                                         <button
@@ -298,7 +298,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                     templates.map((t) => (
                                                         <div
                                                             key={t.id}
-                                                            className="group flex items-center justify-between p-4 bg-stone-900/40 border border-stone-800 rounded-2xl hover:border-stone-600 transition-all"
+                                                            className="group flex items-center justify-between p-4 bg-card-bg/40 border border-card-border rounded-2xl hover:border-indigo-400/50 transition-all"
                                                         >
                                                             <div className="flex items-center gap-4">
                                                                 <div
@@ -308,20 +308,20 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                                     <div className="w-3 h-3 rounded-full shadow-lg" style={{ backgroundColor: t.color }} />
                                                                 </div>
                                                                 <div>
-                                                                    <h4 className="text-[12px] font-black text-white uppercase tracking-tight">{t.name}</h4>
-                                                                    <p className="text-[8px] font-bold text-stone-500 uppercase tracking-widest mt-0.5">ID: {t.id.substring(0, 8)}</p>
+                                                                    <h4 className="text-[12px] font-black text-foreground uppercase tracking-tight">{t.name}</h4>
+                                                                    <p className="text-[8px] font-bold text-muted uppercase tracking-widest mt-0.5">ID: {t.id.substring(0, 8)}</p>
                                                                 </div>
                                                             </div>
                                                             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                                                 <button
                                                                     onClick={() => setEditingTemplate(t)}
-                                                                    className="p-2 text-stone-400 hover:text-white hover:bg-stone-800 rounded-lg transition-all"
+                                                                    className="p-2 text-muted hover:text-foreground hover:bg-card-border rounded-lg transition-all"
                                                                 >
                                                                     <Edit2 size={16} />
                                                                 </button>
                                                                 <button
                                                                     onClick={() => handleDelete(t.id)}
-                                                                    className="p-2 text-stone-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                                                                    className="p-2 text-muted hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                                                                 >
                                                                     <Trash2 size={16} />
                                                                 </button>

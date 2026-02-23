@@ -79,7 +79,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
     }).slice(0, 50);
 
     return (
-        <div className={`bg-stone-950 border ${member.isOnline ? 'border-stone-800' : 'border-stone-900 opacity-60'} rounded-3xl overflow-hidden shadow-2xl transition-all hover:border-indigo-500/40 group relative`}>
+        <div className={`bg-background border ${member.isOnline ? 'border-card-border' : 'border-card-border/60 opacity-60'} rounded-3xl overflow-hidden shadow-2xl transition-all hover:border-indigo-500/40 group relative`}>
             {/* Minimal Header with Icons (Battery/Wifi stubs) */}
             <div className="px-5 pt-4 flex items-center justify-between">
                 <div className="flex items-center gap-2 opacity-20 group-hover:opacity-50 transition-opacity">
@@ -91,13 +91,13 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                         <Activity size={10} className="text-indigo-400" />
                         <span className="text-[8px] font-black text-indigo-400 uppercase tracking-tighter">LIVE+</span>
                     </div>
-                    <span className={`text-[8px] font-black uppercase tracking-widest ${member.isOnline ? 'text-green-500' : 'text-stone-600'}`}>
+                    <span className={`text-[8px] font-black uppercase tracking-widest ${member.isOnline ? 'text-green-500' : 'text-muted'}`}>
                         {member.isOnline ? 'ONLINE' : 'OFFLINE'}
                     </span>
                     <Link
                         href={`/productions/${productionId}/intercom/member/${member.userId}`}
                         target="_blank"
-                        className="p-1 px-1.5 bg-stone-900 rounded-lg text-stone-600 hover:text-white transition-all border border-stone-800 hover:border-indigo-500/50"
+                        className="p-1 px-1.5 bg-card-bg rounded-lg text-muted hover:text-foreground transition-all border border-card-border hover:border-indigo-500/50"
                     >
                         <ExternalLink size={10} />
                     </Link>
@@ -107,19 +107,19 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
             {/* User Main Info */}
             <div className="p-5 flex items-center gap-4 pt-3">
                 <div className="relative">
-                    <div className={`w-14 h-14 rounded-[22px] flex items-center justify-center bg-gradient-to-br from-stone-800 to-stone-900 text-white font-black text-xl border ${member.isOnline ? 'border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.1)]' : 'border-stone-800'}`}>
+                    <div className={`w-14 h-14 rounded-[22px] flex items-center justify-center bg-card-bg text-foreground font-black text-xl border ${member.isOnline ? 'border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.1)]' : 'border-card-border'}`}>
                         {member.userName.substring(0, 2).toUpperCase()}
                     </div>
                     {member.isOnline && (
-                        <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-green-500 border-4 border-stone-950 rounded-full" />
+                        <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-green-500 border-4 border-background rounded-full" />
                     )}
                 </div>
                 <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-black text-white uppercase tracking-tight truncate leading-none mb-1">
+                    <h3 className="text-base font-black text-foreground uppercase tracking-tight truncate leading-none mb-1">
                         {member.userName}
                     </h3>
                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black bg-stone-900 text-stone-400 px-2 py-0.5 rounded-md border border-stone-800 uppercase tracking-widest">
+                        <span className="text-[10px] font-black bg-card-bg text-muted px-2 py-0.5 rounded-md border border-card-border uppercase tracking-widest">
                             {member.roleName}
                         </span>
                     </div>
@@ -127,12 +127,12 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
             </div>
 
             {/* Status Panel (High visibility) */}
-            <div className="mx-4 mb-4 p-4 bg-black/40 rounded-2xl border border-stone-800/50 flex flex-col justify-center min-h-[56px] relative overflow-hidden">
-                <p className="text-[9px] font-black text-stone-600 uppercase tracking-widest mb-2">Estado Actual</p>
+            <div className="mx-4 mb-4 p-4 bg-background dark:bg-black/40 rounded-2xl border border-card-border/50 flex flex-col justify-center min-h-[56px] relative overflow-hidden">
+                <p className="text-[9px] font-black text-muted uppercase tracking-widest mb-2">Estado Actual</p>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${currentStatus === 'AL AIRE' ? 'bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]' : currentStatus === 'IDLE' ? 'bg-stone-700' : 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]'}`} />
-                        <span className={`text-[12px] font-black uppercase tracking-tight ${currentStatus === 'AL AIRE' ? 'text-red-500' : currentStatus === 'IDLE' ? 'text-stone-500' : 'text-white'}`}>
+                        <div className={`w-2 h-2 rounded-full ${currentStatus === 'AL AIRE' ? 'bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]' : currentStatus === 'IDLE' ? 'bg-muted/50' : 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]'}`} />
+                        <span className={`text-[12px] font-black uppercase tracking-tight ${currentStatus === 'AL AIRE' ? 'text-red-500' : currentStatus === 'IDLE' ? 'text-muted' : 'text-foreground'}`}>
                             {currentStatus}
                         </span>
                     </div>
@@ -168,8 +168,8 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                             className={`
                                 group/btn relative p-3 rounded-xl border transition-all active:scale-95
                                 ${member.isOnline
-                                    ? 'bg-stone-900/50 border-stone-800 hover:border-indigo-500/50 hover:bg-stone-800'
-                                    : 'bg-stone-950/20 border-transparent cursor-not-allowed opacity-40'}
+                                    ? 'bg-card-bg/50 border-card-border hover:border-indigo-500/50 hover:bg-card-border'
+                                    : 'bg-background/20 border-transparent cursor-not-allowed opacity-40'}
                                 ${isPending ? 'ring-2 ring-indigo-500/50 border-indigo-500/50 bg-indigo-500/5' : ''}
                             `}
                         >
@@ -180,7 +180,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                                 <div className="mb-1 transition-transform group-hover/btn:scale-110 duration-300">
                                     {getIconForTemplate(t.name, t.color || '#6366f1')}
                                 </div>
-                                <span className={`text-[9px] font-black uppercase tracking-widest transition-colors ${isPending ? 'text-indigo-400' : 'text-stone-500 group-hover/btn:text-white'}`}>
+                                <span className={`text-[9px] font-black uppercase tracking-widest transition-colors ${isPending ? 'text-indigo-400' : 'text-muted group-hover/btn:text-foreground'}`}>
                                     {t.name}
                                 </span>
                             </div>
@@ -202,22 +202,22 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
 
             {/* Direct History / Messages Panel */}
             {directHistory.length > 0 && (
-                <div className="mx-4 mb-4 bg-stone-900 border border-stone-800/50 rounded-2xl overflow-hidden flex flex-col h-[280px]">
-                    <div className="px-3 py-1.5 bg-stone-800/30 border-b border-stone-800/50 flex items-center gap-2">
+                <div className="mx-4 mb-4 bg-card-bg border border-card-border/50 rounded-2xl overflow-hidden flex flex-col h-[280px]">
+                    <div className="px-3 py-1.5 bg-card-border/30 border-b border-card-border/50 flex items-center gap-2">
                         <MessageCircle size={10} className="text-indigo-400" />
-                        <span className="text-[9px] uppercase font-black text-stone-400 tracking-widest">Chat Reciente</span>
+                        <span className="text-[9px] uppercase font-black text-muted tracking-widest">Chat Reciente</span>
                     </div>
                     <div className="flex-1 overflow-y-auto p-3 custom-scrollbar flex flex-col-reverse gap-2">
                         {[...directHistory].map((msg, i) => {
                             const isMine = msg.senderId !== member.userId;
                             return (
                                 <div key={i} className={`flex w-full ${isMine ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`max-w-[85%] px-2.5 py-1.5 rounded-xl text-[10px] font-medium leading-tight ${isMine ? 'bg-indigo-600/20 text-indigo-100 border border-indigo-500/30 rounded-br-none' : 'bg-stone-800 text-stone-200 border border-stone-700 rounded-bl-none'}`}>
-                                        <div className={`text-[8px] font-black uppercase tracking-widest ${isMine ? 'text-indigo-300' : 'text-stone-400'} mb-0.5`}>
+                                    <div className={`max-w-[85%] px-2.5 py-1.5 rounded-xl text-[10px] font-medium leading-tight ${isMine ? 'bg-indigo-600/20 text-indigo-400 dark:text-indigo-100 border border-indigo-500/30 rounded-br-none' : 'bg-background text-foreground border border-card-border rounded-bl-none'}`}>
+                                        <div className={`text-[8px] font-black uppercase tracking-widest ${isMine ? 'text-indigo-500 dark:text-indigo-300' : 'text-muted'} mb-0.5`}>
                                             {isMine ? 'Tú (Control)' : (msg.senderName || member.userName)}
                                         </div>
                                         {msg.message.replace('Mensaje:', '').trim()}
-                                        <div className={`text-[7px] font-bold text-right pt-0.5 mt-0.5 flex justify-end items-center gap-1 ${isMine ? 'text-indigo-300' : 'text-stone-500'}`}>
+                                        <div className={`text-[7px] font-bold text-right pt-0.5 mt-0.5 flex justify-end items-center gap-1 ${isMine ? 'text-indigo-500/70 dark:text-indigo-300' : 'text-muted'}`}>
                                             {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </div>
                                     </div>
@@ -244,19 +244,19 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                             setChatMsg('');
                         }
                     }}
-                    className="flex items-center gap-2 bg-stone-900 border border-stone-800 rounded-xl p-2 focus-within:border-indigo-500/50 transition-colors"
+                    className="flex items-center gap-2 bg-card-bg border border-card-border rounded-xl p-2 focus-within:border-indigo-500/50 transition-colors"
                 >
                     <input
                         type="text"
                         value={chatMsg}
                         onChange={(e) => setChatMsg(e.target.value)}
                         placeholder={`Enviar mensaje a ${member.userName.split(' ')[0]}...`}
-                        className="flex-1 bg-transparent px-2 text-[10px] text-white focus:outline-none placeholder:text-stone-600 font-bold"
+                        className="flex-1 bg-transparent px-2 text-[10px] text-foreground focus:outline-none placeholder:text-muted font-bold"
                     />
                     <button
                         type="submit"
                         disabled={!chatMsg.trim() || !member.isOnline}
-                        className="bg-indigo-600 hover:bg-indigo-500 disabled:bg-stone-800 disabled:text-stone-500 text-white p-1.5 rounded-lg transition-colors active:scale-95"
+                        className="bg-accent hover:bg-accent/80 disabled:bg-card-border disabled:text-muted text-white p-1.5 rounded-lg transition-colors active:scale-95"
                     >
                         <MessageCircle size={14} />
                     </button>

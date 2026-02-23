@@ -49,13 +49,13 @@ export const AutomationDashboard = ({ productionId }: Props) => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-foreground tracking-tight flex items-center gap-3">
                         <div className="p-2 bg-indigo-500/10 rounded-2xl border border-indigo-500/20">
                             <Zap className="text-indigo-400" size={28} />
                         </div>
                         Automation Engine
                     </h1>
-                    <p className="text-stone-400 text-sm mt-2 max-w-lg leading-relaxed">
+                    <p className="text-muted text-sm mt-2 max-w-lg leading-relaxed">
                         Trigger complex sequences based on production events. Sync logic across all connected clients.
                     </p>
                 </div>
@@ -71,17 +71,17 @@ export const AutomationDashboard = ({ productionId }: Props) => {
 
             {/* Manual Macros Quick Bar */}
             {manualMacros.length > 0 && (
-                <div className="bg-stone-900/40 border border-stone-800 rounded-2xl p-4 flex items-center gap-4 overflow-x-auto no-scrollbar">
-                    <div className="flex items-center gap-2 pr-4 border-r border-stone-800 shrink-0">
+                <div className="bg-card-bg/40 border border-card-border rounded-2xl p-4 flex items-center gap-4 overflow-x-auto no-scrollbar">
+                    <div className="flex items-center gap-2 pr-4 border-r border-card-border shrink-0">
                         <Zap size={16} className="text-amber-400" />
-                        <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest">Macros Rápidas</span>
+                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">Macros Rápidas</span>
                     </div>
                     <div className="flex items-center gap-3">
                         {manualMacros.map(macro => (
                             <button
                                 key={macro.id}
                                 onClick={() => triggerRule(macro)}
-                                className="flex items-center gap-2 bg-stone-800 hover:bg-stone-700 text-stone-200 px-4 py-2 rounded-xl text-xs font-bold transition-all border border-stone-700 whitespace-nowrap active:scale-95 active:bg-indigo-600 active:border-indigo-500 group"
+                                className="flex items-center gap-2 bg-background hover:bg-card-bg text-foreground px-4 py-2 rounded-xl text-xs font-bold transition-all border border-card-border whitespace-nowrap active:scale-95 active:bg-indigo-600 active:border-indigo-500 active:text-white group"
                             >
                                 <Play size={12} className="text-indigo-400 group-active:text-white" fill="currentColor" />
                                 {macro.name}
@@ -94,12 +94,12 @@ export const AutomationDashboard = ({ productionId }: Props) => {
             {/* Main Tabs */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="flex items-center gap-6 border-b border-stone-800 pb-px">
+                    <div className="flex items-center gap-6 border-b border-card-border pb-px">
                         <button
                             onClick={() => setActiveTab('rules')}
                             className={cn(
                                 "pb-4 text-xs font-bold uppercase tracking-[0.2em] transition-all relative",
-                                activeTab === 'rules' ? "text-indigo-400" : "text-stone-500 hover:text-stone-300"
+                                activeTab === 'rules' ? "text-indigo-400" : "text-muted hover:text-foreground"
                             )}
                         >
                             Configured Rules
@@ -109,7 +109,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                             onClick={() => setActiveTab('history')}
                             className={cn(
                                 "pb-4 text-xs font-bold uppercase tracking-[0.2em] transition-all relative lg:hidden",
-                                activeTab === 'history' ? "text-indigo-400" : "text-stone-500 hover:text-stone-300"
+                                activeTab === 'history' ? "text-indigo-400" : "text-muted hover:text-foreground"
                             )}
                         >
                             Activity History
@@ -119,7 +119,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                             onClick={() => setActiveTab('hardware')}
                             className={cn(
                                 "pb-4 text-xs font-bold uppercase tracking-[0.2em] transition-all relative",
-                                activeTab === 'hardware' ? "text-indigo-400" : "text-stone-500 hover:text-stone-300"
+                                activeTab === 'hardware' ? "text-indigo-400" : "text-muted hover:text-foreground"
                             )}
                         >
                             Hardware Config
@@ -143,13 +143,13 @@ export const AutomationDashboard = ({ productionId }: Props) => {
 
                 {/* Floating Sidebar for Logs */}
                 <div className={cn("space-y-6", activeTab !== 'history' && activeTab !== 'hardware' && "hidden lg:block")}>
-                    <div className="bg-stone-900 border border-stone-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden h-[600px] flex flex-col">
+                    <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-2xl relative overflow-hidden h-[600px] flex flex-col">
                         <div className="absolute top-0 right-0 p-8 opacity-[0.02] pointer-events-none">
                             <History size={120} />
                         </div>
 
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xs font-bold text-stone-200 uppercase tracking-widest flex items-center gap-2">
+                            <h2 className="text-xs font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
                                 <History size={14} className="text-indigo-400" />
                                 Live Activity
                             </h2>
@@ -160,8 +160,8 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                             <ExecutionLogs logs={logs} isLoading={isLoading} />
                         </div>
 
-                        <div className="mt-4 pt-4 border-t border-stone-800 flex justify-center">
-                            <button className="text-[10px] font-bold text-stone-500 hover:text-white uppercase tracking-widest transition-colors flex items-center gap-2">
+                        <div className="mt-4 pt-4 border-t border-card-border flex justify-center">
+                            <button className="text-[10px] font-bold text-muted hover:text-foreground uppercase tracking-widest transition-colors flex items-center gap-2">
                                 View Full Logs <ArrowRight size={10} />
                             </button>
                         </div>

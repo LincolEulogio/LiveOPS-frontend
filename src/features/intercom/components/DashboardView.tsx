@@ -35,7 +35,6 @@ import { cn } from '@/shared/utils/cn';
 import { HealthMonitor } from '../../health/components/HealthMonitor';
 import { IntercomTemplate, CrewMember } from '../types/intercom.types';
 import { Production } from '@/features/productions/types/production.types';
-import { ThemeSwitcher } from '@/shared/components/ThemeSwitcher';
 
 export const DashboardView = () => {
     const router = useRouter();
@@ -101,30 +100,30 @@ export const DashboardView = () => {
     }, [templates]);
 
     return (
-        <div className="space-y-6 max-w-[1600px] mx-auto pb-20 mt-4">
+        <div className="space-y-6 max-w-7xl mx-auto pb-20 mt-4">
             {/* Top Operational Bar */}
-            <div className="bg-stone-900/80 backdrop-blur-xl border border-stone-800 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
                 <div className="flex items-center gap-4">
                     <div className="p-3 bg-indigo-600/10 rounded-2xl border border-indigo-500/20">
                         <Radio size={24} className="text-indigo-400 animate-pulse" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-black text-white uppercase tracking-tighter leading-none">Control Operacional</h1>
-                        <p className="text-[10px] font-bold text-stone-500 uppercase tracking-widest mt-1">Gestión técnica y de personal en tiempo real</p>
+                        <h1 className="text-xl font-black text-foreground uppercase tracking-tighter leading-none">Control Operacional</h1>
+                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest mt-1">Gestión técnica y de personal en tiempo real</p>
                     </div>
                 </div>
 
-                <div className="hidden lg:block border-l border-stone-800 h-10 mx-2" />
+                <div className="hidden lg:block border-l border-card-border h-10 mx-2" />
 
                 <div className="flex-1 flex justify-center max-w-sm gap-4">
                     <ProductionSelector />
-                    <div className="h-10 w-px bg-stone-800 hidden md:block" />
-                    <div className="flex bg-stone-950 p-1 rounded-2xl border border-stone-800">
+                    <div className="h-10 w-px bg-card-border hidden md:block" />
+                    <div className="flex bg-background p-1 rounded-2xl border border-card-border">
                         <button
                             onClick={() => setActiveTab('intercom')}
                             className={cn(
                                 "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                                activeTab === 'intercom' ? "bg-stone-800 text-indigo-400 shadow-inner" : "text-stone-500 hover:text-stone-300"
+                                activeTab === 'intercom' ? "bg-card-border text-indigo-400 shadow-inner" : "text-muted hover:text-foreground"
                             )}
                         >
                             Comms
@@ -133,7 +132,7 @@ export const DashboardView = () => {
                             onClick={() => setActiveTab('automation')}
                             className={cn(
                                 "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                                activeTab === 'automation' ? "bg-stone-800 text-indigo-400 shadow-inner" : "text-stone-500 hover:text-stone-300"
+                                activeTab === 'automation' ? "bg-card-border text-indigo-400 shadow-inner" : "text-muted hover:text-foreground"
                             )}
                         >
                             Automation
@@ -142,7 +141,7 @@ export const DashboardView = () => {
                             onClick={() => setActiveTab('multicast')}
                             className={cn(
                                 "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                                activeTab === 'multicast' ? "bg-stone-800 text-indigo-400 shadow-inner" : "text-stone-500 hover:text-stone-300"
+                                activeTab === 'multicast' ? "bg-card-border text-indigo-400 shadow-inner" : "text-muted hover:text-foreground"
                             )}
                         >
                             Multicast
@@ -151,7 +150,6 @@ export const DashboardView = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <ThemeSwitcher />
                     <TemplateManager productionId={activeProductionId} />
 
                     <button
@@ -178,21 +176,21 @@ export const DashboardView = () => {
             </div>
 
             {/* Mass Alert Quick Access Bar */}
-            <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-2.5 flex items-center gap-3 overflow-x-auto custom-scrollbar">
-                <div className="flex items-center gap-2 px-3 border-r border-stone-800 mr-1 shrink-0">
-                    <Zap size={14} className="text-stone-500" />
-                    <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest whitespace-nowrap">Global Alerts</span>
+            <div className="bg-card-bg/40 border border-card-border/50 rounded-2xl p-2.5 flex items-center gap-3 overflow-x-auto custom-scrollbar">
+                <div className="flex items-center gap-2 px-3 border-r border-card-border mr-1 shrink-0">
+                    <Zap size={14} className="text-muted" />
+                    <span className="text-[10px] font-black text-muted uppercase tracking-widest whitespace-nowrap">Global Alerts</span>
                 </div>
                 {templates.length > 0 ? templates.map(t => (
                     <button
                         key={t.id}
                         onClick={() => handleMassAlert(t.name)}
-                        className="shrink-0 px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 hover:border-indigo-500/50 rounded-xl text-[10px] font-black text-white/70 hover:text-white uppercase tracking-widest transition-all whitespace-nowrap active:scale-95 shadow-sm"
+                        className="shrink-0 px-4 py-2 bg-background hover:bg-card-bg border border-card-border hover:border-indigo-500/50 rounded-xl text-[10px] font-black text-foreground/70 hover:text-foreground uppercase tracking-widest transition-all whitespace-nowrap active:scale-95 shadow-sm"
                     >
                         {t.name}
                     </button>
                 )) : (
-                    <span className="shrink-0 text-[10px] font-bold text-stone-700 uppercase tracking-widest px-4 italic">Sin plantillas configuradas</span>
+                    <span className="shrink-0 text-[10px] font-bold text-muted uppercase tracking-widest px-4 italic">Sin plantillas configuradas</span>
                 )}
             </div>
 
@@ -235,9 +233,9 @@ export const DashboardView = () => {
                                     />
                                 ))}
                                 {crewMembers.length === 0 && (
-                                    <div className="col-span-full py-20 text-center bg-stone-900/30 border border-dashed border-stone-800 rounded-3xl">
-                                        <Users size={48} className="text-stone-700 mx-auto mb-4" />
-                                        <p className="text-stone-500 font-bold uppercase tracking-widest text-xs">No hay usuarios registrados en esta producción</p>
+                                    <div className="col-span-full py-20 text-center bg-card-bg/50 border border-dashed border-card-border rounded-3xl">
+                                        <Users size={48} className="text-muted mx-auto mb-4" />
+                                        <p className="text-muted font-bold uppercase tracking-widest text-xs">No hay usuarios registrados en esta producción</p>
                                     </div>
                                 )}
                             </motion.div>
@@ -257,7 +255,7 @@ export const DashboardView = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                             >
-                                <div className="bg-stone-900/50 border border-stone-800 rounded-3xl p-6 shadow-2xl">
+                                <div className="bg-card-bg/50 border border-card-border rounded-3xl p-6 shadow-2xl">
                                     <MulticastManager productionId={activeProductionId || ''} />
                                 </div>
                             </motion.div>
@@ -268,14 +266,14 @@ export const DashboardView = () => {
                 {/* Right Area: Timeline & Logs */}
                 <div className="xl:col-span-1 space-y-6 flex flex-col h-fit sticky top-6 pb-10">
                     {/* Escaleta Card */}
-                    <div className="bg-stone-900/50 border border-stone-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[450px]">
+                    <div className="bg-card-bg/50 border border-card-border rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[450px]">
                         <TimelineView />
                     </div>
 
                     {/* Activity Log Card */}
-                    <div className="bg-stone-900/50 border border-stone-800 rounded-3xl flex flex-col shadow-2xl overflow-hidden h-[300px]">
-                        <div className="p-4 border-b border-stone-800 bg-stone-950/20 flex items-center justify-between">
-                            <h2 className="text-[10px] font-black text-stone-500 uppercase tracking-widest flex items-center gap-2">
+                    <div className="bg-card-bg/50 border border-card-border rounded-3xl flex flex-col shadow-2xl overflow-hidden h-[300px]">
+                        <div className="p-4 border-b border-card-border bg-background/20 flex items-center justify-between">
+                            <h2 className="text-[10px] font-black text-muted uppercase tracking-widest flex items-center gap-2">
                                 <Clock size={14} className="text-indigo-400" /> Historial Log
                             </h2>
                         </div>
@@ -292,14 +290,14 @@ export const DashboardView = () => {
                                             key={item.id}
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
-                                            className="bg-stone-950/50 border border-stone-800 p-3 rounded-xl group relative overflow-hidden"
+                                            className="bg-background border border-card-border p-3 rounded-xl group relative overflow-hidden"
                                         >
                                             <div className="flex items-center justify-between mb-1.5">
-                                                <span className="text-[8px] font-black text-stone-600 uppercase tracking-widest">
+                                                <span className="text-[8px] font-black text-muted uppercase tracking-widest">
                                                     {new Date(item.timestamp).toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
-                                            <h4 className="text-[10px] font-bold text-white uppercase tracking-tight line-clamp-2">{item.message}</h4>
+                                            <h4 className="text-[10px] font-bold text-foreground uppercase tracking-tight line-clamp-2">{item.message}</h4>
                                             <div
                                                 className="absolute left-0 top-0 bottom-0 w-1 opacity-60"
                                                 style={{ backgroundColor: item.color }}

@@ -142,35 +142,35 @@ export const PrompterView = ({ productionId }: Props) => {
     };
 
     if (!editor) {
-        return <div className="h-screen bg-black flex items-center justify-center text-stone-500 font-mono text-xl">CONNECTING SCRIPT...</div>;
+        return <div className="h-screen bg-black flex items-center justify-center text-muted font-mono text-xl">CONNECTING SCRIPT...</div>;
     }
 
     return (
-        <div className="h-[calc(100vh-140px)] bg-stone-950 rounded-3xl border border-stone-800 shadow-2xl relative overflow-hidden group">
+        <div className="h-[calc(100vh-140px)] bg-background rounded-3xl border border-card-border shadow-2xl relative overflow-hidden group">
 
             {/* Capa de Scroll para el Contenido */}
             <div
                 ref={containerRef}
                 onScroll={handleScroll}
-                className="absolute inset-0 overflow-y-auto overflow-x-hidden z-10 scroll-smooth text-white"
+                className="absolute inset-0 overflow-y-auto overflow-x-hidden z-10 scroll-smooth text-foreground"
                 style={{ fontSize: `${fontSize}px`, lineHeight: 1.4 }}
             >
                 {/* Header / Back Link (Scrolls with content or could be sticky) */}
-                <div className="sticky top-0 left-0 right-0 p-4 z-40 bg-stone-950/80 backdrop-blur-md border-b border-stone-800 flex items-center justify-between">
+                <div className="sticky top-0 left-0 right-0 p-4 z-40 bg-background/80 backdrop-blur-md border-b border-card-border flex items-center justify-between">
                     <Link
                         href={`/productions/${productionId}`}
-                        className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-stone-500 hover:text-indigo-400 transition-colors"
+                        className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-muted hover:text-indigo-400 transition-colors"
                     >
                         <ArrowLeft size={14} /> Back to Dashboard
                     </Link>
                     <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[10px] font-black text-stone-600 uppercase tracking-widest">Prompter Mode</span>
+                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">Prompter Mode</span>
                     </div>
                 </div>
 
                 {/* Main Content */}
-                <div className="max-w-4xl mx-auto px-16 pt-[15vh] pb-[75vh] relative z-20 w-full font-sans font-bold tracking-wide">
+                <div className="max-w-7xl mx-auto px-16 pt-[15vh] pb-[75vh] relative z-20 w-full font-sans font-bold tracking-wide">
                     <style dangerouslySetInnerHTML={{
                         __html: `
                         .prompter-content p { margin-bottom: 1em; opacity: 0.9; }
@@ -201,26 +201,26 @@ export const PrompterView = ({ productionId }: Props) => {
             </div>
 
             {/* Controles Laterales (Verticales) */}
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-stone-900/90 border border-stone-700 p-3 rounded-2xl flex flex-col items-center gap-4 z-50 shadow-2xl backdrop-blur-md">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-card-bg/90 border border-card-border p-3 rounded-2xl flex flex-col items-center gap-4 z-50 shadow-2xl backdrop-blur-md">
 
                 {/* Font Size */}
                 <div className="flex flex-col items-center gap-1">
                     <button
                         onClick={() => setFontSize(f => Math.min(150, f + 4))}
-                        className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-400 transition-colors"
+                        className="w-8 h-8 flex items-center justify-center bg-background rounded-lg hover:bg-card-border text-muted transition-colors"
                     >
                         <Plus size={14} />
                     </button>
-                    <span className="text-[10px] font-mono text-stone-500 py-1">{fontSize}</span>
+                    <span className="text-[10px] font-mono text-muted py-1">{fontSize}</span>
                     <button
                         onClick={() => setFontSize(f => Math.max(24, f - 4))}
-                        className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-400 transition-colors"
+                        className="w-8 h-8 flex items-center justify-center bg-background rounded-lg hover:bg-card-border text-muted transition-colors"
                     >
                         <Minus size={14} />
                     </button>
                 </div>
 
-                <div className="w-8 h-px bg-stone-700" />
+                <div className="w-8 h-px bg-card-border" />
 
                 {/* Playback */}
                 <div className="flex flex-col items-center gap-3">
@@ -255,25 +255,25 @@ export const PrompterView = ({ productionId }: Props) => {
                             setScrollSpeed(nextSpeed);
                             if (nextSpeed === 0) setIsPlaying(false);
                         }}
-                        className="p-2.5 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-400 transition-colors"
+                        className="p-2.5 bg-background hover:bg-card-border rounded-xl text-muted transition-colors"
                         title="Reduce Speed"
                     >
                         <Rewind size={18} className="rotate-90" />
                     </button>
                 </div>
 
-                <div className="w-8 h-px bg-stone-700" />
+                <div className="w-8 h-px bg-card-border" />
 
                 {/* Status & Tools */}
                 <div className="flex flex-col items-center gap-3">
                     <div className="flex flex-col items-center">
-                        <span className="text-[8px] font-black text-stone-600 uppercase">SPD</span>
+                        <span className="text-[8px] font-black text-muted uppercase">SPD</span>
                         <span className="text-[10px] font-mono text-emerald-500">{scrollSpeed.toFixed(1)}</span>
                     </div>
 
                     <button
                         onClick={toggleFullscreen}
-                        className="p-2.5 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-400 transition-colors"
+                        className="p-2.5 bg-background hover:bg-card-border rounded-xl text-muted transition-colors"
                     >
                         {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
                     </button>

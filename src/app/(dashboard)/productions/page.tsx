@@ -50,9 +50,9 @@ export default function ProductionsListPage() {
       case ProductionStatus.SETUP:
         return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
       case ProductionStatus.ARCHIVED:
-        return 'bg-stone-500/10 text-stone-400 border-stone-500/20';
+        return 'bg-muted/10 text-muted border-card-border';
       default:
-        return 'bg-stone-500/10 text-stone-400 border-stone-500/20';
+        return 'bg-muted/10 text-muted border-card-border';
     }
   };
 
@@ -65,8 +65,8 @@ export default function ProductionsListPage() {
     <div className="max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Productions</h1>
-          <p className="text-stone-400 text-sm mt-1">Manage all multi-tenant live streams</p>
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">Productions</h1>
+          <p className="text-muted text-sm mt-1">Manage all multi-tenant live streams</p>
         </div>
 
         <Guard requiredPermissions={['production:create']}>
@@ -82,7 +82,7 @@ export default function ProductionsListPage() {
 
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500" size={18} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
           <input
             type="text"
             placeholder="Search by name or description..."
@@ -91,7 +91,7 @@ export default function ProductionsListPage() {
               setPage(1);
               setSearchTerm(e.target.value);
             }}
-            className="w-full bg-stone-900 border border-stone-800 rounded-lg py-2 pl-10 pr-4 text-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+            className="w-full bg-background border border-card-border rounded-lg py-2 pl-10 pr-4 text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
           />
         </div>
 
@@ -105,7 +105,7 @@ export default function ProductionsListPage() {
               }}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${statusFilter === status
                 ? 'bg-indigo-600 text-white'
-                : 'bg-stone-900/50 text-stone-400 hover:bg-stone-800 hover:text-stone-200'
+                : 'bg-card-bg/50 text-muted hover:bg-card-border hover:text-foreground'
                 }`}
             >
               {status || 'All'}
@@ -117,7 +117,7 @@ export default function ProductionsListPage() {
       {isLoading ? (
         <div className="animate-pulse space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-16 bg-stone-900 rounded-xl w-full"></div>
+            <div key={i} className="h-16 bg-card-bg rounded-xl w-full"></div>
           ))}
         </div>
       ) : error ? (
@@ -126,19 +126,19 @@ export default function ProductionsListPage() {
           <p>Failed to load productions.</p>
         </div>
       ) : (
-        <div className="bg-stone-900 border border-stone-800 rounded-xl overflow-hidden shadow-xl">
-          <ul className="divide-y divide-stone-800/50">
+        <div className="bg-card-bg border border-card-border rounded-xl overflow-hidden shadow-xl">
+          <ul className="divide-y divide-card-border/50">
             {(() => {
               const productions = Array.isArray(data) ? data : (data?.data || []);
               if (productions.length === 0) {
                 return (
                   <li className="p-16 flex flex-col items-center text-center space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-stone-800/50 flex items-center justify-center text-stone-600">
+                    <div className="w-16 h-16 rounded-full bg-background flex items-center justify-center text-muted">
                       <Plus size={32} />
                     </div>
                     <div className="space-y-1">
-                      <h3 className="text-white font-medium">No productions found</h3>
-                      <p className="text-stone-500 text-sm max-w-xs">
+                      <h3 className="text-foreground font-medium">No productions found</h3>
+                      <p className="text-muted text-sm max-w-xs">
                         {statusFilter
                           ? `No productions matching the "${statusFilter.toLowerCase()}" status.`
                           : "Get started by creating your first live production."}
@@ -157,19 +157,19 @@ export default function ProductionsListPage() {
               }
               return productions.map((production: any) => (
                 <li key={production.id}>
-                  <div className="flex items-center justify-between p-4 hover:bg-stone-800/50 transition-colors group">
+                  <div className="flex items-center justify-between p-4 hover:bg-card-border/50 transition-colors group">
                     <Link
                       href={`/productions/${production.id}`}
                       className="flex gap-4 items-center flex-1 min-w-0"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-stone-950 flex items-center justify-center border border-stone-800">
+                      <div className="w-10 h-10 rounded-lg bg-background flex items-center justify-center border border-card-border">
                         {getEngineIcon(production.engineType)}
                       </div>
                       <div>
-                        <h3 className="text-white font-medium group-hover:text-indigo-400 transition-colors">
+                        <h3 className="text-foreground font-medium group-hover:text-indigo-400 transition-colors">
                           {production.name}
                         </h3>
-                        <p className="text-sm text-stone-500 truncate max-w-[200px] sm:max-w-sm">
+                        <p className="text-sm text-muted truncate max-w-[200px] sm:max-w-sm">
                           {production.description || 'No description provided'}
                         </p>
                       </div>
@@ -186,7 +186,7 @@ export default function ProductionsListPage() {
                         <div className="flex items-center gap-1">
                           <Link
                             href={`/productions/${production.id}/edit`}
-                            className="p-2 text-stone-500 hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-all"
+                            className="p-2 text-muted hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-all"
                             title="Edit Production"
                           >
                             <Edit2 size={16} />
@@ -194,7 +194,7 @@ export default function ProductionsListPage() {
                           <button
                             onClick={(e) => handleDelete(production.id, e)}
                             disabled={isDeleting}
-                            className="p-2 text-stone-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
+                            className="p-2 text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
                             title="Delete Production"
                           >
                             <Trash2 size={16} />
@@ -210,21 +210,21 @@ export default function ProductionsListPage() {
 
           {/* Pagination Controls */}
           {data && !Array.isArray(data) && data.meta?.lastPage > 1 && (
-            <div className="p-4 border-t border-stone-800 flex justify-between items-center text-sm">
+            <div className="p-4 border-t border-card-border flex justify-between items-center text-sm">
               <button
                 disabled={page === 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="px-3 py-1 bg-stone-950 rounded border border-stone-800 disabled:opacity-50 hover:bg-stone-800 transition-colors"
+                className="px-3 py-1 bg-background rounded border border-card-border hover:bg-card-border disabled:opacity-50 transition-colors"
               >
                 Previous
               </button>
-              <span className="text-stone-400">
+              <span className="text-muted">
                 Page {data.meta.page} of {data.meta.lastPage}
               </span>
               <button
                 disabled={page === data.meta.lastPage}
                 onClick={() => setPage((p) => p + 1)}
-                className="px-3 py-1 bg-stone-950 rounded border border-stone-800 disabled:opacity-50 hover:bg-stone-800 transition-colors"
+                className="px-3 py-1 bg-background rounded border border-card-border hover:bg-card-border disabled:opacity-50 transition-colors"
               >
                 Next
               </button>

@@ -145,14 +145,14 @@ export const TimelineCRUD = ({
             ></div>
 
             {/* Dialog */}
-            <div className="relative w-full max-w-lg bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-                <div className="flex items-center justify-between p-6 border-b border-stone-800">
-                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <div className="relative w-full max-w-lg bg-card-bg border border-card-border rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+                <div className="flex items-center justify-between p-6 border-b border-card-border">
+                    <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                         {editingBlock ? 'Editar Bloque' : 'Añadir Bloque a Escaleta'}
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-stone-400 hover:text-white p-1 hover:bg-stone-800 rounded-lg transition-all"
+                        className="text-muted hover:text-foreground p-1 hover:bg-card-border rounded-lg transition-all"
                     >
                         <X size={20} />
                     </button>
@@ -160,78 +160,78 @@ export const TimelineCRUD = ({
 
                 <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
                     <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
+                        <label className="flex items-center gap-2 text-sm font-semibold text-muted">
                             <Type size={16} className="text-indigo-400" />
                             Título
                         </label>
                         <input
                             {...register('title')}
-                            className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all"
+                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all"
                             placeholder="Ej: Intro y Bienvenida"
                         />
                         {errors.title && <p className="text-xs text-red-400">{errors.title.message}</p>}
                     </div>
 
                     <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
+                        <label className="flex items-center gap-2 text-sm font-semibold text-muted">
                             <AlignLeft size={16} className="text-indigo-400" />
                             Descripción
                         </label>
                         <textarea
                             {...register('description')}
                             rows={3}
-                            className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none"
+                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none"
                             placeholder="Detalles del segmento..."
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
+                            <label className="flex items-center gap-2 text-sm font-semibold text-muted">
                                 <Clock size={16} className="text-indigo-400" />
                                 Duración (ms)
                             </label>
                             <input
                                 type="number"
                                 {...register('durationMs', { valueAsNumber: true })}
-                                className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                                className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
+                            <label className="flex items-center gap-2 text-sm font-semibold text-muted">
                                 <Video size={16} className="text-indigo-400" />
                                 Fuente
                             </label>
                             <input
                                 {...register('source')}
-                                className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                                className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
                                 placeholder="Ej: CAM 1, VTR"
                             />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
+                        <label className="flex items-center gap-2 text-sm font-semibold text-muted">
                             <Hash size={16} className="text-indigo-400" />
                             Escena Vinculada (OBS)
                         </label>
                         <input
                             {...register('linkedScene')}
-                            className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
                             placeholder="Nombre exacto en OBS"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-stone-300">
+                        <label className="flex items-center gap-2 text-sm font-semibold text-muted">
                             <AlignLeft size={16} className="text-indigo-400" />
                             Notas Internas
                         </label>
                         <textarea
                             {...register('notes')}
                             rows={2}
-                            className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all resize-none"
+                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all resize-none"
                             placeholder="Notas privadas para el equipo..."
                         />
                     </div>
@@ -240,7 +240,7 @@ export const TimelineCRUD = ({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-4 py-2.5 bg-stone-950 hover:bg-stone-800 text-white font-semibold rounded-xl border border-stone-800 transition-all"
+                            className="flex-1 px-4 py-2.5 bg-background hover:bg-card-border text-foreground font-semibold rounded-xl border border-card-border transition-all"
                         >
                             Cancelar
                         </button>

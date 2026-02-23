@@ -79,17 +79,17 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                 <div className="flex items-center gap-4">
                     <Link
                         href={`/productions/${productionId}`}
-                        className="p-2 bg-stone-900 border border-stone-800 rounded-xl text-stone-400 hover:text-white hover:border-stone-700 transition-all shadow-lg"
+                        className="p-2 bg-card-bg border border-card-border rounded-xl text-muted hover:text-foreground hover:border-indigo-500/50 transition-all shadow-lg"
                         title="Back to Dashboard"
                     >
                         <ArrowLeft size={20} />
                     </Link>
                     <div>
-                        <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                        <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
                             <Activity className="text-indigo-500" />
                             Health & Analytics
                         </h2>
-                        <p className="text-sm text-stone-400">System telemetry and post-show metrics</p>
+                        <p className="text-sm text-muted">System telemetry and post-show metrics</p>
                     </div>
                 </div>
                 {isArchived && !report && (
@@ -112,28 +112,28 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                             <CheckCircle size={20} />
                             Post-Show Report
                         </h3>
-                        <span className="text-xs font-mono text-stone-500 bg-stone-950 px-2 py-1 rounded">
+                        <span className="text-xs font-mono text-muted bg-background px-2 py-1 rounded">
                             {new Date(report.generatedAt).toLocaleString()}
                         </span>
                     </div>
 
                     <div className="grid grid-cols-4 gap-6">
-                        <div className="bg-stone-950 p-4 rounded-xl border border-stone-800">
-                            <span className="block text-stone-500 text-xs font-bold uppercase mb-1">Total Duration</span>
-                            <span className="text-2xl font-bold text-white">
+                        <div className="bg-background p-4 rounded-xl border border-card-border">
+                            <span className="block text-muted text-xs font-bold uppercase mb-1">Total Duration</span>
+                            <span className="text-2xl font-bold text-foreground">
                                 {Math.floor(report.durationMs / 60000)}m {(Math.floor(report.durationMs / 1000) % 60)}s
                             </span>
                         </div>
-                        <div className="bg-stone-950 p-4 rounded-xl border border-stone-800">
-                            <span className="block text-stone-500 text-xs font-bold uppercase mb-1">Avg FPS</span>
+                        <div className="bg-background p-4 rounded-xl border border-card-border">
+                            <span className="block text-muted text-xs font-bold uppercase mb-1">Avg FPS</span>
                             <span className="text-2xl font-bold text-emerald-400">{report.metrics?.avgFps?.toFixed(1) || 0}</span>
                         </div>
-                        <div className="bg-stone-950 p-4 rounded-xl border border-stone-800">
-                            <span className="block text-stone-500 text-xs font-bold uppercase mb-1">Max CPU</span>
+                        <div className="bg-background p-4 rounded-xl border border-card-border">
+                            <span className="block text-muted text-xs font-bold uppercase mb-1">Max CPU</span>
                             <span className="text-2xl font-bold text-amber-400">{report.metrics?.maxCpu?.toFixed(1) || 0}%</span>
                         </div>
-                        <div className="bg-stone-950 p-4 rounded-xl border border-stone-800">
-                            <span className="block text-stone-500 text-xs font-bold uppercase mb-1">Dropped Frames</span>
+                        <div className="bg-background p-4 rounded-xl border border-card-border">
+                            <span className="block text-muted text-xs font-bold uppercase mb-1">Dropped Frames</span>
                             <span className="text-2xl font-bold text-red-400">{report.metrics?.totalDroppedFrames || 0}</span>
                         </div>
                     </div>
@@ -144,12 +144,12 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
             <div className="grid grid-cols-2 gap-6">
 
                 {/* Bitrate Chart */}
-                <div className="col-span-2 bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
-                    <h3 className="text-sm font-bold text-stone-300 uppercase tracking-widest flex items-center gap-2 mb-6">
+                <div className="col-span-2 bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
+                    <h3 className="text-sm font-bold text-muted uppercase tracking-widest flex items-center gap-2 mb-6">
                         <WifiHigh size={16} className="text-emerald-500" />
                         Network Bitrate (kbps)
                     </h3>
-                    {telLoading ? <div className="h-64 animate-pulse bg-stone-800/50 rounded-xl" /> : (
+                    {telLoading ? <div className="h-64 animate-pulse bg-card-border/50 rounded-xl" /> : (
                         <div className="h-64">
                             <ResponsiveContainer width="100%" height="100%">
                                 <LineChart data={chartData}>
@@ -168,12 +168,12 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                 </div>
 
                 {/* CPU Chart */}
-                <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
-                    <h3 className="text-sm font-bold text-stone-300 uppercase tracking-widest flex items-center gap-2 mb-6">
+                <div className="bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
+                    <h3 className="text-sm font-bold text-muted uppercase tracking-widest flex items-center gap-2 mb-6">
                         <Cpu size={16} className="text-amber-500" />
                         Encoder CPU Usage (%)
                     </h3>
-                    {telLoading ? <div className="h-48 animate-pulse bg-stone-800/50 rounded-xl" /> : (
+                    {telLoading ? <div className="h-48 animate-pulse bg-card-border/50 rounded-xl" /> : (
                         <div className="h-48">
                             <ResponsiveContainer width="100%" height="100%">
                                 <LineChart data={chartData}>
@@ -189,12 +189,12 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                 </div>
 
                 {/* FPS & Drops Chart */}
-                <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
-                    <h3 className="text-sm font-bold text-stone-300 uppercase tracking-widest flex items-center gap-2 mb-6">
+                <div className="bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
+                    <h3 className="text-sm font-bold text-muted uppercase tracking-widest flex items-center gap-2 mb-6">
                         <AlertTriangle size={16} className="text-red-500" />
                         Dropped Frames
                     </h3>
-                    {telLoading ? <div className="h-48 animate-pulse bg-stone-800/50 rounded-xl" /> : (
+                    {telLoading ? <div className="h-48 animate-pulse bg-card-border/50 rounded-xl" /> : (
                         <div className="h-48">
                             <ResponsiveContainer width="100%" height="100%">
                                 <LineChart data={chartData}>

@@ -104,11 +104,11 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
     const isEngineConnected = latest && (new Date().getTime() - new Date(latest.timestamp).getTime() < 5000);
 
     return (
-        <div className="flex flex-col gap-6 p-6 bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden relative">
+        <div className="flex flex-col gap-6 p-6 bg-card-bg border border-card-border rounded-2xl shadow-2xl overflow-hidden relative">
             {/* Background Accent */}
             <div className={cn(
                 "absolute top-0 right-0 w-64 h-64 blur-[100px] -mr-32 -mt-32 opacity-10 transition-colors duration-1000",
-                isEngineConnected ? (hasIssues ? "bg-red-500" : "bg-emerald-500") : "bg-stone-500"
+                isEngineConnected ? (hasIssues ? "bg-red-500" : "bg-emerald-500") : "bg-muted"
             )} />
 
             {/* Header */}
@@ -118,7 +118,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                         "p-2 rounded-lg transition-all duration-500",
                         isEngineConnected
                             ? (hasIssues ? "bg-red-500/20 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)]" : "bg-emerald-500/20 text-emerald-400")
-                            : "bg-stone-800 text-stone-500"
+                            : "bg-muted/10 text-muted"
                     )}>
                         <Activity className={cn(
                             "text-sm",
@@ -126,10 +126,10 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                         )} size={20} />
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold text-white tracking-tight leading-none mb-1">Salud del Sistema</h2>
+                        <h2 className="text-lg font-bold text-foreground tracking-tight leading-none mb-1">Salud del Sistema</h2>
                         <div className="flex items-center gap-2">
-                            <p className="text-[10px] text-stone-500 uppercase font-black tracking-widest">Telemetría en Vivo</p>
-                            <div className="w-1 h-1 rounded-full bg-stone-700" />
+                            <p className="text-[10px] text-muted uppercase font-black tracking-widest">Telemetría en Vivo</p>
+                            <div className="w-1 h-1 rounded-full bg-card-border" />
                             <span className="text-[9px] font-bold text-indigo-400/80 uppercase">{latest?.engineType || '---'}</span>
                         </div>
                     </div>
@@ -141,7 +141,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                         !isConnected
                             ? "bg-amber-500/10 border-amber-500/20 text-amber-500"
                             : !isEngineConnected
-                                ? "bg-stone-800 border-stone-700 text-stone-500"
+                                ? "bg-muted/10 border-card-border text-muted"
                                 : hasIssues
                                     ? "bg-red-500/10 border-red-500/20 text-red-400 shadow-[0_0_10px_rgba(239,68,68,0.1)]"
                                     : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
@@ -188,11 +188,11 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
             </div>
 
             {/* Chart Section */}
-            <div className="relative h-64 w-full bg-stone-950/50 rounded-2xl border border-stone-800/80 p-4 group">
+            <div className="relative h-64 w-full bg-background/50 rounded-2xl border border-card-border/80 p-4 group">
                 {!isEngineConnected && (
-                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-stone-950/40 backdrop-blur-[2px]">
-                        <Activity className="text-stone-700 mb-2 animate-pulse" size={32} />
-                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-[0.2em]">Esperando Señal del Motor</p>
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-background/40 backdrop-blur-[2px]">
+                        <Activity className="text-muted/50 mb-2 animate-pulse" size={32} />
+                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Esperando Señal del Motor</p>
                     </div>
                 )}
                 <ResponsiveContainer width="100%" height="100%">
@@ -203,10 +203,10 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                                 <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <XAxis dataKey="time" stroke="#44403c" fontSize={9} tickLine={false} axisLine={false} />
-                        <YAxis stroke="#44403c" fontSize={9} tickLine={false} axisLine={false} domain={[0, 100]} />
+                        <XAxis dataKey="time" stroke="#78716c" fontSize={9} tickLine={false} axisLine={false} />
+                        <YAxis stroke="#78716c" fontSize={9} tickLine={false} axisLine={false} domain={[0, 100]} />
                         <RechartsTooltip
-                            contentStyle={{ backgroundColor: '#0c0a09', border: '1px solid #292524', borderRadius: '12px', fontSize: '10px' }}
+                            contentStyle={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-card-border)', borderRadius: '12px', fontSize: '10px' }}
                             itemStyle={{ padding: '2px 0' }}
                         />
                         <Area type="monotone" dataKey="cpu" stroke="#6366f1" fillOpacity={1} fill="url(#colorCpu)" strokeWidth={2} isAnimationActive={false} name="CPU %" />
@@ -215,7 +215,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                 </ResponsiveContainer>
             </div>
 
-            <div className="flex items-center justify-between text-[10px] font-black text-stone-500 uppercase tracking-[0.15em] bg-stone-950/40 px-4 py-3 rounded-xl border border-stone-800/50 relative z-10">
+            <div className="flex items-center justify-between text-[10px] font-black text-muted uppercase tracking-[0.15em] bg-background/40 px-4 py-3 rounded-xl border border-card-border/50 relative z-10">
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
                         <div className="w-2.5 h-0.5 bg-indigo-500 rounded-full" /> USO DE CPU
@@ -224,8 +224,8 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                         <div className="w-2.5 h-0.5 bg-emerald-500 rounded-full" /> FPS ACTIVOS
                     </div>
                 </div>
-                <div className="flex items-center gap-2 text-stone-400">
-                    <div className={cn("w-1.5 h-1.5 rounded-full transition-all duration-500", isEngineConnected ? "bg-emerald-500 animate-pulse shadow-emerald-500/50 shadow-[0_0_8px]" : "bg-stone-700")} />
+                <div className="flex items-center gap-2 text-muted">
+                    <div className={cn("w-1.5 h-1.5 rounded-full transition-all duration-500", isEngineConnected ? "bg-emerald-500 animate-pulse shadow-emerald-500/50 shadow-[0_0_8px]" : "bg-muted")} />
                     TELEMETRÍA ACTIVA
                 </div>
             </div>
@@ -247,22 +247,22 @@ const MetricCard = ({ label, value, icon: Icon, color, status = 'normal', toolti
         indigo: "text-indigo-400 bg-indigo-400/10",
         emerald: "text-emerald-400 bg-emerald-400/10",
         amber: "text-amber-400 bg-amber-400/10",
-        stone: "text-stone-500 bg-stone-500/10",
+        stone: "text-muted bg-muted/10",
     };
 
     const statusMap = {
-        normal: "border-stone-800",
+        normal: "border-card-border",
         warning: "border-amber-500/30 bg-amber-500/5",
         error: "border-red-500/30 bg-red-500/5",
     };
 
     return (
-        <div className={cn("p-4 rounded-2xl border bg-stone-950/40 flex flex-col gap-3 transition-all hover:border-stone-700 group", statusMap[status])} title={tooltip}>
+        <div className={cn("p-4 rounded-2xl border bg-background/40 flex flex-col gap-3 transition-all hover:border-indigo-500/50 group", statusMap[status])} title={tooltip}>
             <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{label}</span>
+                <span className="text-[10px] font-black text-muted uppercase tracking-widest">{label}</span>
                 <div className={cn("p-1.5 rounded-lg", colorMap[color])}><Icon size={12} /></div>
             </div>
-            <span className={cn("text-2xl font-black tracking-tighter", value === 'N/A' || value === '---' ? "text-stone-700" : "text-white")}>{value}</span>
+            <span className={cn("text-2xl font-black tracking-tighter", value === 'N/A' || value === '---' ? "text-muted/50" : "text-foreground")}>{value}</span>
         </div>
     );
 };

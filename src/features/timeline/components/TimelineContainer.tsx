@@ -155,8 +155,8 @@ export const TimelineContainer = ({ productionId }: Props) => {
                     position: 'top-end',
                     showConfirmButton: false,
                     timer: 3000,
-                    background: '#1c1917',
-                    color: '#fff'
+                    background: 'var(--card-bg)',
+                    color: 'var(--foreground)'
                 });
             } catch (err) {
                 MySwal.fire('Error', 'Fallo al resetear la escaleta', 'error');
@@ -176,8 +176,8 @@ export const TimelineContainer = ({ productionId }: Props) => {
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 2000,
-                background: '#1c1917',
-                color: '#fff'
+                background: 'var(--card-bg)',
+                color: 'var(--foreground)'
             });
         } catch (err) {
             MySwal.fire('Error', 'No se pudo iniciar el bloque', 'error');
@@ -194,8 +194,8 @@ export const TimelineContainer = ({ productionId }: Props) => {
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 2000,
-                background: '#1c1917',
-                color: '#fff'
+                background: 'var(--card-bg)',
+                color: 'var(--foreground)'
             });
         } catch (err) {
             MySwal.fire('Error', 'No se pudo completar el bloque', 'error');
@@ -212,8 +212,8 @@ export const TimelineContainer = ({ productionId }: Props) => {
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 2000,
-                background: '#1c1917',
-                color: '#fff'
+                background: 'var(--card-bg)',
+                color: 'var(--foreground)'
             });
         } catch (err) {
             MySwal.fire('Error', 'No se pudo resetear el bloque', 'error');
@@ -232,7 +232,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <Layout size={20} className="text-indigo-400" />
-                    <h2 className="text-lg font-bold text-white tracking-tight">Escaleta / Rundown</h2>
+                    <h2 className="text-lg font-bold text-foreground tracking-tight">Escaleta / Rundown</h2>
                 </div>
                 <div className="flex items-center gap-2">
                     {canControl && (
@@ -244,7 +244,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
                                     "flex items-center gap-2 px-4 py-1.5 rounded-lg transition-all text-sm font-bold shadow-lg",
                                     hasNext
                                         ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20"
-                                        : "bg-stone-800 text-stone-500 cursor-not-allowed"
+                                        : "bg-background text-muted border border-card-border cursor-not-allowed"
                                 )}
                             >
                                 <ArrowRight size={16} />
@@ -252,7 +252,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
                             </button>
                             <button
                                 onClick={handleResetAll}
-                                className="flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-stone-400 hover:text-orange-400 px-3 py-1.5 rounded-lg border border-stone-800 transition-all text-sm font-medium"
+                                className="flex items-center gap-2 bg-card-bg hover:bg-background text-muted hover:text-orange-400 px-3 py-1.5 rounded-lg border border-card-border transition-all text-sm font-medium"
                                 title="Reset all blocks"
                             >
                                 <RotateCcw size={16} />
@@ -263,7 +263,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
                     {canEdit && (
                         <button
                             onClick={handleCreate}
-                            className="flex items-center gap-2 bg-stone-800 hover:bg-stone-700 text-white px-3 py-1.5 rounded-lg border border-stone-700 transition-all text-sm font-bold"
+                            className="flex items-center gap-2 bg-background hover:bg-card-bg text-foreground px-3 py-1.5 rounded-lg border border-card-border transition-all text-sm font-bold"
                         >
                             <Plus size={16} />
                             Añadir

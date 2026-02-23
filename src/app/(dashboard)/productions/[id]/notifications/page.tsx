@@ -13,7 +13,7 @@ export default function NotificationsPage() {
     useProductionContextInitializer(id);
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-7xl mx-auto space-y-8">
             <div className="flex items-center justify-between bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-xl">
                 <div className="flex items-center gap-4">
                     <Link

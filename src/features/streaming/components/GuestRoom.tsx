@@ -229,30 +229,30 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-stone-950 font-sans text-stone-200 overflow-hidden">
+        <div className="flex flex-col h-full bg-background font-sans text-foreground overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-stone-800 bg-stone-900/50 backdrop-blur-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-card-border bg-background/50 backdrop-blur-md">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-emerald-500/10 rounded-lg">
                         <Radio size={20} className="text-emerald-400 animate-pulse" />
                     </div>
                     <div>
                         <h1 className="text-lg font-bold tracking-tight">Green Room</h1>
-                        <p className="text-[10px] text-stone-500 uppercase tracking-widest font-black">
+                        <p className="text-[10px] text-muted uppercase tracking-widest font-black">
                             Production ID: {productionId.split('-')[0]}...
                         </p>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 px-3 py-1 bg-stone-800/50 rounded-full border border-stone-700/50">
+                    <div className="flex items-center gap-2 px-3 py-1 bg-card-bg/50 rounded-full border border-card-border/50">
                         <div className={cn("w-2 h-2 rounded-full", isSocketConnected ? "bg-emerald-500" : "bg-red-500 animate-pulse")} />
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-muted">
                             {isSocketConnected ? 'Connected' : 'Reconnecting...'}
                         </span>
                     </div>
-                    <button className="p-2 hover:bg-stone-800 rounded-lg transition-colors">
-                        <Settings size={20} className="text-stone-400" />
+                    <button className="p-2 hover:bg-card-border rounded-lg transition-colors">
+                        <Settings size={20} className="text-muted" />
                     </button>
                 </div>
             </div>
@@ -261,7 +261,7 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
             <div className="flex-1 flex flex-col md:flex-row p-6 gap-6 overflow-hidden">
                 {/* Local Preview Section */}
                 <div className="flex-1 flex flex-col gap-4 min-h-0">
-                    <div className="relative group flex-1 bg-stone-900 rounded-2xl overflow-hidden border border-stone-800 shadow-2xl">
+                    <div className="relative group flex-1 bg-card-bg rounded-2xl overflow-hidden border border-card-border shadow-2xl">
                         <video
                             ref={localVideoRef}
                             autoPlay
@@ -275,11 +275,11 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
 
                         {/* Camera Off Placeholder */}
                         {!isCameraOn && (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-stone-900/90 gap-4">
-                                <div className="p-8 bg-stone-800 rounded-full border border-stone-700">
-                                    <VideoOff size={64} className="text-stone-600" />
+                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-card-bg/90 gap-4">
+                                <div className="p-8 bg-background rounded-full border border-card-border">
+                                    <VideoOff size={64} className="text-muted" />
                                 </div>
-                                <p className="text-sm font-bold text-stone-500 uppercase tracking-widest">Cámara Desactivada</p>
+                                <p className="text-sm font-bold text-muted uppercase tracking-widest">Cámara Desactivada</p>
                             </div>
                         )}
 
@@ -294,12 +294,12 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
                         </div>
 
                         {/* Controls Float */}
-                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 px-6 py-3 bg-stone-900/90 backdrop-blur-xl rounded-2xl border border-white/5 shadow-2xl scale-110">
+                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 px-6 py-3 bg-card-bg/90 backdrop-blur-xl rounded-2xl border border-card-border shadow-2xl scale-110">
                             <button
                                 onClick={toggleMic}
                                 className={cn(
                                     "p-3 rounded-xl transition-all",
-                                    isMicOn ? "bg-stone-800 text-stone-200 hover:bg-stone-700" : "bg-red-500 text-white hover:bg-red-600"
+                                    isMicOn ? "bg-background text-muted hover:bg-card-border hover:text-foreground" : "bg-red-500 text-white hover:bg-red-600"
                                 )}
                             >
                                 {isMicOn ? <Mic size={20} /> : <MicOff size={20} />}
@@ -308,12 +308,12 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
                                 onClick={toggleCamera}
                                 className={cn(
                                     "p-3 rounded-xl transition-all",
-                                    isCameraOn ? "bg-stone-800 text-stone-200 hover:bg-stone-700" : "bg-red-500 text-white hover:bg-red-600"
+                                    isCameraOn ? "bg-background text-muted hover:bg-card-border hover:text-foreground" : "bg-red-500 text-white hover:bg-red-600"
                                 )}
                             >
                                 {isCameraOn ? <Video size={20} /> : <VideoOff size={20} />}
                             </button>
-                            <div className="w-px h-8 bg-stone-700 mx-2" />
+                            <div className="w-px h-8 bg-card-border mx-2" />
                             <button
                                 onClick={() => router.back()}
                                 className="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-red-600/20 active:scale-95"
@@ -326,43 +326,43 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
 
                 {/* Sidebar / Operator Status */}
                 <div className="w-full md:w-80 flex flex-col gap-4">
-                    <div className="flex flex-col gap-4 p-5 bg-stone-900/40 border border-stone-800 rounded-2xl">
+                    <div className="flex flex-col gap-4 p-5 bg-card-bg/40 border border-card-border rounded-2xl">
                         <div className="flex items-center gap-2 mb-2">
                             <Signal size={16} className="text-indigo-400" />
-                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-stone-500">Live Status</h3>
+                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">Live Status</h3>
                         </div>
 
                         <div className="flex flex-col gap-3">
-                            <div className="flex items-center justify-between p-3 bg-stone-800/40 rounded-xl border border-white/5">
-                                <span className="text-[10px] font-bold uppercase text-stone-500">Latency</span>
+                            <div className="flex items-center justify-between p-3 bg-background/40 rounded-xl border border-card-border/50">
+                                <span className="text-[10px] font-bold uppercase text-muted">Latency</span>
                                 <span className="text-xs font-mono text-emerald-400 tracking-tighter">~42ms</span>
                             </div>
-                            <div className="flex items-center justify-between p-3 bg-stone-800/40 rounded-xl border border-white/5">
-                                <span className="text-[10px] font-bold uppercase text-stone-500">Video Quality</span>
-                                <span className="text-xs font-bold text-stone-300">1080p @ 30fps</span>
+                            <div className="flex items-center justify-between p-3 bg-background/40 rounded-xl border border-card-border/50">
+                                <span className="text-[10px] font-bold uppercase text-muted">Video Quality</span>
+                                <span className="text-xs font-bold text-foreground/80">1080p @ 30fps</span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex-1 flex flex-col gap-4 p-5 bg-stone-900/40 border border-stone-800 rounded-2xl overflow-hidden">
+                    <div className="flex-1 flex flex-col gap-4 p-5 bg-card-bg/40 border border-card-border rounded-2xl overflow-hidden">
                         <div className="flex items-center gap-2 mb-2">
                             <Users size={16} className="text-indigo-400" />
-                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-stone-500">Control Room</h3>
+                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">Control Room</h3>
                         </div>
 
                         <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar">
                             {Array.from(peers.values()).map(p => (
                                 <div key={p.peerId} className="flex items-center gap-3 p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
                                     <div className="relative">
-                                        <div className="w-10 h-10 rounded-full bg-stone-800 border-2 border-emerald-500 flex items-center justify-center overflow-hidden">
-                                            <Users size={18} className="text-stone-600" />
+                                        <div className="w-10 h-10 rounded-full bg-background border-2 border-emerald-500 flex items-center justify-center overflow-hidden">
+                                            <Users size={18} className="text-muted" />
                                         </div>
-                                        <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-stone-950 flex items-center justify-center">
+                                        <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-background flex items-center justify-center">
                                             <Monitor size={8} className="text-white" />
                                         </div>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-[10px] font-black uppercase text-stone-400">Director</p>
+                                        <p className="text-[10px] font-black uppercase text-muted">Director</p>
                                         <p className="text-xs font-bold text-emerald-400">Connected</p>
                                     </div>
                                 </div>
@@ -370,10 +370,10 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
 
                             {peers.size === 0 && (
                                 <div className="flex flex-col items-center justify-center py-10 text-center gap-3">
-                                    <div className="p-4 bg-stone-800/50 rounded-full">
-                                        <DoorOpen size={24} className="text-stone-600" />
+                                    <div className="p-4 bg-card-border/50 rounded-full">
+                                        <DoorOpen size={24} className="text-muted" />
                                     </div>
-                                    <p className="text-[10px] uppercase font-black text-stone-600 leading-relaxed">
+                                    <p className="text-[10px] uppercase font-black text-muted leading-relaxed">
                                         Waiting for the Director<br />to join the session...
                                     </p>
                                 </div>

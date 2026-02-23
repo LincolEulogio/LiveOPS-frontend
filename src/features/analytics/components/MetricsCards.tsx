@@ -45,23 +45,23 @@ export const MetricsCards = ({ metrics, isLoading }: Props) => {
             {cards.map((card, idx) => (
                 <div
                     key={idx}
-                    className="group relative p-6 bg-stone-900 border border-stone-800 rounded-3xl overflow-hidden hover:bg-stone-800/80 transition-all duration-300"
+                    className="group relative p-6 bg-card-bg border border-card-border rounded-3xl overflow-hidden hover:bg-card-border transition-all duration-300"
                 >
                     {isLoading ? (
                         <div className="animate-pulse space-y-4">
                             <div className="flex justify-between">
-                                <div className="w-12 h-12 bg-stone-800 rounded-2xl"></div>
-                                <div className="w-16 h-4 bg-stone-800 rounded"></div>
+                                <div className="w-12 h-12 bg-card-border rounded-2xl"></div>
+                                <div className="w-16 h-4 bg-card-border rounded"></div>
                             </div>
                             <div className="space-y-2">
-                                <div className="h-8 w-24 bg-stone-800 rounded"></div>
-                                <div className="h-4 w-32 bg-stone-800 rounded"></div>
+                                <div className="h-8 w-24 bg-card-border rounded"></div>
+                                <div className="h-4 w-32 bg-card-border rounded"></div>
                             </div>
                         </div>
                     ) : (
                         <>
                             <div className="flex justify-between items-start mb-4">
-                                <div className="p-3 bg-stone-950 border border-stone-800 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                                <div className="p-3 bg-background border border-card-border rounded-2xl group-hover:scale-110 transition-transform duration-300">
                                     {card.icon}
                                 </div>
                                 {card.trend && (
@@ -76,13 +76,13 @@ export const MetricsCards = ({ metrics, isLoading }: Props) => {
                                 )}
                             </div>
                             <div>
-                                <h3 className="text-xs font-bold text-stone-500 uppercase tracking-[0.1em] mb-1">
+                                <h3 className="text-xs font-bold text-muted uppercase tracking-[0.1em] mb-1">
                                     {card.label}
                                 </h3>
-                                <div className="text-3xl font-bold text-white tracking-tighter">
+                                <div className="text-3xl font-bold text-foreground tracking-tighter">
                                     {typeof card.value === 'number' ? card.value.toLocaleString() : card.value}
                                 </div>
-                                <p className="text-[10px] text-stone-600 mt-2 font-medium">
+                                <p className="text-[10px] text-muted mt-2 font-medium">
                                     {card.description}
                                 </p>
                             </div>

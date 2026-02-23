@@ -10,7 +10,7 @@ interface SocialHubProps {
 
 export const SocialHub = ({ productionId }: SocialHubProps) => {
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full p-4 lg:p-6 bg-stone-950">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full p-4 lg:p-6 bg-background">
             {/* Left Column: Moderation */}
             <div className="flex flex-col h-[calc(100vh-200px)] lg:h-full min-h-[500px]">
                 <div className="flex items-center gap-3 mb-4">
@@ -18,8 +18,8 @@ export const SocialHub = ({ productionId }: SocialHubProps) => {
                         <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-black text-white tracking-tight">AUDIENCE MODERATION</h1>
-                        <p className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Live Comment Feed & Control</p>
+                        <h1 className="text-xl font-black text-foreground tracking-tight">AUDIENCE MODERATION</h1>
+                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Live Comment Feed & Control</p>
                     </div>
                 </div>
                 <SocialManager productionId={productionId} />
@@ -32,8 +32,8 @@ export const SocialHub = ({ productionId }: SocialHubProps) => {
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-black text-white tracking-tight">ENGAGEMENT TOOLS</h1>
-                        <p className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Real-time Polls & Results</p>
+                        <h1 className="text-xl font-black text-foreground tracking-tight">ENGAGEMENT TOOLS</h1>
+                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Real-time Polls & Results</p>
                     </div>
                 </div>
                 <PollManager productionId={productionId} />

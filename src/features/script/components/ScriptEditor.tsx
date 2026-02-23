@@ -74,25 +74,25 @@ export const ScriptEditor = ({ productionId }: Props) => {
 
     if (!isLoaded) {
         return (
-            <div className="flex-1 flex items-center justify-center bg-stone-950/50 rounded-2xl border border-stone-800/50">
+            <div className="flex-1 flex items-center justify-center bg-card-bg/50 rounded-2xl border border-card-border/50">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                    <p className="text-sm font-bold text-stone-500 uppercase tracking-widest animate-pulse">Cargando Guion Vivo...</p>
+                    <p className="text-sm font-bold text-muted uppercase tracking-widest animate-pulse">Cargando Guion Vivo...</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col h-full bg-stone-900/20 rounded-2xl border border-stone-800/50 overflow-hidden shadow-2xl backdrop-blur-sm">
+        <div className="flex flex-col h-full bg-card-bg/20 rounded-2xl border border-card-border/50 overflow-hidden shadow-2xl backdrop-blur-sm">
             {/* Toolbar */}
-            <div className="flex items-center justify-between p-2 bg-stone-900/40 border-b border-stone-800/50">
+            <div className="flex items-center justify-between p-2 bg-card-bg/40 border-b border-card-border/50">
                 <div className="flex items-center gap-1">
                     <button
                         onClick={() => editor?.chain().focus().toggleBold().run()}
                         className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-stone-800",
-                            editor?.isActive('bold') ? "bg-indigo-600 text-white" : "text-stone-400"
+                            "p-2 rounded-lg transition-all hover:bg-card-border",
+                            editor?.isActive('bold') ? "bg-indigo-600 text-white" : "text-muted"
                         )}
                         title="Negrita"
                     >
@@ -101,19 +101,19 @@ export const ScriptEditor = ({ productionId }: Props) => {
                     <button
                         onClick={() => editor?.chain().focus().toggleItalic().run()}
                         className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-stone-800",
-                            editor?.isActive('italic') ? "bg-indigo-600 text-white" : "text-stone-400"
+                            "p-2 rounded-lg transition-all hover:bg-card-border",
+                            editor?.isActive('italic') ? "bg-indigo-600 text-white" : "text-muted"
                         )}
                         title="Cursiva"
                     >
                         <Italic size={18} />
                     </button>
-                    <div className="w-px h-6 bg-stone-800 mx-1" />
+                    <div className="w-px h-6 bg-card-border mx-1" />
                     <button
                         onClick={() => editor?.chain().focus().toggleBulletList().run()}
                         className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-stone-800",
-                            editor?.isActive('bulletList') ? "bg-indigo-600 text-white" : "text-stone-400"
+                            "p-2 rounded-lg transition-all hover:bg-card-border",
+                            editor?.isActive('bulletList') ? "bg-indigo-600 text-white" : "text-muted"
                         )}
                         title="Lista de puntos"
                     >
@@ -122,8 +122,8 @@ export const ScriptEditor = ({ productionId }: Props) => {
                     <button
                         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
                         className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-stone-800",
-                            editor?.isActive('orderedList') ? "bg-indigo-600 text-white" : "text-stone-400"
+                            "p-2 rounded-lg transition-all hover:bg-card-border",
+                            editor?.isActive('orderedList') ? "bg-indigo-600 text-white" : "text-muted"
                         )}
                         title="Lista numerada"
                     >
@@ -141,13 +141,13 @@ export const ScriptEditor = ({ productionId }: Props) => {
                         ) : (
                             <>
                                 <Cloud size={14} className="text-emerald-500" />
-                                <span className="text-[10px] font-black text-stone-500 uppercase tracking-tighter">
+                                <span className="text-[10px] font-black text-muted uppercase tracking-tighter">
                                     {lastSyncTime ? `Sincronizado ${lastSyncTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Sincronizado'}
                                 </span>
                             </>
                         )}
                     </div>
-                    <div className="text-[10px] font-bold text-stone-600">
+                    <div className="text-[10px] font-bold text-muted">
                         {editor?.storage.characterCount.characters() || 0} CARACTERES
                     </div>
                 </div>
@@ -155,7 +155,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
 
             {/* Editor Area */}
             <div
-                className="flex-1 overflow-y-auto bg-stone-950/30 custom-scrollbar"
+                className="flex-1 overflow-y-auto bg-background/30 custom-scrollbar"
                 onScroll={(e) => {
                     const target = e.currentTarget;
                     const percentage = target.scrollTop / (target.scrollHeight - target.clientHeight);
@@ -166,10 +166,10 @@ export const ScriptEditor = ({ productionId }: Props) => {
             </div>
 
             {/* Footer / Status */}
-            <div className="p-3 bg-stone-900/40 border-t border-stone-800/50 flex items-center justify-between">
+            <div className="p-3 bg-card-bg/40 border-t border-card-border/50 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <AlertCircle size={12} className="text-stone-500" />
-                    <span className="text-[9px] text-stone-500 font-bold uppercase tracking-widest">
+                    <AlertCircle size={12} className="text-muted" />
+                    <span className="text-[9px] text-muted font-bold uppercase tracking-widest">
                         Cualquier cambio se guarda automáticamente para todo el equipo
                     </span>
                 </div>

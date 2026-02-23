@@ -72,7 +72,7 @@ export default function TeamManagementPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 pb-12">
+        <div className="max-w-7xl mx-auto space-y-8 pb-12">
             {/* Header */}
             <div>
                 <Link

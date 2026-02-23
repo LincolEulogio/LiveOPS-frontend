@@ -43,11 +43,11 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                 <div className="flex justify-between items-center">
                     <button
                         onClick={() => setIsEditing(false)}
-                        className="text-stone-400 hover:text-white flex items-center gap-2 text-xs font-bold uppercase"
+                        className="text-muted hover:text-foreground flex items-center gap-2 text-xs font-bold uppercase"
                     >
                         ← Back to List
                     </button>
-                    <h2 className="text-xl font-bold text-white">Editing: {selectedTemplate?.name}</h2>
+                    <h2 className="text-xl font-bold text-foreground">Editing: {selectedTemplate?.name}</h2>
                 </div>
                 <OverlayEditor
                     productionId={productionId}
@@ -68,11 +68,11 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
         <div className="space-y-8 p-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <Layers className="text-indigo-400" size={32} />
                         Graphics Constructor
                     </h1>
-                    <p className="text-stone-400 text-sm mt-1">Design and manage your production overlays.</p>
+                    <p className="text-muted text-sm mt-1">Design and manage your production overlays.</p>
                 </div>
                 <button
                     onClick={() => {
@@ -90,8 +90,8 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                     <div
                         key={template.id}
                         className={cn(
-                            "bg-stone-900 border rounded-3xl p-6 transition-all group overflow-hidden relative",
-                            template.isActive ? "border-indigo-500 shadow-xl shadow-indigo-500/10" : "border-stone-800"
+                            "bg-card-bg border rounded-3xl p-6 transition-all group overflow-hidden relative",
+                            template.isActive ? "border-indigo-500 shadow-xl shadow-indigo-500/10" : "border-card-border"
                         )}
                     >
                         {template.isActive && (
@@ -100,13 +100,13 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                             </div>
                         )}
 
-                        <h3 className="text-lg font-bold text-white mb-2">{template.name}</h3>
-                        <p className="text-xs text-stone-500 mb-6">{template.config.layers.length} Layers</p>
+                        <h3 className="text-lg font-bold text-foreground mb-2">{template.name}</h3>
+                        <p className="text-xs text-muted mb-6">{template.config.layers.length} Layers</p>
 
                         <div className="grid grid-cols-2 gap-3">
                             <button
                                 onClick={() => { setSelectedTemplate(template); setIsEditing(true); }}
-                                className="flex items-center justify-center gap-2 bg-stone-800 hover:bg-stone-700 text-white py-3 rounded-xl text-xs font-bold"
+                                className="flex items-center justify-center gap-2 bg-background hover:bg-card-border text-muted py-3 rounded-xl text-xs font-bold"
                             >
                                 <Edit3 size={14} /> Design
                             </button>
@@ -122,17 +122,17 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                             </button>
                         </div>
 
-                        <div className="mt-4 pt-4 border-t border-stone-800/50 flex justify-between items-center">
+                        <div className="mt-4 pt-4 border-t border-card-border/50 flex justify-between items-center">
                             <a
                                 href={`/overlay/${template.id}`}
                                 target="_blank"
-                                className="text-[10px] text-stone-500 hover:text-indigo-400 flex items-center gap-1 font-bold uppercase tracking-widest"
+                                className="text-[10px] text-muted hover:text-indigo-400 flex items-center gap-1 font-bold uppercase tracking-widest"
                             >
                                 <ExternalLink size={10} /> Browser Source URL
                             </a>
                             <button
                                 onClick={() => confirm('Delete?') && deleteMutation.mutate(template.id)}
-                                className="text-stone-600 hover:text-red-500 transition-colors"
+                                className="text-muted hover:text-red-500 transition-colors"
                             >
                                 <Trash2 size={14} />
                             </button>
@@ -141,7 +141,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                 ))}
 
                 {templates.length === 0 && !isLoading && (
-                    <div className="col-span-full py-20 bg-stone-900/50 border-2 border-dashed border-stone-800 rounded-3xl flex flex-col items-center justify-center text-stone-600">
+                    <div className="col-span-full py-20 bg-card-bg/50 border-2 border-dashed border-card-border rounded-3xl flex flex-col items-center justify-center text-muted">
                         <Layers size={48} className="mb-4 opacity-10" />
                         <p className="text-sm font-bold uppercase tracking-widest">No overlays found</p>
                     </div>
