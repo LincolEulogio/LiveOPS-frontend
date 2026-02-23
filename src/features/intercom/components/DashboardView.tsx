@@ -98,13 +98,7 @@ export const DashboardView = () => {
     }, [templates]);
 
     return (
-        <div className="space-y-6 max-w-[1600px] mx-auto pb-20">
-            <button
-                onClick={() => router.push(`/productions/${activeProductionId}`)}
-                className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all bg-stone-800 text-indigo-400 shadow-inner"
-            >
-                Volver a Dashboard
-            </button>
+        <div className="space-y-6 max-w-[1600px] mx-auto pb-20 mt-4">
             {/* Top Operational Bar */}
             <div className="bg-stone-900/80 backdrop-blur-xl border border-stone-800 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
                 <div className="flex items-center gap-4">

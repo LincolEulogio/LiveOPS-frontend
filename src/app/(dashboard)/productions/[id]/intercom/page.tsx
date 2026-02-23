@@ -37,7 +37,7 @@ export default function IntercomPage() {
 
     return (
         <div className="-m-6 md:-m-8 bg-stone-950 text-stone-100 min-h-[calc(100vh-4rem)]">
-            <header className="sticky top-0 h-16 bg-stone-900/80 backdrop-blur-xl border-b border-stone-800 z-50 px-6 md:px-8 flex items-center justify-between">
+            <header className="relative top-0 h-16 bg-stone-900/40 border-b border-stone-800 z-50 px-6 md:px-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <Link
                         href={`/productions/${productionId}`}
