@@ -205,7 +205,7 @@ export const DashboardView = () => {
                                         templates={templates}
                                         onSendCommand={(t) => sendCommand({
                                             message: t.name,
-                                            templateId: t.id,
+                                            templateId: t.id === 'chat' ? undefined : t.id,
                                             targetUserId: member.userId,
                                             targetRoleId: production?.users.find((pu: any) => pu.userId === member.userId)?.roleId,
                                             requiresAck: true

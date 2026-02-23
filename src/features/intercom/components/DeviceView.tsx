@@ -131,9 +131,9 @@ export const DeviceView = () => {
                         </h4>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar flex flex-col-reverse justify-start">
+                    <div className="flex-1 overflow-y-auto p-4 gap-3 custom-scrollbar flex flex-col-reverse justify-start">
                         {userHistory.length > 0 ? (
-                            [...userHistory].reverse().map((msg, i) => {
+                            [...userHistory].map((msg, i) => {
                                 const isMine = msg.senderId === user?.id;
 
                                 return (

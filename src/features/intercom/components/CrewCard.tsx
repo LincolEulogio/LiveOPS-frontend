@@ -212,18 +212,24 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
 
             {/* Direct History / Messages Panel */}
             {directHistory.length > 0 && (
-                <div className="mx-4 mb-4 bg-stone-900 border border-stone-800/50 rounded-2xl overflow-hidden flex flex-col max-h-[140px]">
+                <div className="mx-4 mb-4 bg-stone-900 border border-stone-800/50 rounded-2xl overflow-hidden flex flex-col h-[280px]">
                     <div className="px-3 py-1.5 bg-stone-800/30 border-b border-stone-800/50 flex items-center gap-2">
                         <MessageCircle size={10} className="text-indigo-400" />
                         <span className="text-[9px] uppercase font-black text-stone-400 tracking-widest">Chat Reciente</span>
                     </div>
-                    <div className="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar">
-                        {[...directHistory].reverse().map((msg, i) => {
+                    <div className="flex-1 overflow-y-auto p-3 custom-scrollbar flex flex-col-reverse gap-2">
+                        {[...directHistory].map((msg, i) => {
                             const isMine = msg.senderId !== member.userId;
                             return (
                                 <div key={i} className={`flex w-full ${isMine ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[85%] px-2.5 py-1.5 rounded-xl text-[10px] font-medium leading-tight ${isMine ? 'bg-indigo-600/20 text-indigo-100 border border-indigo-500/30 rounded-br-none' : 'bg-stone-800 text-stone-200 border border-stone-700 rounded-bl-none'}`}>
+                                        <div className={`text-[8px] font-black uppercase tracking-widest ${isMine ? 'text-indigo-300' : 'text-stone-400'} mb-0.5`}>
+                                            {isMine ? 'Tú (Control)' : (msg.senderName || member.userName)}
+                                        </div>
                                         {msg.message.replace('Mensaje:', '').trim()}
+                                        <div className={`text-[7px] font-bold text-right pt-0.5 mt-0.5 flex justify-end items-center gap-1 ${isMine ? 'text-indigo-300' : 'text-stone-500'}`}>
+                                            {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </div>
                                     </div>
                                 </div>
                             );
