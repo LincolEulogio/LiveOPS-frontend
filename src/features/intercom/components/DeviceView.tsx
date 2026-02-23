@@ -10,10 +10,9 @@ import { useSocket } from '@/shared/socket/socket.provider';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
 import { useAppStore } from '@/shared/store/app.store';
-
 export const DeviceView = () => {
     const { activeAlert, history } = useIntercomStore();
-    const { acknowledgeAlert, sendCommand } = useIntercom();
+    const { acknowledgeAlert, sendCommand, sendDirectMessage } = useIntercom();
     const user = useAuthStore((state) => state.user);
     const activeProductionId = useAppStore((state) => state.activeProductionId);
     const [isChatOpen, setIsChatOpen] = React.useState(false);
@@ -50,12 +49,13 @@ export const DeviceView = () => {
         const chatMsgs = history.filter(h => h.message.startsWith('Mensaje:') && h.senderId !== user?.id);
         const lastTargetUserId = chatMsgs.length > 0 ? chatMsgs[0].senderId : undefined;
 
-        // Send a direct message back via standard command
-        sendCommand({
-            message: `Mensaje: ${customMessage.trim()}`,
-            targetUserId: lastTargetUserId,
-            requiresAck: true,
-        });
+        if (lastTargetUserId) {
+            // Send a direct message back via standard command
+            sendDirectMessage({
+                message: `Mensaje: ${customMessage.trim()}`,
+                targetUserId: lastTargetUserId,
+            });
+        }
 
         setCustomMessage('');
         setIsChatOpen(false);

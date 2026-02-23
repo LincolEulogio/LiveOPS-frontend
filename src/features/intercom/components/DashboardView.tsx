@@ -39,7 +39,7 @@ export const DashboardView = () => {
     const activeProductionId = (useAppStore((state) => state.activeProductionId) || productionIdFromParams) as string;
 
     // Pass direct ID to useIntercom to ensure it identifies correctly
-    const { sendCommand, members: onlineMembers } = useIntercom();
+    const { sendCommand, sendDirectMessage, members: onlineMembers } = useIntercom();
     const { history } = useIntercomStore();
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [activeTab, setActiveTab] = useState<'intercom' | 'automation'>('intercom');
@@ -203,13 +203,22 @@ export const DashboardView = () => {
                                         productionId={activeProductionId || ''}
                                         member={member}
                                         templates={templates}
-                                        onSendCommand={(t) => sendCommand({
-                                            message: t.name,
-                                            templateId: t.id === 'chat' ? undefined : t.id,
-                                            targetUserId: member.userId,
-                                            targetRoleId: production?.users.find((pu: any) => pu.userId === member.userId)?.roleId,
-                                            requiresAck: true
-                                        })}
+                                        onSendCommand={(t) => {
+                                            if (t.isChat) {
+                                                sendDirectMessage({
+                                                    message: t.name,
+                                                    targetUserId: t.targetUserId || member.userId
+                                                });
+                                            } else {
+                                                sendCommand({
+                                                    message: t.name,
+                                                    templateId: t.id,
+                                                    targetUserId: member.userId,
+                                                    targetRoleId: production?.users.find((pu: any) => pu.userId === member.userId)?.roleId,
+                                                    requiresAck: true
+                                                });
+                                            }
+                                        }}
                                     />
                                 ))}
                                 {crewMembers.length === 0 && (

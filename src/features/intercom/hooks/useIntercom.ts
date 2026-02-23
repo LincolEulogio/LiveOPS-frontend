@@ -135,6 +135,26 @@ export const useIntercom = (forcedUserId?: string) => {
         });
     }, [socket, isConnected, activeProductionId, user]);
 
+    const sendDirectMessage = useCallback((data: {
+        message: string;
+        targetUserId: string;
+    }) => {
+        if (!socket || !isConnected || !activeProductionId || !user) {
+            return;
+        }
+
+        const senderName = user.role?.name || user.globalRole?.name || 'Operador';
+        console.log(`[Intercom] Emitting direct chat: ${data.message} to ${data.targetUserId}`);
+
+        socket.emit('chat.direct', {
+            productionId: activeProductionId,
+            senderId: user.id,
+            targetUserId: data.targetUserId,
+            message: data.message,
+            senderName,
+        });
+    }, [socket, isConnected, activeProductionId, user]);
+
     const acknowledgeAlert = useCallback((alertId: string, responseType: string = 'OK') => {
         if (!socket || !isConnected || !activeProductionId || !user) {
             console.error('[Intercom] Cannot acknowledge alert: missing context', { isConnected, activeProductionId, hasUser: !!user });
@@ -156,6 +176,7 @@ export const useIntercom = (forcedUserId?: string) => {
 
     return {
         sendCommand,
+        sendDirectMessage,
         acknowledgeAlert,
         members,
     };
