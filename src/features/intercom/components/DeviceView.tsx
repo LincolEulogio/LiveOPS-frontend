@@ -4,7 +4,7 @@ import React from 'react';
 import { useIntercomStore } from '../store/intercom.store';
 import { useIntercom } from '../hooks/useIntercom';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { Bell, CheckCircle, XCircle, Wifi, WifiOff, Shield, MessageCircle, X } from 'lucide-react';
+import { Bell, CheckCircle, XCircle, Wifi, WifiOff, Shield, MessageCircle, X, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useQuery } from '@tanstack/react-query';
@@ -18,6 +18,7 @@ export const DeviceView = () => {
     const activeProductionId = useAppStore((state) => state.activeProductionId);
     const [isChatOpen, setIsChatOpen] = React.useState(false);
     const [customMessage, setCustomMessage] = React.useState('');
+    const [alertReply, setAlertReply] = React.useState('');
 
     // Derived values
     const { isConnected } = useSocket();
@@ -43,7 +44,7 @@ export const DeviceView = () => {
     const handleSendCustomMessage = (e: React.FormEvent) => {
         e.preventDefault();
         if (!customMessage.trim()) return;
-        
+
         // This leverages the "acknowledgeAlert" logic which sends a response back to the Dashboard
         // We use a dummy ID 'chat' to indicate it's a direct message and not an alert acknowledgment
         acknowledgeAlert('chat', customMessage.trim());
@@ -67,7 +68,7 @@ export const DeviceView = () => {
                         </span>
                     </div>
 
-                    <button 
+                    <button
                         onClick={() => setIsChatOpen(true)}
                         className="flex items-center gap-2 bg-stone-900/80 hover:bg-stone-800 backdrop-blur-md px-4 py-3 rounded-2xl border border-stone-800 pointer-events-auto transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
@@ -202,11 +203,11 @@ export const DeviceView = () => {
 
                 <div className="w-full max-w-sm grid grid-cols-2 gap-3 z-10">
                     <button
-                        onClick={() => acknowledgeAlert(activeAlert.id, 'OK')}
+                        onClick={() => acknowledgeAlert(activeAlert.id, 'Confirmado')}
                         className="col-span-2 flex items-center justify-center gap-3 bg-white text-stone-900 py-6 rounded-[2rem] font-black uppercase tracking-[0.2em] active:scale-95 transition-all shadow-xl text-lg"
                     >
                         <CheckCircle size={28} />
-                        CONFIRMAR OK
+                        CONFIRMADO
                     </button>
 
                     <button
@@ -236,6 +237,36 @@ export const DeviceView = () => {
                     >
                         LISTO
                     </button>
+
+                    {/* Chat Response Input */}
+                    <div className="col-span-2 mt-2 bg-black/40 backdrop-blur-md border border-white/20 rounded-3xl p-2 flex items-center gap-2 transition-all focus-within:bg-black/60 focus-within:border-white/40">
+                        <input
+                            type="text"
+                            value={alertReply}
+                            onChange={(e) => setAlertReply(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && alertReply.trim()) {
+                                    e.preventDefault();
+                                    acknowledgeAlert(activeAlert.id, `Mensaje: ${alertReply.trim()}`);
+                                    setAlertReply('');
+                                }
+                            }}
+                            placeholder="Escribe tu respuesta personalizada..."
+                            className="flex-1 bg-transparent px-4 py-2 text-sm text-white focus:outline-none placeholder:text-white/50 font-bold"
+                        />
+                        <button
+                            onClick={() => {
+                                if (alertReply.trim()) {
+                                    acknowledgeAlert(activeAlert.id, `Mensaje: ${alertReply.trim()}`);
+                                    setAlertReply('');
+                                }
+                            }}
+                            disabled={!alertReply.trim()}
+                            className="bg-indigo-600 hover:bg-indigo-500 disabled:bg-white/10 disabled:text-white/30 text-white p-3 rounded-2xl transition-colors active:scale-95"
+                        >
+                            <Send size={18} />
+                        </button>
+                    </div>
                 </div>
             </motion.div>
         </AnimatePresence>
