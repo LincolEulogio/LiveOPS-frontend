@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useIntercom } from '../hooks/useIntercom';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
@@ -34,6 +34,7 @@ import { cn } from '@/shared/utils/cn';
 import { HealthMonitor } from '../../health/components/HealthMonitor';
 
 export const DashboardView = () => {
+    const router = useRouter();
     const { id: productionIdFromParams } = useParams();
     const activeProductionId = (useAppStore((state) => state.activeProductionId) || productionIdFromParams) as string;
 
@@ -98,6 +99,12 @@ export const DashboardView = () => {
 
     return (
         <div className="space-y-6 max-w-[1600px] mx-auto pb-20">
+            <button
+                onClick={() => router.push(`/productions/${activeProductionId}`)}
+                className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all bg-stone-800 text-indigo-400 shadow-inner"
+            >
+                Volver a Dashboard
+            </button>
             {/* Top Operational Bar */}
             <div className="bg-stone-900/80 backdrop-blur-xl border border-stone-800 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
                 <div className="flex items-center gap-4">
@@ -164,8 +171,8 @@ export const DashboardView = () => {
             </div>
 
             {/* Mass Alert Quick Access Bar */}
-            <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-2.5 flex items-center gap-3 overflow-x-auto no-scrollbar">
-                <div className="flex items-center gap-2 px-3 border-r border-stone-800 mr-1">
+            <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-2.5 flex items-center gap-3 overflow-x-auto custom-scrollbar">
+                <div className="flex items-center gap-2 px-3 border-r border-stone-800 mr-1 shrink-0">
                     <Zap size={14} className="text-stone-500" />
                     <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest whitespace-nowrap">Global Alerts</span>
                 </div>
@@ -173,12 +180,12 @@ export const DashboardView = () => {
                     <button
                         key={t.id}
                         onClick={() => handleMassAlert(t.name)}
-                        className="px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 hover:border-indigo-500/50 rounded-xl text-[10px] font-black text-white/70 hover:text-white uppercase tracking-widest transition-all whitespace-nowrap active:scale-95 shadow-sm"
+                        className="shrink-0 px-4 py-2 bg-stone-950 hover:bg-stone-800 border border-stone-800 hover:border-indigo-500/50 rounded-xl text-[10px] font-black text-white/70 hover:text-white uppercase tracking-widest transition-all whitespace-nowrap active:scale-95 shadow-sm"
                     >
                         {t.name}
                     </button>
                 )) : (
-                    <span className="text-[10px] font-bold text-stone-700 uppercase tracking-widest px-4 italic">Sin plantillas configuradas</span>
+                    <span className="shrink-0 text-[10px] font-bold text-stone-700 uppercase tracking-widest px-4 italic">Sin plantillas configuradas</span>
                 )}
             </div>
 

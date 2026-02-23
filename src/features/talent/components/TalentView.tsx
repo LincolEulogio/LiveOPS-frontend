@@ -3,8 +3,9 @@
 import { useTimeline } from '@/features/timeline/hooks/useTimeline';
 import { cn } from '@/shared/utils/cn';
 import { useEffect, useState, useMemo } from 'react';
-import { Clock, ArrowRight, Play, AlertTriangle } from 'lucide-react';
+import { Clock, ArrowRight, Play, AlertTriangle, ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 interface Props {
     productionId: string;
@@ -31,7 +32,15 @@ export const TalentView = ({ productionId }: Props) => {
     }
 
     return (
-        <div className="h-screen w-screen bg-black text-white selection:bg-neon-green overflow-hidden flex flex-col p-8 md:p-12 lg:p-16">
+        <div className="h-screen w-screen bg-black text-white selection:bg-neon-green overflow-hidden flex flex-col p-8 md:p-12 lg:p-16 relative">
+            {/* Back Button */}
+            <Link
+                href={`/productions/${productionId}`}
+                className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 px-4 py-2 bg-stone-900 border border-stone-800 rounded-xl text-stone-400 hover:text-white hover:bg-stone-800 transition-all font-bold uppercase tracking-widest text-xs z-50"
+            >
+                <ChevronLeft size={16} /> Volver
+            </Link>
+
             <AnimatePresence mode="wait">
                 {activeBlock ? (
                     <motion.div

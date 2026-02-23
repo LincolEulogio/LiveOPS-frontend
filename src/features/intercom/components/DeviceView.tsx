@@ -42,16 +42,8 @@ export const DeviceView = () => {
         return (
             <div className="flex flex-col items-center justify-center min-h-[80vh] text-center p-8 bg-black">
                 {/* Top Status Bar */}
-                <div className="absolute top-6 left-6 right-6 flex items-center justify-between">
-                    <div className="flex flex-col items-start bg-stone-900/80 backdrop-blur-md px-4 py-2 rounded-2xl border border-stone-800">
-                        <span className="text-[8px] text-stone-500 font-black uppercase tracking-[0.2em] mb-0.5">Coordinador Activo</span>
-                        <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                            <span className="text-xs font-bold text-white uppercase tracking-tight">{lastCoordinator}</span>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-stone-900/80 backdrop-blur-md border border-stone-800">
+                <div className="absolute top-6 left-6 right-6 flex items-center justify-between pointer-events-none">
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-stone-900/80 backdrop-blur-md border border-stone-800 pointer-events-auto">
                         {isConnected ? (
                             <Wifi size={12} className="text-green-500" />
                         ) : (
@@ -60,6 +52,14 @@ export const DeviceView = () => {
                         <span className="text-[9px] font-black uppercase tracking-[0.1em] text-stone-400">
                             {isConnected ? 'ONLINE' : 'OFFLINE'}
                         </span>
+                    </div>
+
+                    <div className="flex flex-col items-end bg-stone-900/80 backdrop-blur-md px-4 py-2 rounded-2xl border border-stone-800 pointer-events-auto text-right">
+                        <span className="text-[8px] text-stone-500 font-black uppercase tracking-[0.2em] mb-0.5">Coordinador Activo</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-white uppercase tracking-tight">{lastCoordinator}</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                        </div>
                     </div>
                 </div>
 

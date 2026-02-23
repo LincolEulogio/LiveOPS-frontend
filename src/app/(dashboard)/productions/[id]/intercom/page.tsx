@@ -5,8 +5,9 @@ import { useParams } from 'next/navigation';
 import { DashboardView } from '@/features/intercom/components/DashboardView';
 import { DeviceView } from '@/features/intercom/components/DeviceView';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { AppWindow, Smartphone, Info } from 'lucide-react';
+import { AppWindow, Smartphone, Info, ChevronLeft } from 'lucide-react';
 import { useAppStore } from '@/shared/store/app.store';
+import Link from 'next/link';
 
 export default function IntercomPage() {
     const { id: productionId } = useParams();
@@ -35,13 +36,20 @@ export default function IntercomPage() {
     if (!viewMode) return null;
 
     return (
-        <div className="min-h-screen bg-stone-950 text-stone-100">
-            <header className="fixed top-0 left-0 right-0 h-16 bg-stone-900/50 backdrop-blur-md border-b border-stone-800 z-50 px-6 flex items-center justify-between">
+        <div className="-m-6 md:-m-8 bg-stone-950 text-stone-100 min-h-[calc(100vh-4rem)]">
+            <header className="sticky top-0 h-16 bg-stone-900/80 backdrop-blur-xl border-b border-stone-800 z-50 px-6 md:px-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
+                    <Link
+                        href={`/productions/${productionId}`}
+                        className="p-2 bg-stone-800 hover:bg-stone-700 rounded-lg text-stone-400 hover:text-white transition-colors border border-stone-700"
+                        title="Volver a la Producción"
+                    >
+                        <ChevronLeft size={18} />
+                    </Link>
                     <div className="p-2 bg-indigo-600 rounded-lg">
                         <Info size={18} className="text-white" />
                     </div>
-                    <h1 className="font-black uppercase tracking-tighter text-lg">Live Alert System</h1>
+                    <h1 className="font-black uppercase tracking-tighter text-lg md:flex hidden">Live Alert System</h1>
                 </div>
 
                 <div className="flex bg-stone-950 p-1 rounded-xl border border-stone-800">
@@ -60,7 +68,7 @@ export default function IntercomPage() {
                 </div>
             </header>
 
-            <main className="pt-24 px-6 pb-12 max-w-7xl mx-auto">
+            <main className="p-6 md:p-8 max-w-7xl mx-auto">
                 {viewMode === 'dashboard' ? <DashboardView /> : <DeviceView />}
             </main>
 
