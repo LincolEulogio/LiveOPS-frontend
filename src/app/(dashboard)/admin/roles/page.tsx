@@ -67,10 +67,10 @@ export default function AdminRolesPage() {
         <div className="max-w-6xl mx-auto space-y-6">
             <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
                         <Shield className="text-indigo-400" /> Roles & Permissions
                     </h1>
-                    <p className="text-stone-400 text-sm mt-1">Manage system roles and their assigned permissions.</p>
+                    <p className="text-muted text-sm mt-1">Manage system roles and their assigned permissions.</p>
                 </div>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
@@ -82,13 +82,13 @@ export default function AdminRolesPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {roles?.map(role => (
-                    <div key={role.id} className="bg-stone-900 border border-stone-800 rounded-xl p-6 shadow-xl relative overflow-hidden group flex flex-col">
+                    <div key={role.id} className="bg-card-bg border border-card-border rounded-xl p-6 shadow-xl relative overflow-hidden group flex flex-col">
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
                             <Shield size={64} />
                         </div>
 
                         <div className="flex justify-between items-start mb-2 relative z-10">
-                            <h2 className="text-lg font-bold text-white">{role.name}</h2>
+                            <h2 className="text-lg font-bold text-foreground">{role.name}</h2>
                             {role.name !== 'ADMIN' && role.name !== 'SUPERADMIN' && (
                                 <button
                                     onClick={() => handleDeleteRole(role.id, role.name)}
@@ -115,8 +115,8 @@ export default function AdminRolesPage() {
                                             onClick={() => togglePermission(role.id, permission.id, isAssigned)}
                                             disabled={updatePermsMutation.isPending}
                                             className={`w-full flex items-center justify-between p-2 rounded text-[10px] font-mono border transition-all ${isAssigned
-                                                ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300'
-                                                : 'bg-stone-950 border-stone-800 text-stone-500 hover:border-stone-700'
+                                                ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-400'
+                                                : 'bg-background border-card-border text-muted hover:border-indigo-500/50'
                                                 }`}
                                         >
                                             <div className="flex flex-col items-start">
@@ -132,7 +132,7 @@ export default function AdminRolesPage() {
                     </div>
                 ))}
                 {roles?.length === 0 && (
-                    <div className="col-span-full py-12 text-center text-stone-500 text-sm bg-stone-900 border border-stone-800 rounded-xl">
+                    <div className="col-span-full py-12 text-center text-muted text-sm bg-card-bg border border-card-border rounded-xl">
                         No roles found in the system.
                     </div>
                 )}
@@ -141,39 +141,39 @@ export default function AdminRolesPage() {
             {/* Create Role Modal */}
             {isCreateModalOpen && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-stone-900 border border-stone-800 rounded-xl p-8 w-full max-w-md shadow-2xl relative">
-                        <button onClick={() => setIsCreateModalOpen(false)} className="absolute top-4 right-4 text-stone-500 hover:text-white">
+                    <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-md shadow-2xl relative">
+                        <button onClick={() => setIsCreateModalOpen(false)} className="absolute top-4 right-4 text-muted hover:text-foreground">
                             <X size={20} />
                         </button>
-                        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
                             <Plus size={22} className="text-indigo-400" /> Create New Role
                         </h2>
                         <form onSubmit={handleCreateRole} className="space-y-5">
                             <div>
-                                <label className="block text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-1.5 pl-1">Role Name</label>
+                                <label className="block text-[10px] font-bold text-muted uppercase tracking-widest mb-1.5 pl-1">Role Name</label>
                                 <input
                                     type="text"
                                     required
                                     value={newRole.name}
                                     onChange={e => setNewRole(prev => ({ ...prev, name: e.target.value }))}
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                                    className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-sm text-foreground focus:ring-1 focus:ring-indigo-500 outline-none"
                                     placeholder="e.g., MODERATOR"
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-1.5 pl-1">Description</label>
+                                <label className="block text-[10px] font-bold text-muted uppercase tracking-widest mb-1.5 pl-1">Description</label>
                                 <textarea
                                     value={newRole.description}
                                     onChange={e => setNewRole(prev => ({ ...prev, description: e.target.value }))}
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none min-h-[100px]"
+                                    className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-sm text-foreground focus:ring-1 focus:ring-indigo-500 outline-none min-h-[100px]"
                                     placeholder="Describe what this role can do..."
                                 />
                             </div>
-                            <div className="flex justify-end gap-3 mt-8 pt-4 border-t border-stone-800/50">
+                            <div className="flex justify-end gap-3 mt-8 pt-4 border-t border-card-border/50">
                                 <button
                                     type="button"
                                     onClick={() => setIsCreateModalOpen(false)}
-                                    className="px-4 py-2 text-sm font-medium text-stone-500 hover:text-white transition-colors"
+                                    className="px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors"
                                 >
                                     Cancel
                                 </button>

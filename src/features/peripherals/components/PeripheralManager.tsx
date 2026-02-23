@@ -63,9 +63,9 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
     };
 
     return (
-        <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-lg">
+        <div className="bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
             <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3 text-stone-200">
+                <div className="flex items-center gap-3 text-foreground">
                     <Cpu className="text-indigo-400" size={20} />
                     <h2 className="text-lg font-semibold uppercase tracking-tight">Peripherals</h2>
                 </div>
@@ -81,17 +81,17 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
                 {/* Stream Deck Section */}
                 <div className={cn(
                     "p-4 rounded-xl border transition-all",
-                    isStreamDeckConnected ? "bg-indigo-500/5 border-indigo-500/30" : "bg-stone-950 border-stone-800"
+                    isStreamDeckConnected ? "bg-indigo-500/5 border-indigo-500/30" : "bg-background border-card-border"
                 )}>
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
-                            <Monitor size={16} className={isStreamDeckConnected ? "text-indigo-400" : "text-stone-600"} />
-                            <span className="text-xs font-bold text-stone-300 uppercase tracking-wider">Stream Deck</span>
+                            <Monitor size={16} className={isStreamDeckConnected ? "text-indigo-400" : "text-muted"} />
+                            <span className="text-xs font-bold text-foreground uppercase tracking-wider">Stream Deck</span>
                         </div>
                         {isStreamDeckConnected ? (
                             <button
                                 onClick={disconnectStreamDeck}
-                                className="p-1 px-2 bg-stone-800 hover:bg-red-500 text-[10px] font-bold text-stone-400 hover:text-white rounded-lg transition-all"
+                                className="p-1 px-2 bg-card-border hover:bg-red-500 text-[10px] font-bold text-muted hover:text-white rounded-lg transition-all"
                             >
                                 DISCONNECT
                             </button>
@@ -106,7 +106,7 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
                     </div>
 
                     <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-stone-500">
+                        <span className="text-[10px] font-bold text-muted">
                             {isStreamDeckConnected ? streamDeckName : 'Not Detected'}
                         </span>
                         {isStreamDeckConnected && (
@@ -121,20 +121,20 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
                 {/* MIDI Section */}
                 <div className={cn(
                     "p-4 rounded-xl border transition-all",
-                    isMidiConnected ? "bg-emerald-500/5 border-emerald-500/30" : "bg-stone-950 border-stone-800"
+                    isMidiConnected ? "bg-emerald-500/5 border-emerald-500/30" : "bg-background border-card-border"
                 )}>
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
-                            <Music size={16} className={isMidiConnected ? "text-emerald-400" : "text-stone-600"} />
-                            <span className="text-xs font-bold text-stone-300 uppercase tracking-wider">MIDI Controller</span>
+                            <Music size={16} className={isMidiConnected ? "text-emerald-400" : "text-muted"} />
+                            <span className="text-xs font-bold text-foreground uppercase tracking-wider">MIDI Controller</span>
                         </div>
                     </div>
 
                     <div className="space-y-2">
                         {midiInputs.length > 0 ? (
                             midiInputs.map(input => (
-                                <div key={input.id} className="flex items-center justify-between bg-stone-900/50 p-2 rounded-lg border border-white/5">
-                                    <span className="text-[10px] font-bold text-stone-400 truncate max-w-[150px]">{input.name}</span>
+                                <div key={input.id} className="flex items-center justify-between bg-card-bg/50 p-2 rounded-lg border border-card-border">
+                                    <span className="text-[10px] font-bold text-foreground truncate max-w-[150px]">{input.name}</span>
                                     <div className="flex items-center gap-2">
                                         <span className="text-[9px] font-black text-emerald-500">LISTENING</span>
                                         <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />
@@ -143,16 +143,16 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
                             ))
                         ) : (
                             <div className="flex items-center gap-2 opacity-40">
-                                <AlertCircle size={14} className="text-stone-600" />
-                                <span className="text-[10px] font-bold text-stone-600 uppercase">No MIDI devices linked</span>
+                                <AlertCircle size={14} className="text-muted" />
+                                <span className="text-[10px] font-bold text-muted uppercase">No MIDI devices linked</span>
                             </div>
                         )}
                     </div>
                 </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-stone-800">
-                <p className="text-[10px] text-stone-600 font-medium leading-relaxed">
+            <div className="mt-6 pt-4 border-t border-card-border">
+                <p className="text-[10px] text-muted font-medium leading-relaxed">
                     Hardware triggers are mapped to your current production controls.
                     Ensure you have given browser permissions for HID and MIDI.
                 </p>

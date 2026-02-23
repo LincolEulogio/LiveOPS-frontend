@@ -57,22 +57,22 @@ export const IntercomPanel = ({ productionId }: Props) => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-stone-950 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-white/5">
+        <div className="flex flex-col h-full bg-background border border-card-border rounded-2xl shadow-2xl overflow-hidden ring-1 ring-card-border/50">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-stone-800 bg-stone-900/50">
+            <div className="flex items-center justify-between p-4 border-b border-card-border bg-card-bg/50">
                 <div className="flex items-center gap-3">
                     <div className={cn(
                         "w-2 h-2 rounded-full",
                         isConnected ? "bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-red-500"
                     )}></div>
-                    <h2 className="text-sm font-bold text-white tracking-widest uppercase flex items-center gap-2">
+                    <h2 className="text-sm font-bold text-foreground tracking-widest uppercase flex items-center gap-2">
                         <MessageSquare size={16} className="text-indigo-400" />
                         Intercom
                     </h2>
                 </div>
                 <div className="flex items-center gap-2">
                     <TemplateManager productionId={productionId} />
-                    <span className="text-[10px] font-bold text-stone-500 bg-stone-800 px-2 py-0.5 rounded uppercase tracking-tighter">
+                    <span className="text-[10px] font-bold text-muted bg-card-bg px-2 py-0.5 rounded uppercase tracking-tighter hover:text-foreground">
                         Active: {history.length}
                     </span>
                 </div>
@@ -81,15 +81,15 @@ export const IntercomPanel = ({ productionId }: Props) => {
 
             {/* Templates / Quick Actions */}
             {templates.length > 0 && (
-                <div className="p-3 border-b border-stone-800 bg-stone-900/20 flex gap-2 overflow-x-auto no-scrollbar">
+                <div className="p-3 border-b border-card-border bg-card-bg/20 flex gap-2 overflow-x-auto no-scrollbar">
                     {templates.map((t) => (
                         <button
                             key={t.id}
                             onClick={() => sendCommand(t.name, { templateId: t.id })}
-                            className="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 bg-stone-900 hover:bg-stone-800 border border-stone-800 rounded-lg transition-all group"
+                            className="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 bg-card-bg hover:bg-card-border border border-card-border rounded-lg transition-all group"
                         >
                             <Zap size={12} className="text-yellow-500 group-hover:scale-125 transition-transform" />
-                            <span className="text-[10px] font-bold text-stone-300 uppercase tracking-wider">{t.name}</span>
+                            <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">{t.name}</span>
                         </button>
                     ))}
                 </div>
@@ -103,7 +103,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                 {isLoading ? (
                     <IntercomSkeleton />
                 ) : history.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-stone-600 gap-3">
+                    <div className="flex flex-col items-center justify-center h-full text-muted gap-3">
                         <MessageSquare size={32} strokeWidth={1} />
                         <p className="text-[10px] uppercase tracking-widest font-bold">No communications</p>
                     </div>
@@ -119,14 +119,14 @@ export const IntercomPanel = ({ productionId }: Props) => {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 border-t border-stone-800 bg-stone-900/80 backdrop-blur-xl">
+            <div className="p-4 border-t border-card-border bg-card-bg/80 backdrop-blur-xl">
                 <div className="relative group">
                     <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="Send command..."
-                        className="w-full bg-stone-950 border border-stone-800 rounded-xl pl-4 pr-12 py-3 text-sm text-white placeholder:text-stone-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[45px] max-h-[120px]"
+                        className="w-full bg-background border border-card-border rounded-xl pl-4 pr-12 py-3 text-sm text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[45px] max-h-[120px]"
                         rows={1}
                     />
                     <button
@@ -144,12 +144,12 @@ export const IntercomPanel = ({ productionId }: Props) => {
                 </div>
                 <div className="flex items-center justify-between mt-2 px-1">
                     <div className="flex items-center gap-3">
-                        <button className="text-[10px] font-bold text-stone-500 hover:text-stone-300 transition-colors uppercase flex items-center gap-1.5">
+                        <button className="text-[10px] font-bold text-muted hover:text-foreground transition-colors uppercase flex items-center gap-1.5">
                             <ShieldAlert size={12} />
                             All
                         </button>
                     </div>
-                    <div className="text-[9px] text-stone-600 font-mono italic">
+                    <div className="text-[9px] text-muted font-mono italic">
                         Press Enter to broadcast
                     </div>
                 </div>

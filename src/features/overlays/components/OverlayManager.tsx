@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { overlayService } from '../api/overlay.service';
-import { Layers, Plus, ExternalLink, Play, Square, Edit3, Trash2 } from 'lucide-react';
+import { Layers, Plus, ExternalLink, Play, Square, Edit3, Trash2, X } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { OverlayEditor } from './OverlayEditor';
 import { OverlayTemplate } from '../types/overlay.types';
@@ -12,6 +12,8 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
     const queryClient = useQueryClient();
     const [isEditing, setIsEditing] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState<OverlayTemplate | null>(null);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [newOverlayName, setNewOverlayName] = useState('');
 
     const { data: templates = [], isLoading } = useQuery({
         queryKey: ['overlays', productionId],
@@ -75,10 +77,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                     <p className="text-muted text-sm mt-1">Design and manage your production overlays.</p>
                 </div>
                 <button
-                    onClick={() => {
-                        const name = prompt('Overlay Name:');
-                        if (name) createMutation.mutate(name);
-                    }}
+                    onClick={() => setIsCreateModalOpen(true)}
                     className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-2xl font-bold transition-all"
                 >
                     <Plus size={20} /> New Overlay
@@ -147,6 +146,65 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                     </div>
                 )}
             </div>
+
+            {/* Create Overlay Modal */}
+            {isCreateModalOpen && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-card-bg border border-card-border rounded-xl p-6 w-full max-w-sm shadow-2xl overflow-hidden relative">
+                        <div className="absolute top-0 right-0 p-4">
+                            <button onClick={() => {
+                                setIsCreateModalOpen(false);
+                                setNewOverlayName('');
+                            }} className="text-muted hover:text-foreground transition-colors">
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                            <Plus size={20} className="text-indigo-400" /> New Overlay
+                        </h2>
+                        <form onSubmit={(e) => {
+                            e.preventDefault();
+                            if (newOverlayName.trim()) {
+                                createMutation.mutate(newOverlayName.trim());
+                                setIsCreateModalOpen(false);
+                                setNewOverlayName('');
+                            }
+                        }} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">Overlay Name</label>
+                                <input
+                                    type="text"
+                                    required
+                                    autoFocus
+                                    value={newOverlayName}
+                                    onChange={(e) => setNewOverlayName(e.target.value)}
+                                    className="w-full bg-background border border-card-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                                    placeholder="e.g., Main Lower Third"
+                                />
+                            </div>
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setIsCreateModalOpen(false);
+                                        setNewOverlayName('');
+                                    }}
+                                    className="px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={createMutation.isPending || !newOverlayName.trim()}
+                                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors disabled:opacity-50"
+                                >
+                                    {createMutation.isPending ? 'Creating...' : 'Create'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

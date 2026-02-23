@@ -63,11 +63,11 @@ export const TimelineContainer = ({ productionId }: Props) => {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#1c1917',
+            cancelButtonColor: 'var(--background)',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar',
-            background: '#1c1917',
-            color: '#fff'
+            background: 'var(--card-bg)',
+            color: 'var(--foreground)'
         });
 
         if (result.isConfirmed) {
@@ -81,8 +81,8 @@ export const TimelineContainer = ({ productionId }: Props) => {
                     position: 'top-end',
                     showConfirmButton: false,
                     timer: 3000,
-                    background: '#1c1917',
-                    color: '#fff'
+                    background: 'var(--card-bg)',
+                    color: 'var(--foreground)'
                 });
             } catch (err) {
                 MySwal.fire('Error', 'No se pudo eliminar el bloque', 'error');
@@ -99,8 +99,8 @@ export const TimelineContainer = ({ productionId }: Props) => {
                 title: 'Fin de Escaleta',
                 text: 'No hay más bloques pendientes.',
                 icon: 'info',
-                background: '#1c1917',
-                color: '#fff'
+                background: 'var(--card-bg)',
+                color: 'var(--foreground)'
             });
             return;
         }
@@ -118,8 +118,8 @@ export const TimelineContainer = ({ productionId }: Props) => {
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 3000,
-                background: '#1c1917',
-                color: '#fff'
+                background: 'var(--card-bg)',
+                color: 'var(--foreground)'
             });
         } catch (err) {
             console.error('Smart Next failed:', err);
@@ -134,10 +134,10 @@ export const TimelineContainer = ({ productionId }: Props) => {
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#f97316',
-            cancelButtonColor: '#1c1917',
+            cancelButtonColor: 'var(--background)',
             confirmButtonText: 'Sí, resetear todo',
-            background: '#1c1917',
-            color: '#fff'
+            background: 'var(--card-bg)',
+            color: 'var(--foreground)'
         });
 
         if (result.isConfirmed) {

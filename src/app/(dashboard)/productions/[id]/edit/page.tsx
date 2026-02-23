@@ -153,16 +153,16 @@ export default function EditProductionPage() {
             <div className="mb-6">
                 <Link
                     href={`/productions/${id}`}
-                    className="inline-flex items-center gap-2 text-stone-400 hover:text-white transition-colors text-sm font-medium mb-4"
+                    className="inline-flex items-center gap-2 text-muted hover:text-foreground transition-colors text-sm font-medium mb-4"
                 >
                     <ArrowLeft size={16} />
                     Back to Production
                 </Link>
-                <h1 className="text-2xl font-bold text-white tracking-tight">Edit Production</h1>
-                <p className="text-stone-400 text-sm mt-1">Update your live streaming configuration</p>
+                <h1 className="text-2xl font-bold text-foreground tracking-tight">Edit Production</h1>
+                <p className="text-muted text-sm mt-1">Update your live streaming configuration</p>
             </div>
 
-            <div className="bg-stone-900 border border-stone-800 rounded-xl p-6 shadow-xl">
+            <div className="bg-card-bg border border-card-border rounded-xl p-6 shadow-xl">
                 {error && (
                     <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-md mb-6 text-sm">
                         {error}
@@ -171,32 +171,32 @@ export default function EditProductionPage() {
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-medium text-stone-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                             Production Name <span className="text-red-400">*</span>
                         </label>
                         <input
                             {...register('name')}
                             type="text"
-                            className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-shadow"
+                            className="w-full bg-background border border-card-border rounded-md px-3 py-2 text-foreground placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-shadow"
                         />
                         {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name.message}</p>}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-stone-300 mb-1">Description</label>
+                        <label className="block text-sm font-medium text-foreground mb-1">Description</label>
                         <textarea
                             {...register('description')}
                             rows={3}
-                            className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-shadow resize-none"
+                            className="w-full bg-background border border-card-border rounded-md px-3 py-2 text-foreground placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-shadow resize-none"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-stone-300 mb-2">Engine Type</label>
+                            <label className="block text-sm font-medium text-foreground mb-2">Engine Type</label>
                             <select
                                 {...register('engineType')}
-                                className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-2 text-stone-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-shadow"
+                                className="w-full bg-background border border-card-border rounded-md px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-shadow"
                             >
                                 <option value={EngineType.OBS}>OBS Studio</option>
                                 <option value={EngineType.VMIX}>vMix</option>
@@ -204,10 +204,10 @@ export default function EditProductionPage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-stone-300 mb-2">Status</label>
+                            <label className="block text-sm font-medium text-foreground mb-2">Status</label>
                             <select
                                 {...register('status')}
-                                className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-2 text-stone-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-shadow"
+                                className="w-full bg-background border border-card-border rounded-md px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-shadow"
                             >
                                 <option value={ProductionStatus.SETUP}>Setup</option>
                                 <option value={ProductionStatus.ACTIVE}>Active</option>
@@ -218,38 +218,38 @@ export default function EditProductionPage() {
                     </div>
 
                     {/* Conditional Connection Config */}
-                    <div className="p-4 bg-stone-950/50 border border-stone-800 rounded-lg space-y-4">
-                        <h3 className="text-xs font-bold text-stone-500 uppercase tracking-widest">
+                    <div className="p-4 bg-background border border-card-border rounded-lg space-y-4">
+                        <h3 className="text-xs font-bold text-muted uppercase tracking-widest">
                             {activeEngineType} Connection Settings
                         </h3>
 
                         {activeEngineType === EngineType.OBS && (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="md:col-span-1">
-                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Server IP / Host</label>
+                                    <label className="block text-[10px] font-bold text-muted uppercase mb-1">Server IP / Host</label>
                                     <input
                                         {...register('obsConfig.host')}
                                         type="text"
                                         placeholder="127.0.0.1"
-                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                        className="w-full bg-background border border-card-border rounded-md px-3 py-1.5 text-sm text-foreground focus:ring-1 focus:ring-indigo-500"
                                     />
                                 </div>
                                 <div className="md:col-span-1">
-                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Port</label>
+                                    <label className="block text-[10px] font-bold text-muted uppercase mb-1">Port</label>
                                     <input
                                         {...register('obsConfig.port')}
                                         type="text"
                                         placeholder="4455"
-                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                        className="w-full bg-background border border-card-border rounded-md px-3 py-1.5 text-sm text-foreground focus:ring-1 focus:ring-indigo-500"
                                     />
                                 </div>
                                 <div className="md:col-span-1">
-                                    <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">WS Password</label>
+                                    <label className="block text-[10px] font-bold text-muted uppercase mb-1">WS Password</label>
                                     <input
                                         {...register('obsConfig.password')}
                                         type="password"
                                         placeholder="Optional"
-                                        className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                        className="w-full bg-background border border-card-border rounded-md px-3 py-1.5 text-sm text-foreground focus:ring-1 focus:ring-indigo-500"
                                     />
                                 </div>
                             </div>
@@ -259,27 +259,27 @@ export default function EditProductionPage() {
                             <div className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Server IP / Host</label>
+                                        <label className="block text-[10px] font-bold text-muted uppercase mb-1">Server IP / Host</label>
                                         <input
                                             {...register('vmixConfig.host')}
                                             type="text"
                                             placeholder="127.0.0.1"
-                                            className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                            className="w-full bg-background border border-card-border rounded-md px-3 py-1.5 text-sm text-foreground focus:ring-1 focus:ring-indigo-500"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-stone-600 uppercase mb-1">Port</label>
+                                        <label className="block text-[10px] font-bold text-muted uppercase mb-1">Port</label>
                                         <input
                                             {...register('vmixConfig.port')}
                                             type="text"
                                             placeholder="8088"
-                                            className="w-full bg-stone-950 border border-stone-800 rounded-md px-3 py-1.5 text-sm text-stone-100 focus:ring-1 focus:ring-indigo-500"
+                                            className="w-full bg-background border border-card-border rounded-md px-3 py-1.5 text-sm text-foreground focus:ring-1 focus:ring-indigo-500"
                                         />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex justify-between">
-                                        <label className="block text-[10px] font-bold text-stone-600 uppercase">Polling Interval</label>
+                                        <label className="block text-[10px] font-bold text-muted uppercase">Polling Interval</label>
                                         <span className="text-[10px] font-mono text-indigo-400">{watch('vmixConfig.pollingInterval')}ms</span>
                                     </div>
                                     <input
@@ -288,18 +288,18 @@ export default function EditProductionPage() {
                                         min="100"
                                         max="5000"
                                         step="100"
-                                        className="w-full h-1.5 bg-stone-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                                        className="w-full h-1.5 bg-card-border rounded-lg appearance-none cursor-pointer accent-indigo-500"
                                     />
-                                    <p className="text-[10px] text-stone-500">Frequency of API requests to vMix. Lower values provide faster feedback but increase CPU/Network load.</p>
+                                    <p className="text-[10px] text-muted">Frequency of API requests to vMix. Lower values provide faster feedback but increase CPU/Network load.</p>
                                 </div>
                             </div>
                         )}
                     </div>
 
-                    <div className="pt-4 flex justify-end gap-3 border-t border-stone-800">
+                    <div className="pt-4 flex justify-end gap-3 border-t border-card-border">
                         <Link
                             href={`/productions/${id}`}
-                            className="px-4 py-2 rounded-md text-stone-300 hover:text-white hover:bg-stone-800 transition-colors font-medium text-sm"
+                            className="px-4 py-2 rounded-md text-foreground hover:bg-background transition-colors font-medium text-sm"
                         >
                             Cancel
                         </Link>
@@ -313,8 +313,8 @@ export default function EditProductionPage() {
                     </div>
                 </form>
 
-                <div className="mt-10 pt-10 border-t border-stone-800">
-                    <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+                <div className="mt-10 pt-10 border-t border-card-border">
+                    <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
                         <Users size={18} className="text-indigo-400" />
                         Team Management
                     </h3>
@@ -324,7 +324,7 @@ export default function EditProductionPage() {
                             <select
                                 value={selectedEmail}
                                 onChange={(e) => setSelectedEmail(e.target.value)}
-                                className="w-full bg-stone-950 border border-stone-800 rounded-md px-4 py-2 text-sm text-stone-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 appearance-none"
+                                className="w-full bg-background border border-card-border rounded-md px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-indigo-500 appearance-none"
                             >
                                 <option value="">Select a user to invite...</option>
                                 {globalUsers?.filter(u => !production?.users?.some((pu: any) => pu.userId === u.id)).map(u => (
@@ -344,18 +344,18 @@ export default function EditProductionPage() {
                         </button>
                     </div>
 
-                    <div className="space-y-2 bg-stone-950/50 border border-stone-800 rounded-2xl p-4">
+                    <div className="space-y-2 bg-background border border-card-border rounded-2xl p-4">
                         {production?.users?.map((pu: any) => (
-                            <div key={pu.userId} className="flex items-center justify-between py-2 px-3 hover:bg-stone-800/50 rounded-xl transition-colors group">
+                            <div key={pu.userId} className="flex items-center justify-between py-2 px-3 hover:bg-card-bg/50 rounded-xl transition-colors group">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-xl bg-stone-900 border border-stone-800 flex items-center justify-center text-xs font-black text-stone-500 uppercase">
+                                    <div className="w-10 h-10 rounded-xl bg-card-bg border border-card-border flex items-center justify-center text-xs font-black text-muted uppercase">
                                         {(pu.user.name || pu.user.email).charAt(0)}
                                     </div>
                                     <div>
-                                        <p className="text-sm font-bold text-white">
+                                        <p className="text-sm font-bold text-foreground">
                                             {pu.user.name || pu.user.email}
                                         </p>
-                                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mt-0.5">
+                                        <p className="text-[10px] font-black text-muted uppercase tracking-widest mt-0.5">
                                             {pu.role.name} {pu.role.name === 'ADMIN' && ' (Propio)'}
                                         </p>
                                     </div>
@@ -365,7 +365,7 @@ export default function EditProductionPage() {
                                         type="button"
                                         onClick={() => handleRemoveMember(pu.userId, pu.user.email)}
                                         disabled={isManagingTeam}
-                                        className="w-8 h-8 flex items-center justify-center text-stone-600 hover:text-red-400 hover:bg-red-400/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
+                                        className="w-8 h-8 flex items-center justify-center text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
                                     >
                                         <X size={16} />
                                     </button>

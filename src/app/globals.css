@@ -72,25 +72,22 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #0c0a09;
-    /* stone-950 */
+    background: var(--background);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #292524;
-    /* stone-800 */
+    background: var(--card-border);
     border-radius: 10px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #44403c;
-    /* stone-700 */
+    background: var(--muted);
   }
 
   /* Specific class for components like Escaleta */
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #292524 transparent;
+    scrollbar-color: var(--card-border) transparent;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -98,7 +95,7 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #292524;
+    background: var(--card-border);
     border-radius: 20px;
   }
 

@@ -67,10 +67,10 @@ export default function AdminUsersPage() {
         <div className="max-w-6xl mx-auto space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+                    <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
                         <Users className="text-indigo-400" /> Global User Management
                     </h1>
-                    <p className="text-stone-400 text-sm mt-1">Manage global user accounts and their details.</p>
+                    <p className="text-muted text-sm mt-1">Manage global user accounts and their details.</p>
                 </div>
                 <button
                     onClick={openCreate}
@@ -83,42 +83,42 @@ export default function AdminUsersPage() {
             {/* Modal system */}
             {modalMode && modalMode !== 'view' && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-stone-900 border border-stone-800 rounded-xl p-6 w-full max-w-md shadow-2xl overflow-hidden relative">
+                    <div className="bg-card-bg border border-card-border rounded-xl p-6 w-full max-w-md shadow-2xl overflow-hidden relative">
                         <div className="absolute top-0 right-0 p-4">
-                            <button onClick={closeModals} className="text-stone-500 hover:text-white transition-colors">
+                            <button onClick={closeModals} className="text-muted hover:text-foreground transition-colors">
                                 <X size={20} />
                             </button>
                         </div>
-                        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                             {modalMode === 'create' ? <Plus size={20} className="text-indigo-400" /> : <Edit2 size={20} className="text-indigo-400" />}
                             {modalMode === 'create' ? 'Create New User' : 'Edit User'}
                         </h2>
                         <form onSubmit={handleSave} className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">Name</label>
+                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">Name</label>
                                 <input
                                     type="text"
                                     required
                                     value={form.name}
                                     onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-lg px-3 py-2 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                                    className="w-full bg-background border border-card-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
                                     placeholder="Full Name"
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">Email</label>
+                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">Email</label>
                                 <input
                                     type="email"
                                     required
                                     disabled={modalMode === 'edit'}
                                     value={form.email}
                                     onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-lg px-3 py-2 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none transition-all disabled:opacity-50"
+                                    className="w-full bg-background border border-card-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-indigo-500 outline-none transition-all disabled:opacity-50"
                                     placeholder="user@example.com"
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">
+                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">
                                     {modalMode === 'create' ? 'Password' : 'New Password (optional)'}
                                 </label>
                                 <input
@@ -127,16 +127,16 @@ export default function AdminUsersPage() {
                                     minLength={6}
                                     value={form.password}
                                     onChange={(e) => setForm(f => ({ ...f, password: e.target.value }))}
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-lg px-3 py-2 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                                    className="w-full bg-background border border-card-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
                                     placeholder={modalMode === 'create' ? '••••••••' : 'Leave empty to keep current'}
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">System Role</label>
+                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">System Role</label>
                                 <select
                                     value={form.globalRoleId}
                                     onChange={(e) => setForm(f => ({ ...f, globalRoleId: e.target.value }))}
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-lg px-3 py-2 text-sm text-white focus:ring-1 focus:ring-indigo-500 outline-none transition-all appearance-none"
+                                    className="w-full bg-background border border-card-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-indigo-500 outline-none transition-all appearance-none"
                                 >
                                     <option value="">No Global Role</option>
                                     {roles?.map(role => (
@@ -148,7 +148,7 @@ export default function AdminUsersPage() {
                                 <button
                                     type="button"
                                     onClick={closeModals}
-                                    className="px-4 py-2 text-sm font-medium text-stone-400 hover:text-white transition-colors"
+                                    className="px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors"
                                 >
                                     Cancel
                                 </button>
@@ -169,20 +169,20 @@ export default function AdminUsersPage() {
             {/* View Modal */}
             {modalMode === 'view' && selectedUser && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-stone-900 border border-stone-800 rounded-xl p-8 w-full max-w-lg shadow-2xl relative">
+                    <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-lg shadow-2xl relative">
                         <div className="absolute top-0 right-0 p-4">
-                            <button onClick={closeModals} className="text-stone-500 hover:text-white transition-colors">
+                            <button onClick={closeModals} className="text-muted hover:text-foreground transition-colors">
                                 <X size={20} />
                             </button>
                         </div>
 
-                        <div className="flex items-center gap-6 mb-8 pb-8 border-b border-stone-800">
+                        <div className="flex items-center gap-6 mb-8 pb-8 border-b border-card-border">
                             <div className="w-20 h-20 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-3xl font-bold text-indigo-400">
                                 {selectedUser.name?.[0]?.toUpperCase() || 'U'}
                             </div>
                             <div>
-                                <h2 className="text-2xl font-bold text-white mb-1">{selectedUser.name}</h2>
-                                <div className="flex items-center gap-2 text-stone-400">
+                                <h2 className="text-2xl font-bold text-foreground mb-1">{selectedUser.name}</h2>
+                                <div className="flex items-center gap-2 text-muted">
                                     <Shield size={16} className="text-indigo-400" />
                                     <span className="text-sm font-medium">{selectedUser.globalRole?.name || 'Standard User'}</span>
                                 </div>
@@ -192,32 +192,32 @@ export default function AdminUsersPage() {
                         <div className="grid grid-cols-1 gap-6">
                             <div className="space-y-4">
                                 <div className="flex items-center gap-4 group">
-                                    <div className="w-10 h-10 rounded-lg bg-stone-950 border border-stone-800 flex items-center justify-center text-stone-500 group-hover:text-indigo-400 transition-colors">
+                                    <div className="w-10 h-10 rounded-lg bg-background border border-card-border flex items-center justify-center text-muted group-hover:text-indigo-400 transition-colors">
                                         <Mail size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Email Address</p>
-                                        <p className="text-sm text-stone-200">{selectedUser.email}</p>
+                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Email Address</p>
+                                        <p className="text-sm text-foreground">{selectedUser.email}</p>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-4 group">
-                                    <div className="w-10 h-10 rounded-lg bg-stone-950 border border-stone-800 flex items-center justify-center text-stone-500 group-hover:text-indigo-400 transition-colors">
+                                    <div className="w-10 h-10 rounded-lg bg-background border border-card-border flex items-center justify-center text-muted group-hover:text-indigo-400 transition-colors">
                                         <Calendar size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Member Since</p>
-                                        <p className="text-sm text-stone-200">{new Date(selectedUser.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })}</p>
+                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Member Since</p>
+                                        <p className="text-sm text-foreground">{new Date(selectedUser.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })}</p>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-4 group">
-                                    <div className="w-10 h-10 rounded-lg bg-stone-950 border border-stone-800 flex items-center justify-center text-stone-500 group-hover:text-indigo-400 transition-colors">
+                                    <div className="w-10 h-10 rounded-lg bg-background border border-card-border flex items-center justify-center text-muted group-hover:text-indigo-400 transition-colors">
                                         <Fingerprint size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">System Identifier</p>
-                                        <p className="text-xs text-stone-400 font-mono">{selectedUser.id}</p>
+                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">System Identifier</p>
+                                        <p className="text-xs text-muted font-mono">{selectedUser.id}</p>
                                     </div>
                                 </div>
                             </div>
@@ -235,32 +235,32 @@ export default function AdminUsersPage() {
                 </div>
             )}
 
-            <div className="bg-stone-900 border border-stone-800 rounded-xl overflow-hidden shadow-xl">
+            <div className="bg-card-bg border border-card-border rounded-xl overflow-hidden shadow-xl">
                 <table className="w-full text-left border-collapse">
-                    <thead className="bg-stone-900">
-                        <tr className="border-b border-stone-800 text-[10px] font-bold text-stone-500 uppercase tracking-widest">
+                    <thead className="bg-card-bg">
+                        <tr className="border-b border-card-border text-[10px] font-bold text-muted uppercase tracking-widest">
                             <th className="py-4 px-6">User</th>
                             <th className="py-4 px-6">Global Role</th>
                             <th className="py-4 px-6">Created At</th>
                             <th className="py-4 px-6 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-stone-800">
+                    <tbody className="divide-y divide-card-border">
                         {users?.map(user => (
                             <tr key={user.id} className="hover:bg-indigo-500/5 transition-colors">
                                 <td className="py-4 px-6">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-stone-800 border border-stone-700 flex items-center justify-center text-xs font-bold text-indigo-400/60">
+                                        <div className="w-8 h-8 rounded-full bg-background border border-card-border flex items-center justify-center text-xs font-bold text-indigo-400/60">
                                             {user.name?.[0]?.toUpperCase() || 'U'}
                                         </div>
                                         <div>
                                             <button
                                                 onClick={() => openView(user)}
-                                                className="text-sm font-medium text-white hover:text-indigo-400 transition-colors text-left block"
+                                                className="text-sm font-medium text-foreground hover:text-indigo-400 transition-colors text-left block"
                                             >
                                                 {user.name}
                                             </button>
-                                            <p className="text-[11px] text-stone-500 font-mono tracking-tight">{user.email}</p>
+                                            <p className="text-[11px] text-muted font-mono tracking-tight">{user.email}</p>
                                         </div>
                                     </div>
                                 </td>
@@ -270,24 +270,24 @@ export default function AdminUsersPage() {
                                             <Shield size={10} /> {user.globalRole.name}
                                         </span>
                                     ) : (
-                                        <span className="text-[10px] text-stone-600 italic">No Role</span>
+                                        <span className="text-[10px] text-muted italic">No Role</span>
                                     )}
                                 </td>
-                                <td className="py-4 px-6 text-sm text-stone-400 font-mono text-[10px]">
+                                <td className="py-4 px-6 text-sm text-muted font-mono text-[10px]">
                                     {new Date(user.createdAt).toLocaleDateString()}
                                 </td>
                                 <td className="py-4 px-6 text-right">
                                     <div className="flex items-center justify-end gap-1">
                                         <button
                                             onClick={() => openView(user)}
-                                            className="p-2 text-stone-500 hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-colors"
+                                            className="p-2 text-muted hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-colors"
                                             title="View Details"
                                         >
                                             <Info size={16} />
                                         </button>
                                         <button
                                             onClick={() => openEdit(user)}
-                                            className="p-2 text-stone-500 hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-colors"
+                                            className="p-2 text-muted hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-colors"
                                             title="Edit User"
                                         >
                                             <Edit2 size={16} />
@@ -298,7 +298,7 @@ export default function AdminUsersPage() {
                                                     deleteMutation.mutate(user.id);
                                                 }
                                             }}
-                                            className="p-2 text-stone-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                                            className="p-2 text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                                             title="Delete User"
                                         >
                                             <Trash2 size={16} />
@@ -309,7 +309,7 @@ export default function AdminUsersPage() {
                         ))}
                         {users?.length === 0 && (
                             <tr>
-                                <td colSpan={4} className="py-12 text-center text-stone-500 text-sm">
+                                <td colSpan={4} className="py-12 text-center text-muted text-sm">
                                     No users found in the system.
                                 </td>
                             </tr>
