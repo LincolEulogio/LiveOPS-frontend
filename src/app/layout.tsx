@@ -23,22 +23,26 @@ export const metadata: Metadata = {
   description: 'Live Streaming Multi-tenant Control System',
 };
 
+import { ThemeProvider } from '@/shared/providers/ThemeProvider';
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-stone-950 text-stone-50 h-screen w-screen overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-screen overflow-hidden`}
       >
         <ErrorBoundary>
           <ReactQueryProvider>
-            <AudioProvider>
-              <SetupRedirect />
-              <SocketProvider>{children}</SocketProvider>
-            </AudioProvider>
+            <ThemeProvider>
+              <AudioProvider>
+                <SetupRedirect />
+                <SocketProvider>{children}</SocketProvider>
+              </AudioProvider>
+            </ThemeProvider>
           </ReactQueryProvider>
         </ErrorBoundary>
       </body>

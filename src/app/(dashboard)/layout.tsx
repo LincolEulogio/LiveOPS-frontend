@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { LogOut, User as UserIcon, Server, Users, Shield, Info } from 'lucide-react';
+import { LogOut, User as UserIcon, Server, Users, Shield, Info, Layers } from 'lucide-react';
 import Link from 'next/link';
 import { useAppStore } from '@/shared/store/app.store';
 import { authService } from '@/features/auth/api/auth.service';
@@ -71,6 +71,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Info size={18} />
             Operational Hub
           </Link>
+          {activeProductionId && (
+            <Link
+              href={`/productions/${activeProductionId}/overlays`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/overlays') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+            >
+              <Layers size={18} />
+              Graphics Constructor
+            </Link>
+          )}
           <Link
             href="/profile"
             className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname === '/profile' ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}

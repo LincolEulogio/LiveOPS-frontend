@@ -34,6 +34,7 @@ import { cn } from '@/shared/utils/cn';
 import { HealthMonitor } from '../../health/components/HealthMonitor';
 import { IntercomTemplate, CrewMember } from '../types/intercom.types';
 import { Production } from '@/features/productions/types/production.types';
+import { ThemeSwitcher } from '@/shared/components/ThemeSwitcher';
 
 export const DashboardView = () => {
     const router = useRouter();
@@ -140,6 +141,7 @@ export const DashboardView = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
+                    <ThemeSwitcher />
                     <TemplateManager productionId={activeProductionId} />
 
                     <button
