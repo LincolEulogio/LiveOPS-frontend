@@ -12,7 +12,7 @@ import { apiClient } from '@/shared/api/api.client';
 import { useAppStore } from '@/shared/store/app.store';
 
 export const DeviceView = () => {
-    const { activeAlert } = useIntercomStore();
+    const { activeAlert, history } = useIntercomStore();
     const { acknowledgeAlert } = useIntercom();
     const user = useAuthStore((state) => state.user);
     const activeProductionId = useAppStore((state) => state.activeProductionId);
@@ -37,9 +37,10 @@ export const DeviceView = () => {
     // Find the currently active block
     const activeBlock = timelineBlocks.find((b) => b.status === 'ACTIVE');
 
-    // Get the last coordinator who sent a message from history
-    const history = useIntercomStore((state) => state.history);
-    const lastCoordinator = history.length > 0 ? history[0].senderName : 'Esperando...';
+    // Filter history for messages targeting this user (either broadcast or direct chat)
+    const userHistory = history.filter(h =>
+        h.senderName || h.id.includes('sys-') // Basic filter to show incoming messages for now
+    ).slice(0, 10); // Show last 10
 
     const handleSendCustomMessage = (e: React.FormEvent) => {
         e.preventDefault();
@@ -77,7 +78,7 @@ export const DeviceView = () => {
                     </button>
                 </div>
 
-                <div className="w-24 h-24 bg-stone-900/50 rounded-full flex items-center justify-center mb-10 border border-white/5 shadow-2xl relative">
+                <div className="w-24 h-24 bg-stone-900/50 rounded-full flex items-center justify-center mb-8 border border-white/5 shadow-2xl relative">
                     <div className="absolute inset-0 rounded-full border border-indigo-500/20 animate-ping" />
                     <Bell className="text-stone-700" size={40} />
                 </div>
@@ -104,7 +105,7 @@ export const DeviceView = () => {
                     </div>
                 </div>
 
-                <div className="bg-stone-900 border border-stone-800 px-6 py-4 rounded-2xl flex items-center gap-4 w-full max-w-xs shadow-2xl">
+                <div className="bg-stone-900 border border-stone-800 px-6 py-4 rounded-2xl flex items-center gap-4 w-full max-w-sm shadow-2xl mb-8">
                     <div className="bg-indigo-500/20 p-2 text-indigo-400 rounded-xl">
                         <Shield size={20} />
                     </div>
@@ -114,47 +115,71 @@ export const DeviceView = () => {
                     </div>
                 </div>
 
-                <p className="mt-12 text-stone-600 text-[10px] uppercase font-bold tracking-widest max-w-[200px] leading-loose">
+                {/* Inline Chat History Panel */}
+                <div className="w-full max-w-sm bg-stone-900/30 border border-stone-800/50 rounded-3xl flex flex-col h-[280px] overflow-hidden">
+                    <div className="p-3 border-b border-stone-800/50 bg-stone-900/50 flex justify-between items-center">
+                        <h4 className="text-[10px] uppercase font-black tracking-widest text-indigo-400 flex items-center gap-2">
+                            <MessageCircle size={12} /> Mensajes Recientes
+                        </h4>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                        {userHistory.length > 0 ? (
+                            [...userHistory].reverse().map((msg, i) => (
+                                <AnimatePresence key={`msg-${i}`}>
+                                    <motion.div
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        className="bg-black/40 border border-white/5 rounded-2xl p-3 flex flex-col gap-1"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-stone-500">{msg.senderName || 'Control'}</span>
+                                            <span className="text-[8px] font-bold text-stone-600">
+                                                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-white/90 font-medium leading-tight">
+                                            {msg.message}
+                                        </p>
+                                    </motion.div>
+                                </AnimatePresence>
+                            ))
+                        ) : (
+                            <div className="h-full flex flex-col items-center justify-center opacity-30 text-center">
+                                <MessageCircle size={24} className="mb-2 text-stone-600" />
+                                <p className="text-[10px] font-black uppercase tracking-widest text-stone-500">No hay mensajes directos</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Quick Reply Box */}
+                    <div className="p-3 border-t border-stone-800/50 bg-stone-900/50 mt-auto">
+                        <form
+                            onSubmit={handleSendCustomMessage}
+                            className="flex items-center gap-2 bg-black/40 rounded-xl p-1.5 border border-white/5 focus-within:border-indigo-500/50 transition-colors"
+                        >
+                            <input
+                                type="text"
+                                value={customMessage}
+                                onChange={(e) => setCustomMessage(e.target.value)}
+                                placeholder="Responder a control..."
+                                className="flex-1 bg-transparent px-3 py-1.5 text-xs text-white focus:outline-none placeholder:text-stone-600 font-bold"
+                            />
+                            <button
+                                type="submit"
+                                disabled={!customMessage.trim()}
+                                className="bg-indigo-600 hover:bg-indigo-500 disabled:bg-stone-800 disabled:text-stone-500 text-white p-2 rounded-lg transition-colors active:scale-95"
+                            >
+                                <Send size={14} />
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <p className="mt-8 text-stone-600 text-[10px] uppercase font-bold tracking-widest max-w-[200px] leading-loose text-center">
                     Mantén la pantalla encendida. El dispositivo vibrará al recibir alertas.
                 </p>
 
-                {/* Chat Modal */}
-                <AnimatePresence>
-                    {isChatOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 50 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 50 }}
-                            className="absolute bottom-6 left-6 right-6 bg-stone-900 border border-stone-800 rounded-3xl p-6 shadow-2xl z-50 flex flex-col"
-                        >
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2">
-                                    <MessageCircle size={14} /> Enviar Mensaje
-                                </h3>
-                                <button onClick={() => setIsChatOpen(false)} className="text-stone-500 hover:text-white transition-colors bg-stone-800/50 p-1.5 rounded-full">
-                                    <X size={16} />
-                                </button>
-                            </div>
-                            <form onSubmit={handleSendCustomMessage} className="flex flex-col gap-3">
-                                <input
-                                    type="text"
-                                    value={customMessage}
-                                    onChange={(e) => setCustomMessage(e.target.value)}
-                                    placeholder="Escribe tu mensaje al master..."
-                                    className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 placeholder:text-stone-600 font-bold"
-                                    autoFocus
-                                />
-                                <button
-                                    type="submit"
-                                    disabled={!customMessage.trim()}
-                                    className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-stone-800 disabled:text-stone-500 text-white rounded-xl py-3 font-black text-xs uppercase tracking-widest transition-colors flex items-center justify-center gap-2"
-                                >
-                                    Enviar al Control
-                                </button>
-                            </form>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
             </div>
         );
     }

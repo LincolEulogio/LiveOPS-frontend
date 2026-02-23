@@ -34,13 +34,24 @@ interface CrewCardProps {
         lastAck?: {
             message: string;
             timestamp: string;
-            type: 'OK' | 'PROBLEMA' | 'CHECK' | 'LISTO' | 'NO_PONCHE';
+            type: string;
         };
         currentStatus?: string;
     };
     templates: any[];
     onSendCommand: (template: any) => void;
 }
+
+const getAckDisplay = (type: string) => {
+    const t = type.toUpperCase().trim();
+    if (t === 'PROBLEMA') return { icon: AlertCircle, color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/20', text: 'PROBLEMA' };
+    if (t === 'PONCHE NO' || t.includes('PONCHE')) return { icon: AlertCircle, color: 'text-orange-500', bg: 'bg-orange-500/10', border: 'border-orange-500/20', text: 'PONCHE NO' };
+    if (t === 'CHECK') return { icon: Eye, color: 'text-yellow-500', bg: 'bg-yellow-500/10', border: 'border-yellow-500/20', text: 'CHECK' };
+    if (t === 'LISTO' || t === 'CONFIRMADO' || t === 'OK') return { icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/20', text: 'CONFIRMADO' };
+    if (t.startsWith('MENSAJE:')) return { icon: MessageCircle, color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/20', text: t.substring(0, 15) + (t.length > 15 ? '...' : '') };
+
+    return { icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/20', text: type.substring(0, 12) };
+};
 
 const getIconForTemplate = (name: string, color: string) => {
     const n = name.toUpperCase();
@@ -60,6 +71,7 @@ const getIconForTemplate = (name: string, color: string) => {
 export const CrewCard = ({ productionId, member, templates, onSendCommand }: CrewCardProps) => {
     const isAcked = member.lastAck?.timestamp;
     const currentStatus = (member.currentStatus || 'IDLE').toUpperCase();
+    const [chatMsg, setChatMsg] = React.useState('');
 
     return (
         <div className={`bg-stone-950 border ${member.isOnline ? 'border-stone-800' : 'border-stone-900 opacity-60'} rounded-3xl overflow-hidden shadow-2xl transition-all hover:border-indigo-500/40 group relative`}>
@@ -119,16 +131,22 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                             {currentStatus}
                         </span>
                     </div>
-                    {member.lastAck && (
-                        <motion.div
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="flex items-center gap-1.5 bg-green-500/10 px-2 py-1 rounded-lg border border-green-500/20"
-                        >
-                            <CheckCircle2 size={12} className="text-green-500" />
-                            <span className="text-[10px] font-black text-green-500 uppercase tracking-widest">CONFIRMADO</span>
-                        </motion.div>
-                    )}
+                    {member.lastAck && (() => {
+                        const display = getAckDisplay(member.lastAck.type);
+                        const Icon = display.icon;
+                        return (
+                            <motion.div
+                                initial={{ opacity: 0, x: 10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className={`flex items-center gap-1.5 ${display.bg} px-2 py-1 rounded-lg border ${display.border} max-w-[120px]`}
+                            >
+                                <Icon size={12} className={`shrink-0 ${display.color}`} />
+                                <span className={`text-[9px] font-black ${display.color} uppercase tracking-widest truncate`} title={member.lastAck.type}>
+                                    {display.text}
+                                </span>
+                            </motion.div>
+                        );
+                    })()}
                 </div>
             </div>
 
@@ -175,6 +193,35 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                         <span className="text-[10px] font-black uppercase tracking-widest text-stone-700">Sin Plantillas</span>
                     </div>
                 )}
+            </div>
+
+            {/* Direct Chat / Commands */}
+            <div className="px-4 pb-4">
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        if (chatMsg.trim()) {
+                            onSendCommand({ name: `Mensaje: ${chatMsg.trim()}`, id: 'chat', color: '#6366f1' });
+                            setChatMsg('');
+                        }
+                    }}
+                    className="flex items-center gap-2 bg-stone-900 border border-stone-800 rounded-xl p-2 focus-within:border-indigo-500/50 transition-colors"
+                >
+                    <input
+                        type="text"
+                        value={chatMsg}
+                        onChange={(e) => setChatMsg(e.target.value)}
+                        placeholder={`Enviar mensaje a ${member.userName.split(' ')[0]}...`}
+                        className="flex-1 bg-transparent px-2 text-[10px] text-white focus:outline-none placeholder:text-stone-600 font-bold"
+                    />
+                    <button
+                        type="submit"
+                        disabled={!chatMsg.trim() || !member.isOnline}
+                        className="bg-indigo-600 hover:bg-indigo-500 disabled:bg-stone-800 disabled:text-stone-500 text-white p-1.5 rounded-lg transition-colors active:scale-95"
+                    >
+                        <MessageCircle size={14} />
+                    </button>
+                </form>
             </div>
         </div>
     );

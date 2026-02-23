@@ -76,10 +76,10 @@ export const DashboardView = () => {
                 roleName: pu.role.name,
                 isOnline,
                 currentStatus: onlineData?.status || 'IDLE',
-                lastAck: (onlineData?.status && onlineData.status.startsWith('OK:')) ? {
-                    message: onlineData.status,
+                lastAck: (onlineData?.status && onlineData.status.startsWith('ACK:')) ? {
+                    message: onlineData.status.substring(4),
                     timestamp: new Date().toISOString(),
-                    type: 'OK'
+                    type: onlineData.status.substring(4)
                 } : undefined
             };
         });
@@ -195,7 +195,7 @@ export const DashboardView = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
-                                className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6"
+                                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
                             >
                                 {crewMembers.map((member: any) => (
                                     <CrewCard
