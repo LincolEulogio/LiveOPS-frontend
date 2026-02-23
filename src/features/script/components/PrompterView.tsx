@@ -6,9 +6,10 @@ import Collaboration from '@tiptap/extension-collaboration';
 import { TimelineTag } from '../extensions/TimelineTag';
 import { useScript } from '../hooks/useScript';
 import { useState, useEffect, useRef } from 'react';
-import { Play, Pause, FastForward, Rewind, Maximize, Minimize } from 'lucide-react';
+import { Play, Pause, FastForward, Rewind, Maximize, Minimize, ArrowLeft, Plus, Minus } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import * as Y from 'yjs';
+import Link from 'next/link';
 
 interface Props {
     productionId: string;
@@ -16,13 +17,34 @@ interface Props {
 
 export const PrompterView = ({ productionId }: Props) => {
     const { doc, awareness } = useScript(productionId);
-    const [fontSize, setFontSize] = useState(72);
+
+    // Size persistence
+    const [fontSize, setFontSize] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('prompter_font_size');
+            return saved ? parseInt(saved, 10) : 72;
+        }
+        return 72;
+    });
+
+    useEffect(() => {
+        localStorage.setItem('prompter_font_size', fontSize.toString());
+    }, [fontSize]);
+
     const [scrollSpeed, setScrollSpeed] = useState(0); // pixels per frame
     const [isPlaying, setIsPlaying] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const requestRef = useRef<number | undefined>(undefined);
+    const scrollPosRef = useRef(0); // High-precision scroll position
+
+    // Sync ref when mounting or when manual scrolling occurs
+    const handleScroll = () => {
+        if (containerRef.current && !isPlaying) {
+            scrollPosRef.current = containerRef.current.scrollTop;
+        }
+    };
 
     const editor = useEditor({
         extensions: [
@@ -33,6 +55,7 @@ export const PrompterView = ({ productionId }: Props) => {
             }),
         ],
         editable: false, // Prompter is purely read-only
+        immediatelyRender: false, // Fix for SSR hydration
         editorProps: {
             attributes: {
                 class: 'prose prose-invert prose-p:my-8 prose-headings:my-12 prose-h1:text-[1.5em] prose-h2:text-[1.3em] max-w-none focus:outline-none',
@@ -49,12 +72,17 @@ export const PrompterView = ({ productionId }: Props) => {
     // Auto-scroll loop
     const animate = () => {
         if (isPlaying && scrollSpeed > 0 && containerRef.current) {
-            containerRef.current.scrollTop += scrollSpeed;
+            scrollPosRef.current += scrollSpeed;
+            containerRef.current.scrollTop = scrollPosRef.current;
         }
         requestRef.current = requestAnimationFrame(animate);
     };
 
     useEffect(() => {
+        // Sync the ref with actual position when starting playback
+        if (isPlaying && containerRef.current) {
+            scrollPosRef.current = containerRef.current.scrollTop;
+        }
         requestRef.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(requestRef.current!);
     }, [isPlaying, scrollSpeed]);
@@ -78,12 +106,27 @@ export const PrompterView = ({ productionId }: Props) => {
     return (
         <div
             ref={containerRef}
-            className="h-screen bg-black text-white overflow-y-auto overflow-x-hidden relative"
+            onScroll={handleScroll}
+            className="h-[calc(100vh-140px)] bg-stone-950 text-white overflow-y-auto overflow-x-hidden relative rounded-3xl border border-stone-800 shadow-2xl transition-all"
             style={{ fontSize: `${fontSize}px`, lineHeight: 1.4 }}
         >
+            {/* Header / Back Link */}
+            <div className="sticky top-0 left-0 right-0 p-4 z-40 bg-stone-950/80 backdrop-blur-md border-b border-stone-800 flex items-center justify-between">
+                <Link
+                    href={`/productions/${productionId}`}
+                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-stone-500 hover:text-indigo-400 transition-colors"
+                >
+                    <ArrowLeft size={14} /> Back to Dashboard
+                </Link>
+                <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[10px] font-black text-stone-600 uppercase tracking-widest">Prompter Mode</span>
+                </div>
+            </div>
+
             {/* Scroll Indication Line (Eye Level) */}
-            <div className="fixed top-1/3 left-0 right-0 h-1 bg-red-600/30 z-0 pointer-events-none" />
-            <div className="fixed top-1/3 left-4 -mt-3 w-0 h-0 border-t-[12px] border-t-transparent border-l-[16px] border-l-red-600 border-b-[12px] border-b-transparent z-10 opacity-50" />
+            <div className="absolute top-1/2 left-0 right-0 h-1 bg-red-600/30 z-0 pointer-events-none" />
+            <div className="absolute top-1/2 left-4 -mt-3 w-0 h-0 border-t-[12px] border-t-transparent border-l-[16px] border-l-red-600 border-b-[12px] border-b-transparent z-10 opacity-50" />
 
             {/* Main Content */}
             <div className="max-w-4xl mx-auto px-16 pt-[33vh] pb-[66vh] relative z-10 w-full font-sans font-bold tracking-wide">
@@ -104,9 +147,19 @@ export const PrompterView = ({ productionId }: Props) => {
                 <div className="flex flex-col items-center gap-1">
                     <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Size</span>
                     <div className="flex items-center gap-2">
-                        <button onClick={() => setFontSize(f => Math.max(24, f - 4))} className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-300">-</button>
+                        <button
+                            onClick={() => setFontSize(f => Math.max(24, f - 4))}
+                            className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-300 transition-colors"
+                        >
+                            <Minus size={14} />
+                        </button>
                         <span className="w-12 text-center text-sm font-mono text-white">{fontSize}</span>
-                        <button onClick={() => setFontSize(f => Math.min(150, f + 4))} className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-300">+</button>
+                        <button
+                            onClick={() => setFontSize(f => Math.min(150, f + 4))}
+                            className="w-8 h-8 flex items-center justify-center bg-stone-800 rounded-lg hover:bg-stone-700 text-stone-300 transition-colors"
+                        >
+                            <Plus size={14} />
+                        </button>
                     </div>
                 </div>
 
@@ -114,25 +167,40 @@ export const PrompterView = ({ productionId }: Props) => {
 
                 <div className="flex items-center gap-3">
                     <button
-                        onClick={() => { setScrollSpeed(s => Math.max(0, s - 0.5)); if (scrollSpeed <= 0.5) setIsPlaying(false); }}
-                        className="p-3 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-300"
+                        onClick={() => {
+                            const nextSpeed = Math.max(0, scrollSpeed - 0.5);
+                            setScrollSpeed(nextSpeed);
+                            if (nextSpeed === 0) setIsPlaying(false);
+                        }}
+                        className="p-3 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-300 transition-colors"
+                        title="Reduce Speed"
                     >
                         <Rewind size={20} />
                     </button>
 
                     <button
-                        onClick={() => setIsPlaying(!isPlaying)}
+                        onClick={() => {
+                            if (!isPlaying && scrollSpeed === 0) {
+                                setScrollSpeed(2.0); // Default start speed
+                            }
+                            setIsPlaying(!isPlaying);
+                        }}
                         className={cn(
                             "w-14 h-14 flex items-center justify-center rounded-2xl shadow-lg transition-all",
                             isPlaying ? "bg-red-500 hover:bg-red-600 text-white" : "bg-emerald-500 hover:bg-emerald-600 text-white"
                         )}
+                        title={isPlaying ? "Pause" : "Play"}
                     >
                         {isPlaying ? <Pause size={28} /> : <Play size={28} className="translate-x-0.5" />}
                     </button>
 
                     <button
-                        onClick={() => { setScrollSpeed(s => s === 0 ? 1 : s + 0.5); setIsPlaying(true); }}
-                        className="p-3 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-300"
+                        onClick={() => {
+                            setScrollSpeed(s => Math.min(10, s === 0 ? 1 : s + 0.5));
+                            setIsPlaying(true);
+                        }}
+                        className="p-3 bg-stone-800 hover:bg-stone-700 rounded-xl text-stone-300 transition-colors"
+                        title="Increase Speed"
                     >
                         <FastForward size={20} />
                     </button>

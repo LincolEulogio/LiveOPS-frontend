@@ -43,7 +43,11 @@ export const GuestRoom = ({ productionId }: GuestRoomProps) => {
     const initMedia = useCallback(async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 1280, height: 720, frameRate: 30 },
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    frameRate: { ideal: 30 }
+                },
                 audio: true
             });
             setLocalStream(stream);

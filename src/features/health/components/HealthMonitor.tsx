@@ -55,14 +55,18 @@ export const HealthMonitor = ({ productionId }: Props) => {
                         <Cpu size={12} className="text-indigo-400" />
                         <span className="text-[8px] font-bold text-stone-500 uppercase tracking-widest">CPU Engine</span>
                     </div>
-                    <p className="text-xl font-black text-white">{lastStats?.cpuUsage.toFixed(1)}%</p>
+                    <p className="text-xl font-black text-white">
+                        {lastStats?.cpuUsage !== undefined ? lastStats.cpuUsage.toFixed(1) : '--'}%
+                    </p>
                 </div>
                 <div className="bg-stone-950/40 border border-stone-800 p-3 rounded-2xl">
                     <div className="flex items-center gap-2 mb-1">
                         <Zap size={12} className="text-amber-400" />
                         <span className="text-[8px] font-bold text-stone-500 uppercase tracking-widest">FPS Reales</span>
                     </div>
-                    <p className="text-xl font-black text-white">{lastStats?.fps.toFixed(0)}</p>
+                    <p className="text-xl font-black text-white">
+                        {lastStats?.fps !== undefined ? lastStats.fps.toFixed(0) : '--'}
+                    </p>
                 </div>
             </div>
 
