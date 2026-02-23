@@ -5,19 +5,20 @@ import { useState, useEffect, useCallback } from 'react';
 // Stream Deck Vendor ID for filtering
 const ELGATO_VID = 0x0fd9;
 
-interface WebMIDIDevice {
-    id: string;
-    name?: string;
-    state: string;
-    onmidimessage: ((message: any) => void) | null;
-}
-
 interface WebHIDDevice {
     productId: number;
     productName?: string;
     opened: boolean;
     open: () => Promise<void>;
-    addEventListener: (type: string, listener: (event: { data: DataView }) => void) => void;
+    addEventListener: (type: string, listener: (event: any) => void) => void;
+}
+
+interface NavigatorWithHID {
+    hid: {
+        getDevices: () => Promise<WebHIDDevice[]>;
+        requestDevice: (options: { filters: { vendorId?: number }[] }) => Promise<WebHIDDevice[]>;
+        addEventListener: (type: string, listener: (event: any) => void) => void;
+    };
 }
 
 export interface HardwareDevice {
@@ -25,7 +26,7 @@ export interface HardwareDevice {
     type: 'hid' | 'midi';
     name: string;
     connected: boolean;
-    rawDevice?: WebMIDIDevice | WebHIDDevice;
+    rawDevice?: any; // Native browser types are hard to unifiy here
 }
 
 export interface HardwareEvent {
@@ -102,7 +103,7 @@ export const useHardware = () => {
         }
 
         try {
-            const hidDevices = await (navigator as any).hid.getDevices() as WebHIDDevice[];
+            const hidDevices = await (navigator as unknown as NavigatorWithHID).hid.getDevices();
 
             const setupHIDDevice = (device: WebHIDDevice) => {
                 if (!device.opened) {
@@ -155,13 +156,13 @@ export const useHardware = () => {
 
             updateHIDDevices(hidDevices);
 
-            (navigator as any).hid.addEventListener('connect', () => {
-                // Re-fetch to update list
-                (navigator as any).hid.getDevices().then((d: WebHIDDevice[]) => updateHIDDevices(d));
+            const nav = (navigator as unknown as NavigatorWithHID);
+            nav.hid.addEventListener('connect', () => {
+                nav.hid.getDevices().then((d) => updateHIDDevices(d));
             });
 
-            (navigator as any).hid.addEventListener('disconnect', () => {
-                (navigator as any).hid.getDevices().then((d: WebHIDDevice[]) => updateHIDDevices(d));
+            nav.hid.addEventListener('disconnect', () => {
+                nav.hid.getDevices().then((d) => updateHIDDevices(d));
             });
 
         } catch (err) {
@@ -182,7 +183,7 @@ export const useHardware = () => {
             return;
         }
         try {
-            await (navigator as any).hid.requestDevice({ filters: [] }); // Or filter by ELGATO_VID
+            await (navigator as unknown as NavigatorWithHID).hid.requestDevice({ filters: [] }); // Or filter by ELGATO_VID
             // Re-run init to pick up the new device
             initHID();
         } catch (err) {

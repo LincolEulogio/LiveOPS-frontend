@@ -1,5 +1,18 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/features/auth/store/auth.store';
+
+// Extension to handle custom _retry flag in Axios config
+interface CustomInternalConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
+
+interface CustomAxiosInstance extends AxiosInstance {
+  get<T = unknown, R = T, D = unknown>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  post<T = unknown, R = T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  put<T = unknown, R = T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  patch<T = unknown, R = T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  delete<T = unknown, R = T, D = unknown>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+}
 
 // Create a configured axios instance
 const instance = axios.create({
@@ -7,7 +20,7 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Required to send HTTP-only cookies if we were using them
+  withCredentials: true,
 });
 
 // Request interceptor: Attach JWT token from memory
@@ -50,15 +63,17 @@ instance.interceptors.response.use(
     return response.data; // simplify payload for callers
   },
   async (error: AxiosError) => {
-    const originalRequest = error.config as any; // Axios internal config is hard to type precisely here
+    const originalRequest = error.config as CustomInternalConfig;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise(function (resolve, reject) {
           failedQueue.push({ resolve, reject });
         })
           .then((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
+            if (originalRequest.headers) {
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+            }
             return instance(originalRequest);
           })
           .catch((err) => {
@@ -70,9 +85,8 @@ instance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Assume backend has a /auth/refresh endpoint that checks cookies/rotation
         const response = await axios.post(
-          `${apiClient.defaults.baseURL}/auth/refresh`,
+          `${instance.defaults.baseURL}/auth/refresh`,
           {},
           { withCredentials: true }
         );
@@ -82,13 +96,14 @@ instance.interceptors.response.use(
         useAuthStore.getState().setAuth(newToken, response.data.user);
 
         processQueue(null, newToken);
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        if (originalRequest.headers) {
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        }
 
         return instance(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
         useAuthStore.getState().clearAuth(); // Force logout
-        // Optionally redirect to login via window.location if not handled by components
         if (typeof window !== 'undefined') {
           window.location.href = '/login';
         }
@@ -109,16 +124,8 @@ instance.interceptors.response.use(
       message = JSON.stringify(message);
     }
 
-    return Promise.reject(new Error(message));
+    return Promise.reject(new Error(typeof message === 'string' ? message : JSON.stringify(message)));
   }
 );
-
-interface CustomAxiosInstance extends AxiosInstance {
-  get<T = any, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  post<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  put<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  patch<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  delete<T = any, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-}
 
 export const apiClient = instance as CustomAxiosInstance;

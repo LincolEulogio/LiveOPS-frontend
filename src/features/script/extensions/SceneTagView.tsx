@@ -1,11 +1,10 @@
-import React from 'react';
-import { NodeViewWrapper } from '@tiptap/react';
-import { Video, Zap } from 'lucide-react';
+import { NodeViewWrapper, NodeViewProps } from '@tiptap/react';
+import { Video } from 'lucide-react';
 import { useStreaming } from '@/features/streaming/hooks/useStreaming';
 import { useParams } from 'next/navigation';
 import { cn } from '@/shared/utils/cn';
 
-export const SceneTagView = (props: any) => {
+export const SceneTagView = (props: NodeViewProps) => {
     const params = useParams();
     const id = params.id as string;
     const { sendCommand, isPending } = useStreaming(id);

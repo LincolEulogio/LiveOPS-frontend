@@ -1,3 +1,5 @@
+import { PermissionAssignment } from '@/features/users/types/user.types';
+
 export interface User {
   id: string;
   email: string;
@@ -6,12 +8,12 @@ export interface User {
   globalRole?: {
     id: string;
     name: string;
-    permissions?: { permission: { action: string } }[];
+    permissions?: PermissionAssignment[];
   };
   role?: {
     id: string;
     name: string;
-    permissions: string[];
+    permissions: PermissionAssignment[];
   };
 }
 

@@ -6,16 +6,15 @@ export function usePermissions(requiredPermissions: string[]) {
   if (!user) return false;
 
   // 1. Collect all permission actions
-  // The backend might return these as { permission: { action: string } } objects
-  const globalActions = user.globalRole?.permissions?.map((p: any) =>
-    typeof p.permission?.action === 'string' ? p.permission.action : p.permission
-  ) || [];
+  const globalActions = user.globalRole?.permissions?.map((p) =>
+    p.permission?.action
+  ).filter((a): a is string => !!a) || [];
 
-  const prodActions = user.role?.permissions?.map((p: any) =>
-    typeof p.permission?.action === 'string' ? p.permission.action : p
-  ) || [];
+  const prodActions = user.role?.permissions?.map((p) =>
+    p.permission?.action
+  ).filter((a): a is string => !!a) || [];
 
-  const allActions = [...new Set([...globalActions, ...prodActions as any])];
+  const allActions = [...new Set([...globalActions, ...prodActions])];
 
   // 2. Admin bypass by name
   const isSystemAdmin =

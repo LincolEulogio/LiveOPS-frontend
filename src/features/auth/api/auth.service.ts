@@ -1,20 +1,20 @@
 import { apiClient } from '@/shared/api/api.client';
-import { AuthResponse } from '../types/auth.types';
+import { AuthResponse, User } from '../types/auth.types';
 
 export const authService = {
-  async login(data: any): Promise<AuthResponse> {
+  async login(data: Record<string, unknown>): Promise<AuthResponse> {
     return apiClient.post('/auth/login', data);
   },
 
-  async register(data: any): Promise<AuthResponse> {
+  async register(data: Record<string, unknown>): Promise<AuthResponse> {
     return apiClient.post('/auth/register', data);
   },
 
-  async getProfile(): Promise<any> {
+  async getProfile(): Promise<User> {
     return apiClient.get('/auth/profile');
   },
 
-  async updateProfile(data: { name?: string; password?: string }): Promise<any> {
+  async updateProfile(data: { name?: string; password?: string }): Promise<User> {
     return apiClient.patch('/auth/profile', data);
   },
 

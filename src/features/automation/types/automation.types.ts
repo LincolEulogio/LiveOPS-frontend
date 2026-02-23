@@ -1,15 +1,17 @@
+export type JsonValue = string | number | boolean | null | { [key: string]: JsonValue } | JsonValue[];
+
 export interface Trigger {
     id: string;
     ruleId: string;
     eventType: string;
-    condition: any;
+    condition: JsonValue;
 }
 
 export interface Action {
     id: string;
     ruleId: string;
     actionType: string;
-    payload: any;
+    payload: JsonValue;
     order: number;
 }
 
@@ -37,12 +39,12 @@ export interface RuleExecutionLog {
 
 export interface CreateTriggerDto {
     eventType: string;
-    condition?: any;
+    condition?: JsonValue;
 }
 
 export interface CreateActionDto {
     actionType: string;
-    payload?: any;
+    payload?: JsonValue;
     order?: number;
 }
 

@@ -44,7 +44,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
                 document: doc,
             }),
             CollaborationCaret.configure({
-                provider: { awareness } as unknown as any, // Tiptap types can be tricky here, but we can at least avoid direct any if possible
+                provider: { awareness } as unknown as { awareness: any }, // Tiptap's CollaborationCaret expects a provider with awareness
                 render: (user: CaretUser) => {
                     const cursor = document.createElement('span');
                     cursor.classList.add('collaboration-cursor__caret');

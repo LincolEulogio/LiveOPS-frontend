@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { NodeViewWrapper } from '@tiptap/react';
+import { NodeViewWrapper, NodeViewProps } from '@tiptap/react';
 import { Layout, Play } from 'lucide-react';
 import { useTimeline } from '@/features/timeline/hooks/useTimeline';
 import { useParams } from 'next/navigation';
 import { cn } from '@/shared/utils/cn';
 
-export const TimelineTagView = (props: any) => {
+export const TimelineTagView = (props: NodeViewProps) => {
     const params = useParams();
     const productionId = params.id as string;
     const { blocks, startBlock, isMutating } = useTimeline(productionId);

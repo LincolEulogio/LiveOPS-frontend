@@ -30,8 +30,8 @@ export const CommandPalette = () => {
     const { data: productions = [] } = useQuery({
         queryKey: ['productions', 'command-palette'],
         queryFn: async () => {
-            const res = await apiClient.get('/productions');
-            return res.data as any[];
+            const res = await apiClient.get<{ data: any[] }>('/productions');
+            return res.data;
         },
         enabled: isOpen,
     });

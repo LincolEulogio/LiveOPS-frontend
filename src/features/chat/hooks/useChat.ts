@@ -15,6 +15,13 @@ import {
     SendChatMessageDto
 } from '../types/chat.types';
 
+export interface PresenceMember {
+    userId: string;
+    userName: string;
+    status: string;
+    lastSeen: string;
+}
+
 export const useChat = (productionId: string) => {
     const queryClient = useQueryClient();
     const { socket, isConnected } = useSocket();
@@ -23,7 +30,7 @@ export const useChat = (productionId: string) => {
 
     const [unreadCount, setUnreadCount] = useState(0);
     const [typingUsers, setTypingUsers] = useState<Record<string, string>>({});
-    const [members, setMembers] = useState<any[]>([]);
+    const [members, setMembers] = useState<PresenceMember[]>([]);
 
     // 1. Fetch history and templates via React Query
     const { data: history = [], isLoading: isLoadingHistory } = useQuery({
@@ -112,7 +119,7 @@ export const useChat = (productionId: string) => {
             });
         };
 
-        const handlePresence = (data: { members: any[] }) => {
+        const handlePresence = (data: { members: PresenceMember[] }) => {
             setMembers(data.members);
         };
 

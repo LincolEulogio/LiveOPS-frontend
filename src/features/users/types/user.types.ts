@@ -1,3 +1,14 @@
+export interface Permission {
+    id: string;
+    action: string;
+    resource: string;
+}
+
+export interface PermissionAssignment {
+    permissionId: string;
+    permission: Permission;
+}
+
 export interface User {
     id: string;
     email: string;
@@ -12,5 +23,5 @@ export interface Role {
     id: string;
     name: string;
     description: string | null;
-    permissions?: any[];
+    permissions?: PermissionAssignment[];
 }
