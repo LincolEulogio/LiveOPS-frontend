@@ -88,7 +88,7 @@ export const DeviceView = () => {
                     </button>
                 </div>
 
-                <div className="w-24 h-24 bg-card-bg/50 rounded-full flex items-center justify-center mb-8 border border-white/5 shadow-2xl relative">
+                <div className="w-24 h-24 bg-card-bg/50 rounded-full flex items-center justify-center mb-8 border border-foreground/5 shadow-2xl relative">
                     <div className="absolute inset-0 rounded-full border border-indigo-500/20 animate-ping" />
                     <Bell className="text-muted" size={40} />
                 </div>
@@ -100,7 +100,7 @@ export const DeviceView = () => {
                         {activeBlock ? (
                             <div className="flex flex-col items-center">
                                 <span className="px-2 py-0.5 rounded text-[9px] font-black bg-red-500/20 text-red-500 uppercase tracking-widest mb-2 border border-red-500/20">Al Aire</span>
-                                <h4 className="text-lg font-bold text-white uppercase tracking-tighter leading-tight text-center">
+                                <h4 className="text-lg font-bold text-foreground uppercase tracking-tighter leading-tight text-center">
                                     {activeBlock.title}
                                 </h4>
                             </div>
@@ -181,7 +181,7 @@ export const DeviceView = () => {
                     <div className="p-3 border-t border-card-border/50 bg-card-bg/50 mt-auto">
                         <form
                             onSubmit={handleSendCustomMessage}
-                            className="flex items-center gap-2 bg-black/40 rounded-xl p-1.5 border border-white/5 focus-within:border-indigo-500/50 transition-colors"
+                            className="flex items-center gap-2 bg-card-bg/40 border border-card-border rounded-xl p-1.5 focus-within:border-indigo-500/50 transition-colors"
                         >
                             <input
                                 type="text"
@@ -269,7 +269,7 @@ export const DeviceView = () => {
 
                     <button
                         onClick={() => acknowledgeAlert(activeAlert.id, 'No me ponches')}
-                        className="flex flex-col items-center justify-center gap-1 bg-red-600/40 backdrop-blur-md border border-red-400/30 text-white py-5 rounded-[2rem] font-bold uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+                        className="flex flex-col items-center justify-center gap-1 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-5 rounded-[2rem] font-bold uppercase tracking-widest active:scale-95 transition-all text-[10px]"
                     >
                         PONCHE NO
                     </button>
@@ -283,7 +283,7 @@ export const DeviceView = () => {
 
                     <button
                         onClick={() => acknowledgeAlert(activeAlert.id, 'Listo')}
-                        className="flex flex-col items-center justify-center gap-1 bg-green-600/40 backdrop-blur-md border border-green-400/30 text-white py-4 rounded-[1.5rem] font-bold uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+                        className="flex flex-col items-center justify-center gap-1 bg-green-500/10 hover:bg-green-500/20 text-green-500 border border-green-500/20 py-4 rounded-[1.5rem] font-bold uppercase tracking-widest active:scale-95 transition-all text-[10px]"
                     >
                         LISTO
                     </button>

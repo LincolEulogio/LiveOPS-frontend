@@ -36,12 +36,12 @@ export default function IntercomPage() {
     if (!viewMode) return null;
 
     return (
-        <div className="-m-6 md:-m-8 bg-stone-950 text-stone-100 min-h-[calc(100vh-4rem)]">
-            <header className="relative top-0 h-16 bg-stone-900/40 border-b border-stone-800 z-50 px-6 md:px-8 flex items-center justify-between">
+        <div className="-m-6 md:-m-8 bg-background text-foreground min-h-[calc(100vh-4rem)]">
+            <header className="relative top-0 h-16 bg-card-bg/40 border-b border-card-border z-50 px-6 md:px-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <Link
                         href={`/productions/${productionId}`}
-                        className="p-2 bg-stone-800 hover:bg-stone-700 rounded-lg text-stone-400 hover:text-white transition-colors border border-stone-700"
+                        className="p-2 bg-card-bg hover:bg-card-border rounded-lg text-muted hover:text-foreground transition-colors border border-card-border"
                         title="Volver a la Producción"
                     >
                         <ChevronLeft size={18} />
@@ -52,16 +52,16 @@ export default function IntercomPage() {
                     <h1 className="font-black uppercase tracking-tighter text-lg md:flex hidden">Live Alert System</h1>
                 </div>
 
-                <div className="flex bg-stone-950 p-1 rounded-xl border border-stone-800">
+                <div className="flex bg-card-bg p-1 rounded-xl border border-card-border">
                     <button
                         onClick={() => setViewMode('dashboard')}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${viewMode === 'dashboard' ? 'bg-stone-800 text-white shadow-lg' : 'text-stone-500 hover:text-stone-300'}`}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${viewMode === 'dashboard' ? 'bg-background text-foreground shadow-lg border border-card-border' : 'text-muted hover:text-foreground'}`}
                     >
                         <AppWindow size={14} /> Dashboard
                     </button>
                     <button
                         onClick={() => setViewMode('device')}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${viewMode === 'device' ? 'bg-stone-800 text-white shadow-lg' : 'text-stone-500 hover:text-stone-300'}`}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${viewMode === 'device' ? 'bg-background text-foreground shadow-lg border border-card-border' : 'text-muted hover:text-foreground'}`}
                     >
                         <Smartphone size={14} /> Mobile
                     </button>
