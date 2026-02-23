@@ -1,15 +1,16 @@
 import { SocialDashboard } from '@/features/social/components/SocialDashboard';
 
 interface Props {
-    params: {
+    params: Promise<{
         id: string;
-    }
+    }>;
 }
 
-export default function SocialPage({ params }: Props) {
+export default async function SocialPage({ params }: Props) {
+    const { id } = await params;
     return (
         <div className="h-full">
-            <SocialDashboard productionId={params.id} />
+            <SocialDashboard productionId={id} />
         </div>
     );
 }

@@ -1,11 +1,12 @@
 import { GuestDashboard } from '@/features/guest/components/GuestDashboard';
 
 interface Props {
-    params: {
+    params: Promise<{
         id: string;
-    }
+    }>;
 }
 
-export default function GuestPage({ params }: Props) {
-    return <GuestDashboard productionId={params.id} />;
+export default async function GuestPage({ params }: Props) {
+    const { id } = await params;
+    return <GuestDashboard productionId={id} />;
 }

@@ -1,9 +1,10 @@
 import { AnalyticsDashboard } from '@/features/analytics/components/AnalyticsDashboard';
 
 interface Props {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
-export default function AnalyticsPage({ params }: Props) {
-    return <AnalyticsDashboard productionId={params.id} />;
+export default async function AnalyticsPage({ params }: Props) {
+    const { id } = await params;
+    return <AnalyticsDashboard productionId={id} />;
 }
