@@ -17,13 +17,13 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
     return (
         <div className={cn(
             "p-4 rounded-xl border transition-all relative overflow-hidden group",
-            message.status === 'pending' ? "bg-stone-800/50 border-stone-700" :
-                message.status === 'approved' ? "bg-emerald-900/20 border-emerald-500/30" :
-                    message.status === 'on-air' ? "bg-indigo-900/40 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]" :
+            message.status === 'PENDING' ? "bg-stone-800/50 border-stone-700" :
+                message.status === 'APPROVED' ? "bg-emerald-900/20 border-emerald-500/30" :
+                    message.status === 'ON_AIR' ? "bg-indigo-900/40 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]" :
                         "bg-red-900/10 border-red-500/20 opacity-50",
             className
         )}>
-            {message.status === 'on-air' && (
+            {message.status === 'ON_AIR' && (
                 <div className="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-white text-[9px] font-bold uppercase tracking-widest rounded-bl-lg">
                     On Air
                 </div>
@@ -31,8 +31,8 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
 
             <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-full bg-stone-700 flex shrink-0 items-center justify-center overflow-hidden border border-stone-600">
-                    {message.avatarUrl ? (
-                        <img src={message.avatarUrl} alt={message.author} className="w-full h-full object-cover" />
+                    {message.authorAvatar ? (
+                        <img src={message.authorAvatar} alt={message.author} className="w-full h-full object-cover" />
                     ) : (
                         <span className="text-sm font-bold text-stone-400">{message.author.charAt(0).toUpperCase()}</span>
                     )}
@@ -58,7 +58,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
             </div>
 
             {/* Actions for Pending */}
-            {message.status === 'pending' && (
+            {message.status === 'PENDING' && (
                 <div className="mt-4 flex gap-2 pt-3 border-t border-stone-700/50">
                     <button
                         onClick={() => onApprove?.(message.id)}
@@ -76,7 +76,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
             )}
 
             {/* Actions for Approved */}
-            {message.status === 'approved' && (
+            {message.status === 'APPROVED' && (
                 <div className="mt-4 flex gap-2 pt-3 border-t border-emerald-500/20 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                         onClick={() => onSendToAir?.(message.id)}

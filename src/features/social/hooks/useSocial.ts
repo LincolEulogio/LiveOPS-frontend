@@ -3,26 +3,46 @@ import { apiClient } from '@/shared/api/api.client';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useEffect } from 'react';
 
-// Similar to backend type
 export interface SocialMessage {
     id: string;
     productionId: string;
-    platform: 'twitch' | 'youtube';
+    platform: string;
     author: string;
-    avatarUrl?: string;
+    authorAvatar?: string;
     content: string;
     timestamp: Date | string;
-    status: 'pending' | 'approved' | 'rejected' | 'on-air';
+    status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'ON_AIR';
+}
+
+export interface PollOption {
+    id: string;
+    text: string;
+    votes: number;
+}
+
+export interface Poll {
+    id: string;
+    question: string;
+    options: PollOption[];
+    isActive: boolean;
 }
 
 export const useSocial = (productionId: string) => {
     const queryClient = useQueryClient();
     const { socket } = useSocket();
 
-    const { data: messages = [], isLoading } = useQuery({
+    const { data: messages = [], isLoading: isMessagesLoading } = useQuery({
         queryKey: ['social-messages', productionId],
         queryFn: async () => {
             return (await apiClient.get<SocialMessage[]>(`/productions/${productionId}/social/messages`)) as any;
+        },
+        enabled: !!productionId,
+    });
+
+    const { data: activePoll = null, isLoading: isPollLoading } = useQuery({
+        queryKey: ['active-poll', productionId],
+        queryFn: async () => {
+            return (await apiClient.get<Poll | null>(`/productions/${productionId}/social/polls/active`)) as any;
         },
         enabled: !!productionId,
     });
@@ -33,7 +53,7 @@ export const useSocial = (productionId: string) => {
         const handleNewMessage = (msg: SocialMessage) => {
             if (msg.productionId === productionId) {
                 queryClient.setQueryData(['social-messages', productionId], (old: SocialMessage[] = []) => {
-                    return [...old, msg];
+                    return [msg, ...old];
                 });
             }
         };
@@ -46,12 +66,30 @@ export const useSocial = (productionId: string) => {
             }
         };
 
+        const handlePollCreated = (poll: Poll) => {
+            queryClient.setQueryData(['active-poll', productionId], poll);
+        };
+
+        const handlePollUpdated = (poll: Poll) => {
+            queryClient.setQueryData(['active-poll', productionId], poll);
+        };
+
+        const handlePollClosed = () => {
+            queryClient.setQueryData(['active-poll', productionId], null);
+        };
+
         socket.on('social.message.new', handleNewMessage);
         socket.on('social.message.updated', handleUpdatedMessage);
+        socket.on('social.poll.created', handlePollCreated);
+        socket.on('social.poll.updated', handlePollUpdated);
+        socket.on('social.poll.closed', handlePollClosed);
 
         return () => {
             socket.off('social.message.new', handleNewMessage);
             socket.off('social.message.updated', handleUpdatedMessage);
+            socket.off('social.poll.created', handlePollCreated);
+            socket.off('social.poll.updated', handlePollUpdated);
+            socket.off('social.poll.closed', handlePollClosed);
         };
     }, [socket, productionId, queryClient]);
 
@@ -59,15 +97,36 @@ export const useSocial = (productionId: string) => {
         mutationFn: async ({ id, status }: { id: string, status: SocialMessage['status'] }) => {
             return apiClient.put(`/productions/${productionId}/social/messages/${id}/status`, { status }) as any;
         },
-        // Optimistic update could go here
+    });
+
+    const createPollMutation = useMutation({
+        mutationFn: async ({ question, options }: { question: string, options: string[] }) => {
+            return apiClient.post(`/productions/${productionId}/social/polls`, { question, options }) as any;
+        },
+    });
+
+    const votePollMutation = useMutation({
+        mutationFn: async ({ pollId, optionId }: { pollId: string, optionId: string }) => {
+            return apiClient.post(`/productions/${productionId}/social/polls/${pollId}/vote`, { optionId }) as any;
+        },
+    });
+
+    const closePollMutation = useMutation({
+        mutationFn: async (pollId: string) => {
+            return apiClient.delete(`/productions/${productionId}/social/polls/${pollId}`) as any;
+        },
     });
 
     return {
         messages,
-        isLoading,
+        activePoll,
+        isLoading: isMessagesLoading || isPollLoading,
         updateStatus: updateStatusMutation.mutateAsync,
-        pendingMessages: messages.filter((m: SocialMessage) => m.status === 'pending'),
-        approvedMessages: messages.filter((m: SocialMessage) => m.status === 'approved'),
-        onAirMessage: messages.find((m: SocialMessage) => m.status === 'on-air'),
+        createPoll: createPollMutation.mutateAsync,
+        votePoll: votePollMutation.mutateAsync,
+        closePoll: closePollMutation.mutateAsync,
+        pendingMessages: messages.filter((m: SocialMessage) => m.status === 'PENDING'),
+        approvedMessages: messages.filter((m: SocialMessage) => m.status === 'APPROVED'),
+        onAirMessage: messages.find((m: SocialMessage) => m.status === 'ON_AIR'),
     };
 };
