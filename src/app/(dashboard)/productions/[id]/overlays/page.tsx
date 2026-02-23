@@ -9,7 +9,7 @@ export default function OverlaysPage() {
     const productionId = params.id as string;
 
     return (
-        <div className="h-full bg-stone-950 overflow-y-auto">
+        <div className="h-full bg-background overflow-y-auto">
             <OverlayManager productionId={productionId} />
         </div>
     );

@@ -61,7 +61,7 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
             </div>
 
             {/* Table Content */}
-            <div className="flex-1 overflow-auto custom-scrollbar bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+            <div className="flex-1 overflow-auto custom-scrollbar">
                 <table className="w-full border-collapse">
                     <thead className="sticky top-0 bg-card-bg border-b border-card-border z-10">
                         <tr className="text-[10px] font-bold text-muted uppercase tracking-widest">

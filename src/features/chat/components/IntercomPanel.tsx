@@ -98,7 +98,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
             {/* History */}
             <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto p-4 space-y-4 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-fixed"
+                className="flex-1 overflow-y-auto p-4 space-y-4"
             >
                 {isLoading ? (
                     <IntercomSkeleton />

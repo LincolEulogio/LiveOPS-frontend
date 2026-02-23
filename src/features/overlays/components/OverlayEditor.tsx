@@ -65,16 +65,16 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
     const selectedLayer = config.layers.find(l => l.id === selectedLayerId);
 
     return (
-        <div className="flex h-[800px] w-full bg-black rounded-3xl overflow-hidden border border-stone-800 shadow-2xl">
+        <div className="flex h-[800px] w-full bg-background rounded-3xl overflow-hidden border border-card-border shadow-2xl">
             {/* Toolbar */}
-            <div className="w-16 bg-stone-900 border-r border-stone-800 flex flex-col items-center py-6 gap-6">
-                <button onClick={() => addLayer('text')} className="p-3 text-stone-400 hover:text-white transition-colors" title="Add Text">
+            <div className="w-16 bg-card-bg border-r border-card-border flex flex-col items-center py-6 gap-6">
+                <button onClick={() => addLayer('text')} className="p-3 text-muted hover:text-foreground transition-colors" title="Add Text">
                     <Type size={20} />
                 </button>
-                <button onClick={() => addLayer('image')} className="p-3 text-stone-400 hover:text-white transition-colors" title="Add Image">
+                <button onClick={() => addLayer('image')} className="p-3 text-muted hover:text-foreground transition-colors" title="Add Image">
                     <ImageIcon size={20} />
                 </button>
-                <button onClick={() => addLayer('shape')} className="p-3 text-stone-400 hover:text-white transition-colors" title="Add Shape">
+                <button onClick={() => addLayer('shape')} className="p-3 text-muted hover:text-foreground transition-colors" title="Add Shape">
                     <Box size={20} />
                 </button>
                 <div className="mt-auto flex flex-col gap-4">
@@ -136,10 +136,10 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
             </div>
 
             {/* Side Panel (Layers & Properties) */}
-            <div className="w-80 bg-stone-900 border-l border-stone-800 flex flex-col h-full">
+            <div className="w-80 bg-card-bg border-l border-card-border flex flex-col h-full">
                 {/* Layers Top */}
-                <div className="p-4 border-b border-stone-800">
-                    <h3 className="text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] flex items-center gap-2 mb-4">
+                <div className="p-4 border-b border-card-border">
+                    <h3 className="text-[10px] font-black text-muted uppercase tracking-[0.2em] flex items-center gap-2 mb-4">
                         <Layers size={14} /> Layers
                     </h3>
                     <div className="space-y-1 max-h-64 overflow-y-auto custom-scrollbar">
@@ -166,28 +166,28 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
                     {selectedLayer ? (
                         <div className="space-y-6">
-                            <h3 className="text-[10px] font-black text-stone-300 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h3 className="text-[10px] font-black text-foreground/80 uppercase tracking-[0.2em] flex items-center gap-2">
                                 <Settings size={14} /> Properties: {selectedLayer.name}
                             </h3>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-[9px] text-stone-500 font-bold uppercase">X Pos</label>
-                                    <input type="number" value={selectedLayer.x} onChange={e => updateLayer(selectedLayer.id, { x: parseInt(e.target.value) })} className="w-full bg-stone-950 border border-stone-800 rounded-lg p-2 text-xs" />
+                                    <label className="text-[9px] text-muted font-bold uppercase">X Pos</label>
+                                    <input type="number" value={selectedLayer.x} onChange={e => updateLayer(selectedLayer.id, { x: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-lg p-2 text-xs" />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[9px] text-stone-500 font-bold uppercase">Y Pos</label>
-                                    <input type="number" value={selectedLayer.y} onChange={e => updateLayer(selectedLayer.id, { y: parseInt(e.target.value) })} className="w-full bg-stone-950 border border-stone-800 rounded-lg p-2 text-xs" />
+                                    <label className="text-[9px] text-muted font-bold uppercase">Y Pos</label>
+                                    <input type="number" value={selectedLayer.y} onChange={e => updateLayer(selectedLayer.id, { y: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-lg p-2 text-xs" />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[9px] text-stone-500 font-bold uppercase">Content / Data Binding</label>
+                                <label className="text-[9px] text-muted font-bold uppercase">Content / Data Binding</label>
                                 {selectedLayer.type === 'text' ? (
                                     <textarea
                                         value={selectedLayer.content}
                                         onChange={e => updateLayer(selectedLayer.id, { content: e.target.value })}
-                                        className="w-full bg-stone-950 border border-stone-800 rounded-lg p-2 text-xs h-20"
+                                        className="w-full bg-background border border-card-border rounded-lg p-2 text-xs h-20"
                                     />
                                 ) : (
                                     <input
