@@ -65,7 +65,7 @@ export const PrompterView = ({ productionId }: Props) => {
         },
     }, [awareness, doc]);
 
-    // Restore scroll position on mount
+    // Restore scroll position on mount & when content changes
     useEffect(() => {
         if (!editor || !containerRef.current) return;
 
@@ -74,13 +74,23 @@ export const PrompterView = ({ productionId }: Props) => {
             const pos = parseFloat(savedScroll);
             scrollPosRef.current = pos;
 
-            // Usamos un pequeño delay para asegurar que Tiptap haya terminado de renderizar y calcular alturas
-            const timer = setTimeout(() => {
+            // Reintentamos posicionar el scroll varias veces a medida que el contenido se sincroniza
+            // Esto es crucial para Tiptap + Yjs donde la altura crece gradualmente
+            let attempts = 0;
+            const scrollInterval = setInterval(() => {
                 if (containerRef.current) {
-                    containerRef.current.scrollTop = pos;
+                    const currentTop = containerRef.current.scrollTop;
+                    // Si ya estamos cerca de la posición o hemos intentado mucho, paramos
+                    if (Math.abs(currentTop - pos) < 2 || attempts > 20) {
+                        clearInterval(scrollInterval);
+                    } else {
+                        containerRef.current.scrollTop = pos;
+                        attempts++;
+                    }
                 }
-            }, 100);
-            return () => clearTimeout(timer);
+            }, 150);
+
+            return () => clearInterval(scrollInterval);
         }
     }, [productionId, editor]);
 
@@ -173,22 +183,20 @@ export const PrompterView = ({ productionId }: Props) => {
                 </div>
             </div>
 
-            {/* Guía de Lectura FIJA (Nivel de Ojos) */}
+            {/* Guía de Lectura FIJA (Nivel de Ojos) - Extendida de extremo a extremo */}
             <div className="absolute top-1/2 left-0 right-0 z-30 pointer-events-none -translate-y-1/2">
-                <div className="max-w-4xl mx-auto px-16">
-                    <div
-                        onClick={resetToTop}
-                        title="Reiniciar Guion"
-                        className="h-1 bg-red-600/30 cursor-pointer pointer-events-auto hover:bg-red-600/50 transition-colors"
-                    />
-                </div>
+                <div
+                    onClick={resetToTop}
+                    title="Reiniciar Guion"
+                    className="h-[2px] bg-red-600/40 cursor-pointer pointer-events-auto hover:bg-red-600/60 transition-colors shadow-[0_0_8px_rgba(220,38,38,0.2)]"
+                />
             </div>
             {/* Flecha fija en el borde (Triángulo) */}
             <div className="absolute top-1/2 left-2 z-50 pointer-events-none -translate-y-1/2">
                 <div
                     onClick={resetToTop}
                     title="Reiniciar Guion"
-                    className="w-0 h-0 border-y-[10px] border-y-transparent border-l-[14px] border-l-red-600 cursor-pointer pointer-events-auto hover:scale-125 transition-transform active:scale-90 shadow-[0_0_10px_rgba(220,38,38,0.4)]"
+                    className="w-0 h-0 border-y-[12px] border-y-transparent border-l-[16px] border-l-red-600 cursor-pointer pointer-events-auto hover:scale-125 transition-transform active:scale-95 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
                 />
             </div>
 
