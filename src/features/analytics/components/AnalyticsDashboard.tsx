@@ -4,9 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiClient as api } from '@/shared/api/api.client';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Activity, Cpu, HardDrive, WifiHigh, CheckCircle, AlertTriangle, FileText, Download } from 'lucide-react';
+import { Activity, Cpu, HardDrive, WifiHigh, CheckCircle, AlertTriangle, FileText, Download, ArrowLeft } from 'lucide-react';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { useProduction } from '@/features/productions/hooks/useProductions';
+import Link from 'next/link';
 
 interface TelemetryLog {
     timestamp: string;
@@ -75,12 +76,21 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
 
             {/* Header */}
             <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                        <Activity className="text-indigo-500" />
-                        Health & Analytics
-                    </h2>
-                    <p className="text-stone-400">System telemetry and post-show metrics</p>
+                <div className="flex items-center gap-4">
+                    <Link
+                        href={`/productions/${productionId}`}
+                        className="p-2 bg-stone-900 border border-stone-800 rounded-xl text-stone-400 hover:text-white hover:border-stone-700 transition-all shadow-lg"
+                        title="Back to Dashboard"
+                    >
+                        <ArrowLeft size={20} />
+                    </Link>
+                    <div>
+                        <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                            <Activity className="text-indigo-500" />
+                            Health & Analytics
+                        </h2>
+                        <p className="text-sm text-stone-400">System telemetry and post-show metrics</p>
+                    </div>
                 </div>
                 {isArchived && !report && (
                     <button
