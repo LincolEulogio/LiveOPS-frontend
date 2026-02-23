@@ -4,6 +4,8 @@ export interface IntercomAlert {
     id: string;
     message: string;
     senderName: string;
+    senderId?: string;
+    targetUserId?: string;
     color?: string;
     timestamp: string;
     requiresAck: boolean;

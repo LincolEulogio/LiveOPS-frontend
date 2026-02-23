@@ -68,10 +68,19 @@ const getIconForTemplate = (name: string, color: string) => {
     return <Activity {...props} />;
 };
 
+import { useIntercomStore } from '../store/intercom.store';
+
 export const CrewCard = ({ productionId, member, templates, onSendCommand }: CrewCardProps) => {
     const isAcked = member.lastAck?.timestamp;
     const currentStatus = (member.currentStatus || 'IDLE').toUpperCase();
     const [chatMsg, setChatMsg] = React.useState('');
+    const history = useIntercomStore(state => state.history);
+
+    // Filter chat history for this specific user
+    const directHistory = history.filter(h =>
+        (h.targetUserId === member.userId) ||
+        (h.senderId === member.userId && h.message.startsWith('Mensaje:'))
+    ).slice(0, 10);
 
     return (
         <div className={`bg-stone-950 border ${member.isOnline ? 'border-stone-800' : 'border-stone-900 opacity-60'} rounded-3xl overflow-hidden shadow-2xl transition-all hover:border-indigo-500/40 group relative`}>
@@ -194,6 +203,28 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                     </div>
                 )}
             </div>
+
+            {/* Direct History / Messages Panel */}
+            {directHistory.length > 0 && (
+                <div className="mx-4 mb-4 bg-stone-900 border border-stone-800/50 rounded-2xl overflow-hidden flex flex-col max-h-[140px]">
+                    <div className="px-3 py-1.5 bg-stone-800/30 border-b border-stone-800/50 flex items-center gap-2">
+                        <MessageCircle size={10} className="text-indigo-400" />
+                        <span className="text-[9px] uppercase font-black text-stone-400 tracking-widest">Chat Reciente</span>
+                    </div>
+                    <div className="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar">
+                        {[...directHistory].reverse().map((msg, i) => {
+                            const isMine = msg.senderId !== member.userId;
+                            return (
+                                <div key={i} className={`flex w-full ${isMine ? 'justify-end' : 'justify-start'}`}>
+                                    <div className={`max-w-[85%] px-2.5 py-1.5 rounded-xl text-[10px] font-medium leading-tight ${isMine ? 'bg-indigo-600/20 text-indigo-100 border border-indigo-500/30 rounded-br-none' : 'bg-stone-800 text-stone-200 border border-stone-700 rounded-bl-none'}`}>
+                                        {msg.message.replace('Mensaje:', '').trim()}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
 
             {/* Direct Chat / Commands */}
             <div className="px-4 pb-4">

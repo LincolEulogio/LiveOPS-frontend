@@ -13,7 +13,7 @@ import { useAppStore } from '@/shared/store/app.store';
 
 export const DeviceView = () => {
     const { activeAlert, history } = useIntercomStore();
-    const { acknowledgeAlert } = useIntercom();
+    const { acknowledgeAlert, sendCommand } = useIntercom();
     const user = useAuthStore((state) => state.user);
     const activeProductionId = useAppStore((state) => state.activeProductionId);
     const [isChatOpen, setIsChatOpen] = React.useState(false);
@@ -37,18 +37,26 @@ export const DeviceView = () => {
     // Find the currently active block
     const activeBlock = timelineBlocks.find((b) => b.status === 'ACTIVE');
 
-    // Filter history for messages targeting this user (either broadcast or direct chat)
+    // Filter history to ONLY show chat messages (WhatsApp style) and not commands/alerts
     const userHistory = history.filter(h =>
-        h.senderName || h.id.includes('sys-') // Basic filter to show incoming messages for now
-    ).slice(0, 10); // Show last 10
+        h.message?.startsWith('Mensaje:')
+    ).slice(0, 15); // Show last 15
 
     const handleSendCustomMessage = (e: React.FormEvent) => {
         e.preventDefault();
         if (!customMessage.trim()) return;
 
-        // This leverages the "acknowledgeAlert" logic which sends a response back to the Dashboard
-        // We use a dummy ID 'chat' to indicate it's a direct message and not an alert acknowledgment
-        acknowledgeAlert('chat', customMessage.trim());
+        // Extract last coordinator ID
+        const chatMsgs = history.filter(h => h.message.startsWith('Mensaje:') && h.senderId !== user?.id);
+        const lastTargetUserId = chatMsgs.length > 0 ? chatMsgs[0].senderId : undefined;
+
+        // Send a direct message back via standard command
+        sendCommand({
+            message: `Mensaje: ${customMessage.trim()}`,
+            targetUserId: lastTargetUserId,
+            requiresAck: true,
+        });
+
         setCustomMessage('');
         setIsChatOpen(false);
     };
@@ -123,27 +131,44 @@ export const DeviceView = () => {
                         </h4>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar flex flex-col-reverse justify-start">
                         {userHistory.length > 0 ? (
-                            [...userHistory].reverse().map((msg, i) => (
-                                <AnimatePresence key={`msg-${i}`}>
-                                    <motion.div
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        className="bg-black/40 border border-white/5 rounded-2xl p-3 flex flex-col gap-1"
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-stone-500">{msg.senderName || 'Control'}</span>
-                                            <span className="text-[8px] font-bold text-stone-600">
-                                                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            </span>
-                                        </div>
-                                        <p className="text-xs text-white/90 font-medium leading-tight">
-                                            {msg.message}
-                                        </p>
-                                    </motion.div>
-                                </AnimatePresence>
-                            ))
+                            [...userHistory].reverse().map((msg, i) => {
+                                const isMine = msg.senderId === user?.id;
+
+                                return (
+                                    <AnimatePresence key={`msg-${i}`}>
+                                        <motion.div
+                                            initial={{ opacity: 0, x: isMine ? 10 : -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            className={`flex w-full ${isMine ? 'justify-end' : 'justify-start'} mb-2`}
+                                        >
+                                            <div
+                                                className={`
+                                                    max-w-[85%] px-3 py-2 text-[11px] font-medium leading-tight shadow-md
+                                                    ${isMine
+                                                        ? 'bg-[#056162] text-green-50 rounded-2xl rounded-tr-sm border border-[#0d7576]' // WhatsApp Green 
+                                                        : 'bg-[#262d31] text-stone-200 rounded-2xl rounded-tl-sm border border-[#323739]' // WhatsApp Dark Gray 
+                                                    }
+                                                `}
+                                            >
+                                                {!isMine && (
+                                                    <div className="text-[9px] font-black uppercase tracking-widest text-[#53bdeb] mb-0.5">
+                                                        {msg.senderName || 'Control'}
+                                                    </div>
+                                                )}
+                                                <div className="break-words mb-1 text-sm font-semibold opacity-90">
+                                                    {msg.message.replace('Mensaje:', '').trim()}
+                                                </div>
+                                                <div className={`text-[8px] font-bold text-right pt-1 flex justify-end items-center gap-1 ${isMine ? 'text-[#84c6c8]' : 'text-stone-500'}`}>
+                                                    {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    {isMine && <CheckCircle size={10} className="opacity-70" />}
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    </AnimatePresence>
+                                );
+                            })
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center opacity-30 text-center">
                                 <MessageCircle size={24} className="mb-2 text-stone-600" />
@@ -272,7 +297,17 @@ export const DeviceView = () => {
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' && alertReply.trim()) {
                                     e.preventDefault();
+
+                                    // 1. Send to true 1-1 chat history
+                                    sendCommand({
+                                        message: `Mensaje: ${alertReply.trim()}`,
+                                        targetUserId: activeAlert.senderId,
+                                        requiresAck: true,
+                                    });
+
+                                    // 2. Clear this alert and update master dashboard status indicator
                                     acknowledgeAlert(activeAlert.id, `Mensaje: ${alertReply.trim()}`);
+
                                     setAlertReply('');
                                 }
                             }}
@@ -282,6 +317,11 @@ export const DeviceView = () => {
                         <button
                             onClick={() => {
                                 if (alertReply.trim()) {
+                                    sendCommand({
+                                        message: `Mensaje: ${alertReply.trim()}`,
+                                        targetUserId: activeAlert.senderId,
+                                        requiresAck: true,
+                                    });
                                     acknowledgeAlert(activeAlert.id, `Mensaje: ${alertReply.trim()}`);
                                     setAlertReply('');
                                 }

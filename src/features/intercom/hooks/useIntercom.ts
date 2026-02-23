@@ -48,22 +48,29 @@ export const useIntercom = (forcedUserId?: string) => {
             const shouldShowAlert = isTargeted && (!isMeSender || !!forcedUserId);
 
             if (shouldShowAlert) {
+                const isChatMessage = command.message.startsWith('Mensaje:');
+
                 const alert: IntercomAlert = {
                     id: command.id,
                     message: command.message,
                     senderName: command.sender.name || 'Operator',
+                    senderId: command.senderId,
+                    targetUserId: command.targetUserId,
                     color: command.template?.color || '#3b82f6',
                     timestamp: command.createdAt,
                     requiresAck: command.requiresAck,
                     status: 'SENT',
                 };
 
-                setActiveAlert(alert);
                 addToHistory(alert);
-                playAlert();
 
-                if ('vibrate' in navigator) {
-                    navigator.vibrate([200, 100, 200]);
+                if (!isChatMessage) {
+                    setActiveAlert(alert);
+                    playAlert();
+
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate([200, 100, 200]);
+                    }
                 }
             } else if (isMeSender) {
                 // If I am the sender, just add to history without playing alert
@@ -71,6 +78,8 @@ export const useIntercom = (forcedUserId?: string) => {
                     id: command.id,
                     message: command.message,
                     senderName: 'Yo',
+                    senderId: authUser?.id,
+                    targetUserId: command.targetUserId,
                     color: command.template?.color || '#3b82f6',
                     timestamp: command.createdAt,
                     requiresAck: command.requiresAck,
