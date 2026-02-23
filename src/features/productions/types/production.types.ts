@@ -20,6 +20,7 @@ export interface Production {
   engineType: EngineType;
   createdAt: string;
   updatedAt: string;
+  isRehearsal: boolean;
   obsConnection?: {
     url: string;
     password?: string;
