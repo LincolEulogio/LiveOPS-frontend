@@ -80,6 +80,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               Graphics Constructor
             </Link>
           )}
+          {activeProductionId && (
+            <Link
+              href={`/productions/${activeProductionId}/guest`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/guest') ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}
+            >
+              <Users size={18} />
+              Guest Panel
+            </Link>
+          )}
           <Link
             href="/profile"
             className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname === '/profile' ? 'bg-stone-800 text-white' : 'text-stone-400 hover:text-white hover:bg-stone-800/50'}`}

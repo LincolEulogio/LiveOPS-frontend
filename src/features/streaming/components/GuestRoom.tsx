@@ -52,23 +52,48 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
 
     // 1. Initialize Local Media
     const initMedia = useCallback(async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
+        const constraints = [
+            // 1. Ideal HQ Configuration
+            {
                 video: {
                     width: { ideal: 1280 },
                     height: { ideal: 720 },
                     frameRate: { ideal: 30 }
                 },
                 audio: true
-            });
-            setLocalStream(stream);
-            if (localVideoRef.current) {
-                localVideoRef.current.srcObject = stream;
+            },
+            // 2. Standard Fallback
+            {
+                video: true,
+                audio: true
+            },
+            // 3. Audio Only (if video fails)
+            {
+                video: false,
+                audio: true
             }
-        } catch (err) {
-            console.error('Failed to get local media:', err);
-            toast.error('Could not access camera/microphone');
+        ];
+
+        let lastError: any = null;
+
+        for (const config of constraints) {
+            try {
+                console.log('Attempting media capture with:', config);
+                const stream = await navigator.mediaDevices.getUserMedia(config);
+                setLocalStream(stream);
+                if (localVideoRef.current) {
+                    localVideoRef.current.srcObject = stream;
+                }
+                toast.success('Media devices initialized');
+                return; // Success
+            } catch (err) {
+                console.warn(`Failed with config ${JSON.stringify(config)}:`, err);
+                lastError = err;
+            }
         }
+
+        console.error('All media capture attempts failed:', lastError);
+        toast.error(`Could not access media: ${lastError?.message || 'Unknown error'}`);
     }, []);
 
     useEffect(() => {
