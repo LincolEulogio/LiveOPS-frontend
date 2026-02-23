@@ -41,8 +41,10 @@ export const PrompterView = ({ productionId }: Props) => {
 
     // Sync ref when mounting or when manual scrolling occurs
     const handleScroll = () => {
-        if (containerRef.current && !isPlaying) {
+        if (containerRef.current) {
             scrollPosRef.current = containerRef.current.scrollTop;
+            // Persist scroll position
+            localStorage.setItem(`prompter_scroll_${productionId}`, scrollPosRef.current.toString());
         }
     };
 
@@ -63,6 +65,16 @@ export const PrompterView = ({ productionId }: Props) => {
         },
     }, [awareness, doc]);
 
+    // Restore scroll position on mount
+    useEffect(() => {
+        const savedScroll = localStorage.getItem(`prompter_scroll_${productionId}`);
+        if (savedScroll && containerRef.current && editor) {
+            const pos = parseFloat(savedScroll);
+            scrollPosRef.current = pos;
+            containerRef.current.scrollTop = pos;
+        }
+    }, [productionId, editor]); // Wait for editor to be ready to ensure content height is correct
+
     useEffect(() => {
         if (!doc || !editor) return;
         const state = doc.get('default', Y.XmlFragment);
@@ -74,6 +86,8 @@ export const PrompterView = ({ productionId }: Props) => {
         if (isPlaying && scrollSpeed > 0 && containerRef.current) {
             scrollPosRef.current += scrollSpeed;
             containerRef.current.scrollTop = scrollPosRef.current;
+            // Optional: debounce this or save less frequently if performance is an issue
+            localStorage.setItem(`prompter_scroll_${productionId}`, scrollPosRef.current.toString());
         }
         requestRef.current = requestAnimationFrame(animate);
     };
@@ -152,20 +166,25 @@ export const PrompterView = ({ productionId }: Props) => {
 
             {/* Guía de Lectura FIJA (Nivel de Ojos) */}
             <div className="absolute top-1/2 left-0 right-0 z-30 pointer-events-none">
+                <div className="max-w-4xl mx-auto px-16">
+                    <div
+                        onClick={resetToTop}
+                        title="Reiniciar Guion"
+                        className="h-1 bg-red-600/30 cursor-pointer pointer-events-auto hover:bg-red-600/50 transition-colors"
+                    />
+                </div>
+            </div>
+            {/* Flecha fija en el borde */}
+            <div className="absolute top-1/2 left-4 -mt-3 z-50 pointer-events-none">
                 <div
                     onClick={resetToTop}
                     title="Reiniciar Guion"
-                    className="h-1 bg-red-600/30 cursor-pointer pointer-events-auto hover:bg-red-600/50 transition-colors"
-                />
-                <div
-                    onClick={resetToTop}
-                    title="Reiniciar Guion"
-                    className="absolute -top-2.5 left-4 w-0 h-0 border-t-[12px] border-t-transparent border-l-[16px] border-l-red-600 border-b-[12px] border-b-transparent cursor-pointer pointer-events-auto hover:scale-110 transition-transform active:scale-90 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                    className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[16px] border-l-red-600 border-b-[12px] border-b-transparent cursor-pointer pointer-events-auto hover:scale-110 transition-transform active:scale-90 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
                 />
             </div>
 
             {/* Controles Laterales (Verticales) */}
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-stone-900/90 border border-stone-700 p-3 rounded-2xl flex flex-col items-center gap-4 opacity-5 group-hover:opacity-100 transition-opacity z-50 shadow-2xl backdrop-blur-md">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-stone-900/90 border border-stone-700 p-3 rounded-2xl flex flex-col items-center gap-4 z-50 shadow-2xl backdrop-blur-md">
 
                 {/* Font Size */}
                 <div className="flex flex-col items-center gap-1">
