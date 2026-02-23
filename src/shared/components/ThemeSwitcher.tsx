@@ -9,13 +9,13 @@ export const ThemeSwitcher = () => {
     const { theme, setTheme } = useTheme();
 
     const themes = [
-        { id: 'light', name: 'Light', icon: Sun, color: 'text-amber-500' },
-        { id: 'dark', name: 'Dark', icon: Moon, color: 'text-indigo-400' },
-        { id: 'production', name: 'Live', icon: Zap, color: 'text-red-500' },
+        { id: 'light', name: 'Light', icon: Sun, color: 'text-amber-500', animation: 'animate-[spin_4s_linear_infinite]' },
+        { id: 'dark', name: 'Dark', icon: Moon, color: 'text-indigo-500', animation: 'animate-[pulse_2s_ease-in-out_infinite]' },
+        { id: 'production', name: 'Live', icon: Zap, color: 'text-red-500', animation: 'animate-[bounce_2s_infinite]' },
     ] as const;
 
     return (
-        <div className="flex bg-stone-950/50 p-1 rounded-2xl border border-stone-800 backdrop-blur-md">
+        <div className="flex bg-card-bg/50 p-1 rounded-2xl border border-card-border backdrop-blur-md">
             {themes.map((t) => (
                 <button
                     key={t.id}
@@ -23,14 +23,14 @@ export const ThemeSwitcher = () => {
                     className={cn(
                         "p-2 rounded-xl transition-all flex items-center gap-2 group",
                         theme === t.id
-                            ? "bg-stone-800 text-white shadow-inner border border-white/5"
-                            : "text-stone-500 hover:text-stone-300"
+                            ? "bg-background text-foreground shadow-sm border border-card-border"
+                            : "text-muted hover:text-foreground hover:bg-card-border/30"
                     )}
                     title={`Switch to ${t.name} mode`}
                 >
                     <t.icon size={16} className={cn(
                         "transition-transform",
-                        theme === t.id ? t.color : "group-hover:scale-110"
+                        theme === t.id ? cn(t.color, t.animation) : "group-hover:scale-110"
                     )} />
                     {theme === t.id && (
                         <span className="text-[10px] font-black uppercase tracking-widest pr-1">

@@ -74,7 +74,7 @@ export const GuestDashboard = ({ productionId }: Props) => {
                             </>
                         ) : (
                             <>
-                                <Clock size={64} className="text-stone-600 dark:text-stone-400 mx-auto" />
+                                <Clock size={64} className="text-muted mx-auto" />
                                 <h2 className="text-4xl font-bold text-foreground">Standing By</h2>
                                 <p className="text-muted">The production has not started yet. Please wait for the director's cue.</p>
                             </>

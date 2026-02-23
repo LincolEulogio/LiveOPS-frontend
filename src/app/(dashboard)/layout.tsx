@@ -49,7 +49,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden">
       {/* Sidebar Skeleton */}
-      <aside className="w-64 border-r border-card-border bg-indigo-900 dark:bg-background/95 flex flex-col hidden md:flex">
+      <aside className="w-64 border-r border-card-border bg-indigo-900 dark:bg-card-bg flex flex-col hidden md:flex">
         <div className="h-16 flex items-center px-6 border-b border-indigo-800/50 dark:border-card-border">
           <Link href="/profile" className="text-lg font-bold text-white dark:text-foreground tracking-tight">
             LiveOPS
@@ -60,14 +60,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Navigation Items placeholder */}
           <Link
             href="/productions"
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/productions') ? 'bg-indigo-800/80 text-white dark:bg-card-bg dark:text-foreground' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-bg'}`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/productions') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
           >
             <Server size={18} />
             Productions
           </Link>
           <Link
             href={activeProductionId ? `/productions/${activeProductionId}/intercom` : '/productions'}
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/intercom') ? 'bg-indigo-800/80 text-white dark:bg-card-bg dark:text-foreground' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-bg'}`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/intercom') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
           >
             <Info size={18} />
             Operational Hub
@@ -75,7 +75,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {activeProductionId && (
             <Link
               href={`/productions/${activeProductionId}/overlays`}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/overlays') ? 'bg-indigo-800/80 text-white dark:bg-card-bg dark:text-foreground' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-bg'}`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/overlays') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
             >
               <Layers size={18} />
               Graphics Constructor
@@ -84,7 +84,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {activeProductionId && (
             <Link
               href={`/productions/${activeProductionId}/guest`}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/guest') ? 'bg-indigo-800/80 text-white dark:bg-card-bg dark:text-foreground' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-bg'}`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/guest') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
             >
               <Users size={18} />
               Guest Panel
@@ -92,7 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           )}
           <Link
             href="/profile"
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname === '/profile' ? 'bg-indigo-800/80 text-white dark:bg-card-bg dark:text-foreground' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-bg'}`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname === '/profile' ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
           >
             <UserIcon size={18} />
             Profile
@@ -108,7 +108,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Guard requiredPermissions={['user:manage']}>
             <Link
               href="/admin/users"
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/users') ? 'bg-indigo-800/80 text-white dark:bg-card-bg dark:text-foreground' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-bg'}`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/users') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
             >
               <Users size={18} />
               Global Users
@@ -118,7 +118,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Guard requiredPermissions={['role:manage']}>
             <Link
               href="/admin/roles"
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/roles') ? 'bg-indigo-800/80 text-white dark:bg-card-bg dark:text-foreground' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-bg'}`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/roles') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
             >
               <Shield size={18} />
               Roles & Permissions
@@ -126,7 +126,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </Guard>
         </nav>
 
-        <div className="p-4 border-t border-indigo-800/50 dark:border-card-border bg-indigo-950/20 dark:bg-background/50">
+        <div className="p-4 border-t border-indigo-800/50 dark:border-card-border bg-indigo-950/20 dark:bg-card-border/20">
           <div className="flex items-center gap-3 px-3 py-2 mb-2 group">
             <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-600/20 text-white group-hover:scale-105 transition-transform">
               {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
