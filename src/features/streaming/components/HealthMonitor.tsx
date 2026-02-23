@@ -90,7 +90,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
 
     const hasIssues = latest && (
         (latest.cpuUsage !== undefined && latest.cpuUsage > 80) ||
-        (latest.totalFrames > 0 && latest.skippedFrames / latest.totalFrames > 0.05)
+        (latest.totalFrames !== undefined && latest.totalFrames > 0 && latest.skippedFrames !== undefined && latest.skippedFrames / latest.totalFrames > 0.05)
     );
 
     const isEngineConnected = latest && (new Date().getTime() - new Date(latest.timestamp).getTime() < 5000);
@@ -165,10 +165,10 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                 />
                 <MetricCard
                     label="Drops"
-                    value={isEngineConnected && latest ? latest.skippedFrames.toString() : '---'}
+                    value={isEngineConnected && latest?.skippedFrames !== undefined ? latest.skippedFrames.toString() : '---'}
                     icon={BarChart3}
                     color="amber"
-                    status={isEngineConnected && latest ? latest.skippedFrames > 10 ? 'warning' : 'normal' : 'normal'}
+                    status={isEngineConnected && latest?.skippedFrames !== undefined ? latest.skippedFrames > 10 ? 'warning' : 'normal' : 'normal'}
                     tooltip="Pérdida de cuadros detectada por congestión o hardware."
                 />
                 <MetricCard
