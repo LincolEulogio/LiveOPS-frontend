@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useIntercomTemplates } from '../hooks/useIntercomTemplates';
 import { useAppStore } from '@/shared/store/app.store';
 import { Settings, Zap, X, Save, Palette, Type, List, Plus, Trash2, Edit2, ChevronLeft } from 'lucide-react';
-import { CreateCommandTemplateDto, IntercomTemplate } from '../api/intercom.service';
+import { CreateCommandTemplateDto, IntercomTemplate } from '../types/intercom.types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Portal } from '@/shared/components/Portal';
 import Swal from 'sweetalert2';

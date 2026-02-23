@@ -1,3 +1,5 @@
+import { IntercomTemplate } from '../../intercom/types/intercom.types';
+
 export enum TimelineStatus {
     PENDING = 'PENDING',
     ACTIVE = 'ACTIVE',
@@ -18,7 +20,7 @@ export interface TimelineBlock {
     endTime?: string;
     linkedScene?: string;
     intercomTemplateId?: string;
-    intercomTemplate?: any;
+    intercomTemplate?: IntercomTemplate;
     createdAt: string;
     updatedAt: string;
 }

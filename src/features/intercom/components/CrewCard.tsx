@@ -23,23 +23,13 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { IntercomTemplate, CrewMember } from '../types/intercom.types';
 
 interface CrewCardProps {
     productionId: string;
-    member: {
-        userId: string;
-        userName: string;
-        roleName: string;
-        isOnline: boolean;
-        lastAck?: {
-            message: string;
-            timestamp: string;
-            type: string;
-        };
-        currentStatus?: string;
-    };
-    templates: any[];
-    onSendCommand: (template: any) => void;
+    member: CrewMember;
+    templates: IntercomTemplate[];
+    onSendCommand: (template: IntercomTemplate) => void;
 }
 
 const getAckDisplay = (type: string) => {
@@ -188,7 +178,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
 
                             <div className="flex flex-col items-center relative z-10 pointer-events-none">
                                 <div className="mb-1 transition-transform group-hover/btn:scale-110 duration-300">
-                                    {getIconForTemplate(t.name, t.color)}
+                                    {getIconForTemplate(t.name, t.color || '#6366f1')}
                                 </div>
                                 <span className={`text-[9px] font-black uppercase tracking-widest transition-colors ${isPending ? 'text-indigo-400' : 'text-stone-500 group-hover/btn:text-white'}`}>
                                     {t.name}

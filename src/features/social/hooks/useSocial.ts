@@ -34,7 +34,7 @@ export const useSocial = (productionId: string) => {
     const { data: messages = [], isLoading: isMessagesLoading } = useQuery({
         queryKey: ['social-messages', productionId],
         queryFn: async () => {
-            return (await apiClient.get<SocialMessage[]>(`/productions/${productionId}/social/messages`)) as any;
+            return apiClient.get<SocialMessage[]>(`/productions/${productionId}/social/messages`);
         },
         enabled: !!productionId,
     });
@@ -42,7 +42,7 @@ export const useSocial = (productionId: string) => {
     const { data: activePoll = null, isLoading: isPollLoading } = useQuery({
         queryKey: ['active-poll', productionId],
         queryFn: async () => {
-            return (await apiClient.get<Poll | null>(`/productions/${productionId}/social/polls/active`)) as any;
+            return apiClient.get<Poll | null>(`/productions/${productionId}/social/polls/active`);
         },
         enabled: !!productionId,
     });
@@ -95,25 +95,25 @@ export const useSocial = (productionId: string) => {
 
     const updateStatusMutation = useMutation({
         mutationFn: async ({ id, status }: { id: string, status: SocialMessage['status'] }) => {
-            return apiClient.put(`/productions/${productionId}/social/messages/${id}/status`, { status }) as any;
+            return apiClient.put<{ success: boolean }>(`/productions/${productionId}/social/messages/${id}/status`, { status });
         },
     });
 
     const createPollMutation = useMutation({
         mutationFn: async ({ question, options }: { question: string, options: string[] }) => {
-            return apiClient.post(`/productions/${productionId}/social/polls`, { question, options }) as any;
+            return apiClient.post<Poll>(`/productions/${productionId}/social/polls`, { question, options });
         },
     });
 
     const votePollMutation = useMutation({
         mutationFn: async ({ pollId, optionId }: { pollId: string, optionId: string }) => {
-            return apiClient.post(`/productions/${productionId}/social/polls/${pollId}/vote`, { optionId }) as any;
+            return apiClient.post<Poll>(`/productions/${productionId}/social/polls/${pollId}/vote`, { optionId });
         },
     });
 
     const closePollMutation = useMutation({
         mutationFn: async (pollId: string) => {
-            return apiClient.delete(`/productions/${productionId}/social/polls/${pollId}`) as any;
+            return apiClient.delete<{ success: boolean }>(`/productions/${productionId}/social/polls/${pollId}`);
         },
     });
 

@@ -21,6 +21,11 @@ interface Props {
     productionId: string;
 }
 
+interface CaretUser {
+    name?: string;
+    color?: string;
+}
+
 export const ScriptEditor = ({ productionId }: Props) => {
     const { doc, awareness, isLoaded, syncScroll, isSyncing, lastSyncTime } = useScript(productionId);
     const user = useAuthStore((state) => state.user);
@@ -39,8 +44,8 @@ export const ScriptEditor = ({ productionId }: Props) => {
                 document: doc,
             }),
             CollaborationCaret.configure({
-                provider: { awareness } as any,
-                render: (user: any) => {
+                provider: { awareness } as unknown as any, // Tiptap types can be tricky here, but we can at least avoid direct any if possible
+                render: (user: CaretUser) => {
                     const cursor = document.createElement('span');
                     cursor.classList.add('collaboration-cursor__caret');
                     cursor.style.borderLeftColor = user.color || '#6366f1';

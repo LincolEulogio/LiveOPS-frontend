@@ -21,7 +21,7 @@ type FormValues = z.infer<typeof blockSchema>;
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (dto: any) => Promise<void>;
+    onSave: (dto: FormValues) => Promise<void>;
     editingBlock?: TimelineBlock;
 }
 

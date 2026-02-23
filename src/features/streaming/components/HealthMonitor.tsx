@@ -30,6 +30,14 @@ interface HealthStats {
     timestamp: string;
 }
 
+interface HistoricalTelemetry {
+    cpuUsage: number;
+    fps: number;
+    bitrate: number;
+    droppedFrames?: number;
+    timestamp: string;
+}
+
 interface HealthMonitorProps {
     productionId: string;
 }
@@ -39,10 +47,10 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
     const [history, setHistory] = useState<HealthStats[]>([]);
     const [latest, setLatest] = useState<HealthStats | null>(null);
 
-    const { data: historicalData } = useQuery<any[]>({
+    const { data: historicalData } = useQuery<HistoricalTelemetry[]>({
         queryKey: ['analytics', productionId, 'telemetry', 'short'],
         queryFn: async () => {
-            return (api.get(`/productions/${productionId}/analytics/telemetry?minutes=10`) as any) as any[];
+            return api.get<HistoricalTelemetry[]>(`/productions/${productionId}/analytics/telemetry?minutes=10`);
         },
         enabled: !!productionId,
     });

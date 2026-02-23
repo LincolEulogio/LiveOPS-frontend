@@ -32,6 +32,7 @@ import { useIntercomTemplates } from '../hooks/useIntercomTemplates';
 import { AutomationDashboard } from '../../automation/components/AutomationDashboard';
 import { cn } from '@/shared/utils/cn';
 import { HealthMonitor } from '../../health/components/HealthMonitor';
+import { IntercomTemplate, CrewMember } from '../types/intercom.types';
 
 export const DashboardView = () => {
     const router = useRouter();
@@ -45,11 +46,10 @@ export const DashboardView = () => {
     const [activeTab, setActiveTab] = useState<'intercom' | 'automation'>('intercom');
 
     // Fetch Production Data (including registered users)
-    const { data: production } = useQuery<any>({
+    const { data: production } = useQuery<{ id: string; users: any[] }>({ // Simplified users as they are nested
         queryKey: ['production', activeProductionId],
         queryFn: async () => {
-            const data = await (apiClient.get(`/productions/${activeProductionId}`) as any);
-            return data;
+            return apiClient.get(`/productions/${activeProductionId}`);
         },
         enabled: !!activeProductionId,
     });
@@ -58,7 +58,7 @@ export const DashboardView = () => {
     const { templates = [] } = useIntercomTemplates(activeProductionId);
 
     // Merge registered users with online status
-    const crewMembers = useMemo(() => {
+    const crewMembers = useMemo<CrewMember[]>(() => {
         if (!production?.users) return [];
 
         return production.users.map((pu: any) => {
@@ -197,7 +197,7 @@ export const DashboardView = () => {
                                 exit={{ opacity: 0, y: -20 }}
                                 className="grid grid-cols-1 lg:grid-cols-2 gap-6"
                             >
-                                {crewMembers.map((member: any) => (
+                                {crewMembers.map((member) => (
                                     <CrewCard
                                         key={member.userId}
                                         productionId={activeProductionId || ''}

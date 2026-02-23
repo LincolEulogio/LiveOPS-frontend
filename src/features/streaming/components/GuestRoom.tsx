@@ -32,7 +32,7 @@ interface SignalData {
 
 interface PeerInstance {
     signal: (data: SignalData | string) => void;
-    on: (event: string, callback: (...args: any[]) => void) => void;
+    on: (event: string, callback: (arg: any) => void) => void;
     destroy: () => void;
 }
 

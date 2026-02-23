@@ -19,8 +19,7 @@ export const useWebhooks = (productionId: string) => {
     const { data: webhooks = [], isLoading } = useQuery<Webhook[]>({
         queryKey: baseKey,
         queryFn: async () => {
-            const response = await apiClient.get<Webhook[]>(`/productions/${productionId}/webhooks`);
-            return response as any;
+            return apiClient.get<Webhook[]>(`/productions/${productionId}/webhooks`);
         },
         enabled: !!productionId,
     });

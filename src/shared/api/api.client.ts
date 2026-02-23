@@ -1,8 +1,8 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 
 // Create a configured axios instance
-export const apiClient = axios.create({
+const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1',
   headers: {
     'Content-Type': 'application/json',
@@ -11,7 +11,7 @@ export const apiClient = axios.create({
 });
 
 // Request interceptor: Attach JWT token from memory
-apiClient.interceptors.request.use(
+instance.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().token;
     if (token) {
@@ -25,9 +25,15 @@ apiClient.interceptors.request.use(
 );
 
 let isRefreshing = false;
-let failedQueue: any[] = [];
 
-const processQueue = (error: any, token: string | null = null) => {
+interface FailedRequest {
+  resolve: (token: string | null) => void;
+  reject: (error: unknown) => void;
+}
+
+let failedQueue: FailedRequest[] = [];
+
+const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
@@ -39,12 +45,12 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 // Response interceptor: Handle global errors like 401 Unauthorized and attempt silent refresh
-apiClient.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => {
     return response.data; // simplify payload for callers
   },
   async (error: AxiosError) => {
-    const originalRequest = error.config as any;
+    const originalRequest = error.config as any; // Axios internal config is hard to type precisely here
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -53,7 +59,7 @@ apiClient.interceptors.response.use(
         })
           .then((token) => {
             originalRequest.headers.Authorization = `Bearer ${token}`;
-            return apiClient(originalRequest);
+            return instance(originalRequest);
           })
           .catch((err) => {
             return Promise.reject(err);
@@ -78,7 +84,7 @@ apiClient.interceptors.response.use(
         processQueue(null, newToken);
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
-        return apiClient(originalRequest);
+        return instance(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
         useAuthStore.getState().clearAuth(); // Force logout
@@ -93,7 +99,7 @@ apiClient.interceptors.response.use(
     }
 
     // Normalize error shape to be consistent
-    const errorData = error.response?.data as any;
+    const errorData = error.response?.data as { message?: string | string[] };
     let message = errorData?.message || error.message;
 
     // Handle NestJS validation array messages
@@ -106,3 +112,13 @@ apiClient.interceptors.response.use(
     return Promise.reject(new Error(message));
   }
 );
+
+interface CustomAxiosInstance extends AxiosInstance {
+  get<T = any, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  post<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  put<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  patch<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  delete<T = any, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+}
+
+export const apiClient = instance as CustomAxiosInstance;

@@ -4,7 +4,7 @@ import { TimelineBlockItem } from './TimelineBlockItem';
 import { Plus, ListTree, Loader2, PlayCircle } from 'lucide-react';
 import { useAppStore } from '@/shared/store/app.store';
 import { TimelineBlockEditor } from './TimelineBlockEditor';
-import { TimelineBlock } from '../types/timeline.types';
+import { TimelineBlock, CreateTimelineBlockDto } from '../types/timeline.types';
 
 export const TimelineView = () => {
     const activeProductionId = useAppStore((state) => state.activeProductionId);
@@ -33,7 +33,7 @@ export const TimelineView = () => {
         setIsEditorOpen(true);
     };
 
-    const handleSaveBlock = async (dto: any) => {
+    const handleSaveBlock = async (dto: CreateTimelineBlockDto) => {
         try {
             if (editingBlock) {
                 await updateBlock({ id: editingBlock.id, data: dto });

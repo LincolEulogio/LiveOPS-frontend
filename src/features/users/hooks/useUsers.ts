@@ -2,6 +2,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
 import { User, Role } from '../types/user.types';
 
+export interface CreateUserPayload {
+    email: string;
+    password?: string;
+    name?: string;
+    globalRoleId?: string | null;
+}
+
+export interface UpdateUserPayload extends Partial<CreateUserPayload> { }
+
 // Users
 export function useUsers() {
     return useQuery<User[]>({
@@ -15,8 +24,8 @@ export function useUsers() {
 export function useCreateUser() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (data: any) => {
-            return await apiClient.post('/users', data);
+        mutationFn: async (data: CreateUserPayload) => {
+            return await apiClient.post<User>('/users', data);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
@@ -27,8 +36,8 @@ export function useCreateUser() {
 export function useUpdateUser() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ id, data }: { id: string; data: any }) => {
-            return await apiClient.patch(`/users/${id}`, data);
+        mutationFn: async ({ id, data }: { id: string; data: UpdateUserPayload }) => {
+            return await apiClient.patch<User>(`/users/${id}`, data);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
@@ -60,7 +69,7 @@ export function useRoles() {
 
 // Permissions
 export function usePermissions() {
-    return useQuery<any[]>({
+    return useQuery<{ id: string; action: string; description?: string }[]>({
         queryKey: ['permissions'],
         queryFn: async () => {
             return await apiClient.get('/users/permissions');
