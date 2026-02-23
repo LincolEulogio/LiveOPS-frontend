@@ -10,6 +10,8 @@ import { useSocket } from '@/shared/socket/socket.provider';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
 import { useAppStore } from '@/shared/store/app.store';
+import { TimelineBlock } from '../../timeline/types/timeline.types';
+
 export const DeviceView = () => {
     const { activeAlert, history } = useIntercomStore();
     const { acknowledgeAlert, sendCommand, sendDirectMessage } = useIntercom();
@@ -24,11 +26,11 @@ export const DeviceView = () => {
     const activeRole = user?.role?.name || user?.globalRole?.name || 'OPERATOR';
 
     // Fetch timeline blocks to know the current active segment
-    const { data: timelineBlocks = [] } = useQuery<any[]>({
+    const { data: timelineBlocks = [] } = useQuery<TimelineBlock[]>({
         queryKey: ['timeline', activeProductionId],
         queryFn: async () => {
             if (!activeProductionId) return [];
-            return await (apiClient.get(`/productions/${activeProductionId}/timeline`) as any);
+            return await apiClient.get<TimelineBlock[]>(`/productions/${activeProductionId}/timeline`);
         },
         enabled: !!activeProductionId,
     });

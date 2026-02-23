@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { toast } from 'sonner';
 
 interface MidiMessage {
     command: number;
@@ -9,23 +8,24 @@ interface MidiMessage {
     velocity: number;
 }
 
-interface MIDIInput {
+// Using local interfaces with unique names to avoid collisions with global WebMIDI types
+interface LocalMIDIInput {
     id: string;
-    name: string;
+    name: string | null;
     onmidimessage: ((event: { data: Uint8Array }) => void) | null;
 }
 
-interface MIDIAccess {
+interface LocalMIDIAccess {
     inputs: {
-        values: () => IterableIterator<MIDIInput>;
+        values: () => IterableIterator<LocalMIDIInput>;
     };
-    onstatechange: ((event: { port: any }) => void) | null;
+    onstatechange: ((event: { port: unknown }) => void) | null;
 }
 
 export const useMidi = (onMidiMessage: (msg: MidiMessage) => void) => {
-    const [access, setAccess] = useState<MIDIAccess | null>(null);
+    const [access, setAccess] = useState<LocalMIDIAccess | null>(null);
     const [isSupported, setIsSupported] = useState(false);
-    const [inputs, setInputs] = useState<MIDIInput[]>([]);
+    const [inputs, setInputs] = useState<LocalMIDIInput[]>([]);
 
     const onMidiMessageRef = useRef(onMidiMessage);
     onMidiMessageRef.current = onMidiMessage;
@@ -36,10 +36,6 @@ export const useMidi = (onMidiMessage: (msg: MidiMessage) => void) => {
 
     const handleMidiMessage = useCallback((event: { data: Uint8Array }) => {
         const [command, note, velocity] = Array.from(event.data);
-
-        // Command 144: Note On
-        // Command 128: Note Off
-        // Command 176: Control Change (CC)
         onMidiMessageRef.current({ command, note, velocity });
     }, []);
 
@@ -47,7 +43,8 @@ export const useMidi = (onMidiMessage: (msg: MidiMessage) => void) => {
         if (!isSupported) return;
 
         try {
-            const midiAccess = await (navigator as any).requestMIDIAccess() as MIDIAccess;
+            // Use unknown to safely bridge to the internal interface without collision
+            const midiAccess = await (navigator as any).requestMIDIAccess() as LocalMIDIAccess;
             setAccess(midiAccess);
 
             const midiInputs = Array.from(midiAccess.inputs.values());

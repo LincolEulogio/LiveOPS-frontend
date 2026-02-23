@@ -2,6 +2,7 @@
 
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import * as awarenessProtocol from 'y-protocols/awareness';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
 import Collaboration from '@tiptap/extension-collaboration';
@@ -44,7 +45,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
                 document: doc,
             }),
             CollaborationCaret.configure({
-                provider: { awareness } as unknown as { awareness: any }, // Tiptap's CollaborationCaret expects a provider with awareness
+                provider: { awareness } as unknown as { awareness: awarenessProtocol.Awareness }, // Using correct type from y-protocols
                 render: (user: CaretUser) => {
                     const cursor = document.createElement('span');
                     cursor.classList.add('collaboration-cursor__caret');

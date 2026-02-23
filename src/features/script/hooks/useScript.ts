@@ -49,7 +49,7 @@ export const useScript = (productionId: string) => {
         socket.on('script.scroll_received', handleScrollReceived);
 
         // 7. Propagate local doc updates to server
-        const onUpdate = (update: Uint8Array, origin: any) => {
+        const onUpdate = (update: Uint8Array, origin: unknown) => {
             if (origin !== socket) {
                 setIsSyncing(true);
                 socket.emit('script.update', {
@@ -66,7 +66,7 @@ export const useScript = (productionId: string) => {
         };
 
         // 8. Propagate local awareness updates to server
-        const onAwarenessUpdate = ({ added, updated, removed }: any) => {
+        const onAwarenessUpdate = ({ added, updated, removed }: { added: number[], updated: number[], removed: number[] }) => {
             const changedClients = added.concat(updated).concat(removed);
             const update = awarenessProtocol.encodeAwarenessUpdate(awareness, changedClients);
             socket.emit('script.awareness_update', {

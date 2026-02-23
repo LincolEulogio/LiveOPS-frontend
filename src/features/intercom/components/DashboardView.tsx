@@ -33,6 +33,7 @@ import { AutomationDashboard } from '../../automation/components/AutomationDashb
 import { cn } from '@/shared/utils/cn';
 import { HealthMonitor } from '../../health/components/HealthMonitor';
 import { IntercomTemplate, CrewMember } from '../types/intercom.types';
+import { Production } from '@/features/productions/types/production.types';
 
 export const DashboardView = () => {
     const router = useRouter();
@@ -46,10 +47,10 @@ export const DashboardView = () => {
     const [activeTab, setActiveTab] = useState<'intercom' | 'automation'>('intercom');
 
     // Fetch Production Data (including registered users)
-    const { data: production } = useQuery<{ id: string; users: any[] }>({ // Simplified users as they are nested
+    const { data: production } = useQuery<Production>({
         queryKey: ['production', activeProductionId],
         queryFn: async () => {
-            return apiClient.get(`/productions/${activeProductionId}`);
+            return apiClient.get<Production>(`/productions/${activeProductionId}`);
         },
         enabled: !!activeProductionId,
     });
@@ -61,7 +62,7 @@ export const DashboardView = () => {
     const crewMembers = useMemo<CrewMember[]>(() => {
         if (!production?.users) return [];
 
-        return production.users.map((pu: any) => {
+        return (production.users || []).map((pu) => {
             const isOnline = onlineMembers.some(m => m.userId === pu.user.id);
             const onlineData = onlineMembers.find(m => m.userId === pu.user.id);
 
@@ -214,7 +215,7 @@ export const DashboardView = () => {
                                                     message: t.name,
                                                     templateId: t.id,
                                                     targetUserId: member.userId,
-                                                    targetRoleId: production?.users.find((pu: any) => pu.userId === member.userId)?.roleId,
+                                                    targetRoleId: production?.users?.find(pu => pu.userId === member.userId)?.roleId,
                                                     requiresAck: true
                                                 });
                                             }

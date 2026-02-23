@@ -33,28 +33,28 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
     useProductionContextInitializer(productionId);
     const { data: production } = useProduction(productionId);
     const isLive = production?.status === 'ACTIVE';
-    const isArchived = production?.status === 'ARCHIVED' || production?.status === 'COMPLETED' as any;
+    const isArchived = production?.status === 'ARCHIVED';
 
-    const { data: telemetry, isLoading: telLoading } = useQuery<TelemetryLog[]>({
+    const { data: telemetry, isLoading: telLoading } = useQuery({
         queryKey: ['analytics', productionId, 'telemetry'],
-        queryFn: async () => {
-            return (api.get(`/productions/${productionId}/analytics/telemetry?minutes=120`) as any) as TelemetryLog[];
+        queryFn: (): Promise<TelemetryLog[]> => {
+            return api.get<TelemetryLog[]>(`/productions/${productionId}/analytics/telemetry?minutes=120`);
         },
         enabled: !!productionId,
         refetchInterval: isLive ? 10000 : false, // Poll if live
     });
 
-    const { data: report, refetch: refetchReport } = useQuery<ShowReport>({
+    const { data: report, refetch: refetchReport } = useQuery({
         queryKey: ['analytics', productionId, 'report'],
-        queryFn: async () => {
-            return (api.get(`/productions/${productionId}/analytics/report`) as any) as ShowReport;
+        queryFn: (): Promise<ShowReport> => {
+            return api.get<ShowReport>(`/productions/${productionId}/analytics/report`);
         },
         enabled: !!productionId,
     });
 
     const generateReportMutation = useMutation({
         mutationFn: async () => {
-            return (api.post(`/productions/${productionId}/analytics/report/generate`) as any) as any;
+            return api.post<ShowReport>(`/productions/${productionId}/analytics/report/generate`);
         },
         onSuccess: () => refetchReport(),
     });

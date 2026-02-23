@@ -12,8 +12,8 @@ interface Props {
 export const ExportActions = ({ productionId }: Props) => {
     const [isExporting, setIsExporting] = useState(false);
 
-    const convertToCSV = (objArray: any[]) => {
-        const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+    const convertToCSV = (objArray: Record<string, unknown>[]) => {
+        const array = objArray;
         let str = '';
 
         // Headers
@@ -45,7 +45,7 @@ export const ExportActions = ({ productionId }: Props) => {
             const data = await analyticsService.getAllLogsForExport(productionId);
 
             const blob = format === 'csv'
-                ? new Blob([convertToCSV(data)], { type: 'text/csv;charset=utf-8;' })
+                ? new Blob([convertToCSV(data as unknown as Record<string, unknown>[])], { type: 'text/csv;charset=utf-8;' })
                 : new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
 
             const link = document.createElement('a');

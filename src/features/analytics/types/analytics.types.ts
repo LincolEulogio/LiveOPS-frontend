@@ -2,7 +2,7 @@ export interface ProductionLog {
     id: string;
     productionId: string;
     eventType: string;
-    details: any;
+    details: Record<string, unknown>;
     createdAt: string;
 }
 
@@ -11,7 +11,7 @@ export interface OperatorActivity {
     productionId: string;
     userId: string;
     action: string;
-    details: any;
+    details: Record<string, unknown>;
     createdAt: string;
     user?: {
         id: string;

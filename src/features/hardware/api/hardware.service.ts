@@ -1,23 +1,24 @@
 import { apiClient } from '@/shared/api/api.client';
+import { Rule } from '@/features/automation/types/automation.types';
 
 export interface HardwareMapping {
     id: string;
     productionId: string;
     mapKey: string;
     ruleId: string;
-    rule?: any;
+    rule?: Rule;
 }
 
 export const hardwareService = {
     getMappings: async (productionId: string): Promise<HardwareMapping[]> => {
-        return (apiClient.get(`/productions/${productionId}/hardware/mappings`) as any);
+        return apiClient.get<HardwareMapping[]>(`/productions/${productionId}/hardware/mappings`);
     },
 
     saveMapping: async (productionId: string, mapKey: string, ruleId: string): Promise<HardwareMapping> => {
-        return (apiClient.post(`/productions/${productionId}/hardware/mappings`, { mapKey, ruleId }) as any);
+        return apiClient.post<HardwareMapping>(`/productions/${productionId}/hardware/mappings`, { mapKey, ruleId });
     },
 
     deleteMapping: async (productionId: string, mapKey: string): Promise<void> => {
-        return (apiClient.delete(`/productions/${productionId}/hardware/mappings/${mapKey}`) as any);
+        return apiClient.delete<void>(`/productions/${productionId}/hardware/mappings/${mapKey}`);
     },
 };
