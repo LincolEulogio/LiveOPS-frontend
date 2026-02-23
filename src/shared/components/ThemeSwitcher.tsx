@@ -10,8 +10,7 @@ export const ThemeSwitcher = () => {
 
     const themes = [
         { id: 'light', name: 'Light', icon: Sun, color: 'text-amber-500', animation: 'animate-[spin_4s_linear_infinite]' },
-        { id: 'dark', name: 'Dark', icon: Moon, color: 'text-indigo-500', animation: 'animate-[pulse_2s_ease-in-out_infinite]' },
-        { id: 'production', name: 'Live', icon: Zap, color: 'text-red-500', animation: 'animate-[bounce_2s_infinite]' },
+        { id: 'dark', name: 'Dark', icon: Moon, color: 'text-indigo-400', animation: 'animate-[pulse_2s_ease-in-out_infinite]' },
     ] as const;
 
     return (
