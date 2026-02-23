@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { useTimeline } from '../hooks/useTimeline';
 import { TimelineBlockItem } from './TimelineBlockItem';
 import { Plus, ListTree, Loader2, PlayCircle } from 'lucide-react';
 import { useAppStore } from '@/shared/store/app.store';
+import { TimelineBlockEditor } from './TimelineBlockEditor';
+import { TimelineBlock } from '../types/timeline.types';
 
 export const TimelineView = () => {
     const activeProductionId = useAppStore((state) => state.activeProductionId);
@@ -10,20 +13,39 @@ export const TimelineView = () => {
         isLoading,
         isMutating,
         createBlock,
+        updateBlock,
         startBlock,
         completeBlock,
         resetBlock,
         deleteBlock
     } = useTimeline(activeProductionId || undefined);
 
-    const handleAddBlock = async () => {
-        const title = prompt('Enter block title:');
-        if (title) {
-            await createBlock({
-                title,
-                durationMs: 300000, // Default 5 mins
-                order: blocks.length
-            });
+    const [isEditorOpen, setIsEditorOpen] = useState(false);
+    const [editingBlock, setEditingBlock] = useState<TimelineBlock | undefined>(undefined);
+
+    const handleAddBlock = () => {
+        setEditingBlock(undefined);
+        setIsEditorOpen(true);
+    };
+
+    const handleEditBlock = (block: TimelineBlock) => {
+        setEditingBlock(block);
+        setIsEditorOpen(true);
+    };
+
+    const handleSaveBlock = async (dto: any) => {
+        try {
+            if (editingBlock) {
+                await updateBlock({ id: editingBlock.id, data: dto });
+            } else {
+                await createBlock({
+                    ...dto,
+                    order: blocks.length
+                });
+            }
+            setIsEditorOpen(false);
+        } catch (error) {
+            console.error('Failed to save block:', error);
         }
     };
 
@@ -96,6 +118,7 @@ export const TimelineView = () => {
                             onComplete={completeBlock}
                             onReset={resetBlock}
                             onDelete={deleteBlock}
+                            onEdit={() => handleEditBlock(block)}
                             isMutating={isMutating}
                         />
                     ))
@@ -113,6 +136,13 @@ export const TimelineView = () => {
                     Add Segment
                 </button>
             </div>
+
+            <TimelineBlockEditor
+                isOpen={isEditorOpen}
+                onClose={() => setIsEditorOpen(false)}
+                onSave={handleSaveBlock}
+                editingBlock={editingBlock}
+            />
         </div>
     );
 };

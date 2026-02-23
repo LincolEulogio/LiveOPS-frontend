@@ -1,5 +1,5 @@
 import { TimelineBlock, TimelineStatus } from '../types/timeline.types';
-import { Play, CheckCircle, RotateCcw, Clock, Trash2 } from 'lucide-react';
+import { Play, CheckCircle, RotateCcw, Clock, Trash2, Edit2 } from 'lucide-react';
 
 interface TimelineBlockItemProps {
     block: TimelineBlock;
@@ -7,6 +7,7 @@ interface TimelineBlockItemProps {
     onComplete: (id: string) => void;
     onReset: (id: string) => void;
     onDelete: (id: string) => void;
+    onEdit: (block: TimelineBlock) => void;
     isMutating: boolean;
 }
 
@@ -16,6 +17,7 @@ export const TimelineBlockItem = ({
     onComplete,
     onReset,
     onDelete,
+    onEdit,
     isMutating
 }: TimelineBlockItemProps) => {
     const formatDuration = (ms?: number) => {
@@ -50,7 +52,9 @@ export const TimelineBlockItem = ({
                         <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest">
                             #{(block.order + 1).toString().padStart(2, '0')}
                         </span>
-                        <h4 className="text-sm font-bold text-white truncate">{block.title}</h4>
+                        <h4 className="text-sm font-bold text-white truncate group-hover:text-indigo-400 transition-colors cursor-pointer" onClick={() => onEdit(block)}>
+                            {block.title}
+                        </h4>
                     </div>
                     {block.description && (
                         <p className="text-xs text-stone-500 line-clamp-1 mb-2">
@@ -109,16 +113,27 @@ export const TimelineBlockItem = ({
                         </button>
                     )}
 
-                    {block.status === TimelineStatus.PENDING && (
+                    <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
-                            onClick={() => onDelete(block.id)}
+                            onClick={() => onEdit(block)}
                             disabled={isMutating}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg text-stone-600 hover:text-red-400 hover:bg-red-400/10 transition-all opacity-0 group-hover:opacity-100 disabled:opacity-0"
-                            title="Delete Block"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-stone-600 hover:text-indigo-400 hover:bg-indigo-400/10 transition-all disabled:opacity-50"
+                            title="Edit Block"
                         >
-                            <Trash2 size={16} />
+                            <Edit2 size={16} />
                         </button>
-                    )}
+
+                        {block.status === TimelineStatus.PENDING && (
+                            <button
+                                onClick={() => onDelete(block.id)}
+                                disabled={isMutating}
+                                className="w-8 h-8 flex items-center justify-center rounded-lg text-stone-600 hover:text-red-400 hover:bg-red-400/10 transition-all disabled:opacity-50"
+                                title="Delete Block"
+                            >
+                                <Trash2 size={16} />
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

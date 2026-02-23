@@ -2,72 +2,73 @@
 
 import { useHardware } from '../hooks/useHardware';
 import { useAutomation } from '@/features/automation/hooks/useAutomation';
+import { useHardwareMappings } from '../hooks/useHardwareMappings';
+import { useSocket } from '@/shared/socket/socket.provider';
 import { useState, useEffect } from 'react';
-import { Settings, Plus, X, Keyboard, RadioReceiver, Zap } from 'lucide-react';
+import { Settings, Plus, X, Keyboard, RadioReceiver, Zap, Loader2 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 
 interface Props {
     productionId: string;
 }
 
-// Local storage key for mappings
-const getMappingsKey = (prodId: string) => `liveops_hw_mappings_${prodId}`;
-
 export const HardwareManager = ({ productionId }: Props) => {
     const { devices, lastEvent, error, requestHIDDevice, clearLastEvent } = useHardware();
-    const { rules, triggerRule } = useAutomation(productionId);
+    const { rules } = useAutomation(productionId);
+    const { mappings, saveMapping, deleteMapping, isLoading } = useHardwareMappings(productionId);
+    const { socket } = useSocket();
 
-    // Mappings: { "hid:Btn 1": "rule_id" }
-    const [mappings, setMappings] = useState<Record<string, string>>({});
     const [isAssigning, setIsAssigning] = useState(false);
 
-    // Load mappings
+    // Listen for mapped key presses to trigger rules via Socket
     useEffect(() => {
-        const saved = localStorage.getItem(getMappingsKey(productionId));
-        if (saved) {
-            try {
-                setMappings(JSON.parse(saved));
-            } catch (e) { }
-        }
-    }, [productionId]);
-
-    // Save mappings
-    const saveMappings = (newMappings: Record<string, string>) => {
-        setMappings(newMappings);
-        localStorage.setItem(getMappingsKey(productionId), JSON.stringify(newMappings));
-    };
-
-    // Listen for mapped key presses to trigger rules
-    useEffect(() => {
-        if (lastEvent && lastEvent.state === 'pressed' && !isAssigning) {
+        if (lastEvent && lastEvent.state === 'pressed' && !isAssigning && socket) {
             const mapKey = `${lastEvent.type}:${lastEvent.key}`;
-            const ruleId = mappings[mapKey];
-            if (ruleId) {
-                const rule = rules.find(r => r.id === ruleId);
-                if (rule) {
-                    console.log(`Triggering macro ${rule.name} via hardware ${mapKey}`);
-                    triggerRule(rule);
-                    // Provide a small visual feedback if needed, but the rule will execute
-                }
+            const mapping = mappings.find(m => m.mapKey === mapKey);
+
+            if (mapping) {
+                console.log(`Emitting hardware trigger for mapKey: ${mapKey}`);
+                socket.emit('hardware.trigger', {
+                    productionId,
+                    mapKey
+                });
+
+                // Provide a small visual feedback if needed, but the rule will execute in backend
+                clearLastEvent();
             }
         }
-    }, [lastEvent, isAssigning, mappings, rules, triggerRule]);
+    }, [lastEvent, isAssigning, mappings, socket, productionId, clearLastEvent]);
 
-    const handleAssign = (ruleId: string) => {
+    const handleAssign = async (ruleId: string) => {
         if (!lastEvent) return;
         const mapKey = `${lastEvent.type}:${lastEvent.key}`;
-        saveMappings({ ...mappings, [mapKey]: ruleId });
-        setIsAssigning(false);
-        clearLastEvent();
+        try {
+            await saveMapping({ mapKey, ruleId });
+            setIsAssigning(false);
+            clearLastEvent();
+        } catch (e) {
+            console.error('Failed to save mapping:', e);
+        }
     };
 
-    const removeMapping = (mapKey: string) => {
-        const newMap = { ...mappings };
-        delete newMap[mapKey];
-        saveMappings(newMap);
+    const handleRemoveMapping = async (mapKey: string) => {
+        try {
+            await deleteMapping(mapKey);
+        } catch (e) {
+            console.error('Failed to delete mapping:', e);
+        }
     };
 
     const manualMacros = rules.filter(r => r.isEnabled && r.triggers.some(t => t.eventType === 'manual.trigger'));
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center p-12 text-stone-500">
+                <Loader2 size={32} className="animate-spin text-indigo-500 mb-4" />
+                <p className="text-xs font-bold uppercase tracking-widest">Loading Mappings...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">
@@ -122,31 +123,28 @@ export const HardwareManager = ({ productionId }: Props) => {
                         Hardware Mapping
                     </h2>
 
-                    <div className="flex-1 space-y-4 overflow-y-auto no-scrollbar">
+                    <div className="flex-1 space-y-4 overflow-y-auto no-scrollbar max-h-[300px]">
                         {/* Display current Mappings */}
-                        {Object.entries(mappings).map(([mapKey, ruleId]) => {
-                            const matchedRule = rules.find(r => r.id === ruleId);
-                            return (
-                                <div key={mapKey} className="flex justify-between items-center p-3 bg-stone-950 rounded-xl border border-stone-800">
-                                    <div className="flex items-center gap-3">
-                                        <div className="px-2 py-1 bg-stone-800 rounded-md text-[10px] font-mono text-indigo-300 whitespace-nowrap">
-                                            {mapKey}
-                                        </div>
-                                        <ArrowRight size={14} className="text-stone-600" />
-                                        <span className="text-sm font-bold text-stone-300 truncate max-w-[150px]">
-                                            {matchedRule ? matchedRule.name : 'Unknown Rule'}
-                                        </span>
+                        {mappings.map((mapping) => (
+                            <div key={mapping.id} className="flex justify-between items-center p-3 bg-stone-950 rounded-xl border border-stone-800">
+                                <div className="flex items-center gap-3">
+                                    <div className="px-2 py-1 bg-stone-800 rounded-md text-[10px] font-mono text-indigo-300 whitespace-nowrap">
+                                        {mapping.mapKey}
                                     </div>
-                                    <button
-                                        onClick={() => removeMapping(mapKey)}
-                                        className="text-stone-600 hover:text-red-400 p-1"
-                                    >
-                                        <X size={14} />
-                                    </button>
+                                    <ArrowRight size={14} className="text-stone-600" />
+                                    <span className="text-sm font-bold text-stone-300 truncate max-w-[150px]">
+                                        {mapping.rule?.name || 'Unknown Rule'}
+                                    </span>
                                 </div>
-                            );
-                        })}
-                        {Object.keys(mappings).length === 0 && (
+                                <button
+                                    onClick={() => handleRemoveMapping(mapping.mapKey)}
+                                    className="text-stone-600 hover:text-red-400 p-1"
+                                >
+                                    <X size={14} />
+                                </button>
+                            </div>
+                        ))}
+                        {mappings.length === 0 && (
                             <div className="text-xs text-stone-500 text-center py-6">
                                 No hardware mapped yet.
                             </div>
