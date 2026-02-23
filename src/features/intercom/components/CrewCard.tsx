@@ -77,10 +77,16 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
     const history = useIntercomStore(state => state.history);
 
     // Filter chat history for this specific user
-    const directHistory = history.filter(h =>
-        (h.targetUserId === member.userId) ||
-        (h.senderId === member.userId && h.message.startsWith('Mensaje:'))
-    ).slice(0, 10);
+    const directHistory = history.filter(h => {
+        const isMsg = h.message?.startsWith('Mensaje:');
+        if (!isMsg) return false;
+
+        // Either I sent it to them, or they sent it to me
+        const iSent = h.targetUserId === member.userId;
+        const theySent = h.senderId === member.userId;
+
+        return iSent || theySent;
+    }).slice(0, 50);
 
     return (
         <div className={`bg-stone-950 border ${member.isOnline ? 'border-stone-800' : 'border-stone-900 opacity-60'} rounded-3xl overflow-hidden shadow-2xl transition-all hover:border-indigo-500/40 group relative`}>
@@ -232,7 +238,13 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                     onSubmit={(e) => {
                         e.preventDefault();
                         if (chatMsg.trim()) {
-                            onSendCommand({ name: `Mensaje: ${chatMsg.trim()}`, id: 'chat', color: '#6366f1' });
+                            onSendCommand({
+                                name: `Mensaje: ${chatMsg.trim()}`,
+                                id: 'chat',
+                                color: '#6366f1',
+                                isChat: true,
+                                targetUserId: member.userId // Pass it up so it records in local history
+                            });
                             setChatMsg('');
                         }
                     }}

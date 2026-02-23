@@ -152,11 +152,9 @@ export const DeviceView = () => {
                                                     }
                                                 `}
                                             >
-                                                {!isMine && (
-                                                    <div className="text-[9px] font-black uppercase tracking-widest text-[#53bdeb] mb-0.5">
-                                                        {msg.senderName || 'Control'}
-                                                    </div>
-                                                )}
+                                                <div className={`text-[9px] font-black uppercase tracking-widest ${isMine ? 'text-green-200' : 'text-[#53bdeb]'} mb-0.5`}>
+                                                    {isMine ? `Tú (${user?.role?.name || user?.globalRole?.name || 'Operador'})` : (msg.senderName || 'Control')}
+                                                </div>
                                                 <div className="break-words mb-1 text-sm font-semibold opacity-90">
                                                     {msg.message.replace('Mensaje:', '').trim()}
                                                 </div>
