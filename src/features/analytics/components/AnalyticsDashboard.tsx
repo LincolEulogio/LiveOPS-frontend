@@ -37,8 +37,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
     const { data: telemetry, isLoading: telLoading } = useQuery<TelemetryLog[]>({
         queryKey: ['analytics', productionId, 'telemetry'],
         queryFn: async () => {
-            const res = await api.get(`/productions/${productionId}/analytics/telemetry?minutes=120`);
-            return res.data;
+            return (api.get(`/productions/${productionId}/analytics/telemetry?minutes=120`) as any) as TelemetryLog[];
         },
         enabled: !!productionId,
         refetchInterval: isLive ? 10000 : false, // Poll if live
@@ -47,16 +46,14 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
     const { data: report, refetch: refetchReport } = useQuery<ShowReport>({
         queryKey: ['analytics', productionId, 'report'],
         queryFn: async () => {
-            const res = await api.get(`/productions/${productionId}/analytics/report`);
-            return res.data;
+            return (api.get(`/productions/${productionId}/analytics/report`) as any) as ShowReport;
         },
         enabled: !!productionId,
     });
 
     const generateReportMutation = useMutation({
         mutationFn: async () => {
-            const res = await api.post(`/productions/${productionId}/analytics/report/generate`);
-            return res.data;
+            return (api.post(`/productions/${productionId}/analytics/report/generate`) as any) as any;
         },
         onSuccess: () => refetchReport(),
     });

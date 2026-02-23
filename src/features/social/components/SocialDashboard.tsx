@@ -1,7 +1,8 @@
 'use client';
 
-import { useSocial } from '../hooks/useSocial';
+import { useSocial, SocialMessage } from '../hooks/useSocial';
 import { SocialMessageCard } from './SocialMessageCard';
+import { apiClient } from '@/shared/api/api.client';
 import { MessageSquare, ShieldCheck, Tv } from 'lucide-react';
 
 interface Props {
@@ -18,17 +19,10 @@ export const SocialDashboard = ({ productionId }: Props) => {
         const users = ['Ninja', 'Auronplay', 'Ibai', 'Rubius', 'RandomFan99'];
         const msgs = ['¡Increíble directo!', 'Saludos desde México 🇲🇽', 'Esto es spam', '¿A qué hora empieza el show?', 'Jajajaja buenísimo'];
 
-        fetch(`http://localhost:3000/productions/${productionId}/social/messages`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify({
-                platform,
-                author: users[Math.floor(Math.random() * users.length)],
-                content: msgs[Math.floor(Math.random() * msgs.length)]
-            })
+        apiClient.post(`/productions/${productionId}/social/messages`, {
+            platform,
+            author: users[Math.floor(Math.random() * users.length)],
+            content: msgs[Math.floor(Math.random() * msgs.length)]
         });
     };
 
@@ -66,7 +60,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
                                 <span className="text-stone-500 text-sm font-medium">No pending messages</span>
                             </div>
                         ) : (
-                            pendingMessages.map(msg => (
+                            pendingMessages.map((msg: SocialMessage) => (
                                 <SocialMessageCard
                                     key={msg.id}
                                     message={msg}
@@ -91,7 +85,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
                                 <span className="text-stone-500 text-sm font-medium">No approved messages</span>
                             </div>
                         ) : (
-                            approvedMessages.map(msg => (
+                            approvedMessages.map((msg: SocialMessage) => (
                                 <SocialMessageCard
                                     key={msg.id}
                                     message={msg}

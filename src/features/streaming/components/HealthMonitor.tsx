@@ -42,8 +42,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
     const { data: historicalData } = useQuery<any[]>({
         queryKey: ['analytics', productionId, 'telemetry', 'short'],
         queryFn: async () => {
-            const res = await api.get(`/productions/${productionId}/analytics/telemetry?minutes=10`);
-            return res.data;
+            return (api.get(`/productions/${productionId}/analytics/telemetry?minutes=10`) as any) as any[];
         },
         enabled: !!productionId,
     });

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '@/shared/api/api.client';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useEffect } from 'react';
 
@@ -21,16 +22,7 @@ export const useSocial = (productionId: string) => {
     const { data: messages = [], isLoading } = useQuery({
         queryKey: ['social-messages', productionId],
         queryFn: async () => {
-            // In a real app we'd call axios.get(`/productions/${productionId}/social/messages`)
-            // For now we simulate an empty array if no backend endpoint is fully hooked up to an axios client yet
-            const res = await fetch(`http://localhost:3000/productions/${productionId}/social/messages`, {
-                headers: {
-                    // Need JWT token here in real app, we might rely on global interceptors if using axios instead
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            if (!res.ok) return [];
-            return res.json() as Promise<SocialMessage[]>;
+            return (await apiClient.get<SocialMessage[]>(`/productions/${productionId}/social/messages`)) as any;
         },
         enabled: !!productionId,
     });
@@ -65,16 +57,7 @@ export const useSocial = (productionId: string) => {
 
     const updateStatusMutation = useMutation({
         mutationFn: async ({ id, status }: { id: string, status: SocialMessage['status'] }) => {
-            const res = await fetch(`http://localhost:3000/productions/${productionId}/social/messages/${id}/status`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({ status })
-            });
-            if (!res.ok) throw new Error('Failed to update status');
-            return res.json();
+            return apiClient.put(`/productions/${productionId}/social/messages/${id}/status`, { status }) as any;
         },
         // Optimistic update could go here
     });
@@ -83,8 +66,8 @@ export const useSocial = (productionId: string) => {
         messages,
         isLoading,
         updateStatus: updateStatusMutation.mutateAsync,
-        pendingMessages: messages.filter(m => m.status === 'pending'),
-        approvedMessages: messages.filter(m => m.status === 'approved'),
-        onAirMessage: messages.find(m => m.status === 'on-air'),
+        pendingMessages: messages.filter((m: SocialMessage) => m.status === 'pending'),
+        approvedMessages: messages.filter((m: SocialMessage) => m.status === 'approved'),
+        onAirMessage: messages.find((m: SocialMessage) => m.status === 'on-air'),
     };
 };
