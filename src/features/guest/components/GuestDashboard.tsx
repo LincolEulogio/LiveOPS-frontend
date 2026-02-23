@@ -82,6 +82,12 @@ export const GuestDashboard = ({ productionId }: Props) => {
 
                         <div className="mt-8 pt-8 border-t border-stone-800 flex justify-center gap-4">
                             <Link
+                                href={`/productions/${productionId}/room`}
+                                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 rounded-xl text-white font-bold transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-2"
+                            >
+                                <Radio size={18} /> Join as HQ Stream Source
+                            </Link>
+                            <Link
                                 href={`/productions/${productionId}/prompter`}
                                 target="_blank"
                                 className="px-6 py-3 bg-stone-800 hover:bg-stone-700 border border-stone-700 rounded-xl text-stone-200 font-bold transition-all shadow-lg flex items-center gap-2"
