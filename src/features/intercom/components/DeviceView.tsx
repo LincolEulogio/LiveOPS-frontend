@@ -9,86 +9,99 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
+import { useAppStore } from '@/shared/store/app.store';
 
 export const DeviceView = () => {
     const { activeAlert } = useIntercomStore();
     const { acknowledgeAlert } = useIntercom();
     const user = useAuthStore((state) => state.user);
-    const { isConnected, socket } = useSocket();
-    const [selectedRole, setSelectedRole] = React.useState<string | null>(null);
+    const activeProductionId = useAppStore((state) => state.activeProductionId);
 
-    // Get available roles from query (same as dashboard)
-    const { data: roles = [] } = useQuery<any[]>({
-        queryKey: ['roles'],
+    // Derived values
+    const { isConnected } = useSocket();
+    const activeRole = user?.role?.name || user?.globalRole?.name || 'OPERATOR';
+
+    // Fetch timeline blocks to know the current active segment
+    const { data: timelineBlocks = [] } = useQuery<any[]>({
+        queryKey: ['timeline', activeProductionId],
         queryFn: async () => {
-            const data = await (apiClient.get('/users/roles') as any);
-            return data || [];
-        }
+            if (!activeProductionId) return [];
+            return await (apiClient.get(`/productions/${activeProductionId}/timeline`) as any);
+        },
+        enabled: !!activeProductionId,
     });
 
-    const activeRole = selectedRole || user?.role?.name || user?.globalRole?.name || 'VIEWER';
+    // Find the currently active block
+    const activeBlock = timelineBlocks.find((b) => b.status === 'ACTIVE');
 
-    const handleRoleSelect = (roleName: string) => {
-        setSelectedRole(roleName);
-        // We notify the socket about the new role for this session
-        if (socket && isConnected) {
-            socket.emit('role.identify', { roleName });
-        }
-    };
-
-    if (activeRole === 'VIEWER' && !selectedRole) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-[80vh] p-8 bg-black text-center">
-                <h2 className="text-xl font-black text-white mb-2 uppercase tracking-tight">Identificación de Rol</h2>
-                <p className="text-stone-500 text-[10px] uppercase font-bold tracking-widest mb-8">Selecciona tu puesto en esta producción</p>
-
-                <div className="grid grid-cols-2 gap-3 w-full max-w-sm">
-                    {['CÁMARA 1', 'CÁMARA 2', 'CÁMARA 3', 'CÁMARA 4', 'SONIDO', 'PISO'].map(role => (
-                        <button
-                            key={role}
-                            onClick={() => handleRoleSelect(role)}
-                            className="bg-stone-900 border border-stone-800 p-4 rounded-2xl text-white font-bold uppercase tracking-widest text-[10px] hover:border-indigo-500 transition-colors active:scale-95"
-                        >
-                            {role}
-                        </button>
-                    ))}
-                </div>
-            </div>
-        );
-    }
+    // Get the last coordinator who sent a message from history
+    const history = useIntercomStore((state) => state.history);
+    const lastCoordinator = history.length > 0 ? history[0].senderName : 'Esperando...';
 
     if (!activeAlert) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[80vh] text-center p-8 bg-black">
-                <div className="absolute top-6 right-6 flex items-center gap-2 px-3 py-1 rounded-full bg-stone-900 border border-stone-800">
-                    {isConnected ? (
-                        <Wifi size={12} className="text-green-500" />
-                    ) : (
-                        <WifiOff size={12} className="text-red-500" />
-                    )}
-                    <span className="text-[10px] font-black uppercase tracking-widest text-stone-400">
-                        {isConnected ? 'Sincronizado' : 'Desconectado'}
-                    </span>
+                {/* Top Status Bar */}
+                <div className="absolute top-6 left-6 right-6 flex items-center justify-between">
+                    <div className="flex flex-col items-start bg-stone-900/80 backdrop-blur-md px-4 py-2 rounded-2xl border border-stone-800">
+                        <span className="text-[8px] text-stone-500 font-black uppercase tracking-[0.2em] mb-0.5">Coordinador Activo</span>
+                        <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                            <span className="text-xs font-bold text-white uppercase tracking-tight">{lastCoordinator}</span>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-stone-900/80 backdrop-blur-md border border-stone-800">
+                        {isConnected ? (
+                            <Wifi size={12} className="text-green-500" />
+                        ) : (
+                            <WifiOff size={12} className="text-red-500" />
+                        )}
+                        <span className="text-[9px] font-black uppercase tracking-[0.1em] text-stone-400">
+                            {isConnected ? 'ONLINE' : 'OFFLINE'}
+                        </span>
+                    </div>
                 </div>
 
-                <div className="w-24 h-24 bg-stone-900/50 rounded-full flex items-center justify-center mb-8 border border-white/5 shadow-2xl relative">
+                <div className="w-24 h-24 bg-stone-900/50 rounded-full flex items-center justify-center mb-10 border border-white/5 shadow-2xl relative">
                     <div className="absolute inset-0 rounded-full border border-indigo-500/20 animate-ping" />
                     <Bell className="text-stone-700" size={40} />
                 </div>
 
-                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-500 mb-2">Estado del Sistema</h3>
-                <h2 className="text-3xl font-black text-white mb-6 uppercase tracking-tighter">LISTO PARA ALERTAS</h2>
+                {/* Current Production Status */}
+                <div className="mb-10 w-full max-w-sm flex flex-col items-center">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-500 mb-3">En Vivo Ahora</h3>
+                    <div className="bg-stone-900/50 border border-stone-800 px-6 py-4 rounded-3xl w-full">
+                        {activeBlock ? (
+                            <div className="flex flex-col items-center">
+                                <span className="px-2 py-0.5 rounded text-[9px] font-black bg-red-500/20 text-red-500 uppercase tracking-widest mb-2 border border-red-500/20">Al Aire</span>
+                                <h4 className="text-lg font-bold text-white uppercase tracking-tighter leading-tight text-center">
+                                    {activeBlock.title}
+                                </h4>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center opacity-50">
+                                <span className="px-2 py-0.5 rounded text-[9px] font-black bg-stone-800 text-stone-400 uppercase tracking-widest mb-2">Standby</span>
+                                <h4 className="text-sm font-bold text-stone-300 uppercase tracking-tighter text-center">
+                                    No hay bloque activo
+                                </h4>
+                            </div>
+                        )}
+                    </div>
+                </div>
 
-                <div className="bg-stone-900/50 border border-stone-800 px-6 py-3 rounded-2xl flex items-center gap-3">
-                    <Shield size={16} className="text-indigo-400" />
-                    <div className="text-left">
-                        <p className="text-[9px] text-stone-500 uppercase font-black tracking-widest leading-none">Tu Rol</p>
-                        <p className="text-sm font-bold text-white uppercase tracking-tight">{activeRole}</p>
+                <div className="bg-stone-900 border border-stone-800 px-6 py-4 rounded-2xl flex items-center gap-4 w-full max-w-xs shadow-2xl">
+                    <div className="bg-indigo-500/20 p-2 text-indigo-400 rounded-xl">
+                        <Shield size={20} />
+                    </div>
+                    <div className="text-left flex-1">
+                        <p className="text-[10px] text-stone-500 uppercase font-black tracking-widest leading-none mb-1">Tu Rol Activo</p>
+                        <p className="text-base font-bold text-white uppercase tracking-tight">{activeRole}</p>
                     </div>
                 </div>
 
                 <p className="mt-12 text-stone-600 text-[10px] uppercase font-bold tracking-widest max-w-[200px] leading-loose">
-                    Mantén la pantalla encendida. El dispositivo vibrará al recibir órdenes.
+                    Mantén la pantalla encendida. El dispositivo vibrará al recibir alertas.
                 </p>
             </div>
         );

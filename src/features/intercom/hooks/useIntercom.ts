@@ -4,10 +4,12 @@ import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useAppStore } from '@/shared/store/app.store';
 import { useIntercomStore, IntercomAlert } from '../store/intercom.store';
 import { useAudio } from '@/shared/providers/AudioProvider';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const useIntercom = (forcedUserId?: string) => {
     const { socket, isConnected } = useSocket();
     const { playAlert } = useAudio();
+    const queryClient = useQueryClient();
     const authUser = useAuthStore((state) => state.user);
     // Use forcedUserId if provided (for custom views), otherwise use logged in user
     const user = forcedUserId ? { id: forcedUserId, role: null, globalRole: null } : authUser;
@@ -82,16 +84,22 @@ export const useIntercom = (forcedUserId?: string) => {
             updateAlertStatus(response.commandId, 'ACKNOWLEDGED', new Date().toISOString());
         };
 
+        const handleTimelineUpdate = () => {
+            queryClient.invalidateQueries({ queryKey: ['timeline', activeProductionId] });
+        };
+
         socket.on('presence.update', handlePresence);
         socket.on('command.received', handleCommand);
         socket.on('command.ack_received', handleAck);
+        socket.on('timeline.updated', handleTimelineUpdate);
 
         return () => {
             socket.off('presence.update', handlePresence);
             socket.off('command.received', handleCommand);
             socket.off('command.ack_received', handleAck);
+            socket.off('timeline.updated', handleTimelineUpdate);
         };
-    }, [socket, isConnected, user?.id, activeProductionId, setActiveAlert, addToHistory, updateAlertStatus, authUser]);
+    }, [socket, isConnected, user?.id, activeProductionId, setActiveAlert, addToHistory, updateAlertStatus, authUser, queryClient]);
 
     const sendCommand = useCallback((data: {
         message: string;
