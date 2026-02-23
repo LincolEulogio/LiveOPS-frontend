@@ -4,7 +4,7 @@ import React from 'react';
 import { useIntercomStore } from '../store/intercom.store';
 import { useIntercom } from '../hooks/useIntercom';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { Bell, CheckCircle, XCircle, Wifi, WifiOff, Shield } from 'lucide-react';
+import { Bell, CheckCircle, XCircle, Wifi, WifiOff, Shield, MessageCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useQuery } from '@tanstack/react-query';
@@ -16,6 +16,8 @@ export const DeviceView = () => {
     const { acknowledgeAlert } = useIntercom();
     const user = useAuthStore((state) => state.user);
     const activeProductionId = useAppStore((state) => state.activeProductionId);
+    const [isChatOpen, setIsChatOpen] = React.useState(false);
+    const [customMessage, setCustomMessage] = React.useState('');
 
     // Derived values
     const { isConnected } = useSocket();
@@ -38,6 +40,17 @@ export const DeviceView = () => {
     const history = useIntercomStore((state) => state.history);
     const lastCoordinator = history.length > 0 ? history[0].senderName : 'Esperando...';
 
+    const handleSendCustomMessage = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!customMessage.trim()) return;
+        
+        // This leverages the "acknowledgeAlert" logic which sends a response back to the Dashboard
+        // We use a dummy ID 'chat' to indicate it's a direct message and not an alert acknowledgment
+        acknowledgeAlert('chat', customMessage.trim());
+        setCustomMessage('');
+        setIsChatOpen(false);
+    };
+
     if (!activeAlert) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[80vh] text-center p-8 bg-black">
@@ -54,13 +67,13 @@ export const DeviceView = () => {
                         </span>
                     </div>
 
-                    <div className="flex flex-col items-end bg-stone-900/80 backdrop-blur-md px-4 py-2 rounded-2xl border border-stone-800 pointer-events-auto text-right">
-                        <span className="text-[8px] text-stone-500 font-black uppercase tracking-[0.2em] mb-0.5">Coordinador Activo</span>
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-white uppercase tracking-tight">{lastCoordinator}</span>
-                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                        </div>
-                    </div>
+                    <button 
+                        onClick={() => setIsChatOpen(true)}
+                        className="flex items-center gap-2 bg-stone-900/80 hover:bg-stone-800 backdrop-blur-md px-4 py-3 rounded-2xl border border-stone-800 pointer-events-auto transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                        <MessageCircle size={16} className="text-indigo-400" />
+                        <span className="text-[10px] text-white font-black uppercase tracking-[0.2em] mt-0.5">Chat</span>
+                    </button>
                 </div>
 
                 <div className="w-24 h-24 bg-stone-900/50 rounded-full flex items-center justify-center mb-10 border border-white/5 shadow-2xl relative">
@@ -103,6 +116,44 @@ export const DeviceView = () => {
                 <p className="mt-12 text-stone-600 text-[10px] uppercase font-bold tracking-widest max-w-[200px] leading-loose">
                     Mantén la pantalla encendida. El dispositivo vibrará al recibir alertas.
                 </p>
+
+                {/* Chat Modal */}
+                <AnimatePresence>
+                    {isChatOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 50 }}
+                            className="absolute bottom-6 left-6 right-6 bg-stone-900 border border-stone-800 rounded-3xl p-6 shadow-2xl z-50 flex flex-col"
+                        >
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2">
+                                    <MessageCircle size={14} /> Enviar Mensaje
+                                </h3>
+                                <button onClick={() => setIsChatOpen(false)} className="text-stone-500 hover:text-white transition-colors bg-stone-800/50 p-1.5 rounded-full">
+                                    <X size={16} />
+                                </button>
+                            </div>
+                            <form onSubmit={handleSendCustomMessage} className="flex flex-col gap-3">
+                                <input
+                                    type="text"
+                                    value={customMessage}
+                                    onChange={(e) => setCustomMessage(e.target.value)}
+                                    placeholder="Escribe tu mensaje al master..."
+                                    className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 placeholder:text-stone-600 font-bold"
+                                    autoFocus
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={!customMessage.trim()}
+                                    className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-stone-800 disabled:text-stone-500 text-white rounded-xl py-3 font-black text-xs uppercase tracking-widest transition-colors flex items-center justify-center gap-2"
+                                >
+                                    Enviar al Control
+                                </button>
+                            </form>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         );
     }
