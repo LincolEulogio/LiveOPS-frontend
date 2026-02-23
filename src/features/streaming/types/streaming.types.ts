@@ -31,6 +31,19 @@ export interface StreamingState {
     vmix?: VmixState;
     tally?: TallyUpdate;
     lastUpdate: string;
+    destinations?: StreamingDestination[];
+}
+
+export interface StreamingDestination {
+    id: string;
+    productionId: string;
+    name: string;
+    platform: string;
+    rtmpUrl: string;
+    streamKey: string;
+    isEnabled: boolean;
+    isActive: boolean;
+    createdAt: string;
 }
 
 export type StreamingCommand =
@@ -41,7 +54,9 @@ export type StreamingCommand =
     | { type: 'STOP_RECORD' }
     | { type: 'VMIX_CUT' }
     | { type: 'VMIX_FADE'; duration?: number }
-    | { type: 'VMIX_SELECT_INPUT'; payload: { input: number; isPreview?: boolean } };
+    | { type: 'VMIX_SELECT_INPUT'; payload: { input: number; isPreview?: boolean } }
+    | { type: 'START_DESTINATION'; payload: { destId: string } }
+    | { type: 'STOP_DESTINATION'; payload: { destId: string } };
 
 export interface CommandResponse {
     success: boolean;

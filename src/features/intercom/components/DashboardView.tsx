@@ -30,6 +30,7 @@ import { TimelineView } from '../../timeline/components/TimelineView';
 import { TemplateManager } from './TemplateManager';
 import { useIntercomTemplates } from '../hooks/useIntercomTemplates';
 import { AutomationDashboard } from '../../automation/components/AutomationDashboard';
+import { MulticastManager } from '../../streaming/components/MulticastManager';
 import { cn } from '@/shared/utils/cn';
 import { HealthMonitor } from '../../health/components/HealthMonitor';
 import { IntercomTemplate, CrewMember } from '../types/intercom.types';
@@ -45,7 +46,7 @@ export const DashboardView = () => {
     const { sendCommand, sendDirectMessage, members: onlineMembers } = useIntercom();
     const { history } = useIntercomStore();
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [activeTab, setActiveTab] = useState<'intercom' | 'automation'>('intercom');
+    const [activeTab, setActiveTab] = useState<'intercom' | 'automation' | 'multicast'>('intercom');
 
     // Fetch Production Data (including registered users)
     const { data: production } = useQuery<Production>({
@@ -136,6 +137,15 @@ export const DashboardView = () => {
                             )}
                         >
                             Automation
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('multicast')}
+                            className={cn(
+                                "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                                activeTab === 'multicast' ? "bg-stone-800 text-indigo-400 shadow-inner" : "text-stone-500 hover:text-stone-300"
+                            )}
+                        >
+                            Multicast
                         </button>
                     </div>
                 </div>
@@ -231,7 +241,7 @@ export const DashboardView = () => {
                                     </div>
                                 )}
                             </motion.div>
-                        ) : (
+                        ) : activeTab === 'automation' ? (
                             <motion.div
                                 key="automation"
                                 initial={{ opacity: 0, y: 20 }}
@@ -239,6 +249,17 @@ export const DashboardView = () => {
                                 exit={{ opacity: 0, y: -20 }}
                             >
                                 <AutomationDashboard productionId={activeProductionId || ''} />
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="multicast"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                            >
+                                <div className="bg-stone-900/50 border border-stone-800 rounded-3xl p-6 shadow-2xl">
+                                    <MulticastManager productionId={activeProductionId || ''} />
+                                </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
