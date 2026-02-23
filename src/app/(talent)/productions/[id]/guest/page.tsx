@@ -1,18 +1,11 @@
-'use client';
+import { GuestDashboard } from '@/features/guest/components/GuestDashboard';
 
-import React from 'react';
-import { useParams } from 'next/navigation';
-import { GuestRoom } from '@/features/streaming/components/GuestRoom';
+interface Props {
+    params: {
+        id: string;
+    }
+}
 
-export default function GuestPage() {
-    const params = useParams();
-    const id = params.id as string;
-
-    if (!id) return null;
-
-    return (
-        <div className="fixed inset-0 bg-stone-950">
-            <GuestRoom productionId={id} />
-        </div>
-    );
+export default function GuestPage({ params }: Props) {
+    return <GuestDashboard productionId={params.id} />;
 }

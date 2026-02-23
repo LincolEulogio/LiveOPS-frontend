@@ -130,7 +130,7 @@ export default function ProductionDetailPage() {
                   Teleprompter
                 </Link>
                 <Link
-                  href={`/productions/${id}/guest`}
+                  href={`/productions/${id}/room`}
                   className="flex items-center gap-2 px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-[10px] font-bold text-indigo-400 uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition-all shadow-lg"
                 >
                   <Users size={14} />
