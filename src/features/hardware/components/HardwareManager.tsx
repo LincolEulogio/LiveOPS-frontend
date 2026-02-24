@@ -75,8 +75,8 @@ export const HardwareManager = ({ productionId }: Props) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                 {/* Device List */}
-                <div className="bg-stone-900 border border-stone-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
-                    <h2 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2 mb-6">
+                <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2 mb-6">
                         <Keyboard size={18} className="text-indigo-400" />
                         Connected Devices
                     </h2>
@@ -89,15 +89,15 @@ export const HardwareManager = ({ productionId }: Props) => {
 
                     <div className="space-y-3 mb-6">
                         {devices.length === 0 ? (
-                            <div className="text-xs text-stone-500 text-center py-6 border border-stone-800 border-dashed rounded-xl">
+                            <div className="text-xs text-muted text-center py-6 border border-card-border border-dashed rounded-xl">
                                 No MIDI or HID devices detected automatically.
                             </div>
                         ) : (
                             devices.map(d => (
-                                <div key={d.id} className="flex justify-between items-center p-3 bg-stone-800/50 rounded-xl border border-stone-700/50">
+                                <div key={d.id} className="flex justify-between items-center p-3 bg-background/50 rounded-xl border border-card-border">
                                     <div className="flex items-center gap-3">
                                         {d.type === 'hid' ? <Keyboard size={16} className="text-indigo-400" /> : <RadioReceiver size={16} className="text-emerald-400" />}
-                                        <span className="text-sm font-bold text-stone-200">{d.name}</span>
+                                        <span className="text-sm font-bold text-foreground">{d.name}</span>
                                     </div>
                                     <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
                                 </div>
@@ -107,18 +107,18 @@ export const HardwareManager = ({ productionId }: Props) => {
 
                     <button
                         onClick={requestHIDDevice}
-                        className="w-full py-3 bg-stone-800 hover:bg-stone-700 border border-stone-700 rounded-xl text-xs font-bold text-stone-300 transition-all flex justify-center items-center gap-2"
+                        className="w-full py-3 bg-background hover:bg-card-bg border border-card-border rounded-xl text-xs font-bold text-foreground transition-all flex justify-center items-center gap-2"
                     >
                         <Plus size={14} /> Connect Stream Deck / HID Device
                     </button>
-                    <p className="text-[10px] text-stone-500 mt-3 text-center">
+                    <p className="text-[10px] text-muted mt-3 text-center">
                         MIDI devices are detected automatically. HID devices require manual permission.
                     </p>
                 </div>
 
                 {/* Key Mapper */}
-                <div className="bg-stone-900 border border-stone-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col">
-                    <h2 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2 mb-6">
+                <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col">
+                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2 mb-6">
                         <Zap size={18} className="text-amber-400" />
                         Hardware Mapping
                     </h2>
@@ -126,13 +126,13 @@ export const HardwareManager = ({ productionId }: Props) => {
                     <div className="flex-1 space-y-4 overflow-y-auto no-scrollbar max-h-[300px]">
                         {/* Display current Mappings */}
                         {mappings.map((mapping) => (
-                            <div key={mapping.id} className="flex justify-between items-center p-3 bg-stone-950 rounded-xl border border-stone-800">
+                            <div key={mapping.id} className="flex justify-between items-center p-3 bg-background/50 rounded-xl border border-card-border">
                                 <div className="flex items-center gap-3">
-                                    <div className="px-2 py-1 bg-stone-800 rounded-md text-[10px] font-mono text-indigo-300 whitespace-nowrap">
+                                    <div className="px-2 py-1 bg-card-bg rounded-md text-[10px] font-mono text-indigo-400 whitespace-nowrap">
                                         {mapping.mapKey}
                                     </div>
-                                    <ArrowRight size={14} className="text-stone-600" />
-                                    <span className="text-sm font-bold text-stone-300 truncate max-w-[150px]">
+                                    <ArrowRight size={14} className="text-muted" />
+                                    <span className="text-sm font-bold text-foreground truncate max-w-[150px]">
                                         {mapping.rule?.name || 'Unknown Rule'}
                                     </span>
                                 </div>
@@ -145,14 +145,14 @@ export const HardwareManager = ({ productionId }: Props) => {
                             </div>
                         ))}
                         {mappings.length === 0 && (
-                            <div className="text-xs text-stone-500 text-center py-6">
+                            <div className="text-xs text-muted text-center py-6">
                                 No hardware mapped yet.
                             </div>
                         )}
                     </div>
 
                     {/* Mapping Listener Mode */}
-                    <div className="mt-6 pt-6 border-t border-stone-800">
+                    <div className="mt-6 pt-6 border-t border-card-border">
                         {!isAssigning ? (
                             <button
                                 onClick={() => setIsAssigning(true)}
@@ -164,27 +164,27 @@ export const HardwareManager = ({ productionId }: Props) => {
                             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
                                 <div className="p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-center">
                                     {!lastEvent ? (
-                                        <p className="text-xs font-bold text-indigo-300 animate-pulse">
+                                        <p className="text-xs font-bold text-indigo-400 animate-pulse">
                                             Press any physical button on your connected hardware...
                                         </p>
                                     ) : (
                                         <div className="space-y-4">
-                                            <p className="text-xs text-stone-400">Detected input:</p>
+                                            <p className="text-xs text-muted">Detected input:</p>
                                             <div className="inline-block px-3 py-1 bg-indigo-600 text-white font-mono text-sm font-bold rounded-lg shadow-lg">
                                                 {lastEvent.type.toUpperCase()} : {lastEvent.key}
                                             </div>
 
-                                            <div className="text-left mt-4 pt-4 border-t border-indigo-500/20">
-                                                <p className="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2">Assign to Macro:</p>
+                                            <div className="text-left mt-4 pt-4 border-t border-indigo-500/10">
+                                                <p className="text-[10px] font-bold uppercase tracking-widest text-muted mb-2">Assign to Macro:</p>
                                                 <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar pr-2">
                                                     {manualMacros.length === 0 ? (
-                                                        <p className="text-xs text-stone-500">No manual macros available. Create one first.</p>
+                                                        <p className="text-xs text-muted">No manual macros available. Create one first.</p>
                                                     ) : (
                                                         manualMacros.map(m => (
                                                             <button
                                                                 key={m.id}
                                                                 onClick={() => handleAssign(m.id)}
-                                                                className="w-full text-left px-3 py-2 text-xs font-bold text-stone-300 hover:text-white hover:bg-stone-800 rounded-lg transition-all"
+                                                                className="w-full text-left px-3 py-2 text-xs font-bold text-muted hover:text-foreground hover:bg-background rounded-lg transition-all"
                                                             >
                                                                 {m.name}
                                                             </button>
@@ -197,7 +197,7 @@ export const HardwareManager = ({ productionId }: Props) => {
                                 </div>
                                 <button
                                     onClick={() => { setIsAssigning(false); clearLastEvent(); }}
-                                    className="w-full py-2 bg-transparent hover:bg-stone-800 rounded-xl text-xs font-bold text-stone-500 transition-all"
+                                    className="w-full py-2 bg-transparent hover:bg-card-bg rounded-xl text-xs font-bold text-muted transition-all"
                                 >
                                     Cancel
                                 </button>

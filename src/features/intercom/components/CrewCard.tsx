@@ -82,9 +82,9 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
         <div className={`bg-background border ${member.isOnline ? 'border-card-border' : 'border-card-border/60 opacity-60'} rounded-3xl overflow-hidden shadow-2xl transition-all hover:border-indigo-500/40 group relative`}>
             {/* Minimal Header with Icons (Battery/Wifi stubs) */}
             <div className="px-5 pt-4 flex items-center justify-between">
-                <div className="flex items-center gap-2 opacity-20 group-hover:opacity-50 transition-opacity">
-                    <Battery size={10} className="text-white" />
-                    <Wifi size={10} className="text-white" />
+                <div className="flex items-center gap-2 opacity-30 group-hover:opacity-60 transition-opacity">
+                    <Battery size={10} className="text-foreground" />
+                    <Wifi size={10} className="text-foreground" />
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
@@ -127,7 +127,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
             </div>
 
             {/* Status Panel (High visibility) */}
-            <div className="mx-4 mb-4 p-4 bg-background dark:bg-black/40 rounded-2xl border border-card-border/50 flex flex-col justify-center min-h-[56px] relative overflow-hidden">
+            <div className="mx-4 mb-4 p-4 bg-card-bg/30 rounded-2xl border border-card-border/50 flex flex-col justify-center min-h-[56px] relative overflow-hidden">
                 <p className="text-[9px] font-black text-muted uppercase tracking-widest mb-2">Estado Actual</p>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
