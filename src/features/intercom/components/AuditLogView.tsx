@@ -67,58 +67,78 @@ export const AuditLogView = ({ productionId }: Props) => {
     }
 
     return (
-        <div className="bg-slate-900/50 border border-slate-800 rounded-xl overflow-hidden backdrop-blur-sm">
-            <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-white/[0.02]">
-                <h3 className="font-semibold text-slate-200 flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-primary" />
-                    Historial de Producción (Audit Trail)
+        <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2rem] overflow-hidden shadow-2xl relative">
+            {/* Visual Scanline Header Decoration */}
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
+
+            <div className="p-6 border-b border-card-border flex items-center justify-between bg-white/[0.02]">
+                <h3 className="text-xs font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/20">
+                        <Activity size={16} />
+                    </div>
+                    <span>Historial de Producción <span className="text-muted ml-1 opacity-50">(Audit Trail)</span></span>
                 </h3>
                 <button
                     onClick={fetchLogs}
-                    className="text-xs text-slate-400 hover:text-white transition-colors"
+                    className="px-4 py-1.5 bg-background/50 hover:bg-card-border border border-card-border rounded-xl text-[10px] font-black text-muted hover:text-foreground uppercase tracking-widest transition-all active:scale-95"
                 >
-                    Actualizar ahora
+                    Refrescar Telemetría
                 </button>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                    <thead className="text-slate-500 uppercase text-[10px] tracking-wider bg-slate-950/50">
+            <div className="overflow-x-auto no-scrollbar">
+                <table className="w-full text-left">
+                    <thead className="bg-background/40 border-b border-card-border">
                         <tr>
-                            <th className="px-4 py-3 font-medium">Hora</th>
-                            <th className="px-4 py-3 font-medium">Categoría</th>
-                            <th className="px-4 py-3 font-medium">Acción / Detalles</th>
-                            <th className="px-4 py-3 font-medium">Usuario</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-[0.3em]">Temporal</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-[0.3em]">Criterio</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-[0.3em]">Vector de Datos / Registro</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-[0.3em]">Identidad</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/50">
-                        {logs.length === 0 ? (
+                    <tbody className="divide-y divide-card-border/30">
+                        {loading && logs.length === 0 ? (
                             <tr>
-                                <td colSpan={4} className="px-4 py-12 text-center text-slate-500">
-                                    No hay registros disponibles para esta producción aún.
+                                <td colSpan={4} className="px-6 py-20 text-center">
+                                    <div className="flex flex-col items-center gap-4">
+                                        <div className="w-10 h-10 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+                                        <span className="text-[10px] font-black text-muted uppercase tracking-widest animate-pulse">Sincronizando Archivos...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : logs.length === 0 ? (
+                            <tr>
+                                <td colSpan={4} className="px-6 py-20 text-center">
+                                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] italic">No se han detectado fluctuaciones en el sistema aún.</p>
                                 </td>
                             </tr>
                         ) : (
                             logs.map((log) => (
-                                <tr key={log.id} className="hover:bg-white/[0.02] transition-colors group">
-                                    <td className="px-4 py-3 whitespace-nowrap text-slate-400 tabular-nums">
+                                <tr key={log.id} className="hover:bg-white/[0.03] transition-colors group relative">
+                                    <td className="px-6 py-4 whitespace-nowrap text-[11px] font-bold text-indigo-400/80 tabular-nums tracking-wider uppercase">
                                         {format(new Date(log.createdAt), 'HH:mm:ss', { locale: es })}
                                     </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center gap-2 text-slate-300">
-                                            {getIcon(log.eventType)}
-                                            <span className="text-xs font-semibold truncate max-w-[120px]">
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 rounded-lg bg-background/50 flex items-center justify-center border border-card-border group-hover:bg-white/5 transition-colors">
+                                                {getIcon(log.eventType)}
+                                            </div>
+                                            <span className="text-[10px] font-extrabold text-foreground/70 uppercase tracking-widest truncate max-w-[140px]">
                                                 {log.eventType.replace(/_/g, ' ')}
                                             </span>
                                         </div>
                                     </td>
-                                    <td className="px-4 py-3 text-slate-200 font-medium">
-                                        {formatDetails(log.details)}
+                                    <td className="px-6 py-4">
+                                        <p className="text-[11px] font-black text-foreground uppercase tracking-tight leading-relaxed max-w-xl group-hover:text-indigo-400 transition-colors">
+                                            {formatDetails(log.details)}
+                                        </p>
                                     </td>
-                                    <td className="px-4 py-3 whitespace-nowrap">
-                                        <div className="flex items-center gap-2 text-slate-400 italic">
-                                            <User className="w-3 h-3" />
-                                            {log.user?.name || 'Sistema'}
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="flex items-center gap-2.5 px-3 py-1.5 bg-background/30 rounded-lg border border-transparent group-hover:border-card-border transition-all">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/40" />
+                                            <span className="text-[10px] font-black text-muted uppercase tracking-widest italic group-hover:text-foreground">
+                                                {log.user?.name || 'Sistema Core'}
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>
