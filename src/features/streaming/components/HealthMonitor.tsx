@@ -153,8 +153,8 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                 </div>
             </div>
 
-            {/* Main Metrics Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+            {/* Main Metrics Grid - Bento Cells */}
+            <div className="grid grid-cols-2 min-[1600px]:grid-cols-4 gap-4 relative z-10">
                 <MetricCard
                     label="Carga CPU"
                     value={isEngineConnected && latest?.cpuUsage !== undefined ? `${Math.round(latest.cpuUsage)}%` : 'N/A'}
@@ -257,12 +257,12 @@ const MetricCard = ({ label, value, icon: Icon, color, status = 'normal', toolti
     };
 
     return (
-        <div className={cn("p-4 rounded-2xl border bg-background/40 flex flex-col gap-3 transition-all hover:border-indigo-500/50 group", statusMap[status])} title={tooltip}>
+        <div className={cn("p-5 rounded-2xl border bg-background/40 flex flex-col gap-4 transition-all hover:border-indigo-500/50 group shadow-sm", statusMap[status])} title={tooltip}>
             <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black text-muted uppercase tracking-widest">{label}</span>
-                <div className={cn("p-1.5 rounded-lg", colorMap[color])}><Icon size={12} /></div>
+                <span className="text-[10px] font-black text-muted uppercase tracking-widest opacity-60">{label}</span>
+                <div className={cn("p-2 rounded-xl", colorMap[color])}><Icon size={14} /></div>
             </div>
-            <span className={cn("text-2xl font-black tracking-tighter", value === 'N/A' || value === '---' ? "text-muted/50" : "text-foreground")}>{value}</span>
+            <span className={cn("text-3xl font-black tracking-tighter", value === 'N/A' || value === '---' ? "text-muted/50" : "text-foreground")}>{value}</span>
         </div>
     );
 };

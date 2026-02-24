@@ -145,7 +145,7 @@ export const TimelineCRUD = ({
             ></div>
 
             {/* Dialog */}
-            <div className="relative w-full max-w-lg bg-card-bg border border-card-border rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="relative w-full max-w-lg max-h-[50vh] bg-card-bg border border-card-border rounded-[2rem] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
                 <div className="flex items-center justify-between p-6 border-b border-card-border">
                     <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                         {editingBlock ? 'Editar Bloque' : 'Añadir Bloque a Escaleta'}
@@ -158,98 +158,110 @@ export const TimelineCRUD = ({
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
-                    <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-muted">
-                            <Type size={16} className="text-indigo-400" />
-                            Título
-                        </label>
-                        <input
-                            {...register('title')}
-                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all"
-                            placeholder="Ej: Intro y Bienvenida"
-                        />
-                        {errors.title && <p className="text-xs text-red-400">{errors.title.message}</p>}
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-muted">
-                            <AlignLeft size={16} className="text-indigo-400" />
-                            Descripción
-                        </label>
-                        <textarea
-                            {...register('description')}
-                            rows={3}
-                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none"
-                            placeholder="Detalles del segmento..."
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col flex-1 overflow-hidden">
+                    {/* Scrollable Content Area */}
+                    <div className="p-6 sm:p-8 space-y-6 overflow-y-auto no-scrollbar flex-1">
                         <div className="space-y-2">
                             <label className="flex items-center gap-2 text-sm font-semibold text-muted">
-                                <Clock size={16} className="text-indigo-400" />
-                                Duración (ms)
+                                <Type size={16} className="text-indigo-400" />
+                                Título
                             </label>
                             <input
-                                type="number"
-                                {...register('durationMs', { valueAsNumber: true })}
-                                className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                                {...register('title')}
+                                className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all"
+                                placeholder="Ej: Intro y Bienvenida"
                             />
+                            {errors.title && <p className="text-xs text-red-400">{errors.title.message}</p>}
                         </div>
 
                         <div className="space-y-2">
                             <label className="flex items-center gap-2 text-sm font-semibold text-muted">
-                                <Video size={16} className="text-indigo-400" />
-                                Fuente
+                                <AlignLeft size={16} className="text-indigo-400" />
+                                Descripción
+                            </label>
+                            <textarea
+                                {...register('description')}
+                                rows={2}
+                                className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none text-sm"
+                                placeholder="Detalles del segmento..."
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-2 text-sm font-semibold text-muted">
+                                    <Clock size={16} className="text-indigo-400" />
+                                    Duración (ms)
+                                </label>
+                                <input
+                                    type="number"
+                                    {...register('durationMs', { valueAsNumber: true })}
+                                    className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-2 text-sm font-semibold text-muted">
+                                    <Video size={16} className="text-indigo-400" />
+                                    Fuente
+                                </label>
+                                <input
+                                    {...register('source')}
+                                    className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                                    placeholder="Ej: CAM 1, VTR"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="flex items-center gap-2 text-sm font-semibold text-muted">
+                                <Hash size={16} className="text-indigo-400" />
+                                Escena Vinculada (OBS)
                             </label>
                             <input
-                                {...register('source')}
+                                {...register('linkedScene')}
                                 className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
-                                placeholder="Ej: CAM 1, VTR"
+                                placeholder="Nombre exacto en OBS"
                             />
                         </div>
+
+                        <div className="space-y-2">
+                            <label className="flex items-center gap-2 text-sm font-semibold text-muted">
+                                <AlignLeft size={16} className="text-indigo-400" />
+                                Notas Internas
+                            </label>
+                            <textarea
+                                {...register('notes')}
+                                rows={2}
+                                className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all resize-none text-sm"
+                                placeholder="Notas privadas para el equipo..."
+                            />
+                        </div>
+
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-muted">
-                            <Hash size={16} className="text-indigo-400" />
-                            Escena Vinculada (OBS)
-                        </label>
-                        <input
-                            {...register('linkedScene')}
-                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
-                            placeholder="Nombre exacto en OBS"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-muted">
-                            <AlignLeft size={16} className="text-indigo-400" />
-                            Notas Internas
-                        </label>
-                        <textarea
-                            {...register('notes')}
-                            rows={2}
-                            className="w-full bg-background border border-card-border rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all resize-none"
-                            placeholder="Notas privadas para el equipo..."
-                        />
-                    </div>
-
-                    <div className="pt-4 flex gap-3">
+                    {/* Fixed Footer Actions */}
+                    <div className="p-6 sm:p-8 border-t border-card-border bg-white/[0.02] flex gap-4">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-4 py-2.5 bg-background hover:bg-card-border text-foreground font-semibold rounded-xl border border-card-border transition-all"
+                            className="flex-1 px-6 py-4 bg-background hover:bg-card-border text-foreground text-[10px] font-black uppercase tracking-widest rounded-2xl border border-card-border transition-all active:scale-95"
                         >
                             Cancelar
                         </button>
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="flex-[2] bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/20"
+                            className="flex-[2] bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest py-4 rounded-2xl transition-all shadow-xl shadow-indigo-600/30 active:scale-95 flex items-center justify-center gap-2"
                         >
-                            {isSubmitting ? 'Guardando...' : editingBlock ? 'Actualizar' : 'Crear Bloque'}
+                            {isSubmitting ? (
+                                <>
+                                    <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    Procesando...
+                                </>
+                            ) : (
+                                editingBlock ? 'Sincronizar Cambios' : 'Inicializar Nodo'
+                            )}
                         </button>
                     </div>
                 </form>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTimeline } from '@/features/timeline/hooks/useTimeline';
-import { Plus, Layout, RotateCcw, ArrowRight } from 'lucide-react';
+import { Plus, Layout, RotateCcw, ArrowRight, Play, CheckCircle2, Zap } from 'lucide-react';
 import { useState } from 'react';
 import { TimelineCRUD } from '@/features/timeline/components/TimelineCRUD';
 import { TimelineBlock } from '@/features/timeline/types/timeline.types';
@@ -10,6 +10,7 @@ import { RundownTable } from '@/features/timeline/components/RundownTable';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useProduction } from '@/features/productions/hooks/useProductions';
 import { cn } from '@/shared/utils/cn';
+import { motion, AnimatePresence } from 'framer-motion';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -39,7 +40,6 @@ export const TimelineContainer = ({ productionId }: Props) => {
     const currentUserProdRelation = production?.users?.find(u => u.userId === user?.id);
     const userRole = currentUserProdRelation?.role || user?.globalRole;
 
-    // Simple permission resolution for Phase 2
     const isAdmin = userRole?.name === 'ADMIN' || userRole?.name === 'DIRECTOR' || userRole?.name === 'SUPERADMIN';
     const isOperator = userRole?.name === 'OPERATOR' || isAdmin;
 
@@ -62,32 +62,38 @@ export const TimelineContainer = ({ productionId }: Props) => {
             text: "Esta acción no se puede deshacer.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: 'var(--background)',
+            confirmButtonColor: '#6366f1',
+            cancelButtonColor: '#1a1a1a',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar',
-            background: 'var(--card-bg)',
-            color: 'var(--foreground)'
+            background: '#0f172a',
+            color: '#f8fafc',
+            customClass: {
+                popup: 'rounded-[1.5rem] border border-white/10 shadow-2xl backdrop-blur-xl'
+            }
         });
 
         if (result.isConfirmed) {
             try {
                 await deleteBlock(id);
-                MySwal.fire({
-                    title: '¡Eliminado!',
-                    text: 'El bloque ha sido borrado.',
-                    icon: 'success',
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    background: 'var(--card-bg)',
-                    color: 'var(--foreground)'
-                });
+                toastSuccess('Segmento eliminado con éxito');
             } catch (err) {
                 MySwal.fire('Error', 'No se pudo eliminar el bloque', 'error');
             }
         }
+    };
+
+    const toastSuccess = (msg: string) => {
+        MySwal.fire({
+            title: msg,
+            icon: 'success',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            background: '#6366f1',
+            color: '#fff'
+        });
     };
 
     const handleSmartNext = async () => {
@@ -99,8 +105,9 @@ export const TimelineContainer = ({ productionId }: Props) => {
                 title: 'Fin de Escaleta',
                 text: 'No hay más bloques pendientes.',
                 icon: 'info',
-                background: 'var(--card-bg)',
-                color: 'var(--foreground)'
+                background: '#0f172a',
+                color: '#f8fafc',
+                customClass: { popup: 'rounded-[1.5rem]' }
             });
             return;
         }
@@ -110,19 +117,8 @@ export const TimelineContainer = ({ productionId }: Props) => {
                 await completeBlock(activeBlock.id);
             }
             await startBlock(nextBlock.id);
-            MySwal.fire({
-                title: 'Siguiente bloque',
-                text: `Ahora en el aire: ${nextBlock.title}`,
-                icon: 'success',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                background: 'var(--card-bg)',
-                color: 'var(--foreground)'
-            });
+            toastSuccess(`En el aire: ${nextBlock.title}`);
         } catch (err) {
-            console.error('Smart Next failed:', err);
             MySwal.fire('Error', 'Fallo al cambiar de bloque', 'error');
         }
     };
@@ -134,10 +130,11 @@ export const TimelineContainer = ({ productionId }: Props) => {
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#f97316',
-            cancelButtonColor: 'var(--background)',
+            cancelButtonColor: '#1a1a1a',
             confirmButtonText: 'Sí, resetear todo',
-            background: 'var(--card-bg)',
-            color: 'var(--foreground)'
+            background: '#0f172a',
+            color: '#f8fafc',
+            customClass: { popup: 'rounded-[1.5rem]' }
         });
 
         if (result.isConfirmed) {
@@ -146,18 +143,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
                     .filter(b => b.status !== 'PENDING')
                     .map(b => resetBlock(b.id));
                 await Promise.all(promises);
-
-                MySwal.fire({
-                    title: '¡Reseteado!',
-                    text: 'La escaleta ha sido reiniciada.',
-                    icon: 'success',
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    background: 'var(--card-bg)',
-                    color: 'var(--foreground)'
-                });
+                toastSuccess('Escaleta reiniciada');
             } catch (err) {
                 MySwal.fire('Error', 'Fallo al resetear la escaleta', 'error');
             }
@@ -168,17 +154,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
         try {
             await startBlock(id);
             const block = blocks.find(b => b.id === id);
-            MySwal.fire({
-                title: 'Bloque iniciado',
-                text: `${block?.title || 'Segmento'} está ahora en vivo`,
-                icon: 'success',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000,
-                background: 'var(--card-bg)',
-                color: 'var(--foreground)'
-            });
+            toastSuccess(`${block?.title || 'Segmento'} está ahora en vivo`);
         } catch (err) {
             MySwal.fire('Error', 'No se pudo iniciar el bloque', 'error');
         }
@@ -187,16 +163,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
     const handleComplete = async (id: string) => {
         try {
             await completeBlock(id);
-            MySwal.fire({
-                title: 'Bloque completado',
-                icon: 'success',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000,
-                background: 'var(--card-bg)',
-                color: 'var(--foreground)'
-            });
+            toastSuccess('Segmento completado');
         } catch (err) {
             MySwal.fire('Error', 'No se pudo completar el bloque', 'error');
         }
@@ -205,16 +172,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
     const handleReset = async (id: string) => {
         try {
             await resetBlock(id);
-            MySwal.fire({
-                title: 'Bloque reseteado',
-                icon: 'info',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000,
-                background: 'var(--card-bg)',
-                color: 'var(--foreground)'
-            });
+            toastSuccess('Segmento en standby');
         } catch (err) {
             MySwal.fire('Error', 'No se pudo resetear el bloque', 'error');
         }
@@ -228,61 +186,83 @@ export const TimelineContainer = ({ productionId }: Props) => {
     const hasNext = blocks.some(b => b.status === 'PENDING');
 
     return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <Layout size={20} className="text-indigo-400" />
-                    <h2 className="text-lg font-bold text-foreground tracking-tight">Escaleta / Rundown</h2>
+        <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col group/timeline h-full">
+            {/* Visual Scanline */}
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent opacity-0 group-hover/timeline:opacity-100 transition-opacity" />
+
+            {/* Premium Tactical Header - Integrated */}
+            <div className="p-6 sm:p-8 border-b border-card-border/50 bg-white/[0.04] flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none group-hover/timeline:scale-110 transition-transform duration-1000">
+                    <Layout size={100} />
                 </div>
-                <div className="flex items-center gap-2">
+
+                <div className="relative z-10 flex items-center gap-4">
+                    <div className="w-12 h-12 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-inner">
+                        <Layout className="text-indigo-400" size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-lg font-black text-foreground uppercase tracking-tight italic leading-none mb-1.5">
+                            Operational Rundown
+                        </h2>
+                        <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">Scalable Event Sequence</p>
+                    </div>
+                </div>
+
+                <div className="relative z-10 flex flex-wrap items-center gap-3 w-full lg:w-auto mt-2 lg:mt-0">
                     {canControl && (
                         <>
-                            <button
+                            <motion.button
+                                whileTap={{ scale: 0.95 }}
                                 onClick={handleSmartNext}
                                 disabled={!hasNext}
                                 className={cn(
-                                    "flex items-center gap-2 px-4 py-1.5 rounded-lg transition-all text-sm font-bold shadow-lg",
+                                    "flex-1 lg:flex-none flex items-center justify-center gap-3 px-5 py-3 rounded-xl transition-all text-[10px] font-black uppercase tracking-widest shadow-xl",
                                     hasNext
-                                        ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20"
-                                        : "bg-background text-muted border border-card-border cursor-not-allowed"
+                                        ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30"
+                                        : "bg-background/50 text-muted border border-card-border cursor-not-allowed"
                                 )}
                             >
-                                <ArrowRight size={16} />
-                                {hasActive ? 'Siguiente Bloque' : 'Iniciar Producción'}
-                            </button>
+                                <ArrowRight size={16} className={hasNext ? "animate-pulse" : ""} />
+                                {hasActive ? 'Next Segment' : 'Engage'}
+                            </motion.button>
+
                             <button
                                 onClick={handleResetAll}
-                                className="flex items-center gap-2 bg-card-bg hover:bg-background text-muted hover:text-orange-400 px-3 py-1.5 rounded-lg border border-card-border transition-all text-sm font-medium"
-                                title="Reset all blocks"
+                                className="flex items-center gap-2 bg-background/50 hover:bg-card-bg text-[9px] font-black text-muted hover:text-orange-400 px-3 py-3 rounded-xl border border-card-border transition-all uppercase tracking-widest"
+                                title="Reset all"
                             >
-                                <RotateCcw size={16} />
-                                Reset
+                                <RotateCcw size={14} />
                             </button>
                         </>
                     )}
+
                     {canEdit && (
                         <button
                             onClick={handleCreate}
-                            className="flex items-center gap-2 bg-background hover:bg-card-bg text-foreground px-3 py-1.5 rounded-lg border border-card-border transition-all text-sm font-bold"
+                            className="flex-1 lg:flex-none flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-foreground px-5 py-3 rounded-xl border border-card-border transition-all text-[10px] font-black uppercase tracking-widest"
                         >
                             <Plus size={16} />
-                            Añadir
+                            Init Node
                         </button>
                     )}
                 </div>
             </div>
 
-            <RundownTable
-                productionId={productionId}
-                blocks={blocks}
-                onStart={handleStart}
-                onComplete={handleComplete}
-                onReset={handleReset}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                canControl={canControl}
-                canEdit={canEdit}
-            />
+            {/* Main Rundown Area - Integrated Table */}
+            <div className="flex-1 overflow-x-auto no-scrollbar relative min-h-[400px]">
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
+                <RundownTable
+                    productionId={productionId}
+                    blocks={blocks}
+                    onStart={handleStart}
+                    onComplete={handleComplete}
+                    onReset={handleReset}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    canControl={canControl}
+                    canEdit={canEdit}
+                />
+            </div>
 
             <TimelineCRUD
                 productionId={productionId}

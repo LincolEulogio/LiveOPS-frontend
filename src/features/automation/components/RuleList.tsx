@@ -2,7 +2,8 @@
 
 import { Rule } from '../types/automation.types';
 import { cn } from '@/shared/utils/cn';
-import { Edit2, Trash2, Zap, Play, ToggleLeft, ToggleRight, ArrowRight } from 'lucide-react';
+import { Edit2, Trash2, Zap, Play, ToggleLeft, ToggleRight, ArrowRight, Activity, Clock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Props {
     rules: Rule[];
@@ -14,99 +15,131 @@ interface Props {
 export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
     if (rules.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center py-20 text-muted bg-card-bg/20 rounded-2xl border border-card-border border-dashed">
-                <Zap size={48} strokeWidth={1} className="mb-4 opacity-10" />
-                <h3 className="text-sm font-bold text-muted uppercase tracking-widest">No Automation Rules</h3>
-                <p className="text-xs text-muted mt-2">Automate your workflow by creating rules.</p>
+            <div className="flex flex-col items-center justify-center py-24 text-muted bg-card-bg/20 rounded-[2.5rem] border-2 border-card-border border-dashed backdrop-blur-sm">
+                <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-6">
+                    <Zap size={32} strokeWidth={1.5} className="opacity-20" />
+                </div>
+                <h3 className="text-sm font-black text-muted-foreground uppercase tracking-[0.3em] mb-2">Engine Standby</h3>
+                <p className="text-[10px] font-bold text-muted uppercase tracking-widest text-center px-8">No automation rules configured for this production instance.</p>
             </div>
         );
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {rules.map((rule) => (
-                <div
-                    key={rule.id}
-                    className={cn(
-                        "group flex flex-col p-5 bg-card-bg border border-card-border rounded-2xl transition-all relative overflow-hidden",
-                        !rule.isEnabled && "opacity-60 grayscale-[0.5]"
-                    )}
-                >
-                    {/* Status Bar */}
-                    <div className={cn(
-                        "absolute left-0 top-0 bottom-0 w-1 transition-colors",
-                        rule.isEnabled ? "bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]" : "bg-card-border"
-                    )}></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <AnimatePresence mode="popLayout">
+                {rules.map((rule) => (
+                    <motion.div
+                        layout
+                        key={rule.id}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className={cn(
+                            "group flex flex-col p-8 bg-card-bg/60 backdrop-blur-xl border border-card-border/60 rounded-[2.5rem] transition-all duration-500 relative overflow-hidden shadow-xl hover:bg-white/[0.04] hover:-translate-y-1",
+                            !rule.isEnabled && "opacity-60 grayscale-[0.8] brightness-75"
+                        )}
+                    >
+                        {/* Status Accent Bar */}
+                        <div className={cn(
+                            "absolute left-0 top-0 bottom-0 w-1.5 transition-all duration-500",
+                            rule.isEnabled ? "bg-indigo-600 shadow-[2px_0_15px_rgba(99,102,241,0.4)]" : "bg-card-border"
+                        )} />
 
-                    {/* Header */}
-                    <div className="flex items-start justify-between gap-4 mb-4 pl-2">
-                        <div>
-                            <h3 className="text-sm font-bold text-foreground group-hover:text-indigo-400 transition-colors mb-1">
-                                {rule.name}
-                            </h3>
-                            <p className="text-xs text-muted line-clamp-1">{rule.description || 'No description'}</p>
-                        </div>
-                        <button
-                            onClick={() => onToggle(rule.id, !rule.isEnabled)}
-                            className={cn(
-                                "p-1 rounded-lg transition-all",
-                                rule.isEnabled ? "text-indigo-400 hover:bg-indigo-500/10" : "text-muted hover:bg-card-border"
-                            )}
-                        >
-                            {rule.isEnabled ? <ToggleRight size={24} /> : <ToggleLeft size={24} />}
-                        </button>
-                    </div>
-
-                    {/* Logic Preview */}
-                    <div className="flex items-center gap-3 mb-6 bg-background/50 p-2.5 rounded-xl border border-card-border/50">
-                        <div className="flex flex-col items-center gap-1">
-                            <span className="text-[8px] font-bold text-muted uppercase tracking-tighter">Trigger</span>
-                            <div className="px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded text-[9px] font-bold text-amber-500 truncate max-w-[80px]">
-                                {rule.triggers[0]?.eventType.split('.').pop() || 'None'}
+                        {/* Interactive Toggle & Header */}
+                        <div className="flex items-start justify-between gap-6 mb-6 pl-2">
+                            <div className="min-w-0">
+                                <h3 className="text-sm font-black text-foreground group-hover:text-indigo-400 transition-colors mb-1 truncate uppercase tracking-tight">
+                                    {rule.name}
+                                </h3>
+                                <p className="text-[10px] font-bold text-muted uppercase tracking-widest line-clamp-1">{rule.description || 'System automation rule'}</p>
                             </div>
+                            <button
+                                onClick={() => onToggle(rule.id, !rule.isEnabled)}
+                                className={cn(
+                                    "p-1.5 rounded-xl transition-all active:scale-90",
+                                    rule.isEnabled ? "text-indigo-400 bg-indigo-500/10" : "text-muted bg-card-border/30 hover:bg-card-border"
+                                )}
+                            >
+                                {rule.isEnabled ? <ToggleRight size={28} /> : <ToggleLeft size={28} />}
+                            </button>
                         </div>
 
-                        <ArrowRight size={14} className="text-muted/50 shrink-0" />
+                        {/* Tactical Logic Visualization */}
+                        <div className="bg-background/40 backdrop-blur-md rounded-2xl p-4 border border-card-border/50 space-y-4 mb-6 relative overflow-hidden">
+                            <div className="flex items-center gap-4 relative z-10">
+                                <div className="space-y-1 flex-1">
+                                    <span className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">Input Stimulus</span>
+                                    <div className="flex items-center gap-2 px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-[10px] font-black text-amber-500 truncate shadow-inner">
+                                        <Activity size={10} />
+                                        {rule.triggers[0]?.eventType.replace('.', ' ').toUpperCase() || 'MANUAL'}
+                                    </div>
+                                </div>
 
-                        <div className="flex flex-col items-center gap-1 flex-1 overflow-hidden">
-                            <span className="text-[8px] font-bold text-muted uppercase tracking-tighter">Actions ({rule.actions.length})</span>
-                            <div className="flex gap-1 overflow-hidden w-full">
-                                {rule.actions.slice(0, 2).map((action, idx) => (
-                                    <div key={idx} className="px-2 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded text-[9px] font-bold text-indigo-400 truncate flex-1">
+                                <div className="pt-4 shrink-0">
+                                    <div className="w-8 h-8 rounded-full bg-card-border/30 flex items-center justify-center">
+                                        <ArrowRight size={14} className="text-muted" />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1 flex-1">
+                                    <span className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">Sequence Output</span>
+                                    <div className="flex items-center gap-2 px-3 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-[10px] font-black text-indigo-400 truncate shadow-inner">
+                                        <Zap size={10} />
+                                        {rule.actions.length} ACTIONS
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-wrap gap-1.5">
+                                {rule.actions.slice(0, 3).map((action, idx) => (
+                                    <div key={idx} className="px-2 py-0.5 bg-white/5 border border-white/5 rounded-lg text-[8px] font-black text-muted uppercase tracking-widest">
                                         {action.actionType.split('.').pop()}
                                     </div>
                                 ))}
-                                {rule.actions.length > 2 && (
-                                    <div className="px-1 py-1 bg-card-border border border-card-border/50 rounded text-[8px] font-bold text-muted shrink-0">
-                                        +{rule.actions.length - 2}
+                                {rule.actions.length > 3 && (
+                                    <div className="px-2 py-0.5 bg-indigo-600/10 text-indigo-400 rounded-lg text-[8px] font-black uppercase tracking-widest">
+                                        +{rule.actions.length - 3}
                                     </div>
                                 )}
                             </div>
                         </div>
-                    </div>
 
-                    {/* Footer Actions */}
-                    <div className="flex items-center justify-between mt-auto">
-                        <span className="text-[10px] text-muted font-mono">
-                            MODIFIED {new Date(rule.updatedAt).toLocaleDateString()}
-                        </span>
-                        <div className="flex items-center gap-1">
-                            <button
-                                onClick={() => onEdit(rule)}
-                                className="p-2 text-muted hover:text-foreground hover:bg-card-border rounded-lg transition-all"
-                            >
-                                <Edit2 size={16} />
-                            </button>
-                            <button
-                                onClick={() => onDelete(rule.id)}
-                                className="p-2 text-muted hover:text-red-400 hover:bg-card-border rounded-lg transition-all"
-                            >
-                                <Trash2 size={16} />
-                            </button>
+                        {/* Footer Operational Controls */}
+                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-card-border/30 pl-2">
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-1.5 text-[9px] font-black text-muted uppercase tracking-widest">
+                                    <Clock size={10} />
+                                    {new Date(rule.updatedAt).toLocaleDateString()}
+                                </div>
+                                {rule.isEnabled && (
+                                    <div className="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 uppercase tracking-widest">
+                                        <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                                        ARMED
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => onEdit(rule)}
+                                    className="p-2.5 bg-background border border-card-border text-muted hover:text-indigo-400 hover:border-indigo-500/30 rounded-xl transition-all active:scale-90 shadow-sm"
+                                    title="Protocol Edit"
+                                >
+                                    <Edit2 size={14} />
+                                </button>
+                                <button
+                                    onClick={() => onDelete(rule.id)}
+                                    className="p-2.5 bg-background border border-card-border text-muted hover:text-red-400 hover:border-red-500/30 rounded-xl transition-all active:scale-90 shadow-sm"
+                                    title="Decommission"
+                                >
+                                    <Trash2 size={14} />
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            ))}
+                    </motion.div>
+                ))}
+            </AnimatePresence>
         </div>
     );
 };

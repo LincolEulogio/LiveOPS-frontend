@@ -17,7 +17,7 @@ import {
     Bold, Italic, Underline as UnderlineIcon, List, ListOrdered,
     Type, Save, Cloud, CloudOff, AlertCircle,
     Heading1, Heading2, Heading3, Heading4, Heading5, Heading6,
-    Zap
+    Zap, Hash, AlignLeft
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 
@@ -54,7 +54,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
                 document: doc,
             }),
             CollaborationCaret.configure({
-                provider: { awareness } as unknown as { awareness: awarenessProtocol.Awareness }, // Using correct type from y-protocols
+                provider: { awareness } as unknown as { awareness: awarenessProtocol.Awareness },
                 render: (user: CaretUser) => {
                     const cursor = document.createElement('span');
                     cursor.classList.add('collaboration-cursor__caret');
@@ -70,13 +70,13 @@ export const ScriptEditor = ({ productionId }: Props) => {
                 },
                 user: {
                     name: user?.name || 'Anon',
-                    color: '#6366f1', // We can make this dynamic based on user ID
+                    color: '#6366f1',
                 },
             }),
         ],
         editorProps: {
             attributes: {
-                class: 'prose dark:prose-invert prose-sm focus:outline-none max-w-none px-8 py-10 prose-p:my-1 prose-headings:my-2 prose-h1:text-3xl prose-h2:text-2xl cursor-text',
+                class: 'prose dark:prose-invert prose-sm sm:prose-base focus:outline-none max-w-none px-6 sm:px-12 py-10 sm:py-16 prose-p:my-1 prose-headings:my-2 prose-h1:text-4xl prose-h1:font-black prose-h2:text-3xl prose-h2:font-black cursor-text min-h-full font-serif',
             },
         },
         onSelectionUpdate: () => {
@@ -85,173 +85,124 @@ export const ScriptEditor = ({ productionId }: Props) => {
         onUpdate: () => {
             setTick(t => t + 1);
         },
-    }, [isLoaded]); // Re-initialize when doc is ready
+    }, [isLoaded]);
 
     if (!isLoaded) {
         return (
-            <div className="flex-1 flex items-center justify-center bg-card-bg/50 rounded-2xl border border-card-border/50">
-                <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                    <p className="text-sm font-bold text-muted uppercase tracking-widest animate-pulse">Cargando Guion Vivo...</p>
+            <div className="flex-1 flex items-center justify-center bg-card-bg/50 rounded-3xl border border-card-border/50 backdrop-blur-xl">
+                <div className="flex flex-col items-center gap-6">
+                    <div className="relative">
+                        <div className="w-16 h-16 border-[6px] border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin" />
+                        <div className="absolute inset-0 bg-indigo-500/10 blur-xl rounded-full" />
+                    </div>
+                    <div className="text-center">
+                        <p className="text-sm font-black text-foreground uppercase tracking-[0.2em] mb-1">Live Scripting</p>
+                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest animate-pulse">Syncing with Cloud Doc...</p>
+                    </div>
                 </div>
             </div>
         );
     }
 
+    const ToolbarButton = ({ onClick, isActive, icon: Icon, disabled, title }: any) => (
+        <button
+            onClick={onClick}
+            disabled={disabled}
+            className={cn(
+                "p-2.5 rounded-xl transition-all active:scale-95 flex items-center justify-center min-w-[38px] min-h-[38px]",
+                isActive ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20" : "text-muted hover:bg-card-border hover:text-foreground"
+            )}
+            title={title}
+        >
+            <Icon size={18} />
+        </button>
+    );
+
     return (
-        <div className="flex flex-col h-full bg-card-bg rounded-2xl border border-card-border overflow-hidden shadow-md">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between p-2 bg-card-bg border-b border-card-border">
-                <div className="flex items-center gap-1 flex-wrap">
-                    <button
+        <div className="flex flex-col h-full bg-card-bg/80 backdrop-blur-2xl rounded-[2.5rem] border border-card-border overflow-hidden shadow-2xl relative">
+            {/* Real-time Indicator Top Border */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0 pointer-events-none" />
+
+            {/* Premium Toolbar */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-3 sm:p-4 bg-white/5 border-b border-card-border/50 gap-4">
+                <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 sm:pb-0 px-1">
+                    <ToolbarButton
                         onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('heading', { level: 1 }) ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
+                        isActive={editor?.isActive('heading', { level: 1 })}
+                        icon={Heading1}
                         title="Título 1"
-                    >
-                        <Heading1 size={18} />
-                    </button>
-                    <button
+                    />
+                    <ToolbarButton
                         onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('heading', { level: 2 }) ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
+                        isActive={editor?.isActive('heading', { level: 2 })}
+                        icon={Heading2}
                         title="Título 2"
-                    >
-                        <Heading2 size={18} />
-                    </button>
-                    <button
-                        onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('heading', { level: 3 }) ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
-                        title="Título 3"
-                    >
-                        <Heading3 size={18} />
-                    </button>
-                    <button
-                        onClick={() => editor?.chain().focus().toggleHeading({ level: 4 }).run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('heading', { level: 4 }) ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
-                        title="Título 4"
-                    >
-                        <Heading4 size={18} />
-                    </button>
-                    <button
-                        onClick={() => editor?.chain().focus().toggleHeading({ level: 5 }).run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('heading', { level: 5 }) ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
-                        title="Título 5"
-                    >
-                        <Heading5 size={18} />
-                    </button>
-                    <button
-                        onClick={() => editor?.chain().focus().toggleHeading({ level: 6 }).run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('heading', { level: 6 }) ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
-                        title="Título 6"
-                    >
-                        <Heading6 size={18} />
-                    </button>
-
-                    <div className="w-px h-6 bg-card-border mx-1" />
-
-                    <button
+                    />
+                    <div className="w-px h-6 bg-card-border/50 mx-2 shrink-0" />
+                    <ToolbarButton
                         onClick={() => editor?.chain().focus().toggleBold().run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('bold') ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
+                        isActive={editor?.isActive('bold')}
+                        icon={Bold}
                         title="Negrita"
-                    >
-                        <Bold size={18} />
-                    </button>
-                    <button
+                    />
+                    <ToolbarButton
                         onClick={() => editor?.chain().focus().toggleItalic().run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('italic') ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
+                        isActive={editor?.isActive('italic')}
+                        icon={Italic}
                         title="Cursiva"
-                    >
-                        <Italic size={18} />
-                    </button>
-                    <button
+                    />
+                    <ToolbarButton
                         onClick={() => editor?.chain().focus().toggleUnderline().run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('underline') ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
+                        isActive={editor?.isActive('underline')}
+                        icon={UnderlineIcon}
                         title="Subrayado"
-                    >
-                        <UnderlineIcon size={18} />
-                    </button>
-
-                    <div className="w-px h-6 bg-card-border mx-1" />
-
-                    <button
+                    />
+                    <div className="w-px h-6 bg-card-border/50 mx-2 shrink-0" />
+                    <ToolbarButton
                         onClick={() => editor?.chain().focus().toggleBulletList().run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('bulletList') ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
-                        title="Lista de puntos"
-                    >
-                        <List size={18} />
-                    </button>
-                    <button
-                        onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-                        disabled={editor?.state.selection.empty}
-                        className={cn(
-                            "p-2 rounded-lg transition-all hover:bg-card-border disabled:opacity-30 disabled:hover:bg-transparent",
-                            editor?.isActive('orderedList') ? "bg-indigo-600 text-white" : "text-muted"
-                        )}
-                        title="Lista numerada"
-                    >
-                        <ListOrdered size={18} />
-                    </button>
+                        isActive={editor?.isActive('bulletList')}
+                        icon={List}
+                        title="Lista"
+                    />
+                    <ToolbarButton
+                        onClick={() => editor?.chain().focus().setParagraph().run()}
+                        isActive={editor?.isActive('paragraph')}
+                        icon={AlignLeft}
+                        title="Párrafo"
+                    />
                 </div>
 
-                <div className="flex items-center gap-4 px-4">
-                    <div className="flex flex-col items-center">
-                        <span className="text-[10px] font-bold text-muted uppercase tracking-tighter">
+                <div className="flex items-center gap-6 justify-between sm:justify-end px-2">
+                    <div className="flex items-center gap-3">
+                        <div className="flex -space-x-2">
+                            {[1, 2].map(i => (
+                                <div key={i} className="w-6 h-6 rounded-full border-2 border-card-bg bg-indigo-600 flex items-center justify-center text-[8px] font-black text-white">
+                                    {i === 1 ? 'JD' : 'AM'}
+                                </div>
+                            ))}
+                        </div>
+                        <span className="text-[9px] font-black text-muted uppercase tracking-[0.2em]">Editing Live</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-background/50 border border-card-border rounded-xl">
+                        <Hash size={12} className="text-indigo-400" />
+                        <span className="text-[10px] font-black font-mono text-foreground leading-none">
                             {editor?.storage.characterCount.characters() || 0}
                         </span>
-                        <span className="text-[8px] font-black text-muted/60 uppercase tracking-tighter">CARACTERES</span>
                     </div>
                 </div>
             </div>
 
-            {/* Editor Area */}
+            {/* Editor Surface */}
             <div
-                className="flex-1 overflow-y-auto bg-background custom-scrollbar cursor-text relative min-h-0"
+                className="flex-1 overflow-y-auto bg-background/30 custom-scrollbar-premium cursor-text relative"
                 onScroll={(e) => {
                     const target = e.currentTarget;
                     const percentage = target.scrollTop / (target.scrollHeight - target.clientHeight);
                     syncScroll(percentage);
                 }}
             >
-                <div className="max-w-4xl mx-auto min-h-full pb-20">
+                <div className="max-w-4xl mx-auto min-h-full">
                     <EditorContent
                         editor={editor}
                         className="cursor-text"
@@ -259,12 +210,18 @@ export const ScriptEditor = ({ productionId }: Props) => {
                 </div>
             </div>
 
-            {/* Footer / Status */}
-            <div className="p-3 bg-card-bg border-t border-card-border flex items-center justify-between">
+            {/* Tactical Status Footer */}
+            <div className="p-3 bg-white/5 border-t border-card-border/50 flex items-center justify-between px-6">
                 <div className="flex items-center gap-2">
-                    <AlertCircle size={12} className="text-muted" />
-                    <span className="text-[9px] text-muted font-bold uppercase tracking-widest">
-                        Cualquier cambio se guarda automáticamente para todo el equipo
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                    <span className="text-[9px] text-muted font-black uppercase tracking-[0.2em]">
+                        Live Sync: {isSyncing ? 'Pushing Changes...' : 'Synchronized'}
+                    </span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Cloud size={12} className="text-muted" />
+                    <span className="text-[9px] text-muted/60 font-black uppercase tracking-widest">
+                        v1.4.2-STABLE
                     </span>
                 </div>
             </div>
@@ -272,57 +229,63 @@ export const ScriptEditor = ({ productionId }: Props) => {
             <style jsx global>{`
                 .ProseMirror {
                     cursor: text !important;
+                    outline: none !important;
                 }
                 .ProseMirror p.is-editor-empty:first-child::before {
                     content: attr(data-placeholder);
                     float: left;
                     color: var(--muted);
-                    opacity: 0.5;
+                    opacity: 0.3;
                     pointer-events: none;
                     height: 0;
-                    cursor: text;
+                    font-weight: 300;
                 }
                 .ProseMirror ul {
-                    list-style-type: disc !important;
-                    padding-left: 1.5em !important;
-                    margin: 1em 0 !important;
+                    list-style-type: none !important;
+                    padding-left: 2rem !important;
+                    position: relative;
                 }
-                .ProseMirror ol {
-                    list-style-type: decimal !important;
-                    padding-left: 1.5em !important;
-                    margin: 1em 0 !important;
+                .ProseMirror ul li::before {
+                    content: '•';
+                    position: absolute;
+                    left: 0.75rem;
+                    color: #6366f1;
+                    font-weight: 900;
                 }
-                .ProseMirror h1 { font-size: 1.875rem; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; }
-                .ProseMirror h2 { font-size: 1.5rem; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; }
-                .ProseMirror h3 { font-size: 1.25rem; font-weight: 700; margin-top: 1.25em; margin-bottom: 0.5em; }
-                .ProseMirror h4 { font-size: 1.125rem; font-weight: 700; margin-top: 1em; margin-bottom: 0.5em; }
-                .ProseMirror h5 { font-size: 1rem; font-weight: 700; margin-top: 1em; margin-bottom: 0.5em; }
-                .ProseMirror h6 { font-size: 0.875rem; font-weight: 700; margin-top: 1em; margin-bottom: 0.5em; }
+                .ProseMirror h1 { line-height: 1; margin-bottom: 1.5rem; letter-spacing: -0.05em; color: #fff; }
+                .ProseMirror h2 { line-height: 1; margin-bottom: 1.25rem; letter-spacing: -0.03em; color: rgba(255,255,255,0.9); }
                 
                 .collaboration-cursor__caret {
                     position: relative;
                     margin-left: -1px;
                     margin-right: -1px;
-                    border-left: 2px solid #0d0d0d;
-                    border-right: 2px solid #0d0d0d;
+                    border-left: 2px solid #6366f1;
                     word-break: normal;
                     pointer-events: none;
                 }
                 .collaboration-cursor__label {
                     position: absolute;
-                    top: -1.25em;
-                    left: -1px;
-                    font-size: 10px;
-                    font-style: normal;
+                    top: -1.5rem;
+                    left: 0;
+                    font-size: 9px;
                     font-weight: 900;
-                    line-height: normal;
-                    user-select: none;
                     color: white;
-                    padding: 2px 6px;
+                    padding: 2px 8px;
                     white-space: nowrap;
-                    border-radius: 4px 4px 4px 0;
+                    border-radius: 6px 6px 6px 0;
                     text-transform: uppercase;
-                    letter-spacing: 0.05em;
+                    letter-spacing: 0.1em;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                }
+
+                .custom-scrollbar-premium::-webkit-scrollbar { width: 5px; }
+                .custom-scrollbar-premium::-webkit-scrollbar-track { bg-transparent; }
+                .custom-scrollbar-premium::-webkit-scrollbar-thumb {
+                    background: rgba(255,255,255,0.05);
+                    border-radius: 10px;
+                }
+                .custom-scrollbar-premium:hover::-webkit-scrollbar-thumb {
+                    background: rgba(99,102,241,0.2);
                 }
             `}</style>
         </div>

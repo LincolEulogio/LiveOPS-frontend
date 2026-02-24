@@ -5,8 +5,9 @@ import { useAutomation } from '@/features/automation/hooks/useAutomation';
 import { useHardwareMappings } from '../hooks/useHardwareMappings';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useState, useEffect } from 'react';
-import { Settings, Plus, X, Keyboard, RadioReceiver, Zap, Loader2 } from 'lucide-react';
+import { Settings, Plus, X, Keyboard, RadioReceiver, Zap, Loader2, ArrowRight, Activity, Trash2, Cpu } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Props {
     productionId: string;
@@ -32,8 +33,6 @@ export const HardwareManager = ({ productionId }: Props) => {
                     productionId,
                     mapKey
                 });
-
-                // Provide a small visual feedback if needed, but the rule will execute in backend
                 clearLastEvent();
             }
         }
@@ -63,130 +62,217 @@ export const HardwareManager = ({ productionId }: Props) => {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center p-12 text-stone-500">
-                <Loader2 size={32} className="animate-spin text-indigo-500 mb-4" />
-                <p className="text-xs font-bold uppercase tracking-widest">Loading Mappings...</p>
+            <div className="flex flex-col items-center justify-center p-20 bg-card-bg/40 backdrop-blur-xl border border-card-border rounded-[2.5rem] shadow-2xl">
+                <div className="relative mb-6">
+                    <Loader2 size={48} className="animate-spin text-indigo-500 opacity-20" />
+                    <Cpu size={24} className="absolute inset-0 m-auto text-indigo-400 animate-pulse" />
+                </div>
+                <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Synchronizing Registry</p>
+                <p className="text-[9px] font-bold text-muted/40 uppercase tracking-widest mt-2">Connecting to physical hardware bridge</p>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                {/* Device List */}
-                <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-2xl relative overflow-hidden">
-                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2 mb-6">
-                        <Keyboard size={18} className="text-indigo-400" />
-                        Connected Devices
-                    </h2>
+                {/* Device List - Premium Surface */}
+                <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden group/devices">
+                    {/* Tactical Scanline */}
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent animate-pulse" />
+
+                    <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-inner">
+                                <Keyboard size={24} className="text-indigo-400" />
+                            </div>
+                            <div>
+                                <h2 className="text-xs font-black text-foreground uppercase tracking-[0.2em] leading-none mb-1.5">Connected Nodes</h2>
+                                <span className="text-[9px] font-black text-muted uppercase tracking-widest flex items-center gap-2">
+                                    <Activity size={10} className="text-emerald-500" />
+                                    Active Signal
+                                </span>
+                            </div>
+                        </div>
+                        <div className="px-3 py-1 bg-white/5 border border-white/5 rounded-full">
+                            <span className="text-[9px] font-black text-muted uppercase tracking-widest">{devices.length} Devices</span>
+                        </div>
+                    </div>
 
                     {error && (
-                        <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-xs p-3 rounded-xl mb-4">
-                            {error}
+                        <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-widest p-4 rounded-2xl mb-6 shadow-lg shadow-red-500/5 animate-pulse">
+                            <span className="flex items-center gap-3"><X size={14} /> {error}</span>
                         </div>
                     )}
 
-                    <div className="space-y-3 mb-6">
+                    <div className="space-y-4 mb-8">
                         {devices.length === 0 ? (
-                            <div className="text-xs text-muted text-center py-6 border border-card-border border-dashed rounded-xl">
-                                No MIDI or HID devices detected automatically.
+                            <div className="p-12 border-2 border-dashed border-card-border/60 rounded-3xl flex flex-col items-center justify-center text-center opacity-40 group-hover/devices:opacity-60 transition-opacity">
+                                <RadioReceiver size={40} className="text-muted mb-4 stroke-[1px]" />
+                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">No automated devices located</p>
+                                <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">Ready for manual HID initialization</p>
                             </div>
                         ) : (
                             devices.map(d => (
-                                <div key={d.id} className="flex justify-between items-center p-3 bg-background/50 rounded-xl border border-card-border">
-                                    <div className="flex items-center gap-3">
-                                        {d.type === 'hid' ? <Keyboard size={16} className="text-indigo-400" /> : <RadioReceiver size={16} className="text-emerald-400" />}
-                                        <span className="text-sm font-bold text-foreground">{d.name}</span>
+                                <motion.div
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    key={d.id}
+                                    className="flex justify-between items-center p-5 bg-background/40 backdrop-blur-md rounded-2xl border border-card-border/60 shadow-inner hover:border-indigo-500/30 transition-all group/item"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className={cn(
+                                            "w-10 h-10 rounded-xl flex items-center justify-center shadow-inner border border-white/5",
+                                            d.type === 'hid' ? "bg-indigo-500/10 text-indigo-400" : "bg-emerald-500/10 text-emerald-400"
+                                        )}>
+                                            {d.type === 'hid' ? <Keyboard size={18} /> : <RadioReceiver size={18} />}
+                                        </div>
+                                        <div>
+                                            <span className="text-sm font-black text-foreground uppercase tracking-tight leading-none">{d.name}</span>
+                                            <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1.5 opacity-60">Signature: {d.type.toUpperCase()}</p>
+                                        </div>
                                     </div>
-                                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[8px] font-black text-muted uppercase tracking-widest opacity-40">Healthy</span>
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
+                                    </div>
+                                </motion.div>
                             ))
                         )}
                     </div>
 
                     <button
                         onClick={requestHIDDevice}
-                        className="w-full py-3 bg-background hover:bg-card-bg border border-card-border rounded-xl text-xs font-bold text-foreground transition-all flex justify-center items-center gap-2"
+                        className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all flex justify-center items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] group"
                     >
-                        <Plus size={14} /> Connect Stream Deck / HID Device
+                        <Plus size={16} className="group-hover:rotate-90 transition-transform" />
+                        Pair HID Interface
                     </button>
-                    <p className="text-[10px] text-muted mt-3 text-center">
-                        MIDI devices are detected automatically. HID devices require manual permission.
+                    <p className="text-[9px] font-bold text-muted/60 mt-4 text-center uppercase tracking-widest">
+                        MIDI units bridge automatically. Stream Decks require pairing.
                     </p>
                 </div>
 
-                {/* Key Mapper */}
-                <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col">
-                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2 mb-6">
-                        <Zap size={18} className="text-amber-400" />
-                        Hardware Mapping
-                    </h2>
+                {/* Logic Bridge Surface */}
+                <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden flex flex-col group/bridge">
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent animate-pulse" />
 
-                    <div className="flex-1 space-y-4 overflow-y-auto no-scrollbar max-h-[300px]">
-                        {/* Display current Mappings */}
-                        {mappings.map((mapping) => (
-                            <div key={mapping.id} className="flex justify-between items-center p-3 bg-background/50 rounded-xl border border-card-border">
-                                <div className="flex items-center gap-3">
-                                    <div className="px-2 py-1 bg-card-bg rounded-md text-[10px] font-mono text-indigo-400 whitespace-nowrap">
-                                        {mapping.mapKey}
-                                    </div>
-                                    <ArrowRight size={14} className="text-muted" />
-                                    <span className="text-sm font-bold text-foreground truncate max-w-[150px]">
-                                        {mapping.rule?.name || 'Unknown Rule'}
-                                    </span>
-                                </div>
-                                <button
-                                    onClick={() => handleRemoveMapping(mapping.mapKey)}
-                                    className="text-stone-600 hover:text-red-400 p-1"
-                                >
-                                    <X size={14} />
-                                </button>
+                    <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center border border-amber-500/20 shadow-inner">
+                                <Zap size={24} className="text-amber-400" />
                             </div>
-                        ))}
+                            <div>
+                                <h2 className="text-xs font-black text-foreground uppercase tracking-[0.2em] leading-none mb-1.5">Logic Mappings</h2>
+                                <span className="text-[9px] font-black text-muted uppercase tracking-widest flex items-center gap-2">
+                                    <Settings size={10} className="text-amber-500" />
+                                    Macro Persistence
+                                </span>
+                            </div>
+                        </div>
+                        <div className="px-3 py-1 bg-white/5 border border-white/5 rounded-full">
+                            <span className="text-[9px] font-black text-muted uppercase tracking-widest">{mappings.length} Bound</span>
+                        </div>
+                    </div>
+
+                    <div className="flex-1 space-y-4 overflow-y-auto no-scrollbar max-h-[350px] pr-2">
+                        <AnimatePresence mode="popLayout">
+                            {mappings.map((mapping) => (
+                                <motion.div
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    key={mapping.id}
+                                    className="flex justify-between items-center p-4 bg-background/40 backdrop-blur-md rounded-2xl border border-card-border/60 shadow-inner group/map-item hover:border-amber-500/30 transition-all"
+                                >
+                                    <div className="flex items-center gap-4 shrink-0">
+                                        <div className="px-3 py-1.5 bg-background border border-card-border rounded-lg text-[9px] font-black font-mono text-indigo-400 uppercase tracking-widest shadow-lg">
+                                            {mapping.mapKey}
+                                        </div>
+                                        <ArrowRight size={14} className="text-muted/40 group-hover/map-item:translate-x-1 transition-transform" />
+                                        <div className="flex flex-col min-w-0">
+                                            <span className="text-[11px] font-black text-foreground uppercase tracking-tight truncate max-w-[140px]">
+                                                {mapping.rule?.name || 'Undefined Protocol'}
+                                            </span>
+                                            <p className="text-[8px] font-bold text-muted uppercase tracking-[0.2em] mt-1">Primary Macro</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => handleRemoveMapping(mapping.mapKey)}
+                                        className="p-2.5 bg-white/5 border border-white/5 text-muted hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all active:scale-90"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+
                         {mappings.length === 0 && (
-                            <div className="text-xs text-muted text-center py-6">
-                                No hardware mapped yet.
+                            <div className="p-12 border-2 border-dashed border-card-border/60 rounded-3xl flex flex-col items-center justify-center text-center opacity-40 group-hover/bridge:opacity-60 transition-opacity">
+                                <Zap size={40} className="text-muted mb-4 stroke-[1px]" />
+                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Matrix Unpopulated</p>
+                                <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">Bind physical input to logical macros</p>
                             </div>
                         )}
                     </div>
 
-                    {/* Mapping Listener Mode */}
-                    <div className="mt-6 pt-6 border-t border-card-border">
+                    {/* Matrix Binder Mode */}
+                    <div className="mt-8 pt-8 border-t border-card-border/50">
                         {!isAssigning ? (
                             <button
                                 onClick={() => setIsAssigning(true)}
-                                className="w-full py-3 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/50 rounded-xl text-xs font-bold text-indigo-400 transition-all"
+                                className="w-full py-5 bg-background/50 hover:bg-white/5 border border-dashed border-card-border rounded-2xl text-[10px] font-black text-muted hover:text-indigo-400 hover:border-indigo-500/50 transition-all uppercase tracking-[0.3em] shadow-inner font-mono"
                             >
-                                Add New Mapping
+                                + Initialize New Binding
                             </button>
                         ) : (
-                            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
-                                <div className="p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-center">
+                            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <div className="p-8 bg-indigo-600/5 border border-indigo-500/20 rounded-[2rem] text-center shadow-inner relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-indigo-500/5 opacity-30 animate-pulse pointer-events-none" />
+
                                     {!lastEvent ? (
-                                        <p className="text-xs font-bold text-indigo-400 animate-pulse">
-                                            Press any physical button on your connected hardware...
-                                        </p>
+                                        <div className="relative z-10 flex flex-col items-center gap-4">
+                                            <div className="w-12 h-12 bg-indigo-500/20 rounded-full flex items-center justify-center animate-bounce">
+                                                <Keyboard size={24} className="text-indigo-400" />
+                                            </div>
+                                            <div>
+                                                <p className="text-[11px] font-black text-foreground uppercase tracking-[0.2em]">Passive Listening...</p>
+                                                <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-2 px-6">Press any physical button on your surface to capture the intercept key</p>
+                                            </div>
+                                        </div>
                                     ) : (
-                                        <div className="space-y-4">
-                                            <p className="text-xs text-muted">Detected input:</p>
-                                            <div className="inline-block px-3 py-1 bg-indigo-600 text-white font-mono text-sm font-bold rounded-lg shadow-lg">
-                                                {lastEvent.type.toUpperCase()} : {lastEvent.key}
+                                        <div className="space-y-8 relative z-10">
+                                            <div className="space-y-2">
+                                                <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-60">Intercept Identification:</p>
+                                                <div className="inline-block px-5 py-3 bg-indigo-600 border border-indigo-500 text-white font-mono text-xs font-black rounded-xl shadow-2xl shadow-indigo-600/40 uppercase tracking-[0.2em]">
+                                                    {lastEvent.type} <span className="mx-2 opacity-50">::</span> {lastEvent.key}
+                                                </div>
                                             </div>
 
-                                            <div className="text-left mt-4 pt-4 border-t border-indigo-500/10">
-                                                <p className="text-[10px] font-bold uppercase tracking-widest text-muted mb-2">Assign to Macro:</p>
-                                                <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar pr-2">
+                                            <div className="text-left mt-8 pt-8 border-t border-white/5">
+                                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted mb-4 px-2">Select Target Macro Protocol:</p>
+                                                <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-3">
                                                     {manualMacros.length === 0 ? (
-                                                        <p className="text-xs text-muted">No manual macros available. Create one first.</p>
+                                                        <div className="p-6 bg-white/5 rounded-2xl border border-dashed border-white/10 text-center">
+                                                            <p className="text-[10px] font-black text-muted uppercase tracking-widest">No Manual Macros Primed</p>
+                                                            <p className="text-[8px] font-bold text-muted/40 uppercase tracking-widest mt-1">Create an automation with a manual trigger first</p>
+                                                        </div>
                                                     ) : (
                                                         manualMacros.map(m => (
                                                             <button
                                                                 key={m.id}
                                                                 onClick={() => handleAssign(m.id)}
-                                                                className="w-full text-left px-3 py-2 text-xs font-bold text-muted hover:text-foreground hover:bg-background rounded-lg transition-all"
+                                                                className="w-full text-left px-5 py-4 bg-background/40 hover:bg-white/5 border border-card-border/60 hover:border-indigo-500/30 rounded-2xl transition-all group/macro shadow-lg"
                                                             >
-                                                                {m.name}
+                                                                <div className="flex items-center justify-between">
+                                                                    <div className="flex flex-col">
+                                                                        <span className="text-[11px] font-black text-foreground uppercase tracking-tight group-hover/macro:text-indigo-400 transition-colors">{m.name}</span>
+                                                                        <p className="text-[8px] font-bold text-muted uppercase tracking-[0.1em] mt-1 italic">Authorized Logic ID: {m.id.slice(0, 6)}</p>
+                                                                    </div>
+                                                                    <Plus size={14} className="text-muted group-hover/macro:text-indigo-400 opacity-0 group-hover/macro:opacity-100 transition-all group-hover/macro:scale-125" />
+                                                                </div>
                                                             </button>
                                                         ))
                                                     )}
@@ -197,9 +283,9 @@ export const HardwareManager = ({ productionId }: Props) => {
                                 </div>
                                 <button
                                     onClick={() => { setIsAssigning(false); clearLastEvent(); }}
-                                    className="w-full py-2 bg-transparent hover:bg-card-bg rounded-xl text-xs font-bold text-muted transition-all"
+                                    className="w-full py-4 bg-white/5 hover:bg-red-500/10 border border-white/5 text-[10px] font-black text-muted hover:text-red-400 rounded-2xl transition-all uppercase tracking-[0.3em]"
                                 >
-                                    Cancel
+                                    Abort Operation
                                 </button>
                             </div>
                         )}
@@ -210,9 +296,3 @@ export const HardwareManager = ({ productionId }: Props) => {
         </div>
     );
 };
-
-const ArrowRight = ({ size, className }: { size: number; className?: string }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-);

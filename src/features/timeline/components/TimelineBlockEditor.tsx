@@ -68,7 +68,7 @@ export const TimelineBlockEditor = ({ isOpen, onClose, onSave, editingBlock }: P
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose}></div>
 
-            <div className="relative w-full max-w-lg bg-card-bg border border-card-border rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 flex flex-col">
+            <div className="relative w-full max-w-lg max-h-[50vh] bg-card-bg border border-card-border rounded-4xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 flex flex-col overflow-y-auto">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-card-border bg-background">
                     <div className="flex items-center gap-3">

@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { LogOut, User as UserIcon, Server, Users, Shield, Info, Layers } from 'lucide-react';
+import { LogOut, User as UserIcon, Server, Users, Shield, Info, Layers, Menu, X, Activity, Command, Zap } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useAppStore } from '@/shared/store/app.store';
 import { authService } from '@/features/auth/api/auth.service';
@@ -11,6 +12,7 @@ import { Guard } from '@/shared/components/Guard';
 import { PresenceBar } from '@/shared/components/PresenceBar';
 import { CommandPalette } from '@/shared/components/CommandPalette';
 import { ThemeSwitcher } from '@/shared/components/ThemeSwitcher';
+import { cn } from '@/shared/utils/cn';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -18,14 +20,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { token, user, clearAuth, isHydrated } = useAuthStore();
   const activeProductionId = useAppStore((state) => state.activeProductionId);
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on path change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   useEffect(() => {
-    // Wait for store to be rehydrated from localStorage OR for initial client-side mount
-    // to avoid false-positive redirect to /login
     if (isMounted && isHydrated && !token) {
       router.push('/login');
     }
@@ -37,144 +43,258 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     router.push('/login');
   };
 
-  // Prevent hydration mismatch or flashing protected content
   if (!isMounted || !isHydrated || !token) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <span className="text-muted">Loading...</span>
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6">
+        <div className="w-16 h-16 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin shadow-xl shadow-indigo-600/10" />
+        <span className="text-[10px] font-black text-muted uppercase tracking-[0.4em] animate-pulse">Initializing System</span>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-background text-foreground overflow-hidden">
-      {/* Sidebar Skeleton */}
-      <aside className="w-64 border-r border-card-border bg-indigo-900 dark:bg-card-bg flex flex-col hidden md:flex">
-        <div className="h-16 flex items-center px-6 border-b border-indigo-800/50 dark:border-card-border">
-          <Link href="/profile" className="text-lg font-bold text-white dark:text-foreground tracking-tight">
-            LiveOPS
+    <div className="flex h-screen bg-background text-foreground overflow-hidden selection:bg-indigo-500/30">
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60] min-[769px]:hidden"
+            />
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 w-[85%] max-w-[320px] bg-card-bg/95 backdrop-blur-3xl border-r border-card-border z-[70] flex flex-col min-[769px]:hidden"
+            >
+              <div className="h-20 flex items-center justify-between px-8 border-b border-card-border/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-600/20">
+                    <Zap size={18} className="text-white" fill="currentColor" />
+                  </div>
+                  <span className="text-lg font-black text-foreground tracking-tighter uppercase italic">LiveOPS</span>
+                </div>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 text-muted hover:text-foreground transition-all active:scale-90"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <SidebarContent pathname={pathname} activeProductionId={activeProductionId} user={user} handleLogout={handleLogout} />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Sidebar */}
+      <aside className="w-[280px] border-r border-card-border bg-card-bg/40 backdrop-blur-2xl flex flex-col hidden min-[769px]:flex shrink-0 relative overflow-hidden group/sidebar">
+        {/* Dynamic Scanline Header */}
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+
+        <div className="h-20 flex items-center px-8 border-b border-card-border/50 bg-white/[0.02]">
+          <Link href="/productions" className="flex items-center gap-3 group/logo">
+            <div className="w-10 h-10 bg-indigo-600 group-hover:bg-indigo-500 rounded-xl flex items-center justify-center shadow-xl shadow-indigo-600/20 transition-all group-hover:scale-110">
+              <Zap size={22} className="text-white" fill="currentColor" />
+            </div>
+            <div>
+              <h1 className="text-xl font-black text-foreground tracking-tighter uppercase italic leading-none">LiveOPS</h1>
+              <p className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.3em] mt-1 opacity-60">Control Surface</p>
+            </div>
           </Link>
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-          {/* Navigation Items placeholder */}
-          <Link
-            href="/productions"
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/productions') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
-          >
-            <Server size={18} />
-            Productions
-          </Link>
-          <Link
-            href={activeProductionId ? `/productions/${activeProductionId}/intercom` : '/productions'}
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/intercom') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
-          >
-            <Info size={18} />
-            Operational Hub
-          </Link>
-          {activeProductionId && (
-            <Link
-              href={`/productions/${activeProductionId}/overlays`}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/overlays') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
-            >
-              <Layers size={18} />
-              Graphics Constructor
-            </Link>
-          )}
-          {activeProductionId && (
-            <Link
-              href={`/productions/${activeProductionId}/guest`}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.includes('/guest') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
-            >
-              <Users size={18} />
-              Guest Panel
-            </Link>
-          )}
-          <Link
-            href="/profile"
-            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname === '/profile' ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
-          >
-            <UserIcon size={18} />
-            Profile
-          </Link>
+        <SidebarContent pathname={pathname} activeProductionId={activeProductionId} user={user} handleLogout={handleLogout} />
+      </aside>
 
-          {/* Admin Section */}
-          <Guard requiredPermissions={['user:manage', 'role:manage']}>
-            <div className="pt-4 pb-1 mt-4 border-t border-indigo-800/50 dark:border-card-border/50">
-              <p className="px-3 text-[10px] font-bold text-indigo-300 dark:text-muted uppercase tracking-widest mb-1">Administration</p>
+      {/* Main Content Viewport */}
+      <main className="flex-1 flex flex-col h-screen overflow-hidden bg-background relative selection:bg-indigo-500/30">
+        <header className="h-20 border-b border-card-border/40 flex items-center justify-between px-6 min-[769px]:px-10 bg-background/50 backdrop-blur-2xl z-40">
+          <div className="flex items-center gap-6">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="p-3 -ml-3 text-foreground min-[769px]:hidden hover:bg-white/5 rounded-2xl transition-all active:scale-90 border border-transparent hover:border-card-border/50"
+            >
+              <Menu size={24} />
+            </button>
+
+            <div className="hidden min-[769px]:flex flex-col">
+              <div className="flex items-center gap-3">
+                <Activity size={14} className="text-indigo-400" />
+                <h2 className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">Operational Node</h2>
+              </div>
+              <h1 className="text-lg font-black text-foreground uppercase tracking-tight mt-0.5">
+                {pathname === '/productions' ? 'Asset Management' :
+                  pathname.includes('/intercom') ? 'Tactical Command' :
+                    pathname.includes('/overlays') ? 'Visual Pipeline' :
+                      pathname.includes('/social') ? 'Engagement Hub' :
+                        pathname.includes('/automation') ? 'Logic Engine' : 'Production Core'}
+              </h1>
             </div>
-          </Guard>
+          </div>
 
-          <Guard requiredPermissions={['user:manage']}>
-            <Link
-              href="/admin/users"
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/users') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
-            >
-              <Users size={18} />
-              Global Users
-            </Link>
-          </Guard>
-
-          <Guard requiredPermissions={['role:manage']}>
-            <Link
-              href="/admin/roles"
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${pathname.startsWith('/admin/roles') ? 'bg-indigo-800/80 text-white dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-indigo-200 hover:text-white hover:bg-indigo-800/50 dark:text-muted dark:hover:text-foreground dark:hover:bg-card-border/50'}`}
-            >
-              <Shield size={18} />
-              Roles & Permissions
-            </Link>
-          </Guard>
-        </nav>
-
-        <div className="p-4 border-t border-indigo-800/50 dark:border-card-border bg-indigo-950/20 dark:bg-card-border/20">
-          <div className="flex items-center gap-3 px-3 py-2 mb-2 group">
-            <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-600/20 text-white group-hover:scale-105 transition-transform">
-              {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
+          <div className="flex items-center gap-4 min-[769px]:gap-8">
+            <div className="hidden lg:flex items-center gap-1.5 px-4 py-2 bg-white/5 border border-white/5 rounded-2xl shadow-inner group cursor-default">
+              <Command size={14} className="text-muted group-hover:text-indigo-400 transition-colors" />
+              <span className="text-[10px] font-black text-muted uppercase tracking-widest">K: Search Matrix</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white dark:text-foreground truncate">{user?.name || 'User'}</p>
-              <div className="flex flex-col">
-                <p className="text-[10px] text-indigo-200 dark:text-muted truncate">{user?.email}</p>
-                {user?.globalRole && (
-                  <p className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mt-0.5">
-                    {user.globalRole.name}
-                  </p>
-                )}
+
+            <div className="flex items-center gap-4">
+              <ThemeSwitcher />
+              <PresenceBar />
+              <div className="h-6 w-[1px] bg-card-border/50 hidden min-[769px]:block" />
+              <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 transition-all hover:bg-emerald-500/10">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.5)]" />
+                <span className="text-[10px] font-black text-emerald-500/80 uppercase tracking-[0.2em]">Signal Stable</span>
               </div>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 text-indigo-200 dark:text-muted hover:text-red-300 dark:hover:text-destructive hover:bg-red-500/10 dark:hover:bg-destructive/10 rounded-md transition-colors"
-          >
-            <LogOut size={18} />
-            <span className="text-sm">Sign out</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden bg-background">
-        <header className="h-16 border-b border-card-border flex items-center justify-between px-6 bg-background/50 backdrop-blur-md z-30">
-          <div className="flex items-center gap-4">
-            <span className="font-black text-foreground tracking-tighter md:hidden">LOPS</span>
-            <div className="hidden md:block">
-              {/* Optional: Breadcrumbs or Page Title could go here */}
-            </div>
-          </div>
-          <div className="flex items-center gap-6">
-            <ThemeSwitcher />
-            <PresenceBar />
-            <div className="h-4 w-[1px] bg-card-border hidden md:block" />
-            <div className="hidden md:flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Live System</span>
-            </div>
-          </div>
         </header>
+
         <CommandPalette />
-        <div className="flex-1 overflow-y-auto p-6 md:p-8">{children}</div>
+
+        {/* Scrollable Workspace */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar relative">
+          {/* Subtle Background Decoration */}
+          <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
+            <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/5 blur-[120px] rounded-full" />
+            <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
+          </div>
+
+          <div className="max-w-[1800px] mx-auto p-6 min-[769px]:p-10 lg:p-12 relative z-10 min-h-full">
+            {children}
+          </div>
+        </div>
       </main>
     </div>
   );
 }
+
+const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: any) => (
+  <>
+    <nav className="flex-1 overflow-y-auto py-8 px-5 space-y-2 custom-scrollbar">
+      <p className="px-4 text-[9px] font-black text-muted uppercase tracking-[0.3em] mb-4 opacity-40">Core Systems</p>
+
+      <SidebarLink
+        href="/productions"
+        icon={Server}
+        label="Productions"
+        active={pathname === '/productions' || (pathname.startsWith('/productions/') && !pathname.includes('intercom') && !pathname.includes('overlays') && !pathname.includes('guest'))}
+      />
+
+      <SidebarLink
+        href={activeProductionId ? `/productions/${activeProductionId}/intercom` : '/productions'}
+        icon={Zap}
+        label="Operational Hub"
+        active={pathname.includes('/intercom')}
+      />
+
+      {activeProductionId && (
+        <>
+          <div className="h-4" />
+          <p className="px-4 text-[9px] font-black text-muted uppercase tracking-[0.3em] mb-4 opacity-40">Active Engine</p>
+          <SidebarLink
+            href={`/productions/${activeProductionId}/overlays`}
+            icon={Layers}
+            label="Graphics Engine"
+            active={pathname.includes('/overlays')}
+          />
+          <SidebarLink
+            href={`/productions/${activeProductionId}/guest`}
+            icon={Users}
+            label="Guest Panel"
+            active={pathname.includes('/guest')}
+          />
+        </>
+      )}
+
+      <div className="h-4" />
+      <p className="px-4 text-[9px] font-black text-muted uppercase tracking-[0.3em] mb-4 opacity-40">Identity</p>
+      <SidebarLink
+        href="/profile"
+        icon={UserIcon}
+        label="Operator Profile"
+        active={pathname === '/profile'}
+      />
+
+      <Guard requiredPermissions={['user:manage', 'role:manage']}>
+        <div className="h-8" />
+        <p className="px-4 text-[9px] font-black text-indigo-400 uppercase tracking-[0.4em] mb-4 opacity-60">Administration</p>
+
+        <Guard requiredPermissions={['user:manage']}>
+          <SidebarLink
+            href="/admin/users"
+            icon={Users}
+            label="Global Users"
+            active={pathname.startsWith('/admin/users')}
+          />
+        </Guard>
+
+        <Guard requiredPermissions={['role:manage']}>
+          <SidebarLink
+            href="/admin/roles"
+            icon={Shield}
+            label="Permissions Matrix"
+            active={pathname.startsWith('/admin/roles')}
+          />
+        </Guard>
+      </Guard>
+    </nav>
+
+    {/* Sidebar User Hub */}
+    <div className="p-6 bg-white/[0.03] border-t border-card-border/50">
+      <div className="p-4 bg-background/60 backdrop-blur-md rounded-2xl border border-card-border/60 shadow-inner flex items-center gap-4 mb-4 relative overflow-hidden group/user">
+        <div className="absolute inset-x-0 bottom-0 h-1 bg-indigo-600/20" />
+        <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-lg font-black shadow-xl shadow-indigo-600/30 text-white shrink-0 group-hover/user:scale-110 transition-all">
+          {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-black text-foreground truncate tracking-tighter uppercase leading-none mb-1">{user?.name || 'Operator'}</p>
+          <div className="flex items-center gap-1.5 opacity-60">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <p className="text-[9px] font-bold text-muted truncate uppercase tracking-widest">{user?.globalRole?.name || 'Authorized'}</p>
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={handleLogout}
+        className="w-full flex items-center justify-between px-5 py-4 text-muted hover:text-white hover:bg-red-600 rounded-2xl transition-all duration-300 group shadow-lg hover:shadow-red-600/20 mb-2"
+      >
+        <div className="flex items-center gap-3">
+          <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
+          <span className="text-[10px] font-black uppercase tracking-[0.2em]">Terminate Session</span>
+        </div>
+        <div className="w-1.5 h-1.5 rounded-full bg-muted/20 group-hover:bg-white" />
+      </button>
+    </div>
+  </>
+);
+
+const SidebarLink = ({ href, icon: Icon, label, active }: any) => (
+  <Link
+    href={href}
+    className={cn(
+      "flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 group/link relative overflow-hidden",
+      active
+        ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/30"
+        : "text-muted hover:text-foreground hover:bg-white/5"
+    )}
+  >
+    <div className="flex items-center gap-4 relative z-10">
+      <Icon size={20} className={cn("transition-transform group-hover/link:scale-110", active ? "text-white" : "text-indigo-400")} />
+      <span className="text-[10px] font-black uppercase tracking-[0.2em]">{label}</span>
+    </div>
+    {active && (
+      <div className="w-1.5 h-1.5 rounded-full bg-white relative z-10" />
+    )}
+    {active && (
+      <motion.div layoutId="nav-glow" className="absolute inset-0 bg-white/10" />
+    )}
+  </Link>
+);
