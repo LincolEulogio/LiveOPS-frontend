@@ -20,6 +20,120 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
     const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
     const canvasRef = useRef<HTMLDivElement>(null);
     const [zoom, setZoom] = useState(0.4);
+    const [draggingId, setDraggingId] = useState<string | null>(null);
+    const [resizingId, setResizingId] = useState<{ id: string, handle: string } | null>(null);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0, layerX: 0, layerY: 0, width: 0, height: 0 });
+    const [previewMode, setPreviewMode] = useState(false);
+    const [sampleData] = useState({
+        active_block_title: 'ENTREVISTA CON GUEST_NAME',
+        active_block_notes: 'Tema: Impacto de la IA en producción en vivo',
+        guest_name: 'Dr. Jane Smith',
+        system_cpu: '15%',
+    });
+
+    const snapToGrid = (val: number) => Math.round(val / 10) * 10;
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (draggingId && canvasRef.current) {
+                const deltaX = (e.clientX - dragStart.x) / zoom;
+                const deltaY = (e.clientY - dragStart.y) / zoom;
+                updateLayer(draggingId, {
+                    x: snapToGrid(dragStart.layerX + deltaX),
+                    y: snapToGrid(dragStart.layerY + deltaY)
+                });
+            } else if (resizingId && canvasRef.current) {
+                const deltaX = (e.clientX - dragStart.x) / zoom;
+                const deltaY = (e.clientY - dragStart.y) / zoom;
+                const { handle } = resizingId;
+                const updates: Partial<OverlayLayer> = {};
+
+                if (handle.includes('e')) updates.width = snapToGrid(Math.max(20, dragStart.width + deltaX));
+                if (handle.includes('s')) updates.height = snapToGrid(Math.max(20, dragStart.height + deltaY));
+                if (handle.includes('w')) {
+                    const newWidth = snapToGrid(Math.max(20, dragStart.width - deltaX));
+                    updates.width = newWidth;
+                    updates.x = dragStart.layerX + (dragStart.width - newWidth);
+                }
+                if (handle.includes('n')) {
+                    const newHeight = snapToGrid(Math.max(20, dragStart.height - deltaY));
+                    updates.height = newHeight;
+                    updates.y = dragStart.layerY + (dragStart.height - newHeight);
+                }
+
+                updateLayer(resizingId.id, updates);
+            }
+        };
+
+        const handleMouseUp = () => {
+            setDraggingId(null);
+            setResizingId(null);
+        };
+
+        if (draggingId || resizingId) {
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+        }
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [draggingId, resizingId, dragStart, zoom]);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (!selectedLayerId) return;
+            // Ignore if typing in an input
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+            const moveStep = e.shiftKey ? 50 : 10;
+            const layer = config.layers.find(l => l.id === selectedLayerId)!;
+
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                deleteLayer(selectedLayerId);
+            } else if (e.key === 'ArrowLeft') {
+                updateLayer(selectedLayerId, { x: layer.x - moveStep });
+            } else if (e.key === 'ArrowRight') {
+                updateLayer(selectedLayerId, { x: layer.x + moveStep });
+            } else if (e.key === 'ArrowUp') {
+                updateLayer(selectedLayerId, { y: layer.y - moveStep });
+            } else if (e.key === 'ArrowDown') {
+                updateLayer(selectedLayerId, { y: layer.y + moveStep });
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [selectedLayerId, config.layers]);
+
+    const handleLayerMouseDown = (e: React.MouseEvent, layer: OverlayLayer) => {
+        e.stopPropagation();
+        setSelectedLayerId(layer.id);
+        setDraggingId(layer.id);
+        setDragStart({
+            x: e.clientX,
+            y: e.clientY,
+            layerX: layer.x,
+            layerY: layer.y,
+            width: layer.width,
+            height: layer.height
+        });
+    };
+
+    const handleResizeStart = (e: React.MouseEvent, id: string, handle: string) => {
+        e.stopPropagation();
+        const layer = config.layers.find(l => l.id === id)!;
+        setResizingId({ id, handle });
+        setDragStart({
+            x: e.clientX,
+            y: e.clientY,
+            layerX: layer.x,
+            layerY: layer.y,
+            width: layer.width,
+            height: layer.height
+        });
+    };
 
     const addLayer = (type: OverlayLayer['type']) => {
         const newLayer: OverlayLayer = {
@@ -86,32 +200,50 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
 
             {/* Canvas Area */}
             <div className="flex-1 bg-background flex flex-col relative overflow-hidden">
-                <div className="p-4 border-b border-card-border flex justify-between items-center">
-                    <span className="text-xs font-bold text-muted uppercase tracking-widest">Viewport (1920x1080)</span>
-                    <input
-                        type="range" min="0.1" max="1" step="0.1"
-                        value={zoom} onChange={e => setZoom(parseFloat(e.target.value))}
-                        className="w-32 accent-indigo-500"
-                    />
+                <div className="p-4 border-b border-card-border flex justify-between items-center bg-card-bg/50">
+                    <div className="flex items-center gap-4">
+                        <span className="text-xs font-bold text-muted uppercase tracking-widest">Viewport (1920x1080)</span>
+                        <div className="h-4 w-px bg-card-border" />
+                        <button
+                            onClick={() => setPreviewMode(!previewMode)}
+                            className={cn(
+                                "text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border transition-all",
+                                previewMode ? "bg-indigo-500 text-white border-indigo-400" : "bg-card-border/50 text-muted border-card-border hover:text-foreground"
+                            )}
+                        >
+                            {previewMode ? 'Live Preview: ON' : 'Preview Bindings'}
+                        </button>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <span className="text-[10px] text-muted font-bold">{Math.round(zoom * 100)}%</span>
+                        <input
+                            type="range" min="0.1" max="1" step="0.1"
+                            value={zoom} onChange={e => setZoom(parseFloat(e.target.value))}
+                            className="w-32 accent-indigo-500 cursor-pointer"
+                        />
+                    </div>
                 </div>
 
-                <div className="flex-1 flex items-center justify-center p-20 overflow-auto">
+                <div className="flex-1 flex items-center justify-center p-20 overflow-auto bg-[radial-gradient(#ffffff10_1px,transparent_1px)] [background-size:20px_20px]">
                     <div
-                        className="bg-card-bg shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
+                        className="bg-card-bg shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-hidden"
                         style={{
                             width: config.width,
                             height: config.height,
                             transform: `scale(${zoom})`,
-                            transformOrigin: 'center'
+                            transformOrigin: 'center',
+                            backgroundImage: 'linear-gradient(45deg, #161b22 25%, transparent 25%), linear-gradient(-45deg, #161b22 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #161b22 75%), linear-gradient(-45deg, transparent 75%, #161b22 75%)',
+                            backgroundSize: '20px 20px',
+                            backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
                         }}
                     >
                         {config.layers.sort((a, b) => a.zIndex - b.zIndex).map(layer => (
                             <div
                                 key={layer.id}
-                                onClick={(e) => { e.stopPropagation(); setSelectedLayerId(layer.id); }}
+                                onMouseDown={(e) => handleLayerMouseDown(e, layer)}
                                 className={cn(
-                                    "absolute cursor-move border",
-                                    selectedLayerId === layer.id ? "border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] z-50" : "border-transparent hover:border-white/20"
+                                    "absolute border group transition-shadow",
+                                    selectedLayerId === layer.id ? "border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.4)] z-50" : "border-transparent hover:border-white/20 select-none"
                                 )}
                                 style={{
                                     left: layer.x,
@@ -120,14 +252,34 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                     height: layer.height,
                                     opacity: layer.opacity,
                                     backgroundColor: layer.type === 'shape' ? layer.content : 'transparent',
+                                    zIndex: layer.zIndex,
                                     ...layer.style
                                 }}
                             >
                                 {layer.type === 'text' && (
-                                    <div className="w-full h-full flex items-center">{layer.content}</div>
+                                    <div className="w-full h-full flex items-center overflow-hidden">
+                                        {previewMode && layer.binding
+                                            ? `${layer.binding.prefix || ''}${sampleData[layer.binding.field as keyof typeof sampleData] || layer.binding.field}${layer.binding.suffix || ''}`
+                                            : layer.content}
+                                    </div>
                                 )}
                                 {layer.type === 'image' && (
                                     <img src={layer.content} className="w-full h-full object-contain pointer-events-none" />
+                                )}
+
+                                {/* Resize Handles */}
+                                {selectedLayerId === layer.id && (
+                                    <>
+                                        <div onMouseDown={(e) => handleResizeStart(e, layer.id, 'nw')} className="absolute -left-1.5 -top-1.5 w-3 h-3 bg-white border-2 border-indigo-500 rounded-full cursor-nw-resize z-50 hover:scale-125 transition-transform" />
+                                        <div onMouseDown={(e) => handleResizeStart(e, layer.id, 'ne')} className="absolute -right-1.5 -top-1.5 w-3 h-3 bg-white border-2 border-indigo-500 rounded-full cursor-ne-resize z-50 hover:scale-125 transition-transform" />
+                                        <div onMouseDown={(e) => handleResizeStart(e, layer.id, 'sw')} className="absolute -left-1.5 -bottom-1.5 w-3 h-3 bg-white border-2 border-indigo-500 rounded-full cursor-sw-resize z-50 hover:scale-125 transition-transform" />
+                                        <div onMouseDown={(e) => handleResizeStart(e, layer.id, 'se')} className="absolute -right-1.5 -bottom-1.5 w-3 h-3 bg-white border-2 border-indigo-500 rounded-full cursor-se-resize z-50 hover:scale-125 transition-transform" />
+
+                                        <div onMouseDown={(e) => handleResizeStart(e, layer.id, 'n')} className="absolute left-1/2 -translate-x-1/2 -top-1.5 w-3 h-3 bg-white border-2 border-indigo-500 rounded-full cursor-n-resize z-50 hover:scale-125 transition-transform" />
+                                        <div onMouseDown={(e) => handleResizeStart(e, layer.id, 's')} className="absolute left-1/2 -translate-x-1/2 -bottom-1.5 w-3 h-3 bg-white border-2 border-indigo-500 rounded-full cursor-s-resize z-50 hover:scale-125 transition-transform" />
+                                        <div onMouseDown={(e) => handleResizeStart(e, layer.id, 'e')} className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-indigo-500 rounded-full cursor-e-resize z-50 hover:scale-125 transition-transform" />
+                                        <div onMouseDown={(e) => handleResizeStart(e, layer.id, 'w')} className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-indigo-500 rounded-full cursor-w-resize z-50 hover:scale-125 transition-transform" />
+                                    </>
                                 )}
                             </div>
                         ))}
@@ -179,6 +331,29 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                     <label className="text-[9px] text-muted font-bold uppercase">Y Pos</label>
                                     <input type="number" value={selectedLayer.y} onChange={e => updateLayer(selectedLayer.id, { y: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-lg p-2 text-xs" />
                                 </div>
+                                <div className="space-y-2">
+                                    <label className="text-[9px] text-muted font-bold uppercase">Width</label>
+                                    <input type="number" value={selectedLayer.width} onChange={e => updateLayer(selectedLayer.id, { width: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-lg p-2 text-xs" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[9px] text-muted font-bold uppercase">Height</label>
+                                    <input type="number" value={selectedLayer.height} onChange={e => updateLayer(selectedLayer.id, { height: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-lg p-2 text-xs" />
+                                </div>
+                            </div>
+
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => updateLayer(selectedLayer.id, { zIndex: selectedLayer.zIndex + 1 })}
+                                    className="flex-1 p-2 bg-background border border-card-border rounded-lg text-xs flex items-center justify-center gap-2 hover:bg-card-border"
+                                >
+                                    <ChevronUp size={12} /> Bring Forward
+                                </button>
+                                <button
+                                    onClick={() => updateLayer(selectedLayer.id, { zIndex: Math.max(0, selectedLayer.zIndex - 1) })}
+                                    className="flex-1 p-2 bg-background border border-card-border rounded-lg text-xs flex items-center justify-center gap-2 hover:bg-card-border"
+                                >
+                                    <ChevronDown size={12} /> Send Backward
+                                </button>
                             </div>
 
                             <div className="space-y-2">

@@ -1,387 +1,84 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useSocket } from '@/shared/socket/socket.provider';
-import { useAuthStore } from '@/features/auth/store/auth.store';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-    Video, VideoOff, Mic, MicOff,
-    Settings, Users, DoorOpen,
-    Monitor, Signal, Radio
-} from 'lucide-react';
-import { cn } from '@/shared/utils/cn';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 import { toast } from 'sonner';
+import { Radio } from 'lucide-react';
 import {
-    WebRTCSignal,
-    WebRTCSignalPayload,
-    WebRTCReceivedSignal,
-    PresenceUpdatePayload,
-    PresenceMember
-} from '@/shared/types/webrtc.types';
-
-// Dynamic import for SimplePeer to avoid SSR issues
-const SimplePeer = typeof window !== 'undefined' ? require('simple-peer') : null;
-
-// Interfaces now imported from '@/shared/types/webrtc.types'
-
-interface PeerInstance {
-    signal: (data: WebRTCSignal | string) => void;
-    on: (event: string, callback: (arg: any) => void) => void;
-    destroy: () => void;
-}
-
-interface PeerConnection {
-    peerId: string;
-    peer: PeerInstance;
-    stream?: MediaStream;
-}
+    LiveKitRoom,
+    VideoConference,
+    RoomAudioRenderer,
+} from '@livekit/components-react';
+import '@livekit/components-styles';
+import axios from 'axios';
 
 export const GuestRoom = ({ productionId }: { productionId: string }) => {
-    const { socket, isConnected: isSocketConnected } = useSocket();
     const { user } = useAuthStore();
     const router = useRouter();
+    const [token, setToken] = useState<string | null>(null);
+    const [lkUrl, setLkUrl] = useState<string | null>(null);
 
-    const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-    const [peers, setPeers] = useState<Map<string, PeerConnection>>(new Map());
-    const [isCameraOn, setIsCameraOn] = useState(true);
-    const [isMicOn, setIsMicOn] = useState(true);
-    const [isJoining, setIsJoining] = useState(false);
-
-    const localVideoRef = useRef<HTMLVideoElement>(null);
-    const peersRef = useRef<Map<string, PeerConnection>>(new Map());
-
-    // 1. Initialize Local Media
-    const initMedia = useCallback(async () => {
-        const constraints = [
-            // 1. Ideal HQ Configuration
-            {
-                video: {
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    frameRate: { ideal: 30 }
-                },
-                audio: true
-            },
-            // 2. Standard Fallback
-            {
-                video: true,
-                audio: true
-            },
-            // 3. Audio Only (if video fails)
-            {
-                video: false,
-                audio: true
-            }
-        ];
-
-        let lastError: any = null;
-
-        for (const config of constraints) {
+    useEffect(() => {
+        const fetchToken = async () => {
             try {
-                console.log('Attempting media capture with:', config);
-                const stream = await navigator.mediaDevices.getUserMedia(config);
-                setLocalStream(stream);
-                if (localVideoRef.current) {
-                    localVideoRef.current.srcObject = stream;
-                }
-                toast.success('Media devices initialized');
-                return; // Success
+                const res = await axios.post(`/api/streaming/${productionId}/token`, {
+                    identity: user?.id || `guest-${Math.random().toString(36).substring(7)}`,
+                    name: user?.name || 'Guest Participant',
+                    isOperator: false
+                });
+                setToken(res.data.token);
+                setLkUrl(res.data.url);
             } catch (err) {
-                console.warn(`Failed with config ${JSON.stringify(config)}:`, err);
-                lastError = err;
-            }
-        }
-
-        console.error('All media capture attempts failed:', lastError);
-        toast.error(`Could not access media: ${lastError?.message || 'Unknown error'}`);
-    }, []);
-
-    useEffect(() => {
-        initMedia();
-        return () => {
-            localStream?.getTracks().forEach(track => track.stop());
-        };
-    }, [initMedia]);
-
-    // 2. WebRTC Signalling Handlers
-    useEffect(() => {
-        if (!socket || !isSocketConnected || !localStream) return;
-
-        const handleSignalReceived = (data: WebRTCReceivedSignal) => {
-            const peerInfo = peersRef.current.get(data.senderUserId);
-
-            if (peerInfo) {
-                // We already have a peer, just signal it
-                peerInfo.peer.signal(data.signal);
-            } else {
-                // New peer (someone else initiated an offer)
-                createPeer(data.senderUserId, false, data.signal);
+                console.error('Failed to fetch LiveKit token:', err);
+                toast.error('Error al conectar con el servidor de streaming');
             }
         };
 
-        const handlePresenceUpdate = (data: PresenceUpdatePayload) => {
-            // Find Operators/Directors to connect to
-            const targets = data.members.filter(m =>
-                (m.roleName === 'DIRECTOR' || m.roleName === 'OPERATOR') &&
-                m.userId !== user?.id
-            );
+        if (user) fetchToken();
+    }, [productionId, user]);
 
-            targets.forEach(target => {
-                if (!peersRef.current.has(target.userId)) {
-                    // If we are a Guest, we might want to initiate connections to the Director
-                    // Or wait for Director to initiate. Let's wait for now to simplify, 
-                    // or just initiate to all targets for a mesh.
-                    createPeer(target.userId, true);
-                }
-            });
-        };
-
-        socket.on('webrtc.signal_received', handleSignalReceived);
-        socket.on('presence.update', handlePresenceUpdate);
-
-        return () => {
-            socket.off('webrtc.signal_received', handleSignalReceived);
-            socket.off('presence.update', handlePresenceUpdate);
-        };
-    }, [socket, isSocketConnected, localStream, user?.id]);
-
-    const createPeer = (peerId: string, initiator: boolean, incomingSignal?: WebRTCSignal) => {
-        if (!localStream || !SimplePeer) return;
-
-        console.log(`SimplePeer: Creating peer with ${peerId} (initiator: ${initiator})`);
-
-        const peer = new SimplePeer({
-            initiator,
-            trickle: false,
-            stream: localStream,
-        });
-
-        peer.on('signal', (signal: WebRTCSignal) => {
-            if (socket) {
-                const payload: WebRTCSignalPayload = {
-                    productionId,
-                    targetUserId: peerId,
-                    signal
-                };
-                socket.emit('webrtc.signal', payload);
-            }
-        });
-
-        peer.on('stream', (stream: MediaStream) => {
-            console.log(`SimplePeer: Received stream from ${peerId}`);
-            updatePeers(peerId, { stream });
-        });
-
-        peer.on('close', () => {
-            console.log(`SimplePeer: Peer ${peerId} closed`);
-            removePeer(peerId);
-        });
-
-        peer.on('error', (err: Error) => {
-            console.error('Peer error:', err);
-            removePeer(peerId);
-        });
-
-        if (incomingSignal) {
-            peer.signal(incomingSignal);
-        }
-
-        const peerInfo: PeerConnection = { peerId, peer };
-        peersRef.current.set(peerId, peerInfo);
-        setPeers(new Map(peersRef.current));
-    };
-
-    const updatePeers = (peerId: string, updates: Partial<PeerConnection>) => {
-        const existing = peersRef.current.get(peerId);
-        if (existing) {
-            peersRef.current.set(peerId, { ...existing, ...updates });
-            setPeers(new Map(peersRef.current));
-        }
-    };
-
-    const removePeer = (peerId: string) => {
-        const peerInfo = peersRef.current.get(peerId);
-        if (peerInfo) {
-            peerInfo.peer.destroy();
-            peersRef.current.delete(peerId);
-            setPeers(new Map(peersRef.current));
-        }
-    };
-
-    const toggleCamera = () => {
-        if (localStream) {
-            const videoTrack = localStream.getVideoTracks()[0];
-            if (videoTrack) {
-                videoTrack.enabled = !videoTrack.enabled;
-                setIsCameraOn(videoTrack.enabled);
-            }
-        }
-    };
-
-    const toggleMic = () => {
-        if (localStream) {
-            const audioTrack = localStream.getAudioTracks()[0];
-            if (audioTrack) {
-                audioTrack.enabled = !audioTrack.enabled;
-                setIsMicOn(audioTrack.enabled);
-            }
-        }
-    };
+    if (!token || !lkUrl) {
+        return (
+            <div className="flex-1 flex flex-col items-center justify-center bg-background gap-4">
+                <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                <p className="text-muted text-xs font-bold uppercase tracking-widest">Iniciando sesión segura...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col h-full bg-background font-sans text-foreground overflow-hidden">
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-card-border bg-background/50 backdrop-blur-md">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-emerald-500/10 rounded-lg">
-                        <Radio size={20} className="text-emerald-400 animate-pulse" />
-                    </div>
-                    <div>
-                        <h1 className="text-lg font-bold tracking-tight">Green Room</h1>
-                        <p className="text-[10px] text-muted uppercase tracking-widest font-black">
-                            Production ID: {productionId.split('-')[0]}...
-                        </p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 px-3 py-1 bg-card-bg/50 rounded-full border border-card-border/50">
-                        <div className={cn("w-2 h-2 rounded-full", isSocketConnected ? "bg-emerald-500" : "bg-red-500 animate-pulse")} />
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-muted">
-                            {isSocketConnected ? 'Connected' : 'Reconnecting...'}
-                        </span>
-                    </div>
-                    <button className="p-2 hover:bg-card-border rounded-lg transition-colors">
-                        <Settings size={20} className="text-muted" />
-                    </button>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col md:flex-row p-6 gap-6 overflow-hidden">
-                {/* Local Preview Section */}
-                <div className="flex-1 flex flex-col gap-4 min-h-0">
-                    <div className="relative group flex-1 bg-card-bg rounded-2xl overflow-hidden border border-card-border shadow-2xl">
-                        <video
-                            ref={localVideoRef}
-                            autoPlay
-                            muted
-                            playsInline
-                            className={cn(
-                                "w-full h-full object-cover transition-opacity duration-500",
-                                isCameraOn ? "opacity-100" : "opacity-0"
-                            )}
-                        />
-
-                        {/* Camera Off Placeholder */}
-                        {!isCameraOn && (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-card-bg/90 gap-4">
-                                <div className="p-8 bg-background rounded-full border border-card-border">
-                                    <VideoOff size={64} className="text-muted" />
-                                </div>
-                                <p className="text-sm font-bold text-muted uppercase tracking-widest">Cámara Desactivada</p>
-                            </div>
-                        )}
-
-                        {/* Overlay Info */}
-                        <div className="absolute bottom-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-lg border border-white/10">
-                            <span className="text-xs font-bold text-white uppercase tracking-tight">TÚ</span>
-                            <div className="flex gap-1 h-3 items-end">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="w-1 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.1}s`, height: `${40 + Math.random() * 60}%` }} />
-                                ))}
-                            </div>
+            <LiveKitRoom
+                video={true}
+                audio={true}
+                token={token}
+                serverUrl={lkUrl}
+                connect={true}
+                onDisconnected={() => router.back()}
+                className="flex-1 flex flex-col"
+            >
+                {/* Custom Header in LiveKit Room */}
+                <div className="flex items-center justify-between px-6 py-4 border-b border-card-border bg-background/50 backdrop-blur-md">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-emerald-500/10 rounded-lg">
+                            <Radio size={20} className="text-emerald-400 animate-pulse" />
                         </div>
-
-                        {/* Controls Float */}
-                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 px-6 py-3 bg-card-bg/90 backdrop-blur-xl rounded-2xl border border-card-border shadow-2xl scale-110">
-                            <button
-                                onClick={toggleMic}
-                                className={cn(
-                                    "p-3 rounded-xl transition-all",
-                                    isMicOn ? "bg-background text-muted hover:bg-card-border hover:text-foreground" : "bg-red-500 text-white hover:bg-red-600"
-                                )}
-                            >
-                                {isMicOn ? <Mic size={20} /> : <MicOff size={20} />}
-                            </button>
-                            <button
-                                onClick={toggleCamera}
-                                className={cn(
-                                    "p-3 rounded-xl transition-all",
-                                    isCameraOn ? "bg-background text-muted hover:bg-card-border hover:text-foreground" : "bg-red-500 text-white hover:bg-red-600"
-                                )}
-                            >
-                                {isCameraOn ? <Video size={20} /> : <VideoOff size={20} />}
-                            </button>
-                            <div className="w-px h-8 bg-card-border mx-2" />
-                            <button
-                                onClick={() => router.back()}
-                                className="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-red-600/20 active:scale-95"
-                            >
-                                Salir
-                            </button>
+                        <div>
+                            <h1 className="text-lg font-bold tracking-tight">Live Guest Room</h1>
+                            <p className="text-[10px] text-muted uppercase tracking-widest font-black">
+                                Production ID: {productionId.split('-')[0]}...
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                {/* Sidebar / Operator Status */}
-                <div className="w-full md:w-80 flex flex-col gap-4">
-                    <div className="flex flex-col gap-4 p-5 bg-card-bg/40 border border-card-border rounded-2xl">
-                        <div className="flex items-center gap-2 mb-2">
-                            <Signal size={16} className="text-indigo-400" />
-                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">Live Status</h3>
-                        </div>
-
-                        <div className="flex flex-col gap-3">
-                            <div className="flex items-center justify-between p-3 bg-background/40 rounded-xl border border-card-border/50">
-                                <span className="text-[10px] font-bold uppercase text-muted">Latency</span>
-                                <span className="text-xs font-mono text-emerald-400 tracking-tighter">~42ms</span>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-background/40 rounded-xl border border-card-border/50">
-                                <span className="text-[10px] font-bold uppercase text-muted">Video Quality</span>
-                                <span className="text-xs font-bold text-foreground/80">1080p @ 30fps</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex-1 flex flex-col gap-4 p-5 bg-card-bg/40 border border-card-border rounded-2xl overflow-hidden">
-                        <div className="flex items-center gap-2 mb-2">
-                            <Users size={16} className="text-indigo-400" />
-                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">Control Room</h3>
-                        </div>
-
-                        <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar">
-                            {Array.from(peers.values()).map(p => (
-                                <div key={p.peerId} className="flex items-center gap-3 p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
-                                    <div className="relative">
-                                        <div className="w-10 h-10 rounded-full bg-background border-2 border-emerald-500 flex items-center justify-center overflow-hidden">
-                                            <Users size={18} className="text-muted" />
-                                        </div>
-                                        <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-background flex items-center justify-center">
-                                            <Monitor size={8} className="text-white" />
-                                        </div>
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-[10px] font-black uppercase text-muted">Director</p>
-                                        <p className="text-xs font-bold text-emerald-400">Connected</p>
-                                    </div>
-                                </div>
-                            ))}
-
-                            {peers.size === 0 && (
-                                <div className="flex flex-col items-center justify-center py-10 text-center gap-3">
-                                    <div className="p-4 bg-card-border/50 rounded-full">
-                                        <DoorOpen size={24} className="text-muted" />
-                                    </div>
-                                    <p className="text-[10px] uppercase font-black text-muted leading-relaxed">
-                                        Waiting for the Director<br />to join the session...
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                <div className="flex-1 relative overflow-hidden">
+                    <VideoConference />
                 </div>
-            </div>
+
+                <RoomAudioRenderer />
+            </LiveKitRoom>
         </div>
     );
 };

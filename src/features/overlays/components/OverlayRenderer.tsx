@@ -65,7 +65,7 @@ export const OverlayRenderer = ({ template }: Props) => {
             {layers.sort((a, b) => a.zIndex - b.zIndex).map(layer => (
                 <div
                     key={layer.id}
-                    className="absolute"
+                    className="absolute overflow-hidden"
                     style={{
                         left: layer.x,
                         top: layer.y,
@@ -73,6 +73,8 @@ export const OverlayRenderer = ({ template }: Props) => {
                         height: layer.height,
                         opacity: layer.opacity,
                         backgroundColor: layer.type === 'shape' ? layer.content : 'transparent',
+                        zIndex: layer.zIndex,
+                        borderStyle: 'solid',
                         ...layer.style
                     }}
                 >
