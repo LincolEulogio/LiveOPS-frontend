@@ -159,7 +159,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                 initial={{ opacity: 0, scale: 0.9, y: 40 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 40 }}
-                className="relative w-full h-full md:h-auto md:max-h-[95vh] max-w-[1400px] bg-card-bg/60 backdrop-blur-2xl border border-card-border md:rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col"
+                className="relative w-full h-full md:h-auto md:max-h-[80vh] max-w-[1400px] bg-card-bg/60 backdrop-blur-2xl border border-card-border md:rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col"
             >
                 {/* Visual Header Decoration */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
@@ -174,12 +174,12 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                             <h2 className="text-2xl md:text-3xl font-black text-foreground uppercase tracking-tight leading-none mb-2">
                                 {editingRule ? 'Modify Interaction' : 'Initialize Logic'}
                             </h2>
-                            <div className="flex flex-wrap gap-2 items-center text-[10px] font-black text-muted uppercase tracking-[0.2em]">
-                                <span className="opacity-60 text-indigo-400">Dynamic Gateway</span>
-                                <ArrowRight size={10} />
-                                <span>Rule Configurator</span>
-                                <ArrowRight size={10} />
-                                <span className="p-1 px-2 bg-white/5 rounded-md border border-white/5">{productionId.slice(0, 8)}</span>
+                            <div className="flex flex-wrap gap-2 items-center text-[10px] font-black uppercase tracking-[0.2em]">
+                                <span className="text-indigo-400/90">Dynamic Gateway</span>
+                                <ArrowRight size={10} className="text-foreground/20" />
+                                <span className="text-foreground/40">Rule Configurator</span>
+                                <ArrowRight size={10} className="text-foreground/20" />
+                                <span className="p-1 px-2 bg-white/5 rounded-md border border-card-border text-foreground/50">{productionId.slice(0, 8)}</span>
                             </div>
                         </div>
                     </div>
@@ -333,7 +333,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         <div className="space-y-6">
                             <div className="flex items-center gap-3">
                                 <Activity size={16} className="text-indigo-400" />
-                                <h3 className="text-xs font-black text-muted uppercase tracking-[0.3em]">Initial Identity</h3>
+                                <h3 className="text-xs font-black text-foreground/50 uppercase tracking-[0.3em]">Initial Identity</h3>
                             </div>
                             <div className="space-y-5 bg-white/5 p-6 rounded-3xl border border-white/5 shadow-inner">
                                 <div className="space-y-2">
@@ -361,7 +361,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         <div className="flex-1 flex flex-col gap-6">
                             <div className="flex items-center gap-3">
                                 <Settings2 size={16} className="text-amber-400" />
-                                <h3 className="text-xs font-black text-muted uppercase tracking-[0.3em]">Module Parameters</h3>
+                                <h3 className="text-xs font-black text-foreground/50 uppercase tracking-[0.3em]">Module Parameters</h3>
                             </div>
 
                             <AnimatePresence mode="wait">
