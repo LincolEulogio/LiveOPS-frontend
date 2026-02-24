@@ -21,7 +21,8 @@ import {
     AlertCircle,
     Radio,
     ShieldAlert,
-    ExternalLink
+    ExternalLink,
+    Scissors
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CrewCard } from './CrewCard';
@@ -166,6 +167,21 @@ export const DashboardView = () => {
                         TODO READY
                     </button>
                     <button
+                        onClick={async () => {
+                            try {
+                                await apiClient.post(`/productions/${activeProductionId}/automation/instant-clip`);
+                                // Toast or notification here would be nice
+                            } catch (e) {
+                                console.error('Failed to trigger instant clip', e);
+                            }
+                        }}
+                        className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-amber-500/20 flex items-center gap-2"
+                        title="Capturar últimos 30 segundos"
+                    >
+                        <Scissors size={14} />
+                        CLIP
+                    </button>
+                    <button
                         onClick={() => handleMassAlert('AL AIRE')}
                         className="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-red-600/20 flex items-center gap-2"
                     >
@@ -206,7 +222,7 @@ export const DashboardView = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
-                                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+                                className="grid grid-cols-1 lg:grid-cols-3 gap-6"
                             >
                                 {crewMembers.map((member) => (
                                     <CrewCard
