@@ -68,7 +68,7 @@ export default function IntercomPage() {
                 </div>
             </header>
 
-            <main className="p-6 md:p-8 max-w-7xl mx-auto">
+            <main className="p-6 md:p-8 max-w-[1800px] mx-auto">
                 {viewMode === 'dashboard' ? <DashboardView /> : <DeviceView />}
             </main>
 

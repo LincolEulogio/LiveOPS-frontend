@@ -100,7 +100,7 @@ export const DashboardView = () => {
     }, [templates]);
 
     return (
-        <div className="space-y-6 max-w-7xl mx-auto pb-20 mt-4">
+        <div className="space-y-6 max-w-[1800px] mx-auto pb-20 mt-4">
             {/* Top Operational Bar */}
             <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
                 <div className="flex items-center gap-4">
