@@ -166,8 +166,38 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
           </div>
 
-          <div className="max-w-[1800px] mx-auto p-6 min-[769px]:p-10 lg:p-12 relative z-10 min-h-full">
-            {children}
+          <div className="max-w-[1800px] mx-auto p-6 min-[769px]:p-10 lg:p-12 relative z-10 min-h-full flex flex-col">
+            <div className="flex-1">
+              {children}
+            </div>
+
+            {/* Tactical Footer */}
+            <footer className="mt-auto border-t border-card-border bg-white/[0.02] backdrop-blur-sm py-6 px-10 flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-500 group/footer border-x">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-[2px] bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] group-hover/footer:w-16 transition-all duration-700" />
+                <p className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground/70 group-hover/footer:text-foreground transition-colors">
+                  Movimiento Misionero Mundial
+                </p>
+              </div>
+
+              <div className="flex items-center gap-8">
+                <div className="flex items-center gap-3 bg-indigo-500/5 px-4 py-2 rounded-2xl border border-indigo-500/10">
+                  <span className="text-[9px] font-bold text-muted uppercase tracking-widest opacity-60">Lead Architect</span>
+                  <span className="text-[11px] font-black text-indigo-400 uppercase tracking-widest">Lincol E.H</span>
+                </div>
+
+                <div className="h-6 w-[1px] bg-card-border hidden md:block" />
+
+                <div className="flex items-center gap-3">
+                  <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">
+                    © 2026
+                  </p>
+                  <div className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl">
+                    <span className="text-[10px] font-black text-foreground/50 uppercase tracking-[0.2em]">LiveOPS Core</span>
+                  </div>
+                </div>
+              </div>
+            </footer>
           </div>
         </div>
       </main>

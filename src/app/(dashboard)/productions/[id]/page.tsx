@@ -90,7 +90,7 @@ export default function ProductionDetailPage() {
   );
 
   return (
-    <div className="mx-auto max-w-[1800px] space-y-6 sm:space-y-8 pb-32 mt-2 sm:mt-6 px-4 sm:px-0">
+    <div className="mx-auto max-w-[1800px] space-y-6 sm:space-y-8 pb-6 mt-2 sm:mt-6 px-4 sm:px-0">
       {/* Header - Glass Container */}
       <div className="relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-[2.5rem] blur opacity-10" />
