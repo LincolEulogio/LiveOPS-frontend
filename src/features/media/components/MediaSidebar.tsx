@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { apiClient } from '@/shared/api/api.client';
 
 interface MediaAsset {
     id: string;
@@ -19,7 +19,6 @@ interface MediaAsset {
     extension: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export const MediaSidebar = () => {
     const [assets, setAssets] = useState<MediaAsset[]>([]);
@@ -30,8 +29,8 @@ export const MediaSidebar = () => {
     const fetchAssets = async () => {
         setIsLoading(true);
         try {
-            const resp = await axios.get(`${API_BASE_URL}/media/assets`);
-            setAssets(resp.data);
+            const data = await apiClient.get<MediaAsset[]>('/media/assets');
+            setAssets(data);
         } catch (err) {
             console.error('Failed to fetch assets:', err);
             toast.error('Could not load media assets');

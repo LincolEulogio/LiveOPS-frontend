@@ -11,7 +11,7 @@ import {
     RoomAudioRenderer,
 } from '@livekit/components-react';
 import '@livekit/components-styles';
-import axios from 'axios';
+import { apiClient } from '@/shared/api/api.client';
 
 export const GuestRoom = ({ productionId }: { productionId: string }) => {
     const { user } = useAuthStore();
@@ -22,13 +22,13 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
     useEffect(() => {
         const fetchToken = async () => {
             try {
-                const res = await axios.post(`/api/streaming/${productionId}/token`, {
+                const data: any = await apiClient.post(`/streaming/${productionId}/token`, {
                     identity: user?.id || `guest-${Math.random().toString(36).substring(7)}`,
                     name: user?.name || 'Guest Participant',
                     isOperator: false
                 });
-                setToken(res.data.token);
-                setLkUrl(res.data.url);
+                setToken(data.token);
+                setLkUrl(data.url);
             } catch (err) {
                 console.error('Failed to fetch LiveKit token:', err);
                 toast.error('Error al conectar con el servidor de streaming');
