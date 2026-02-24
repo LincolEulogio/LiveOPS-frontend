@@ -212,9 +212,11 @@ export const DeviceView = () => {
                     <div className="grid grid-cols-1 gap-4">
                         <button
                             onClick={async () => {
-                                const success = await subscribeToPush();
-                                if (success) {
+                                const result = await subscribeToPush();
+                                if (result.success) {
                                     alert('¡Notificaciones activadas!');
+                                } else {
+                                    alert(`Error al activar notificaciones: ${result.error}`);
                                 }
                             }}
                             className="w-full flex items-center justify-between p-4 bg-card-bg/50 border border-card-border rounded-2xl group active:scale-95 transition-all"

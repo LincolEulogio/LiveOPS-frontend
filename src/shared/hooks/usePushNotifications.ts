@@ -29,8 +29,7 @@ export const usePushNotifications = () => {
             if (!subscription) {
                 const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
                 if (!publicKey) {
-                    console.error('VAPID public key not found');
-                    return;
+                    throw new Error('VAPID public key not found in environment');
                 }
 
                 subscription = await registration.pushManager.subscribe({
@@ -42,10 +41,10 @@ export const usePushNotifications = () => {
             // Sync with backend
             await apiClient.post('/notifications/push/subscribe', subscription);
             console.log('Push notification subscription synced');
-            return true;
-        } catch (error) {
+            return { success: true };
+        } catch (error: any) {
             console.error('Failed to subscribe to push notifications:', error);
-            return false;
+            return { success: false, error: error.message || 'Unknown error during subscription' };
         }
     };
 
