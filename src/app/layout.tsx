@@ -23,9 +23,15 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: 'LiveOPS Production Control',
   description: 'Live Streaming Multi-tenant Control System',
+  manifest: '/manifest.json',
+  icons: {
+    apple: '/icons/icon-192x192.png',
+  },
+  themeColor: '#6366f1',
 };
 
 import { ThemeProvider } from '@/shared/providers/ThemeProvider';
+import { PWAInitializer } from '@/shared/components/PWAInitializer';
 
 export default function RootLayout({
   children,
@@ -38,6 +44,7 @@ export default function RootLayout({
         className={`${inter.variable} ${montserrat.variable} antialiased h-screen w-screen overflow-hidden`}
         suppressHydrationWarning
       >
+        <PWAInitializer />
         <ErrorBoundary>
           <ReactQueryProvider>
             <ThemeProvider>

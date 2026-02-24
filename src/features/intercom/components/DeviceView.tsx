@@ -3,8 +3,9 @@
 import React from 'react';
 import { useIntercomStore } from '../store/intercom.store';
 import { useIntercom } from '../hooks/useIntercom';
+import { usePushNotifications } from '@/shared/hooks/usePushNotifications';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { Bell, CheckCircle, XCircle, Wifi, WifiOff, Shield, MessageCircle, X, Send } from 'lucide-react';
+import { Bell, CheckCircle, XCircle, Wifi, WifiOff, Shield, MessageCircle, X, Send, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useQuery } from '@tanstack/react-query';
@@ -24,6 +25,7 @@ export const DeviceView = () => {
     // Derived values
     const { isConnected } = useSocket();
     const activeRole = user?.role?.name || user?.globalRole?.name || 'OPERATOR';
+    const { subscribeToPush } = usePushNotifications();
 
     // Fetch timeline blocks to know the current active segment
     const { data: timelineBlocks = [] } = useQuery<TimelineBlock[]>({
@@ -205,6 +207,31 @@ export const DeviceView = () => {
                     Mantén la pantalla encendida. El dispositivo vibrará al recibir alertas.
                 </p>
 
+                <div className="mt-8 pt-8 border-t border-card-border">
+                    <h3 className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-4">Ajustes de Dispositivo</h3>
+                    <div className="grid grid-cols-1 gap-4">
+                        <button
+                            onClick={async () => {
+                                const success = await subscribeToPush();
+                                if (success) {
+                                    alert('¡Notificaciones activadas!');
+                                }
+                            }}
+                            className="w-full flex items-center justify-between p-4 bg-card-bg/50 border border-card-border rounded-2xl group active:scale-95 transition-all"
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className="p-2 bg-amber-500/10 rounded-xl border border-amber-500/20 group-active:bg-amber-500 group-active:text-black transition-colors">
+                                    <Bell size={18} className="text-amber-400 group-active:text-inherit" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-sm font-bold text-foreground tracking-tight">Activar Notificaciones Push</p>
+                                    <p className="text-[10px] text-muted font-medium">Recibir alertas con la pantalla bloqueada</p>
+                                </div>
+                            </div>
+                            <ChevronRight size={16} className="text-muted" />
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     }
