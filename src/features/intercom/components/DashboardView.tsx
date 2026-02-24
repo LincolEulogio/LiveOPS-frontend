@@ -22,10 +22,12 @@ import {
     Radio,
     ShieldAlert,
     ExternalLink,
-    Scissors
+    Scissors,
+    AlertTriangle, Play, Bell, History
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CrewCard } from './CrewCard';
+import { AuditLogView } from './AuditLogView';
 import { ProductionSelector } from '@/features/productions/components/ProductionSelector';
 import { TimelineView } from '../../timeline/components/TimelineView';
 import { TemplateManager } from './TemplateManager';
@@ -46,7 +48,7 @@ export const DashboardView = () => {
     const { sendCommand, sendDirectMessage, members: onlineMembers } = useIntercom();
     const { history } = useIntercomStore();
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [activeTab, setActiveTab] = useState<'intercom' | 'automation' | 'multicast'>('intercom');
+    const [activeTab, setActiveTab] = useState<'intercom' | 'automation' | 'multicast' | 'logs' | 'templates'>('intercom');
 
     // Fetch Production Data (including registered users)
     const { data: production } = useQuery<Production>({
@@ -120,33 +122,23 @@ export const DashboardView = () => {
                     <ProductionSelector />
                     <div className="h-10 w-px bg-card-border hidden md:block" />
                     <div className="flex bg-background p-1 rounded-2xl border border-card-border">
-                        <button
-                            onClick={() => setActiveTab('intercom')}
-                            className={cn(
-                                "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                                activeTab === 'intercom' ? "bg-card-border text-indigo-400 shadow-inner" : "text-muted hover:text-foreground"
-                            )}
-                        >
-                            Comms
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('automation')}
-                            className={cn(
-                                "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                                activeTab === 'automation' ? "bg-card-border text-indigo-400 shadow-inner" : "text-muted hover:text-foreground"
-                            )}
-                        >
-                            Automation
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('multicast')}
-                            className={cn(
-                                "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                                activeTab === 'multicast' ? "bg-card-border text-indigo-400 shadow-inner" : "text-muted hover:text-foreground"
-                            )}
-                        >
-                            Multicast
-                        </button>
+                        {[
+                            { label: 'Comms', id: 'intercom' },
+                            { label: 'Automation', id: 'automation' },
+                            { label: 'Multicast', id: 'multicast' },
+                            { label: 'Logs', id: 'logs' },
+                        ].map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id as any)}
+                                className={cn(
+                                    "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                                    activeTab === tab.id ? "bg-card-border text-indigo-400 shadow-inner" : "text-muted hover:text-foreground"
+                                )}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
                     </div>
                 </div>
 
@@ -214,7 +206,7 @@ export const DashboardView = () => {
                 {/* Main Switcher Area */}
                 <div className="xl:col-span-3 space-y-6">
 
-                    {/* Crew Grid */}
+                    {/* Content based on activeTab */}
                     <AnimatePresence mode="wait">
                         {activeTab === 'intercom' ? (
                             <motion.div
@@ -264,7 +256,7 @@ export const DashboardView = () => {
                             >
                                 <AutomationDashboard productionId={activeProductionId || ''} />
                             </motion.div>
-                        ) : (
+                        ) : activeTab === 'multicast' ? (
                             <motion.div
                                 key="multicast"
                                 initial={{ opacity: 0, y: 20 }}
@@ -274,6 +266,15 @@ export const DashboardView = () => {
                                 <div className="bg-card-bg/50 border border-card-border rounded-3xl p-6 shadow-2xl">
                                     <MulticastManager productionId={activeProductionId || ''} />
                                 </div>
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="logs"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                            >
+                                <AuditLogView productionId={activeProductionId || ''} />
                             </motion.div>
                         )}
                     </AnimatePresence>
