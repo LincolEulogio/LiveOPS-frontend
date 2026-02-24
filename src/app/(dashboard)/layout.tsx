@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { LogOut, User as UserIcon, Server, Users, Shield, Info, Layers, Menu, X, Activity, Command, Zap } from 'lucide-react';
+import { LogOut, User as UserIcon, Server, Users, Shield, Info, Layers, Menu, X, Activity, Command, Zap, ArrowUp } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useAppStore } from '@/shared/store/app.store';
@@ -13,6 +13,7 @@ import { PresenceBar } from '@/shared/components/PresenceBar';
 import { CommandPalette } from '@/shared/components/CommandPalette';
 import { ThemeSwitcher } from '@/shared/components/ThemeSwitcher';
 import { cn } from '@/shared/utils/cn';
+import { useRef } from 'react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -21,6 +22,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const activeProductionId = useAppStore((state) => state.activeProductionId);
   const [isMounted, setIsMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      setShowScrollTop(scrollContainerRef.current.scrollTop > 400);
+    }
+  };
+
+  const scrollToTop = () => {
+    scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Close mobile menu on path change
   useEffect(() => {
@@ -159,7 +172,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <CommandPalette />
 
         {/* Scrollable Workspace */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar relative">
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="flex-1 overflow-y-auto custom-scrollbar relative"
+        >
           {/* Subtle Background Decoration */}
           <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
             <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/5 blur-[120px] rounded-full" />
@@ -200,6 +217,28 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </footer>
           </div>
         </div>
+
+        {/* Tactical Scroll to Top */}
+        <AnimatePresence>
+          {showScrollTop && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.5, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.5, y: 20 }}
+              onClick={scrollToTop}
+              className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.25rem] shadow-2xl shadow-indigo-600/40 flex items-center justify-center border border-indigo-400/30 group active:scale-90 transition-all"
+              whileHover={{ y: -5 }}
+            >
+              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[1.25rem]" />
+              <ArrowUp size={24} className="group-hover:animate-bounce" />
+
+              {/* Tactical Label Hint */}
+              <div className="absolute right-full mr-4 px-3 py-1.5 bg-card-bg/95 backdrop-blur-md border border-card-border rounded-xl opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0 pointer-events-none hidden sm:block">
+                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-foreground whitespace-nowrap">Retorno a Base</span>
+              </div>
+            </motion.button>
+          )}
+        </AnimatePresence>
       </main>
     </div>
   );
