@@ -127,7 +127,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main Content Viewport */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden bg-background relative selection:bg-indigo-500/30">
-        <header className="h-20 border-b border-card-border/40 flex items-center justify-between px-6 min-[769px]:px-10 bg-background/50 backdrop-blur-2xl z-40">
+        <header className="h-20 border-b border-card-border/40 flex items-center justify-between px-6 min-[769px]:px-10 bg-background/50 backdrop-blur-2xl z-30">
           <div className="flex items-center gap-6">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
@@ -175,15 +175,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="flex-1 overflow-y-auto custom-scrollbar relative"
+          className="flex-1 overflow-y-auto no-scrollbar relative"
         >
-          {/* Subtle Background Decoration */}
-          <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
-            <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/5 blur-[120px] rounded-full" />
-            <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
-          </div>
+          {/* Ambient Background Glows */}
+          <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/5 blur-[120px] rounded-full" />
+          <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
 
-          <div className="max-w-[1800px] mx-auto p-6 min-[769px]:p-10 lg:p-12 relative z-10 min-h-full flex flex-col">
+          <div className="max-w-[1800px] mx-auto p-6 min-[769px]:p-10 lg:p-12 relative min-h-full flex flex-col">
             <div className="flex-1">
               {children}
             </div>
@@ -216,29 +214,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
             </footer>
           </div>
+
+          {/* Tactical Scroll to Top */}
+          <AnimatePresence>
+            {showScrollTop && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.5, y: 20 }}
+                onClick={scrollToTop}
+                className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.25rem] shadow-2xl shadow-indigo-600/40 flex items-center justify-center border border-indigo-400/30 group active:scale-90 transition-all"
+                whileHover={{ y: -5 }}
+              >
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[1.25rem]" />
+                <ArrowUp size={24} className="group-hover:animate-bounce" />
+
+                {/* Tactical Label Hint */}
+                <div className="absolute right-full mr-4 px-3 py-1.5 bg-card-bg/95 backdrop-blur-md border border-card-border rounded-xl opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0 pointer-events-none hidden sm:block">
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-foreground whitespace-nowrap">Retorno a Base</span>
+                </div>
+              </motion.button>
+            )}
+          </AnimatePresence>
         </div>
-
-        {/* Tactical Scroll to Top */}
-        <AnimatePresence>
-          {showScrollTop && (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.5, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.5, y: 20 }}
-              onClick={scrollToTop}
-              className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.25rem] shadow-2xl shadow-indigo-600/40 flex items-center justify-center border border-indigo-400/30 group active:scale-90 transition-all"
-              whileHover={{ y: -5 }}
-            >
-              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[1.25rem]" />
-              <ArrowUp size={24} className="group-hover:animate-bounce" />
-
-              {/* Tactical Label Hint */}
-              <div className="absolute right-full mr-4 px-3 py-1.5 bg-card-bg/95 backdrop-blur-md border border-card-border rounded-xl opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0 pointer-events-none hidden sm:block">
-                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-foreground whitespace-nowrap">Retorno a Base</span>
-              </div>
-            </motion.button>
-          )}
-        </AnimatePresence>
       </main>
     </div>
   );

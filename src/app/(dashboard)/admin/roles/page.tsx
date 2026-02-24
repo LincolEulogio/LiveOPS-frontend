@@ -140,7 +140,7 @@ export default function AdminRolesPage() {
 
             {/* Create Role Modal */}
             {isCreateModalOpen && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
                     <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-md shadow-2xl relative">
                         <button onClick={() => setIsCreateModalOpen(false)} className="absolute top-4 right-4 text-muted hover:text-foreground">
                             <X size={20} />

@@ -149,7 +149,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
 
             {/* Create Overlay Modal */}
             {isCreateModalOpen && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
                     <div className="bg-card-bg border border-card-border rounded-xl p-6 w-full max-w-sm shadow-2xl overflow-hidden relative">
                         <div className="absolute top-0 right-0 p-4">
                             <button onClick={() => {

@@ -74,7 +74,7 @@ export default function ProfilePage() {
       </div>
 
       {isEditing && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
           <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-md shadow-2xl overflow-hidden relative">
             <div className="absolute top-0 right-0 p-4">
               <button onClick={() => setIsEditing(false)} className="text-muted hover:text-foreground transition-colors">
