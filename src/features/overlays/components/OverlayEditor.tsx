@@ -179,7 +179,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
     const selectedLayer = config.layers.find(l => l.id === selectedLayerId);
 
     return (
-        <div className="flex h-[800px] w-full bg-background rounded-3xl overflow-hidden border border-card-border shadow-2xl">
+        <div className="flex h-[800px] w-full bg-background rounded-3xl overflow-hidden border border-card-border shadow-2xl mb-5">
             {/* Toolbar */}
             <div className="w-16 bg-card-bg border-r border-card-border flex flex-col items-center py-6 gap-6">
                 <button onClick={() => addLayer('text')} className="p-3 text-muted hover:text-foreground transition-colors" title="Add Text">
