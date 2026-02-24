@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useUsers, useCreateUser, useDeleteUser, useUpdateUser, useRoles } from '@/features/users/hooks/useUsers';
 import { Users, Plus, Trash2, Shield, Loader2, Edit2, Info, X, Save, Mail, UserIcon, Calendar, Fingerprint } from 'lucide-react';
 import { User } from '@/features/users/types/user.types';
+import { toast } from 'sonner';
 
 export default function AdminUsersPage() {
     const { data: users, isLoading: usersLoading } = useUsers();
@@ -43,15 +44,17 @@ export default function AdminUsersPage() {
         try {
             if (modalMode === 'create') {
                 await createMutation.mutateAsync(form);
+                toast.success('User created successfully');
             } else if (modalMode === 'edit' && selectedUser) {
-                // If password is empty, don't send it to backend (handle in backend or hook)
                 const updateData = { ...form };
                 if (!updateData.password) delete (updateData as any).password;
                 await updateMutation.mutateAsync({ id: selectedUser.id, data: updateData });
+                toast.success('User updated successfully');
             }
             closeModals();
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
+            toast.error(err.message || 'Failed to save user');
         }
     };
 
@@ -293,9 +296,14 @@ export default function AdminUsersPage() {
                                             <Edit2 size={16} />
                                         </button>
                                         <button
-                                            onClick={() => {
+                                            onClick={async () => {
                                                 if (confirm(`Are you sure you want to delete ${user.name}?`)) {
-                                                    deleteMutation.mutate(user.id);
+                                                    try {
+                                                        await deleteMutation.mutateAsync(user.id);
+                                                        toast.success('User deleted successfully');
+                                                    } catch (err: any) {
+                                                        toast.error(err.message || 'Failed to delete user');
+                                                    }
                                                 }
                                             }}
                                             className="p-2 text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
