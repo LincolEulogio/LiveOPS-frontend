@@ -59,7 +59,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!isMounted || !isHydrated || !token) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6">
-        <div className="w-16 h-16 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin shadow-xl shadow-indigo-600/10" />
+        <div className="w-16 h-16 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin" />
         <span className="text-[10px] font-black text-muted uppercase tracking-[0.4em] animate-pulse">Initializing System</span>
       </div>
     );
@@ -87,7 +87,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             >
               <div className="h-20 flex items-center justify-between px-8 border-b border-card-border/50">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-600/20">
+                  <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                     <Zap size={18} className="text-white" fill="currentColor" />
                   </div>
                   <span className="text-lg font-black text-foreground tracking-tighter uppercase italic">LiveOPS</span>
@@ -112,7 +112,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <div className="h-20 flex items-center px-8 border-b border-card-border/50 bg-white/[0.02]">
           <Link href="/productions" className="flex items-center gap-3 group/logo">
-            <div className="w-10 h-10 bg-indigo-600 group-hover:bg-indigo-500 rounded-xl flex items-center justify-center shadow-xl shadow-indigo-600/20 transition-all group-hover:scale-110">
+            <div className="w-10 h-10 bg-indigo-600 group-hover:bg-indigo-500 rounded-xl flex items-center justify-center transition-all group-hover:scale-110">
               <Zap size={22} className="text-white" fill="currentColor" />
             </div>
             <div>
@@ -153,7 +153,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
 
             <div className="flex items-center gap-4 min-[769px]:gap-8">
-              <div className="hidden lg:flex items-center gap-1.5 px-4 py-2 bg-white/5 border border-white/5 rounded-2xl shadow-inner group cursor-default">
+              <div className="hidden lg:flex items-center gap-1.5 px-4 py-2 bg-white/5 border border-white/5 rounded-2xl group cursor-default">
                 <Command size={14} className="text-muted group-hover:text-indigo-400 transition-colors" />
                 <span className="text-[10px] font-black text-muted uppercase tracking-widest">K: Search Matrix</span>
               </div>
@@ -163,7 +163,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <PresenceBar />
                 <div className="h-6 w-[1px] bg-card-border/50 hidden min-[769px]:block" />
                 <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 transition-all hover:bg-emerald-500/10">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.5)]" />
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="text-[10px] font-black text-emerald-500/80 uppercase tracking-[0.2em]">Signal Stable</span>
                 </div>
               </div>
@@ -193,7 +193,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {/* Tactical Footer */}
             <footer className="mt-12 border-t border-card-border bg-white/[0.02] backdrop-blur-sm py-6 px-10 flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-500 group/footer">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-[2px] bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] group-hover/footer:w-16 transition-all duration-700" />
+                <div className="w-10 h-[2px] bg-indigo-500 group-hover/footer:w-16 transition-all duration-700" />
                 <p className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground/70 group-hover/footer:text-foreground transition-colors">
                   Movimiento Misionero Mundial
                 </p>
@@ -227,7 +227,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.5, y: 20 }}
                 onClick={scrollToTop}
-                className="fixed bottom-28 right-8 z-[100] w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.25rem] shadow-2xl shadow-indigo-600/40 flex items-center justify-center border border-indigo-400/30 group active:scale-90 transition-all"
+                className="fixed bottom-28 right-8 z-[100] w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.25rem] flex items-center justify-center border border-indigo-400/30 group active:scale-90 transition-all"
                 whileHover={{ y: -5 }}
               >
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[1.25rem]" />
@@ -319,9 +319,9 @@ const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: an
 
     {/* Sidebar User Hub */}
     <div className="p-6 bg-white/[0.03] border-t border-card-border/50">
-      <div className="p-4 bg-background/60 backdrop-blur-md rounded-2xl border border-card-border/60 shadow-inner flex items-center gap-4 mb-4 relative overflow-hidden group/user">
+      <div className="p-4 bg-background/60 backdrop-blur-md rounded-2xl border border-card-border/60 flex items-center gap-4 mb-4 relative overflow-hidden group/user">
         <div className="absolute inset-x-0 bottom-0 h-1 bg-indigo-600/20" />
-        <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-lg font-black shadow-xl shadow-indigo-600/30 text-white shrink-0 group-hover/user:scale-110 transition-all">
+        <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-lg font-black text-white shrink-0 group-hover/user:scale-110 transition-all">
           {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
@@ -335,7 +335,7 @@ const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: an
 
       <button
         onClick={handleLogout}
-        className="w-full flex items-center justify-between px-5 py-4 text-muted hover:text-white hover:bg-red-600 rounded-2xl transition-all duration-300 group shadow-lg hover:shadow-red-600/20 mb-2"
+        className="w-full flex items-center justify-between px-5 py-4 text-muted hover:text-white hover:bg-red-600 rounded-2xl transition-all duration-300 group mb-2"
       >
         <div className="flex items-center gap-3">
           <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -353,7 +353,7 @@ const SidebarLink = ({ href, icon: Icon, label, active }: any) => (
     className={cn(
       "flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 group/link relative overflow-hidden",
       active
-        ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/30"
+        ? "bg-indigo-600 text-white"
         : "text-muted hover:text-foreground hover:bg-white/5"
     )}
   >

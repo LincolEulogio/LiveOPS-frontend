@@ -74,7 +74,7 @@ export default function AdminRolesPage() {
                 </div>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20"
+                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-all"
                 >
                     <Plus size={16} /> New Role
                 </button>
@@ -82,7 +82,7 @@ export default function AdminRolesPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {roles?.map(role => (
-                    <div key={role.id} className="bg-card-bg border border-card-border rounded-xl p-6 shadow-xl relative overflow-hidden group flex flex-col">
+                    <div key={role.id} className="bg-card-bg border border-card-border rounded-xl p-6 relative overflow-hidden group flex flex-col">
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
                             <Shield size={64} />
                         </div>
@@ -141,7 +141,7 @@ export default function AdminRolesPage() {
             {/* Create Role Modal */}
             {isCreateModalOpen && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-                    <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-md shadow-2xl relative">
+                    <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-md relative">
                         <button onClick={() => setIsCreateModalOpen(false)} className="absolute top-4 right-4 text-muted hover:text-foreground">
                             <X size={20} />
                         </button>
@@ -180,7 +180,7 @@ export default function AdminRolesPage() {
                                 <button
                                     type="submit"
                                     disabled={createRoleMutation.isPending}
-                                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 shadow-lg shadow-indigo-500/20"
+                                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50"
                                 >
                                     {createRoleMutation.isPending ? 'Creating...' : 'Create Role'}
                                 </button>

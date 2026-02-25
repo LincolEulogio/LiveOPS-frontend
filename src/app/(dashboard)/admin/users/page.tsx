@@ -77,7 +77,7 @@ export default function AdminUsersPage() {
                 </div>
                 <button
                     onClick={openCreate}
-                    className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-colors shadow-lg shadow-indigo-500/20"
+                    className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-colors"
                 >
                     <Plus size={16} /> Add User
                 </button>
@@ -86,7 +86,7 @@ export default function AdminUsersPage() {
             {/* Modal system */}
             {modalMode && modalMode !== 'view' && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-                    <div className="bg-card-bg border border-card-border rounded-xl p-6 w-full max-w-md shadow-2xl overflow-hidden relative">
+                    <div className="bg-card-bg border border-card-border rounded-xl p-6 w-full max-w-md overflow-hidden relative">
                         <div className="absolute top-0 right-0 p-4">
                             <button onClick={closeModals} className="text-muted hover:text-foreground transition-colors">
                                 <X size={20} />
@@ -172,7 +172,7 @@ export default function AdminUsersPage() {
             {/* View Modal */}
             {modalMode === 'view' && selectedUser && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-                    <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-lg shadow-2xl relative">
+                    <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-lg relative">
                         <div className="absolute top-0 right-0 p-4">
                             <button onClick={closeModals} className="text-muted hover:text-foreground transition-colors">
                                 <X size={20} />
@@ -238,7 +238,7 @@ export default function AdminUsersPage() {
                 </div>
             )}
 
-            <div className="bg-card-bg border border-card-border rounded-xl overflow-hidden shadow-xl">
+            <div className="bg-card-bg border border-card-border rounded-xl overflow-hidden">
                 <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left border-collapse min-w-[600px]">
                         <thead className="bg-card-bg">

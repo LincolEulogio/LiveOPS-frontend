@@ -48,9 +48,9 @@ export default function ProductionsListPage() {
   const getStatusStyle = (status: ProductionStatus) => {
     switch (status) {
       case ProductionStatus.ACTIVE:
-        return 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.1)]';
+        return 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10';
       case ProductionStatus.SETUP:
-        return 'text-amber-400 border-amber-500/30 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.1)]';
+        return 'text-amber-400 border-amber-500/30 bg-amber-500/10';
       case ProductionStatus.ARCHIVED:
         return 'text-muted border-card-border/50 bg-white/5';
       default:
@@ -67,19 +67,19 @@ export default function ProductionsListPage() {
     <div className="w-full space-y-10 p-4">
 
       {/* Tactical Page Header */}
-      <div className="flex flex-col min-[1100px]:flex-row justify-between items-start min-[1100px]:items-center gap-8 bg-card-bg/60 backdrop-blur-3xl border border-card-border p-8 md:p-10 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] relative overflow-hidden group">
+      <div className="flex flex-col min-[1100px]:flex-row justify-between items-start min-[1100px]:items-center gap-8 bg-card-bg/60 backdrop-blur-3xl border border-card-border p-8 md:p-10 rounded-[3rem] relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
           <Globe size={180} />
         </div>
 
         <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-          <div className="w-16 h-16 bg-indigo-600 rounded-[1.5rem] flex items-center justify-center shadow-[0_20px_40px_rgba(79,70,229,0.3)] border border-indigo-400/20 group-hover:rotate-6 transition-transform">
+          <div className="w-16 h-16 bg-indigo-600 rounded-[1.5rem] flex items-center justify-center border border-indigo-400/20 group-hover:rotate-6 transition-transform">
             <Zap size={32} className="text-white" fill="currentColor" />
           </div>
           <div className="text-center md:text-left">
             <h1 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter leading-none mb-3 text-slate-900 dark:text-white">Productions Hub</h1>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-              <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 shadow-inner flex items-center gap-2">
+              <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 flex items-center gap-2">
                 <Activity size={10} className="animate-pulse" /> Global Control Surface
               </span>
               <span className="text-[10px] font-black text-muted uppercase tracking-[0.3em] flex items-center gap-2 opacity-60">
@@ -93,7 +93,7 @@ export default function ProductionsListPage() {
           <Guard requiredPermissions={['production:create']}>
             <Link
               href="/productions/new"
-              className="flex items-center justify-center gap-4 bg-white text-indigo-600 hover:bg-indigo-50 px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] shadow-2xl transition-all hover:scale-[1.03] active:scale-95 group"
+              className="flex items-center justify-center gap-4 bg-white text-indigo-600 hover:bg-indigo-50 px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] transition-all hover:scale-[1.03] active:scale-95 group"
             >
               <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
               Initialize Node
@@ -103,7 +103,7 @@ export default function ProductionsListPage() {
       </div>
 
       {/* Advanced Filter Matrix */}
-      <div className="flex flex-col xl:flex-row gap-6 bg-white/[0.02] border border-white/5 p-6 rounded-[2.5rem] shadow-inner">
+      <div className="flex flex-col xl:flex-row gap-6 bg-white/[0.02] border border-white/5 p-6 rounded-[2.5rem]">
         <div className="relative flex-1 group">
           <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-indigo-400 transition-colors" size={20} />
           <input
@@ -114,11 +114,11 @@ export default function ProductionsListPage() {
               setPage(1);
               setSearchTerm(e.target.value);
             }}
-            className="w-full bg-background/50 border border-card-border/60 rounded-2xl py-4.5 pl-14 pr-6 text-sm font-bold text-foreground placeholder:text-muted/60 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all uppercase tracking-tight shadow-inner"
+            className="w-full bg-background/50 border border-card-border/60 rounded-2xl py-4.5 pl-14 pr-6 text-sm font-bold text-foreground placeholder:text-muted/60 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all uppercase tracking-tight"
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 p-1.5 bg-background/40 rounded-2xl border border-card-border/60 shadow-inner">
+        <div className="flex flex-wrap items-center gap-2 p-1.5 bg-background/40 rounded-2xl border border-card-border/60">
           <div className="px-4 py-2 flex items-center gap-3 border-r border-card-border/50 mr-2">
             <Filter size={14} className="text-muted" />
             <span className="text-[9px] font-black text-muted uppercase tracking-[0.2em]">Filter:</span>
@@ -133,7 +133,7 @@ export default function ProductionsListPage() {
               className={cn(
                 "px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl transition-all whitespace-nowrap border relative overflow-hidden group",
                 statusFilter === status
-                  ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)]'
+                  ? 'bg-indigo-600 border-indigo-500 text-white'
                   : 'bg-transparent border-transparent text-muted hover:text-foreground hover:bg-white/5'
               )}
             >
@@ -156,7 +156,7 @@ export default function ProductionsListPage() {
           ))}
         </div>
       ) : error ? (
-        <div className="bg-red-500/10 text-red-400 p-10 rounded-[3rem] border border-red-500/20 flex flex-col items-center justify-center gap-6 shadow-2xl">
+        <div className="bg-red-500/10 text-red-400 p-10 rounded-[3rem] border border-red-500/20 flex flex-col items-center justify-center gap-6">
           <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center">
             <AlertCircle size={32} />
           </div>
@@ -188,7 +188,7 @@ export default function ProductionsListPage() {
                     {!statusFilter && (
                       <Link
                         href="/productions/new"
-                        className="flex items-center gap-4 bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] shadow-2xl transition-all hover:scale-[1.05] active:scale-95"
+                        className="flex items-center gap-4 bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:scale-[1.05] active:scale-95"
                       >
                         <Zap size={16} fill="currentColor" />
                         Initialize Sequence
@@ -201,7 +201,7 @@ export default function ProductionsListPage() {
                 <Link
                   key={production.id}
                   href={`/productions/${production.id}`}
-                  className="group relative h-[300px] flex flex-col bg-card-bg/60 backdrop-blur-2xl border border-card-border/60 rounded-[2.5rem] p-8 hover:bg-white/[0.04] hover:border-indigo-500/30 hover:-translate-y-2 transition-all duration-500 shadow-xl overflow-hidden"
+                  className="group relative h-[300px] flex flex-col bg-card-bg/60 backdrop-blur-2xl border border-card-border/60 rounded-[2.5rem] p-8 hover:bg-white/[0.04] hover:border-indigo-500/30 hover:-translate-y-2 transition-all duration-500 overflow-hidden"
                 >
                   {/* Dynamic Corner Badge */}
                   <div className="absolute top-0 right-0 p-4">
@@ -214,7 +214,7 @@ export default function ProductionsListPage() {
                   </div>
 
                   <div className="flex-1 space-y-6 flex flex-col justify-center">
-                    <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:bg-indigo-600/10 group-hover:border-indigo-500/20 transition-all duration-500">
+                    <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center group-hover:scale-110 group-hover:bg-indigo-600/10 group-hover:border-indigo-500/20 transition-all duration-500">
                       {getEngineIcon(production.engineType)}
                     </div>
                     <div>
@@ -230,9 +230,9 @@ export default function ProductionsListPage() {
                   <div className="flex items-center justify-between pt-6 border-t border-card-border/40 mt-auto">
                     <div className="flex -space-x-3">
                       {[1, 2, 3].map(i => (
-                        <div key={i} className="w-8 h-8 rounded-full bg-background border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-muted uppercase tracking-tighter shadow-xl">U</div>
+                        <div key={i} className="w-8 h-8 rounded-full bg-background border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-muted uppercase tracking-tighter">U</div>
                       ))}
-                      <div className="w-8 h-8 rounded-full bg-indigo-600 border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-white uppercase tracking-tighter shadow-xl">+5</div>
+                      <div className="w-8 h-8 rounded-full bg-indigo-600 border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-white uppercase tracking-tighter">+5</div>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -261,7 +261,7 @@ export default function ProductionsListPage() {
 
           {/* Tactical Pagination Hub */}
           {data && !Array.isArray(data) && data.meta?.lastPage > 1 && (
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-6 bg-white/[0.02] border border-white/5 p-6 rounded-[2.5rem] shadow-inner">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-6 bg-white/[0.02] border border-white/5 p-6 rounded-[2.5rem]">
               <button
                 disabled={page === 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -279,7 +279,7 @@ export default function ProductionsListPage() {
               <button
                 disabled={page === data.meta.lastPage}
                 onClick={() => setPage((p) => p + 1)}
-                className="w-full sm:w-auto px-8 py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all disabled:opacity-20 active:scale-95"
+                className="w-full sm:w-auto px-8 py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-indigo-500 transition-all disabled:opacity-20 active:scale-95"
               >
                 Next Sector
               </button>
