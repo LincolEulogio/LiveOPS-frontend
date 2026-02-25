@@ -2,8 +2,7 @@
 
 import { useStreaming } from '@/features/streaming/hooks/useStreaming';
 import { EngineType } from '@/features/streaming/types/streaming.types';
-import { ObsControls } from '@/features/streaming/components/ObsControls';
-import { VmixControls } from '@/features/streaming/components/VmixControls';
+import { OperationalSurface } from '@/features/streaming/components/OperationalSurface';
 import { Wifi, WifiOff, Activity, Loader2 } from 'lucide-react';
 import { useKeyboardShortcuts } from '@/shared/hooks/useKeyboardShortcuts';
 import { cn } from '@/shared/utils/cn';
@@ -100,23 +99,14 @@ export function StreamingDashboard({ productionId, engineType }: StreamingDashbo
                 </div>
 
                 <div className="p-6 sm:p-10">
-                    {engineType === EngineType.OBS ? (
-                        <ObsControls
-                            productionId={productionId}
-                            state={state?.obs}
-                            sendCommand={sendCommand}
-                            isPending={isPending}
-                            isDisconnected={!isEngineConnected}
-                        />
-                    ) : (
-                        <VmixControls
-                            productionId={productionId}
-                            state={state?.vmix}
-                            sendCommand={sendCommand}
-                            isPending={isPending}
-                            isDisconnected={!isEngineConnected}
-                        />
-                    )}
+                    <OperationalSurface
+                        productionId={productionId}
+                        engineType={engineType}
+                        state={engineType === EngineType.OBS ? state?.obs : state?.vmix}
+                        sendCommand={sendCommand}
+                        isPending={isPending}
+                        isDisconnected={!isEngineConnected}
+                    />
                 </div>
             </div>
         </div>

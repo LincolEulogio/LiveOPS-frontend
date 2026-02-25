@@ -10,6 +10,8 @@ export interface ObsState {
     isRecording: boolean;
     cpuUsage?: number;
     fps?: number;
+    memoryUsage?: number;
+    availableDiskSpace?: number;
     isConnected: boolean;
 }
 

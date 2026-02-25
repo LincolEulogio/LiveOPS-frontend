@@ -27,6 +27,9 @@ interface HealthStats {
     skippedFrames: number;
     totalFrames: number;
     memoryUsage?: number;
+    availableDiskSpace?: number;
+    isStreaming?: boolean;
+    isRecording?: boolean;
     timestamp: string;
 }
 
@@ -93,6 +96,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
             time: new Date(h.timestamp).toLocaleTimeString([], { second: '2-digit' }),
             cpu: h.cpuUsage !== undefined ? Math.round(h.cpuUsage) : null,
             fps: h.fps !== undefined ? Math.round(h.fps) : null,
+            bitrate: h.bitrate !== undefined ? (h.bitrate / 100) : null, // Scaled for chart
         }));
     }, [history]);
 
@@ -154,7 +158,15 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
             </div>
 
             {/* Main Metrics Grid - Bento Cells */}
-            <div className="grid grid-cols-2 min-[1600px]:grid-cols-4 gap-4 relative z-10">
+            <div className="grid grid-cols-2 min-[1600px]:grid-cols-4 lg:grid-cols-5 gap-4 relative z-10">
+                <MetricCard
+                    label="Salida Bitrate"
+                    value={isEngineConnected && latest?.bitrate !== undefined ? `${(latest.bitrate / 1000).toFixed(1)} Mbps` : '0.0 Mbps'}
+                    icon={Zap}
+                    color="emerald"
+                    status={isEngineConnected && latest?.bitrate !== undefined && latest.bitrate < 3000 && latest.isStreaming ? 'warning' : 'normal'}
+                    tooltip="Velocidad de subida actual hacia los servidores de streaming."
+                />
                 <MetricCard
                     label="Carga CPU"
                     value={isEngineConnected && latest?.cpuUsage !== undefined ? `${Math.round(latest.cpuUsage)}%` : 'N/A'}
@@ -166,24 +178,26 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                 <MetricCard
                     label="Frame Rate"
                     value={isEngineConnected && latest?.fps !== undefined ? `${Math.round(latest.fps)} FPS` : 'N/A'}
-                    icon={Zap}
-                    color="emerald"
+                    icon={Activity}
+                    color="indigo"
                     status={isEngineConnected && latest?.fps !== undefined && latest.fps < 24 ? 'warning' : 'normal'}
                     tooltip="Frames por segundo efectivos en la salida del motor."
                 />
                 <MetricCard
-                    label="Drops"
-                    value={isEngineConnected && latest?.skippedFrames !== undefined ? latest.skippedFrames.toString() : '---'}
+                    label="Dropped Frames"
+                    value={isEngineConnected && latest?.skippedFrames !== undefined ? latest.skippedFrames.toString() : '0'}
                     icon={BarChart3}
                     color="amber"
-                    status={isEngineConnected && latest?.skippedFrames !== undefined ? latest.skippedFrames > 10 ? 'warning' : 'normal' : 'normal'}
+                    status={isEngineConnected && latest?.skippedFrames !== undefined && latest.skippedFrames > 10 ? 'warning' : 'normal'}
                     tooltip="Pérdida de cuadros detectada por congestión o hardware."
                 />
                 <MetricCard
-                    label="Memoria Eng."
-                    value={isEngineConnected && latest?.memoryUsage !== undefined ? `${Math.round(latest.memoryUsage / 1024 / 1024)}MB` : '---'}
+                    label="Espacio Disco"
+                    value={isEngineConnected && latest?.availableDiskSpace !== undefined ? `${(latest.availableDiskSpace / 1024).toFixed(1)} GB` : '---'}
                     icon={Info}
                     color="stone"
+                    status={isEngineConnected && latest?.availableDiskSpace !== undefined && latest.availableDiskSpace < 10000 ? 'warning' : 'normal'}
+                    tooltip="Espacio disponible para grabaciones locales en el motor."
                 />
             </div>
 
@@ -202,6 +216,10 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                                 <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
                                 <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                             </linearGradient>
+                            <linearGradient id="colorBitrate" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
+                                <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                            </linearGradient>
                         </defs>
                         <XAxis dataKey="time" stroke="#78716c" fontSize={9} tickLine={false} axisLine={false} />
                         <YAxis stroke="#78716c" fontSize={9} tickLine={false} axisLine={false} domain={[0, 100]} />
@@ -210,7 +228,8 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                             itemStyle={{ padding: '2px 0' }}
                         />
                         <Area type="monotone" dataKey="cpu" stroke="#6366f1" fillOpacity={1} fill="url(#colorCpu)" strokeWidth={2} isAnimationActive={false} name="CPU %" />
-                        <Area type="monotone" dataKey="fps" stroke="#10b981" fillOpacity={0} strokeWidth={2} isAnimationActive={false} name="FPS" />
+                        <Area type="monotone" dataKey="bitrate" stroke="#10b981" fillOpacity={1} fill="url(#colorBitrate)" strokeWidth={2} isAnimationActive={false} name="Bitrate" />
+                        <Area type="monotone" dataKey="fps" stroke="#f59e0b" fillOpacity={0} strokeWidth={2} isAnimationActive={false} name="FPS" />
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
