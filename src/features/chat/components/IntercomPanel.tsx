@@ -56,7 +56,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
     return (
         <div className="flex flex-col h-full bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] shadow-2xl overflow-hidden relative">
             {/* Tactical Header */}
-            <div className="flex items-center justify-between p-5 border-b border-card-border/50 bg-white/5">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-5 border-b border-card-border/50 bg-white/5">
                 <div className="flex items-center gap-3">
                     <div className="relative">
                         <div className={cn(

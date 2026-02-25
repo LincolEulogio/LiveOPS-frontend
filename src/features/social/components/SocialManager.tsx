@@ -50,9 +50,9 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden shadow-2xl relative">
+        <div className="flex flex-col h-full bg-card-bg/60 rounded-[2.5rem] overflow-hidden relative">
             {/* Header Area */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-card-border/50 bg-white/5">
+            <div className="flex flex-col md:flex-row gap-5 items-center justify-between px-6 py-5 border-b border-card-border/50 bg-white/5">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20">
                         <Share2 size={18} className="text-indigo-400" />
@@ -89,7 +89,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
             </div>
 
             {/* Tactical Live Air Indicator */}
-            <div className="px-6 py-4 bg-red-600/5 border-b border-card-border/30 flex items-center justify-between relative group">
+            <div className="px-6 py-4 bg-red-600/5 border-b border-card-border/30 flex items-center justify-between relative group ">
                 <div className="flex items-center gap-3">
                     <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em]">Alpha Output:</span>
                     <div className="flex items-center gap-2">
@@ -99,7 +99,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                                 animate={{ opacity: 1, x: 0 }}
                                 className="flex items-center gap-3"
                             >
-                                <span className="text-[10px] font-black text-red-500 uppercase tracking-tighter truncate max-w-[200px]">
+                                <span className="text-xs font-black text-red-500 uppercase tracking-tighter truncate max-w-[200px]">
                                     Sending: {onAirMessage.author}
                                 </span>
                                 <div className="w-2 h-2 rounded-full bg-red-600 animate-ping shadow-[0_0_12px_rgba(220,38,38,0.8)]" />
@@ -115,7 +115,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                 {onAirMessage && (
                     <button
                         onClick={clearActive}
-                        className="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-all active:scale-95 shadow-lg shadow-red-600/20"
+                        className="px-4 py-1 bg-red-600 hover:bg-red-500 text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-all active:scale-95 shadow-lg shadow-red-600/20 cursor-pointer text-xs"
                     >
                         Kill Feed
                     </button>

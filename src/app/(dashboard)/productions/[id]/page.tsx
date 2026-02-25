@@ -103,8 +103,8 @@ export default function ProductionDetailPage() {
                 <Server className="text-orange-400" size={32} />
               )}
             </div>
-            <div className="min-w-0">
-              <h1 className="text-2xl sm:text-4xl font-black text-foreground uppercase tracking-tighter leading-none mb-2 truncate">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-sm md:text-md lg:text-lg font-black text-foreground uppercase tracking-tighter leading-tight mb-2 break-words">
                 {production.name}
               </h1>
               <div className="flex flex-wrap items-center gap-2">

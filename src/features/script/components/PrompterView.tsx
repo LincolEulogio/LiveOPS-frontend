@@ -152,7 +152,7 @@ export const PrompterView = ({ productionId }: Props) => {
     }
 
     return (
-        <div className="h-[calc(100vh-140px)] bg-background rounded-3xl border border-card-border shadow-2xl relative overflow-hidden group">
+        <div className="h-[calc(100vh-140px)] bg-background rounded-3xl border border-card-border shadow-2xl relative overflow-hidden group ">
 
             {/* Capa de Scroll para el Contenido */}
             <div

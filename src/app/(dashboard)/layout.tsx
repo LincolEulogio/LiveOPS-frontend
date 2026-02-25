@@ -127,43 +127,45 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main Content Viewport */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden bg-background relative selection:bg-indigo-500/30">
-        <header className="h-20 border-b border-card-border/40 flex items-center justify-between px-6 min-[769px]:px-10 bg-background/50 backdrop-blur-2xl z-30">
-          <div className="flex items-center gap-6">
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="p-3 -ml-3 text-foreground min-[769px]:hidden hover:bg-white/5 rounded-2xl transition-all active:scale-90 border border-transparent hover:border-card-border/50"
-            >
-              <Menu size={24} />
-            </button>
+        <header className="h-20 border-b border-card-border/40 bg-background/50 backdrop-blur-2xl z-30">
+          <div className="max-w-[1800px] mx-auto h-full flex items-center justify-between px-6 min-[769px]:px-10">
+            <div className="flex items-center gap-6">
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="p-3 -ml-3 text-foreground min-[769px]:hidden hover:bg-white/5 rounded-2xl transition-all active:scale-90 border border-transparent hover:border-card-border/50"
+              >
+                <Menu size={24} />
+              </button>
 
-            <div className="hidden min-[769px]:flex flex-col">
-              <div className="flex items-center gap-3">
-                <Activity size={14} className="text-indigo-400" />
-                <h2 className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">Operational Node</h2>
+              <div className="hidden min-[769px]:flex flex-col">
+                <div className="flex items-center gap-3">
+                  <Activity size={14} className="text-indigo-400" />
+                  <h2 className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">Operational Node</h2>
+                </div>
+                <h1 className="text-lg font-black text-foreground uppercase tracking-tight mt-0.5">
+                  {pathname === '/productions' ? 'Asset Management' :
+                    pathname.includes('/intercom') ? 'Tactical Command' :
+                      pathname.includes('/overlays') ? 'Visual Pipeline' :
+                        pathname.includes('/social') ? 'Engagement Hub' :
+                          pathname.includes('/automation') ? 'Logic Engine' : 'Production Core'}
+                </h1>
               </div>
-              <h1 className="text-lg font-black text-foreground uppercase tracking-tight mt-0.5">
-                {pathname === '/productions' ? 'Asset Management' :
-                  pathname.includes('/intercom') ? 'Tactical Command' :
-                    pathname.includes('/overlays') ? 'Visual Pipeline' :
-                      pathname.includes('/social') ? 'Engagement Hub' :
-                        pathname.includes('/automation') ? 'Logic Engine' : 'Production Core'}
-              </h1>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 min-[769px]:gap-8">
-            <div className="hidden lg:flex items-center gap-1.5 px-4 py-2 bg-white/5 border border-white/5 rounded-2xl shadow-inner group cursor-default">
-              <Command size={14} className="text-muted group-hover:text-indigo-400 transition-colors" />
-              <span className="text-[10px] font-black text-muted uppercase tracking-widest">K: Search Matrix</span>
             </div>
 
-            <div className="flex items-center gap-4">
-              <ThemeSwitcher />
-              <PresenceBar />
-              <div className="h-6 w-[1px] bg-card-border/50 hidden min-[769px]:block" />
-              <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 transition-all hover:bg-emerald-500/10">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.5)]" />
-                <span className="text-[10px] font-black text-emerald-500/80 uppercase tracking-[0.2em]">Signal Stable</span>
+            <div className="flex items-center gap-4 min-[769px]:gap-8">
+              <div className="hidden lg:flex items-center gap-1.5 px-4 py-2 bg-white/5 border border-white/5 rounded-2xl shadow-inner group cursor-default">
+                <Command size={14} className="text-muted group-hover:text-indigo-400 transition-colors" />
+                <span className="text-[10px] font-black text-muted uppercase tracking-widest">K: Search Matrix</span>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <ThemeSwitcher />
+                <PresenceBar />
+                <div className="h-6 w-[1px] bg-card-border/50 hidden min-[769px]:block" />
+                <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 transition-all hover:bg-emerald-500/10">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.5)]" />
+                  <span className="text-[10px] font-black text-emerald-500/80 uppercase tracking-[0.2em]">Signal Stable</span>
+                </div>
               </div>
             </div>
           </div>
@@ -178,16 +180,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           className="flex-1 overflow-y-auto no-scrollbar relative"
         >
           {/* Ambient Background Glows */}
-          <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/5 blur-[120px] rounded-full" />
-          <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
+          <div className="absolute inset-0 overflow-hidden pointer-events-none -z-0">
+            <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/5 blur-[120px] rounded-full" />
+            <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
+          </div>
 
-          <div className="max-w-[1800px] mx-auto p-6 min-[769px]:p-10 lg:p-12 relative min-h-full flex flex-col">
+          <div className="max-w-[1800px] mx-auto min-[769px]:p-10 lg:p-12 relative min-h-full flex flex-col">
             <div className="flex-1">
               {children}
             </div>
 
             {/* Tactical Footer */}
-            <footer className="mt-auto border-t border-card-border bg-white/[0.02] backdrop-blur-sm py-6 px-10 flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-500 group/footer border-x">
+            <footer className="mt-12 border-t border-card-border bg-white/[0.02] backdrop-blur-sm py-6 px-10 flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-500 group/footer">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-[2px] bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] group-hover/footer:w-16 transition-all duration-700" />
                 <p className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground/70 group-hover/footer:text-foreground transition-colors">
@@ -195,7 +199,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </p>
               </div>
 
-              <div className="flex items-center gap-8">
+              <div className="flex flex-col md:flex-row items-center gap-4">
                 <div className="flex items-center gap-3 bg-indigo-500/5 px-4 py-2 rounded-2xl border border-indigo-500/10">
                   <span className="text-[9px] font-bold text-muted uppercase tracking-widest opacity-60">Lead Architect</span>
                   <span className="text-[11px] font-black text-indigo-400 uppercase tracking-widest">Lincol E.H</span>

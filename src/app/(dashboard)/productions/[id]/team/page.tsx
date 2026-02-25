@@ -72,7 +72,7 @@ export default function TeamManagementPage() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-8 pb-12">
+        <div className="max-w-7xl mx-auto space-y-8 p-6">
             {/* Header */}
             <div>
                 <Link
@@ -151,8 +151,8 @@ export default function TeamManagementPage() {
 
                         <ul className="divide-y divide-card-border/50">
                             {((production as any).users || []).map((prodUser: any) => (
-                                <li key={prodUser.userId} className="p-4 hover:bg-card-border/30 transition-colors flex items-center justify-between group">
-                                    <div className="flex items-center gap-4">
+                                <li key={prodUser.userId} className="p-4 hover:bg-card-border/30 transition-colors flex flex-col gap-4 md:flex-row md:items-center justify-between group">
+                                    <div className="flex  items-center gap-4">
                                         <div className="w-10 h-10 rounded-full bg-background border border-card-border flex items-center justify-center text-muted">
                                             <User size={20} />
                                         </div>

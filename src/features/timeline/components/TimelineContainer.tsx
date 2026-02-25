@@ -249,7 +249,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
             </div>
 
             {/* Main Rundown Area - Integrated Table */}
-            <div className="flex-1 overflow-x-auto no-scrollbar relative min-h-[400px]">
+            <div className="flex-1 relative min-h-[400px]">
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
                 <RundownTable
                     productionId={productionId}

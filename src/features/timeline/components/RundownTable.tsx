@@ -57,7 +57,7 @@ export const RundownTable = ({
         .reduce((sum, b) => sum + (b.durationMs || 0), 0);
 
     return (
-        <div className="w-full relative overflow-x-auto no-scrollbar">
+        <div className="w-full relative overflow-x-auto no-scrollbar touch-pan-x">
             <table className="w-full text-left border-collapse min-w-[800px] lg:min-w-full">
                 <thead>
                     <tr className="bg-white/[0.02] border-b border-card-border/50">

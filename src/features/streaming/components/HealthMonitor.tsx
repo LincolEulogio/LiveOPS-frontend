@@ -112,7 +112,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
             )} />
 
             {/* Header */}
-            <div className="flex items-center justify-between relative z-10">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between relative z-10">
                 <div className="flex items-center gap-3">
                     <div className={cn(
                         "p-2 rounded-lg transition-all duration-500",
@@ -215,7 +215,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                 </ResponsiveContainer>
             </div>
 
-            <div className="flex items-center justify-between text-[10px] font-black text-muted uppercase tracking-[0.15em] bg-background/40 px-4 py-3 rounded-xl border border-card-border/50 relative z-10">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between text-[10px] font-black text-muted uppercase tracking-[0.15em] bg-background/40 px-4 py-3 rounded-xl border border-card-border/50 relative z-10">
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
                         <div className="w-2.5 h-0.5 bg-indigo-500 rounded-full" /> USO DE CPU
