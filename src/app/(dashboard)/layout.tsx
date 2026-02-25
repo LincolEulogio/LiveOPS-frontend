@@ -359,7 +359,7 @@ const SidebarLink = ({ href, icon: Icon, label, active }: any) => (
   >
     <div className="flex items-center gap-4 relative z-10">
       <Icon size={20} className={cn("transition-transform group-hover/link:scale-110", active ? "text-white" : "text-indigo-400")} />
-      <span className="text-[12px] font-bold capitalize ">{label}</span>
+      <span className="text-[12px] capitalize ">{label}</span>
     </div>
     {active && (
       <div className="w-1.5 h-1.5 rounded-full bg-white relative z-10" />
