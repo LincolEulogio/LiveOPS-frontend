@@ -26,7 +26,16 @@ export interface VmixState {
         number: number;
         title: string;
         type: string;
+        key?: string;
     }>;
+    version?: string;
+    edition?: string;
+    fps?: number;
+    renderTime?: number;
+    cpuUsage?: number;
+    totalCpuUsage?: number;
+    gpuMemoryUsage?: number;
+    url?: string;
 }
 
 export interface StreamingState {

@@ -36,6 +36,14 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
     isPending,
     isDisconnected
 }) => {
+    const [imgErrors, setImgErrors] = React.useState<Record<string, boolean>>({});
+    const [tick, setTick] = React.useState(0);
+
+    React.useEffect(() => {
+        const interval = setInterval(() => setTick(t => t + 1), 2000); // refresh every 2s
+        return () => clearInterval(interval);
+    }, []);
+
     if (isDisconnected) {
         return (
             <div className="flex flex-col items-center justify-center p-12 text-center space-y-6 bg-red-500/5 rounded-[2rem] border border-red-500/10 backdrop-blur-md">
@@ -67,6 +75,10 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
         ? 'Preview Scene'
         : (state?.inputs?.find((i: any) => i.number === state?.previewInput)?.title || `Input ${state?.previewInput || 2}`);
 
+    const vmixBaseUrl = engineType === 'VMIX' ? state?.url?.replace(/\/api$/, '') : '';
+    const previewUrl = vmixBaseUrl ? `${vmixBaseUrl}/preview.jpg?t=${tick}` : '';
+    const programUrl = vmixBaseUrl ? `${vmixBaseUrl}/program.jpg?t=${tick}` : '';
+
     return (
         <div className="flex flex-col gap-8">
             {/* 1. Multiview Simulation Layer */}
@@ -77,11 +89,22 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                         <div className="px-3 py-1 bg-emerald-500 text-white text-[9px] font-black uppercase rounded-lg">Preview</div>
                         <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentPreview}</span>
                     </div>
-                    <div className="w-full h-full flex items-center justify-center bg-[radial-gradient(#ffffff05_1px,transparent_1px)] [background-size:20px_20px]">
-                        <Camera size={48} className="text-muted/20" />
+
+                    <div className="w-full h-full flex items-center justify-center bg-black">
+                        {(previewUrl && !imgErrors['preview']) ? (
+                            <img
+                                src={previewUrl}
+                                alt="Preview"
+                                className="w-full h-full object-cover"
+                                onError={() => setImgErrors(prev => ({ ...prev, preview: true }))}
+                            />
+                        ) : (
+                            <Camera size={48} className="text-muted/20" />
+                        )}
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between">
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+                    <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between pointer-events-none text-white">
                         <div className="flex items-center gap-2 text-[9px] font-bold text-emerald-400 uppercase">
                             <Activity size={10} /> Standby Ready
                         </div>
@@ -94,12 +117,22 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                         <div className="px-3 py-1 bg-red-600 text-white text-[9px] font-black uppercase rounded-lg animate-pulse">Program</div>
                         <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentProgram}</span>
                     </div>
-                    {/* Simulated Content Base64 if we had it, for now placeholder */}
-                    <div className="w-full h-full flex items-center justify-center bg-[radial-gradient(#ffffff05_1px,transparent_1px)] [background-size:20px_20px]">
-                        <Monitor size={48} className="text-muted/20" />
+
+                    <div className="w-full h-full flex items-center justify-center bg-black">
+                        {(programUrl && !imgErrors['program']) ? (
+                            <img
+                                src={programUrl}
+                                alt="Program"
+                                className="w-full h-full object-cover"
+                                onError={() => setImgErrors(prev => ({ ...prev, program: true }))}
+                            />
+                        ) : (
+                            <Monitor size={48} className="text-muted/20" />
+                        )}
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                    <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between text-white">
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+                    <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between text-white pointer-events-none">
                         <div className="flex items-center gap-2 text-[9px] font-bold text-red-400 uppercase">
                             <Activity size={10} /> Live Output
                         </div>
@@ -153,6 +186,7 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                                 const inputTitle = input?.title || `Input ${inputNum}`;
                                 const isActive = state?.activeInput === inputNum;
                                 const isPreview = state?.previewInput === inputNum;
+                                const thumbUrl = vmixBaseUrl && input?.key ? `${vmixBaseUrl}/thumbnails/${input.key}.jpg?t=${tick}` : '';
 
                                 return (
                                     <button
@@ -168,10 +202,17 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                                                     : "bg-background/40 border-card-border text-muted-foreground hover:border-indigo-500/50 hover:text-foreground"
                                         )}
                                     >
-                                        <div className="absolute top-2 left-3 bg-black/20 px-1.5 rounded text-[8px] font-bold">{inputNum}</div>
-                                        <span className="text-[10px] font-black uppercase truncate w-full text-center px-1">{inputTitle}</span>
+                                        {thumbUrl && !imgErrors[input.key] && (
+                                            <img
+                                                src={thumbUrl}
+                                                className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity"
+                                                onError={() => setImgErrors(prev => ({ ...prev, [input.key]: true }))}
+                                            />
+                                        )}
+                                        <div className="absolute top-2 left-3 bg-black/40 backdrop-blur-sm px-1.5 rounded text-[8px] font-bold z-10">{inputNum}</div>
+                                        <span className="text-[10px] font-black uppercase truncate w-full text-center px-1 z-10 relative drop-shadow-md">{inputTitle}</span>
                                         {(isActive || isPreview) && (
-                                            <div className="absolute bottom-1.5 inset-x-4 h-0.5 bg-white/40 rounded-full" />
+                                            <div className="absolute bottom-1.5 inset-x-4 h-0.5 bg-white/40 rounded-full z-10" />
                                         )}
                                     </button>
                                 );
