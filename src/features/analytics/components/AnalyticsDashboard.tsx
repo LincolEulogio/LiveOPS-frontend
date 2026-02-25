@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiClient as api } from '@/shared/api/api.client';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Activity, Cpu, HardDrive, WifiHigh, CheckCircle, AlertTriangle, FileText, Download, ArrowLeft } from 'lucide-react';
+import { Activity, Cpu, HardDrive, WifiHigh, CheckCircle, AlertTriangle, FileText, Download, ArrowLeft, Bot, Sparkles } from 'lucide-react';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { useProduction } from '@/features/productions/hooks/useProductions';
 import Link from 'next/link';
@@ -27,6 +27,7 @@ interface ShowReport {
         avgFps: number;
     };
     generatedAt: string;
+    aiAnalysis?: string;
 }
 
 export const AnalyticsDashboard = ({ productionId }: { productionId: string }) => {
@@ -137,6 +138,24 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                             <span className="text-2xl font-bold text-red-400">{report.metrics?.totalDroppedFrames || 0}</span>
                         </div>
                     </div>
+
+                    {report.aiAnalysis && (
+                        <div className="mt-8 pt-8 border-t border-indigo-500/20">
+                            <div className="flex items-center gap-2 mb-4 text-indigo-400">
+                                <Bot size={20} />
+                                <h4 className="font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                                    AI Performance Insights
+                                    <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                        <Sparkles size={10} />
+                                        POWERED BY GEMINI
+                                    </span>
+                                </h4>
+                            </div>
+                            <div className="bg-background/40 p-5 rounded-xl border border-indigo-500/10 text-sm leading-relaxed text-stone-200 whitespace-pre-wrap font-medium">
+                                {report.aiAnalysis}
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
 

@@ -12,6 +12,8 @@ export interface SocialMessage {
     content: string;
     timestamp: Date | string;
     status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'ON_AIR';
+    aiSentiment?: string;
+    aiCategory?: string;
 }
 
 export interface PollOption {

@@ -1,6 +1,6 @@
 import { SocialMessage } from '@/features/social/hooks/useSocial';
 import { cn } from '@/shared/utils/cn';
-import { Check, X, Tv } from 'lucide-react';
+import { Check, X, Tv, Sparkles, MessageCircle } from 'lucide-react';
 
 interface Props {
     message: SocialMessage;
@@ -54,6 +54,29 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
                     <p className="text-sm text-foreground break-words leading-relaxed">
                         {message.content}
                     </p>
+
+                    {/* AI Insights */}
+                    {(message.aiSentiment || message.aiCategory) && (
+                        <div className="flex gap-2 mt-3 items-center">
+                            {message.aiSentiment && (
+                                <span className={cn(
+                                    "text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1",
+                                    message.aiSentiment === 'POSITIVO' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
+                                        message.aiSentiment === 'NEGATIVO' ? "bg-red-500/10 text-red-400 border border-red-500/20" :
+                                            "bg-stone-500/10 text-stone-400 border border-stone-500/20"
+                                )}>
+                                    <Sparkles size={10} />
+                                    {message.aiSentiment}
+                                </span>
+                            )}
+                            {message.aiCategory && (
+                                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center gap-1">
+                                    <MessageCircle size={10} />
+                                    {message.aiCategory}
+                                </span>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
 
