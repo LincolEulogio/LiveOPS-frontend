@@ -85,6 +85,7 @@ export const useStreaming = (productionId: string | undefined) => {
             isRecording: boolean;
             isExternal: boolean;
             isMultiCorder: boolean;
+            inputs: any[];
         }) => {
             if (data.productionId === productionId && data.activeInput !== undefined) {
                 updateStreamingState(productionId, {
@@ -94,7 +95,8 @@ export const useStreaming = (productionId: string | undefined) => {
                         isStreaming: data.isStreaming,
                         isRecording: data.isRecording,
                         isExternal: data.isExternal,
-                        isMultiCorder: data.isMultiCorder
+                        isMultiCorder: data.isMultiCorder,
+                        inputs: data.inputs
                     },
                     isConnected: true
                 });

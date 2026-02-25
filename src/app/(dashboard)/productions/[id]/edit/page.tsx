@@ -100,6 +100,19 @@ export default function EditProductionPage() {
     const onSubmit = async (formData: EditFormValues) => {
         try {
             setError(null);
+
+            // Clean data before sending: strip protocol from host if user pasted it
+            // because the backend adds it back
+            if (formData.vmixConfig?.host && formData.vmixConfig.host.includes('://')) {
+                try {
+                    const parsed = new URL(formData.vmixConfig.host);
+                    formData.vmixConfig.host = parsed.hostname;
+                    if (parsed.port) formData.vmixConfig.port = parsed.port;
+                } catch (e) {
+                    formData.vmixConfig.host = formData.vmixConfig.host.replace(/^http(s)?:\/\//, '').split('/')[0].split(':')[0];
+                }
+            }
+
             await updateMutation.mutateAsync({
                 id,
                 data: formData,

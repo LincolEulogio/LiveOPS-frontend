@@ -12,7 +12,9 @@ import {
     Volume2,
     VolumeX,
     Layout,
-    Camera
+    Camera,
+    Repeat,
+    Zap
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { StreamingCommand, ObsState, VmixState } from '../types/streaming.types';
@@ -57,8 +59,13 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
 
     // Simulated Preview/Program Scenes for Demo
     // In a real app, these would come from OBS preview/program state
-    const currentProgram = engineType === 'OBS' ? state?.currentScene : (state?.activeInput || 'Input 1');
-    const currentPreview = engineType === 'OBS' ? 'Preview Scene' : (state?.previewInput || 'Input 2');
+    const currentProgram = engineType === 'OBS'
+        ? state?.currentScene
+        : (state?.inputs?.find((i: any) => i.number === state?.activeInput)?.title || `Input ${state?.activeInput || 1}`);
+
+    const currentPreview = engineType === 'OBS'
+        ? 'Preview Scene'
+        : (state?.inputs?.find((i: any) => i.number === state?.previewInput)?.title || `Input ${state?.previewInput || 2}`);
 
     return (
         <div className="flex flex-col gap-8">
@@ -68,7 +75,7 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                 <div className="relative group rounded-3xl overflow-hidden border-2 border-emerald-500/40 bg-card-bg/40 backdrop-blur-md">
                     <div className="absolute top-4 left-6 z-10 flex items-center gap-2">
                         <div className="px-3 py-1 bg-emerald-500 text-white text-[9px] font-black uppercase rounded-lg">Preview</div>
-                        <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[150px]">{currentPreview}</span>
+                        <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentPreview}</span>
                     </div>
                     <div className="w-full h-full flex items-center justify-center bg-[radial-gradient(#ffffff05_1px,transparent_1px)] [background-size:20px_20px]">
                         <Camera size={48} className="text-muted/20" />
@@ -76,7 +83,7 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between">
                         <div className="flex items-center gap-2 text-[9px] font-bold text-emerald-400 uppercase">
-                            <Activity size={10} /> Signal Stable
+                            <Activity size={10} /> Standby Ready
                         </div>
                     </div>
                 </div>
@@ -85,7 +92,7 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                 <div className="relative group rounded-3xl overflow-hidden border-2 border-red-500/40 bg-card-bg/40 backdrop-blur-md">
                     <div className="absolute top-4 left-6 z-10 flex items-center gap-2">
                         <div className="px-3 py-1 bg-red-600 text-white text-[9px] font-black uppercase rounded-lg animate-pulse">Program</div>
-                        <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[150px]">{currentProgram}</span>
+                        <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentProgram}</span>
                     </div>
                     {/* Simulated Content Base64 if we had it, for now placeholder */}
                     <div className="w-full h-full flex items-center justify-center bg-[radial-gradient(#ffffff05_1px,transparent_1px)] [background-size:20px_20px]">
@@ -113,7 +120,7 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                             <span className="text-xs font-black text-foreground uppercase tracking-widest">Scene Matrix</span>
                         </div>
                         <div className="flex items-center gap-4">
-                            <span className="text-[10px] font-black text-muted uppercase">{engineType === 'OBS' ? state?.scenes?.length || 0 : 8} Virtual Slots</span>
+                            <span className="text-[10px] font-black text-muted uppercase">{engineType === 'OBS' ? state?.scenes?.length || 0 : (state?.inputs?.length || 8)} Active Inputs</span>
                         </div>
                     </div>
 
@@ -128,10 +135,10 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                                         "group relative h-20 flex flex-col items-center justify-center p-4 rounded-2xl border transition-all overflow-hidden active:scale-95",
                                         state.currentScene === scene
                                             ? "bg-red-600 border-red-500 text-white shadow-lg shadow-red-500/20"
-                                            : "bg-background/40 border-card-border text-muted hover:border-indigo-500/50 hover:text-foreground"
+                                            : "bg-background/40 border-card-border text-muted-foreground hover:border-indigo-500/50 hover:text-foreground"
                                     )}
                                 >
-                                    <span className="text-[10px] font-black uppercase truncate w-full text-center">{scene}</span>
+                                    <span className="text-[10px] font-black uppercase truncate w-full text-center px-2">{scene}</span>
                                     {state.currentScene === scene && (
                                         <div className="absolute top-1 right-2 flex gap-1">
                                             <div className="w-1 h-1 rounded-full bg-white animate-pulse" />
@@ -140,30 +147,70 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                                 </button>
                             ))
                         ) : (
-                            // Simulated vMix Inputs
-                            Array.from({ length: 8 }).map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => sendCommand({ type: 'VMIX_SELECT_INPUT', payload: { input: i + 1 } })}
-                                    disabled={isPending}
-                                    className={cn(
-                                        "group relative h-20 flex flex-col items-center justify-center p-4 rounded-2xl border transition-all overflow-hidden active:scale-95",
-                                        state?.activeInput === i + 1
-                                            ? "bg-red-600 border-red-500 text-white shadow-lg shadow-red-500/20"
-                                            : state?.previewInput === i + 1
-                                                ? "bg-emerald-600 border-emerald-500 text-white"
-                                                : "bg-background/40 border-card-border text-muted hover:border-indigo-500/50 hover:text-foreground"
-                                    )}
-                                >
-                                    <span className="text-xs font-black uppercase">Input {i + 1}</span>
-                                </button>
-                            ))
+                            // Actual vMix Inputs
+                            (state?.inputs || Array.from({ length: 8 })).map((input: any, i: number) => {
+                                const inputNum = input?.number || (i + 1);
+                                const inputTitle = input?.title || `Input ${inputNum}`;
+                                const isActive = state?.activeInput === inputNum;
+                                const isPreview = state?.previewInput === inputNum;
+
+                                return (
+                                    <button
+                                        key={inputNum}
+                                        onClick={() => sendCommand({ type: 'VMIX_SELECT_INPUT', payload: { input: inputNum } })}
+                                        disabled={isPending}
+                                        className={cn(
+                                            "group relative h-20 flex flex-col items-center justify-center p-4 rounded-2xl border transition-all overflow-hidden active:scale-95",
+                                            isActive
+                                                ? "bg-red-600 border-red-500 text-white shadow-lg shadow-red-500/20"
+                                                : isPreview
+                                                    ? "bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                                                    : "bg-background/40 border-card-border text-muted-foreground hover:border-indigo-500/50 hover:text-foreground"
+                                        )}
+                                    >
+                                        <div className="absolute top-2 left-3 bg-black/20 px-1.5 rounded text-[8px] font-bold">{inputNum}</div>
+                                        <span className="text-[10px] font-black uppercase truncate w-full text-center px-1">{inputTitle}</span>
+                                        {(isActive || isPreview) && (
+                                            <div className="absolute bottom-1.5 inset-x-4 h-0.5 bg-white/40 rounded-full" />
+                                        )}
+                                    </button>
+                                );
+                            })
                         )}
                     </div>
                 </div>
 
                 {/* Transport & Audio (4/12) */}
                 <div className="lg:col-span-4 space-y-8 h-full flex flex-col">
+                    {/* Transition Controls (vMix Only / Enhanced) */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-3 border-b border-card-border/40 pb-4">
+                            <div className="p-2 bg-pink-500/10 rounded-lg text-pink-400">
+                                <Zap size={16} />
+                            </div>
+                            <span className="text-xs font-black text-foreground uppercase tracking-widest">Transition Hub</span>
+                        </div>
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => sendCommand({ type: 'VMIX_CUT' })}
+                                disabled={isPending || engineType !== 'VMIX'}
+                                className="flex-1 py-6 bg-red-600 hover:bg-red-500 text-white rounded-2xl border border-red-400/50 font-black text-xs uppercase transition-all shadow-lg shadow-red-500/20 active:scale-95 disabled:opacity-20 flex flex-col items-center gap-2"
+                            >
+                                <Zap size={20} fill="currentColor" />
+                                Instant Cut
+                            </button>
+                            <button
+                                onClick={() => sendCommand({ type: 'VMIX_FADE', duration: 500 })}
+                                disabled={isPending || engineType !== 'VMIX'}
+                                className="flex-1 py-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl border border-indigo-400/50 font-black text-xs uppercase transition-all shadow-lg shadow-indigo-500/20 active:scale-95 disabled:opacity-20 flex flex-col items-center gap-2"
+                            >
+                                <Repeat size={20} />
+                                Auto Fade
+                            </button>
+                        </div>
+                    </div>
+
                     {/* Simplified Transport */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-3 border-b border-card-border/40 pb-4">

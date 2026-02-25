@@ -22,6 +22,11 @@ export interface VmixState {
     isRecording: boolean;
     isExternal: boolean;
     isMultiCorder: boolean;
+    inputs: Array<{
+        number: number;
+        title: string;
+        type: string;
+    }>;
 }
 
 export interface StreamingState {
