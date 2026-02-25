@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { streamingService } from '../api/streaming.service';
-import { StreamingDestination } from '../types/streaming.types';
+import { streamingService } from '@/features/streaming/api/streaming.service';
+import { StreamingDestination } from '@/features/streaming/types/streaming.types';
 import { toast } from 'sonner';
 
 export const useStreamingDestinations = (productionId: string | undefined) => {

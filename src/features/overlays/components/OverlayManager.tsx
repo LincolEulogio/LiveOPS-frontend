@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { overlayService } from '../api/overlay.service';
+import { overlayService } from '@/features/overlays/api/overlay.service';
 import { Layers, Plus, ExternalLink, Play, Square, Edit3, Trash2, X, ChevronLeft } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
-import { OverlayEditor } from './OverlayEditor';
-import { OverlayTemplate } from '../types/overlay.types';
+import { OverlayEditor } from '@/features/overlays/components/OverlayEditor';
+import { OverlayTemplate } from '@/features/overlays/types/overlay.types';
 
 export const OverlayManager = ({ productionId }: { productionId: string }) => {
     const queryClient = useQueryClient();

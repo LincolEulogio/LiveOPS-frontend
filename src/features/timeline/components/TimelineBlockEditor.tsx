@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { TimelineBlock, CreateTimelineBlockDto, UpdateTimelineBlockDto } from '../types/timeline.types';
+import { TimelineBlock, CreateTimelineBlockDto, UpdateTimelineBlockDto } from '@/features/timeline/types/timeline.types';
 import { X, Clock, Monitor, Settings2, Info, ArrowRight, Type, AlignLeft } from 'lucide-react';
 import { useEffect } from 'react';
 import { cn } from '@/shared/utils/cn';

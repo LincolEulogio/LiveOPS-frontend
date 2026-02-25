@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { VmixState, StreamingCommand } from '../types/streaming.types';
+import { VmixState, StreamingCommand } from '@/features/streaming/types/streaming.types';
 import { Play, Repeat, Zap, ZapOff, Grid, AlertCircle, Radio, Activity, Monitor } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/shared/utils/cn';

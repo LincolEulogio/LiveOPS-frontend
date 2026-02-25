@@ -1,6 +1,6 @@
 import React from 'react';
 import { Radio, Activity, ExternalLink, Scissors } from 'lucide-react';
-import { TemplateManager } from '../TemplateManager';
+import { TemplateManager } from '@/features/intercom/components/TemplateManager';
 import { apiClient } from '@/shared/api/api.client';
 import { Production } from '@/features/productions/types/production.types';
 

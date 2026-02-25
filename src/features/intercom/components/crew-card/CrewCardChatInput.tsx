@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
-import { IntercomTemplate } from '../../types/intercom.types';
+import { IntercomTemplate } from '@/features/intercom/types/intercom.types';
 
 interface CrewCardChatInputProps {
     memberUserId: string;

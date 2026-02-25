@@ -1,7 +1,7 @@
 'use client';
 
-import { useChat } from '../hooks/useChat';
-import { CommandItem } from './CommandItem';
+import { useChat } from '@/features/chat/hooks/useChat';
+import { CommandItem } from '@/features/chat/components/CommandItem';
 import { TemplateManager } from '@/features/intercom/components/TemplateManager';
 import { MessageSquare, Send, AlertCircle, Zap, ShieldAlert, History, Settings, Laptop, Smartphone } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';

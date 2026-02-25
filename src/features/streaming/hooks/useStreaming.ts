@@ -1,9 +1,9 @@
 import { useEffect, useCallback } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useSocket } from '@/shared/socket/socket.provider';
-import { streamingService } from '../api/streaming.service';
-import { useStreamingStore } from '../store/streaming.store';
-import { StreamingCommand, StreamingState } from '../types/streaming.types';
+import { streamingService } from '@/features/streaming/api/streaming.service';
+import { useStreamingStore } from '@/features/streaming/store/streaming.store';
+import { StreamingCommand, StreamingState } from '@/features/streaming/types/streaming.types';
 
 export const useStreaming = (productionId: string | undefined) => {
     const { socket, isConnected: isSocketConnected } = useSocket();

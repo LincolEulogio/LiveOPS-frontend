@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { BarChart3, Plus, X, Square } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useSocial, PollOption } from '../hooks/useSocial';
+import { useSocial, PollOption } from '@/features/social/hooks/useSocial';
 
 interface PollManagerProps {
     productionId: string;

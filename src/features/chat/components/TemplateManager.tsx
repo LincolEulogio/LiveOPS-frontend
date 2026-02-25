@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CommandTemplate } from '../types/chat.types';
+import { CommandTemplate } from '@/features/chat/types/chat.types';
 import { X, Plus, Trash2, Zap } from 'lucide-react';
 
 interface Props {

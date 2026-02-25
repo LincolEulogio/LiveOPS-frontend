@@ -12,8 +12,8 @@ import {
     Square,
     AlertCircle
 } from 'lucide-react';
-import { useStreamingDestinations } from '../hooks/useStreamingDestinations';
-import { StreamingDestination } from '../types/streaming.types';
+import { useStreamingDestinations } from '@/features/streaming/hooks/useStreamingDestinations';
+import { StreamingDestination } from '@/features/streaming/types/streaming.types';
 
 interface MulticastManagerProps {
     productionId: string;

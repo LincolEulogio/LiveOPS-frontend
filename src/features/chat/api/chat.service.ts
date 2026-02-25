@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/api.client';
-import { Command, CommandTemplate, ChatMessage } from '../types/chat.types';
+import { Command, CommandTemplate, ChatMessage } from '@/features/chat/types/chat.types';
 
 export const chatService = {
     getCommandHistory: (productionId: string, limit: number = 50): Promise<Command[]> =>

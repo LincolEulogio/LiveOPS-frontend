@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/api.client';
-import { DashboardMetrics, ProductionLog } from '../types/analytics.types';
+import { DashboardMetrics, ProductionLog } from '@/features/analytics/types/analytics.types';
 
 export const analyticsService = {
     getDashboardMetrics: (productionId: string): Promise<DashboardMetrics> =>

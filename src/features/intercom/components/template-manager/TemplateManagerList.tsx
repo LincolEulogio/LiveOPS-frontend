@@ -1,7 +1,7 @@
 import React from 'react';
 import { Zap, Edit2, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { IntercomTemplate } from '../../types/intercom.types';
+import { IntercomTemplate } from '@/features/intercom/types/intercom.types';
 
 interface TemplateManagerListProps {
     templates: IntercomTemplate[];

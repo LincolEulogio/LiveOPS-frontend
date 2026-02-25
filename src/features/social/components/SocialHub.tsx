@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { SocialManager } from './SocialManager';
-import { PollManager } from './PollManager';
+import { SocialManager } from '@/features/social/components/SocialManager';
+import { PollManager } from '@/features/social/components/PollManager';
 
 interface SocialHubProps {
     productionId: string;

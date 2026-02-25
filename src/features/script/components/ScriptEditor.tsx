@@ -9,9 +9,9 @@ import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCaret from '@tiptap/extension-collaboration-caret';
-import { SceneTag } from '../extensions/SceneTag';
-import { TimelineTag } from '../extensions/TimelineTag';
-import { useScript } from '../hooks/useScript';
+import { SceneTag } from '@/features/script/extensions/SceneTag';
+import { TimelineTag } from '@/features/script/extensions/TimelineTag';
+import { useScript } from '@/features/script/hooks/useScript';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import {
     Bold, Italic, Underline as UnderlineIcon, List, ListOrdered,

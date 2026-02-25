@@ -1,19 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useIntercomStore } from '../store/intercom.store';
-import { useIntercom } from '../hooks/useIntercom';
+import { useIntercomStore } from '@/features/intercom/store/intercom.store';
+import { useIntercom } from '@/features/intercom/hooks/useIntercom';
 import { usePushNotifications } from '@/shared/hooks/usePushNotifications';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
 import { useAppStore } from '@/shared/store/app.store';
-import { TimelineBlock } from '../../timeline/types/timeline.types';
+import { TimelineBlock } from '@/features/timeline/types/timeline.types';
 
 // New Sub-components
-import { DeviceIdleView } from './device/DeviceIdleView';
-import { DeviceAlertView } from './device/DeviceAlertView';
+import { DeviceIdleView } from '@/features/intercom/components/device/DeviceIdleView';
+import { DeviceAlertView } from '@/features/intercom/components/device/DeviceAlertView';
 
 export const DeviceView = () => {
     const { activeAlert, history } = useIntercomStore();

@@ -1,4 +1,4 @@
-import { TimelineBlock, TimelineStatus } from '../types/timeline.types';
+import { TimelineBlock, TimelineStatus } from '@/features/timeline/types/timeline.types';
 import { Play, CheckCircle, RotateCcw, Clock, Trash2, Edit2 } from 'lucide-react';
 
 interface TimelineBlockItemProps {

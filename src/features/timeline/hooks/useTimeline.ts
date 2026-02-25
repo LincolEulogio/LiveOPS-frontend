@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { timelineService } from '../api/timeline.service';
+import { timelineService } from '@/features/timeline/api/timeline.service';
 import { useSocket } from '@/shared/socket/socket.provider';
-import { CreateTimelineBlockDto, UpdateTimelineBlockDto } from '../types/timeline.types';
+import { CreateTimelineBlockDto, UpdateTimelineBlockDto } from '@/features/timeline/types/timeline.types';
 
 export const useTimeline = (productionId?: string) => {
     const queryClient = useQueryClient();

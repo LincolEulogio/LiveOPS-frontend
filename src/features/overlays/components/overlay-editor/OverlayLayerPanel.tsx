@@ -3,7 +3,7 @@
 import React from 'react';
 import { Layers, Type, Image as ImageIcon, Box, Trash2, Settings, ChevronUp, ChevronDown, Plus } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
-import { OverlayLayer, OverlayConfig } from '../../types/overlay.types';
+import { OverlayLayer, OverlayConfig } from '@/features/overlays/types/overlay.types';
 
 interface OverlayLayerPanelProps {
     config: OverlayConfig;

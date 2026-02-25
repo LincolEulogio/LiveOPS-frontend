@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { StreamingState } from '../types/streaming.types';
+import { StreamingState } from '@/features/streaming/types/streaming.types';
 
 interface StreamingStore {
     states: Record<string, StreamingState>; // productionId -> state

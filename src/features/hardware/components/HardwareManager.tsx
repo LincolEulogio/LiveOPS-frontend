@@ -1,8 +1,8 @@
 'use client';
 
-import { useHardware } from '../hooks/useHardware';
+import { useHardware } from '@/features/hardware/hooks/useHardware';
 import { useAutomation } from '@/features/automation/hooks/useAutomation';
-import { useHardwareMappings } from '../hooks/useHardwareMappings';
+import { useHardwareMappings } from '@/features/hardware/hooks/useHardwareMappings';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useState, useEffect } from 'react';
 import { Settings, Plus, X, Keyboard, RadioReceiver, Zap, Loader2, ArrowRight, Activity, Trash2, Cpu } from 'lucide-react';

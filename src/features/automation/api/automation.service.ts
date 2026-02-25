@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/api.client';
-import { Rule, RuleExecutionLog, CreateRuleDto, UpdateRuleDto } from '../types/automation.types';
+import { Rule, RuleExecutionLog, CreateRuleDto, UpdateRuleDto } from '@/features/automation/types/automation.types';
 
 export const automationService = {
     getRules: (productionId: string): Promise<Rule[]> =>

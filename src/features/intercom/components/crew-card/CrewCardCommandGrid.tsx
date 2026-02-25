@@ -1,7 +1,7 @@
 import React from 'react';
 import { ZoomIn, ZoomOut, Radio, Clock, CheckCircle2, Video, Zap, Activity } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
-import { IntercomTemplate } from '../../types/intercom.types';
+import { IntercomTemplate } from '@/features/intercom/types/intercom.types';
 
 interface CrewCardCommandGridProps {
     templates: IntercomTemplate[];

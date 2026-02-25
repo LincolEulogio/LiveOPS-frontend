@@ -1,7 +1,7 @@
 'use client';
 
-import { useSocial, SocialMessage } from '../hooks/useSocial';
-import { SocialMessageCard } from './SocialMessageCard';
+import { useSocial, SocialMessage } from '@/features/social/hooks/useSocial';
+import { SocialMessageCard } from '@/features/social/components/SocialMessageCard';
 import { apiClient } from '@/shared/api/api.client';
 import { MessageSquare, ShieldCheck, Tv } from 'lucide-react';
 

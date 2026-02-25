@@ -10,9 +10,9 @@ import { authService } from '@/features/auth/api/auth.service';
 import { CommandPalette } from '@/shared/components/CommandPalette';
 
 // New Sub-components
-import { DashboardSidebar } from './components/DashboardSidebar';
-import { DashboardHeader } from './components/DashboardHeader';
-import { DashboardFooter } from './components/DashboardFooter';
+import { DashboardSidebar } from '@/app/(dashboard)/components/DashboardSidebar';
+import { DashboardHeader } from '@/app/(dashboard)/components/DashboardHeader';
+import { DashboardFooter } from '@/app/(dashboard)/components/DashboardFooter';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();

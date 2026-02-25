@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/api.client';
-import { StreamingState, StreamingCommand, CommandResponse, StreamingDestination } from '../types/streaming.types';
+import { StreamingState, StreamingCommand, CommandResponse, StreamingDestination } from '@/features/streaming/types/streaming.types';
 
 export const streamingService = {
     async getStreamingState(productionId: string): Promise<StreamingState> {

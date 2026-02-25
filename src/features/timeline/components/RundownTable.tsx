@@ -7,7 +7,7 @@ import {
     AlertTriangle, Tag, Edit2, Trash2,
     Activity, ArrowRight
 } from 'lucide-react';
-import { TimelineBlock, TimelineStatus } from '../types/timeline.types';
+import { TimelineBlock, TimelineStatus } from '@/features/timeline/types/timeline.types';
 import { cn } from '@/shared/utils/cn';
 import { formatDuration } from '@/shared/utils/format';
 import { motion, AnimatePresence } from 'framer-motion';

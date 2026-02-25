@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { cn } from '@/shared/utils/cn';
-import { OverlayConfig, OverlayLayer } from '../../types/overlay.types';
+import { OverlayConfig, OverlayLayer } from '@/features/overlays/types/overlay.types';
 
 interface OverlayViewportProps {
     config: OverlayConfig;

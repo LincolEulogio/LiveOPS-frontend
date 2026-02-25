@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useCommandPalette } from '../hooks/useCommandPalette';
+import { useCommandPalette } from '@/shared/hooks/useCommandPalette';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MonitorPlay, Activity, LayoutDashboard, Settings, Video, Server, Users, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';

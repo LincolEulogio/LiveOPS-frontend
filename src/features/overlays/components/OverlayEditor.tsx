@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OverlayTemplate, OverlayLayer, OverlayConfig } from '../types/overlay.types';
+import { OverlayTemplate, OverlayLayer, OverlayConfig } from '@/features/overlays/types/overlay.types';
 
 // New Sub-components
-import { OverlayToolbar } from './overlay-editor/OverlayToolbar';
-import { OverlayViewport } from './overlay-editor/OverlayViewport';
-import { OverlayLayerPanel } from './overlay-editor/OverlayLayerPanel';
+import { OverlayToolbar } from '@/features/overlays/components/overlay-editor/OverlayToolbar';
+import { OverlayViewport } from '@/features/overlays/components/overlay-editor/OverlayViewport';
+import { OverlayLayerPanel } from '@/features/overlays/components/overlay-editor/OverlayLayerPanel';
 
 interface Props {
     productionId: string;

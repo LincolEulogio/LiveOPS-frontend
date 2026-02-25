@@ -1,6 +1,6 @@
 import React from 'react';
 import { History, ArrowRight } from 'lucide-react';
-import { ExecutionLogs } from '../ExecutionLogs';
+import { ExecutionLogs } from '@/features/automation/components/ExecutionLogs';
 
 interface AutomationDashboardSidebarProps {
     logs: any[];

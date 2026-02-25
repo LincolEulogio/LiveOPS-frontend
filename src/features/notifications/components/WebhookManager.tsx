@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useWebhooks, Webhook } from '../hooks/useWebhooks';
+import { useWebhooks, Webhook } from '@/features/notifications/hooks/useWebhooks';
 import {
     Bell,
     Plus,

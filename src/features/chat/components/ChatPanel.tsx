@@ -1,6 +1,6 @@
 'use client';
 
-import { useChat } from '../hooks/useChat';
+import { useChat } from '@/features/chat/hooks/useChat';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/shared/utils/cn';
@@ -8,9 +8,9 @@ import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useSocket } from '@/shared/socket/socket.provider';
 
 // New Sub-components
-import { ChatHeader } from './chat-panel/ChatHeader';
-import { ChatMessageList } from './chat-panel/ChatMessageList';
-import { ChatInput } from './chat-panel/ChatInput';
+import { ChatHeader } from '@/features/chat/components/chat-panel/ChatHeader';
+import { ChatMessageList } from '@/features/chat/components/chat-panel/ChatMessageList';
+import { ChatInput } from '@/features/chat/components/chat-panel/ChatInput';
 
 interface Props {
     productionId: string;

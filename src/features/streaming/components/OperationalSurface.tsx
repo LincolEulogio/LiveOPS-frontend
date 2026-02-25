@@ -17,7 +17,7 @@ import {
     Zap
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
-import { StreamingCommand, ObsState, VmixState } from '../types/streaming.types';
+import { StreamingCommand, ObsState, VmixState } from '@/features/streaming/types/streaming.types';
 
 interface OperationalSurfaceProps {
     productionId: string;

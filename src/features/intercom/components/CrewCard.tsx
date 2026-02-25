@@ -2,17 +2,17 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { IntercomTemplate, CrewMember } from '../types/intercom.types';
+import { IntercomTemplate, CrewMember } from '@/features/intercom/types/intercom.types';
 import { cn } from '@/shared/utils/cn';
-import { useIntercomStore } from '../store/intercom.store';
+import { useIntercomStore } from '@/features/intercom/store/intercom.store';
 
 // New Sub-components
-import { CrewCardHeader } from './crew-card/CrewCardHeader';
-import { CrewCardIdentity } from './crew-card/CrewCardIdentity';
-import { CrewCardStatus } from './crew-card/CrewCardStatus';
-import { CrewCardCommandGrid } from './crew-card/CrewCardCommandGrid';
-import { CrewCardChatFeed } from './crew-card/CrewCardChatFeed';
-import { CrewCardChatInput } from './crew-card/CrewCardChatInput';
+import { CrewCardHeader } from '@/features/intercom/components/crew-card/CrewCardHeader';
+import { CrewCardIdentity } from '@/features/intercom/components/crew-card/CrewCardIdentity';
+import { CrewCardStatus } from '@/features/intercom/components/crew-card/CrewCardStatus';
+import { CrewCardCommandGrid } from '@/features/intercom/components/crew-card/CrewCardCommandGrid';
+import { CrewCardChatFeed } from '@/features/intercom/components/crew-card/CrewCardChatFeed';
+import { CrewCardChatInput } from '@/features/intercom/components/crew-card/CrewCardChatInput';
 
 interface CrewCardProps {
     productionId: string;

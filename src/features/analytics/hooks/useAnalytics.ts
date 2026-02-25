@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { analyticsService } from '../api/analytics.service';
+import { analyticsService } from '@/features/analytics/api/analytics.service';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useEffect, useState } from 'react';
-import { ProductionLog } from '../types/analytics.types';
+import { ProductionLog } from '@/features/analytics/types/analytics.types';
 
 export const useAnalytics = (productionId: string) => {
     const { socket } = useSocket();

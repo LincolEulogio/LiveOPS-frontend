@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useTimeline } from '../hooks/useTimeline';
-import { TimelineBlockItem } from './TimelineBlockItem';
+import { useTimeline } from '@/features/timeline/hooks/useTimeline';
+import { TimelineBlockItem } from '@/features/timeline/components/TimelineBlockItem';
 import { Plus, ListTree, Loader2, PlayCircle } from 'lucide-react';
 import { useAppStore } from '@/shared/store/app.store';
-import { TimelineBlockEditor } from './TimelineBlockEditor';
-import { TimelineBlock, CreateTimelineBlockDto } from '../types/timeline.types';
+import { TimelineBlockEditor } from '@/features/timeline/components/TimelineBlockEditor';
+import { TimelineBlock, CreateTimelineBlockDto } from '@/features/timeline/types/timeline.types';
 
 export const TimelineView = () => {
     const activeProductionId = useAppStore((state) => state.activeProductionId);

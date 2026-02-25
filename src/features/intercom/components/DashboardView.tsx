@@ -2,28 +2,28 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import { useIntercom } from '../hooks/useIntercom';
+import { useIntercom } from '@/features/intercom/hooks/useIntercom';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
 import { useAppStore } from '@/shared/store/app.store';
-import { useIntercomStore } from '../store/intercom.store';
+import { useIntercomStore } from '@/features/intercom/store/intercom.store';
 import {
     Users
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CrewCard } from './CrewCard';
-import { AuditLogView } from './AuditLogView';
-import { useIntercomTemplates } from '../hooks/useIntercomTemplates';
-import { AutomationDashboard } from '../../automation/components/AutomationDashboard';
-import { MulticastManager } from '../../streaming/components/MulticastManager';
-import { CrewMember } from '../types/intercom.types';
+import { CrewCard } from '@/features/intercom/components/CrewCard';
+import { AuditLogView } from '@/features/intercom/components/AuditLogView';
+import { useIntercomTemplates } from '@/features/intercom/hooks/useIntercomTemplates';
+import { AutomationDashboard } from '@/features/automation/components/AutomationDashboard';
+import { MulticastManager } from '@/features/streaming/components/MulticastManager';
+import { CrewMember } from '@/features/intercom/types/intercom.types';
 import { Production } from '@/features/productions/types/production.types';
 
 // New Sub-components
-import { DashboardHeader } from './dashboard/DashboardHeader';
-import { DashboardTabs } from './dashboard/DashboardTabs';
-import { DashboardQuickActions } from './dashboard/DashboardQuickActions';
-import { DashboardSidebar } from './dashboard/DashboardSidebar';
+import { DashboardHeader } from '@/features/intercom/components/dashboard/DashboardHeader';
+import { DashboardTabs } from '@/features/intercom/components/dashboard/DashboardTabs';
+import { DashboardQuickActions } from '@/features/intercom/components/dashboard/DashboardQuickActions';
+import { DashboardSidebar } from '@/features/intercom/components/dashboard/DashboardSidebar';
 
 export const DashboardView = () => {
     const { id: productionIdFromParams } = useParams();

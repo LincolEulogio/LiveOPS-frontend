@@ -1,6 +1,6 @@
 import React from 'react';
 import { Zap, Play } from 'lucide-react';
-import { Rule } from '../../types/automation.types';
+import { Rule } from '@/features/automation/types/automation.types';
 
 interface AutomationDashboardMacrosProps {
     macros: Rule[];

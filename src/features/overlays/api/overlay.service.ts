@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/api.client';
-import { OverlayTemplate, CreateOverlayDto } from '../types/overlay.types';
+import { OverlayTemplate, CreateOverlayDto } from '@/features/overlays/types/overlay.types';
 
 export const overlayService = {
     getOverlays: (productionId: string): Promise<OverlayTemplate[]> =>

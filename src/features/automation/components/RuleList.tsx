@@ -1,6 +1,6 @@
 'use client';
 
-import { Rule } from '../types/automation.types';
+import { Rule } from '@/features/automation/types/automation.types';
 import { cn } from '@/shared/utils/cn';
 import { Edit2, Trash2, Zap, Play, ToggleLeft, ToggleRight, ArrowRight, Activity, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

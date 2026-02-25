@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Type, Image as ImageIcon, Box, Save } from 'lucide-react';
-import { OverlayLayer } from '../../types/overlay.types';
+import { OverlayLayer } from '@/features/overlays/types/overlay.types';
 
 interface OverlayToolbarProps {
     onAddLayer: (type: OverlayLayer['type']) => void;

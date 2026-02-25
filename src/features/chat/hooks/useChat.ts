@@ -3,7 +3,7 @@ import { useEffect, useCallback, useState } from 'react';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useAudio } from '@/shared/providers/AudioProvider';
-import { chatService } from '../api/chat.service';
+import { chatService } from '@/features/chat/api/chat.service';
 import {
     Command,
     CommandTemplate,
@@ -13,7 +13,7 @@ import {
     CommandStatus,
     ChatMessage,
     SendChatMessageDto
-} from '../types/chat.types';
+} from '@/features/chat/types/chat.types';
 
 export interface PresenceMember {
     userId: string;

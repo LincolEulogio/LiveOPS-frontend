@@ -1,6 +1,6 @@
 'use client';
 
-import { RuleExecutionLog } from '../types/automation.types';
+import { RuleExecutionLog } from '@/features/automation/types/automation.types';
 import { cn } from '@/shared/utils/cn';
 import { CheckCircle2, AlertCircle, Clock, Zap, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

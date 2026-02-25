@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OverlayTemplate, OverlayLayer } from '../types/overlay.types';
+import { OverlayTemplate, OverlayLayer } from '@/features/overlays/types/overlay.types';
 import { useSocket } from '@/shared/socket/socket.provider';
 
 interface Props {

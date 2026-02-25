@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/api.client';
-import { IntercomTemplate, CreateCommandTemplateDto } from '../types/intercom.types';
+import { IntercomTemplate, CreateCommandTemplateDto } from '@/features/intercom/types/intercom.types';
 
 export const intercomService = {
     getTemplates: async (productionId: string): Promise<IntercomTemplate[]> => {

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { automationService } from '../api/automation.service';
-import { CreateRuleDto, UpdateRuleDto, Rule } from '../types/automation.types';
+import { automationService } from '@/features/automation/api/automation.service';
+import { CreateRuleDto, UpdateRuleDto, Rule } from '@/features/automation/types/automation.types';
 import { useSocket } from '@/shared/socket/socket.provider';
 
 export const useAutomation = (productionId: string) => {

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useIntercom } from '../hooks/useIntercom';
-import { useIntercomStore } from '../store/intercom.store';
+import { useIntercom } from '@/features/intercom/hooks/useIntercom';
+import { useIntercomStore } from '@/features/intercom/store/intercom.store';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     CheckCircle2,

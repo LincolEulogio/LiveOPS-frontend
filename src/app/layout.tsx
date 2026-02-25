@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
-import './globals.css';
+import '@/app/globals.css';
 import { ReactQueryProvider } from '@/shared/api/react-query.provider';
 import { SocketProvider } from '@/shared/socket/socket.provider';
 import { AudioProvider } from '@/shared/providers/AudioProvider';

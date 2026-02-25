@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from 'react';
-import { apiClient } from '../api/api.client';
+import { apiClient } from '@/shared/api/api.client';
 
 export const usePushNotifications = () => {
     useEffect(() => {

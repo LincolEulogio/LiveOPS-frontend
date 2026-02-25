@@ -2,7 +2,7 @@ import { useEffect, useCallback, useState } from 'react';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useAppStore } from '@/shared/store/app.store';
-import { useIntercomStore, IntercomAlert } from '../store/intercom.store';
+import { useIntercomStore, IntercomAlert } from '@/features/intercom/store/intercom.store';
 import { useAudio } from '@/shared/providers/AudioProvider';
 import { useQueryClient } from '@tanstack/react-query';
 

@@ -1,6 +1,6 @@
 import { Node, mergeAttributes, InputRule } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
-import { TimelineTagView } from './TimelineTagView';
+import { TimelineTagView } from '@/features/script/extensions/TimelineTagView';
 
 export interface TimelineTagOptions {
     onTrigger?: (blockId: string) => void;

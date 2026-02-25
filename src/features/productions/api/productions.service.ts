@@ -4,7 +4,7 @@ import {
   CreateProductionDto,
   UpdateProductionDto,
   ProductionListResponse,
-} from '../types/production.types';
+} from '@/features/productions/types/production.types';
 
 export const productionsService = {
   async getProductions(params?: {

@@ -1,4 +1,4 @@
-import { useStreamingStore } from '../store/streaming.store';
+import { useStreamingStore } from '@/features/streaming/store/streaming.store';
 
 export const useTally = (productionId: string | undefined) => {
     const states = useStreamingStore(s => s.states);

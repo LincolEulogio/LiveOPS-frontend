@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSocial, SocialMessage } from '../hooks/useSocial';
+import { useSocial, SocialMessage } from '@/features/social/hooks/useSocial';
 import { apiClient } from '@/shared/api/api.client';
 
 interface SocialManagerProps {

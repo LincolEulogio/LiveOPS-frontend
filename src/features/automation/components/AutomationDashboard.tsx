@@ -1,15 +1,15 @@
 'use client';
 
-import { useAutomation } from '../hooks/useAutomation';
-import { RuleEditor } from './RuleEditor';
+import { useAutomation } from '@/features/automation/hooks/useAutomation';
+import { RuleEditor } from '@/features/automation/components/RuleEditor';
 import { useState } from 'react';
-import { Rule } from '../types/automation.types';
+import { Rule } from '@/features/automation/types/automation.types';
 
 // New Sub-components
-import { AutomationDashboardHeader } from './automation-dashboard/AutomationDashboardHeader';
-import { AutomationDashboardMacros } from './automation-dashboard/AutomationDashboardMacros';
-import { AutomationDashboardTabs } from './automation-dashboard/AutomationDashboardTabs';
-import { AutomationDashboardSidebar } from './automation-dashboard/AutomationDashboardSidebar';
+import { AutomationDashboardHeader } from '@/features/automation/components/automation-dashboard/AutomationDashboardHeader';
+import { AutomationDashboardMacros } from '@/features/automation/components/automation-dashboard/AutomationDashboardMacros';
+import { AutomationDashboardTabs } from '@/features/automation/components/automation-dashboard/AutomationDashboardTabs';
+import { AutomationDashboardSidebar } from '@/features/automation/components/automation-dashboard/AutomationDashboardSidebar';
 
 interface Props {
     productionId: string;

@@ -3,9 +3,9 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { usePathname } from 'next/navigation';
-import { useAppStore } from '../store/app.store';
+import { useAppStore } from '@/shared/store/app.store';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { logger } from '../utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { WifiOff, Loader2 } from 'lucide-react';
 
 interface SocketContextProps {

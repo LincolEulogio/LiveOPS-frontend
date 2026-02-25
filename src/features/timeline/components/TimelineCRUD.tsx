@@ -3,8 +3,8 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { TimelineBlock, CreateTimelineBlockDto } from '../types/timeline.types';
-import { useTimeline } from '../hooks/useTimeline';
+import { TimelineBlock, CreateTimelineBlockDto } from '@/features/timeline/types/timeline.types';
+import { useTimeline } from '@/features/timeline/hooks/useTimeline';
 import { X, Clock, Type, AlignLeft, Hash, Video } from 'lucide-react';
 import { useEffect } from 'react';
 

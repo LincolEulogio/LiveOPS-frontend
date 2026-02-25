@@ -2,10 +2,10 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cpu, History, Settings2 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
-import { RuleList } from '../RuleList';
-import { ExecutionLogs } from '../ExecutionLogs';
-import { HardwareManager } from '../../../hardware/components/HardwareManager';
-import { Rule } from '../../types/automation.types';
+import { RuleList } from '@/features/automation/components/RuleList';
+import { ExecutionLogs } from '@/features/automation/components/ExecutionLogs';
+import { HardwareManager } from '@/features/hardware/components/HardwareManager';
+import { Rule } from '@/features/automation/types/automation.types';
 
 interface AutomationDashboardTabsProps {
     activeTab: 'rules' | 'history' | 'hardware';

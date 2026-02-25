@@ -4,7 +4,7 @@ import {
     CreateTimelineBlockDto,
     UpdateTimelineBlockDto,
     ReorderBlocksDto
-} from '../types/timeline.types';
+} from '@/features/timeline/types/timeline.types';
 
 export const timelineService = {
     getBlocks: async (productionId: string): Promise<TimelineBlock[]> => {

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useProductions } from '../hooks/useProductions';
+import { useProductions } from '@/features/productions/hooks/useProductions';
 import { useAppStore } from '@/shared/store/app.store';
 import { ChevronDown, Server, Loader2, Check, Zap, Globe, Shield } from 'lucide-react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';

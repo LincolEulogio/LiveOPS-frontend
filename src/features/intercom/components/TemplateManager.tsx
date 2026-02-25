@@ -1,18 +1,18 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useIntercomTemplates } from '../hooks/useIntercomTemplates';
+import { useIntercomTemplates } from '@/features/intercom/hooks/useIntercomTemplates';
 import { Settings } from 'lucide-react';
-import { CreateCommandTemplateDto, IntercomTemplate } from '../types/intercom.types';
+import { CreateCommandTemplateDto, IntercomTemplate } from '@/features/intercom/types/intercom.types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Portal } from '@/shared/components/Portal';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 // New Sub-components
-import { TemplateManagerHeader } from './template-manager/TemplateManagerHeader';
-import { TemplateManagerForm } from './template-manager/TemplateManagerForm';
-import { TemplateManagerList } from './template-manager/TemplateManagerList';
+import { TemplateManagerHeader } from '@/features/intercom/components/template-manager/TemplateManagerHeader';
+import { TemplateManagerForm } from '@/features/intercom/components/template-manager/TemplateManagerForm';
+import { TemplateManagerList } from '@/features/intercom/components/template-manager/TemplateManagerList';
 
 const MySwal = withReactContent(Swal);
 

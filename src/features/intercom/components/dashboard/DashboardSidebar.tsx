@@ -1,8 +1,8 @@
 import React from 'react';
 import { List, Clock, History, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TimelineView } from '../../../timeline/components/TimelineView';
-import { HealthMonitor } from '../../../health/components/HealthMonitor';
+import { TimelineView } from '@/features/timeline/components/TimelineView';
+import { HealthMonitor } from '@/features/health/components/HealthMonitor';
 
 interface DashboardSidebarProps {
     productionId: string;

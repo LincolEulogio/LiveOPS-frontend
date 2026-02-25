@@ -1,9 +1,9 @@
 'use client';
 
-import { analyticsService } from '../api/analytics.service';
+import { analyticsService } from '@/features/analytics/api/analytics.service';
 import { Download, FileDown, FileSpreadsheet, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { ProductionLog } from '../types/analytics.types';
+import { ProductionLog } from '@/features/analytics/types/analytics.types';
 
 interface Props {
     productionId: string;

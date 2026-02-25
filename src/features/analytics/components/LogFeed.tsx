@@ -1,6 +1,6 @@
 'use client';
 
-import { ProductionLog } from '../types/analytics.types';
+import { ProductionLog } from '@/features/analytics/types/analytics.types';
 import { cn } from '@/shared/utils/cn';
 import { Terminal, Search, Filter, History } from 'lucide-react';
 import { useState } from 'react';

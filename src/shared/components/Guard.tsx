@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { usePermissions } from '../hooks/usePermissions';
+import { usePermissions } from '@/shared/hooks/usePermissions';
 
 interface GuardProps {
   requiredPermissions: string[];

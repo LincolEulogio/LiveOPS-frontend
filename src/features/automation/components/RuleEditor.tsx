@@ -3,20 +3,20 @@
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Rule } from '../types/automation.types';
+import { Rule } from '@/features/automation/types/automation.types';
 import { Zap, Play, Clock, Monitor, Radio, Bell } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSocket } from '@/shared/socket/socket.provider';
-import { intercomService } from '../../intercom/api/intercom.service';
-import { productionsService } from '../../productions/api/productions.service';
+import { intercomService } from '@/features/intercom/api/intercom.service';
+import { productionsService } from '@/features/productions/api/productions.service';
 import { motion } from 'framer-motion';
 
 // New Sub-components
-import { RuleEditorHeader } from './rule-editor/RuleEditorHeader';
-import { RuleEditorCanvas } from './rule-editor/RuleEditorCanvas';
-import { RuleEditorInspector } from './rule-editor/RuleEditorInspector';
-import { RuleEditorFooter } from './rule-editor/RuleEditorFooter';
+import { RuleEditorHeader } from '@/features/automation/components/rule-editor/RuleEditorHeader';
+import { RuleEditorCanvas } from '@/features/automation/components/rule-editor/RuleEditorCanvas';
+import { RuleEditorInspector } from '@/features/automation/components/rule-editor/RuleEditorInspector';
+import { RuleEditorFooter } from '@/features/automation/components/rule-editor/RuleEditorFooter';
 
 const ruleSchema = z.object({
     name: z.string().min(1, 'Name is required'),

@@ -1,6 +1,6 @@
 'use client';
 
-import { DashboardMetrics } from '../types/analytics.types';
+import { DashboardMetrics } from '@/features/analytics/types/analytics.types';
 import { Activity, Zap, MessageSquare, BarChart3, Users } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 

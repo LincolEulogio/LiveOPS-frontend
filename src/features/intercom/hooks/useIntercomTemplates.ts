@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { intercomService } from '../api/intercom.service';
-import { CreateCommandTemplateDto } from '../types/intercom.types';
+import { intercomService } from '@/features/intercom/api/intercom.service';
+import { CreateCommandTemplateDto } from '@/features/intercom/types/intercom.types';
 
 export const useIntercomTemplates = (productionId?: string) => {
     const queryClient = useQueryClient();

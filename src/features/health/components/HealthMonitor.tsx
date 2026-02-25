@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useStreamHealth, HealthStats } from '../hooks/useStreamHealth';
+import { useStreamHealth, HealthStats } from '@/features/health/hooks/useStreamHealth';
 import {
     LineChart,
     Line,

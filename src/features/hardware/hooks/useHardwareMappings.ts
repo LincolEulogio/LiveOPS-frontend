@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { hardwareService, HardwareMapping } from '../api/hardware.service';
+import { hardwareService, HardwareMapping } from '@/features/hardware/api/hardware.service';
 
 export const useHardwareMappings = (productionId?: string) => {
     const queryClient = useQueryClient();

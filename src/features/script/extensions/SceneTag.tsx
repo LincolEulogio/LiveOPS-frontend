@@ -1,6 +1,6 @@
 import { Node, mergeAttributes, InputRule } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
-import { SceneTagView } from './SceneTagView';
+import { SceneTagView } from '@/features/script/extensions/SceneTagView';
 
 export interface SceneTagOptions {
     onTrigger?: (sceneName: string) => void;

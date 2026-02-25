@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { usePresence } from '../hooks/usePresence';
-import { cn } from '../utils/cn';
+import { usePresence } from '@/shared/hooks/usePresence';
+import { cn } from '@/shared/utils/cn';
 import { Users } from 'lucide-react';
 
 export const PresenceBar = () => {

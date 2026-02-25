@@ -1,6 +1,6 @@
 'use client';
 
-import { Command, CommandStatus } from '../types/chat.types';
+import { Command, CommandStatus } from '@/features/chat/types/chat.types';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { cn } from '@/shared/utils/cn';
 import {

@@ -1,4 +1,4 @@
-import { SocialMessage } from '../hooks/useSocial';
+import { SocialMessage } from '@/features/social/hooks/useSocial';
 import { cn } from '@/shared/utils/cn';
 import { Check, X, Tv } from 'lucide-react';
 

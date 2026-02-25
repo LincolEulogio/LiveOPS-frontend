@@ -1,4 +1,4 @@
-import { IntercomTemplate } from '../../intercom/types/intercom.types';
+import { IntercomTemplate } from '@/features/intercom/types/intercom.types';
 
 export enum TimelineStatus {
     PENDING = 'PENDING',

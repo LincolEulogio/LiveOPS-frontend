@@ -1,6 +1,6 @@
 import React from 'react';
 import { Zap } from 'lucide-react';
-import { IntercomTemplate } from '../../types/intercom.types';
+import { IntercomTemplate } from '@/features/intercom/types/intercom.types';
 
 interface DashboardQuickActionsProps {
     templates: IntercomTemplate[];
