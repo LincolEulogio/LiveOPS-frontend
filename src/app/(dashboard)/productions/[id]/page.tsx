@@ -307,20 +307,40 @@ export default function ProductionDetailPage() {
             </div>
 
             {/* Quick Links / Utility Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
-              <Link href={`/productions/${id}/automation`} className="group">
-                <div className="bg-card-bg/60 backdrop-blur-md border border-card-border rounded-[1.5rem] p-5 h-full transition-all hover:bg-card-bg hover:border-indigo-500/30  active:scale-95">
-                  <Zap className="text-indigo-400 mb-4 group-hover:animate-pulse" size={20} />
-                  <h3 className="text-xs font-black text-foreground uppercase  mb-1">Automation</h3>
-                  <p className="text-[10px] text-muted-foreground font-bold leading-relaxed uppercase ">Rules & Macros</p>
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-6">
+              <Link href={`/productions/${id}/automation`} className="group relative block">
+                <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6 h-full transition-all hover:bg-background/80 hover:border-indigo-500/40 relative overflow-hidden active:scale-[0.98]">
+                  <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none group-hover:scale-110 group-hover:opacity-10 transition-all duration-500">
+                    <Zap size={100} className="text-indigo-500" />
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                    <Zap size={22} className="group-hover:animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-black text-foreground uppercase tracking-widest mb-1.5">Automation</h3>
+                    <p className="text-[10px] text-muted font-bold leading-relaxed uppercase group-hover:text-muted-foreground transition-colors">Rules, Triggers & Macros</p>
+                  </div>
+                  <div className="mt-6 flex items-center gap-2 text-[9px] font-black text-indigo-400 uppercase opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                    Configure Node <ChevronRight size={12} />
+                  </div>
                 </div>
               </Link>
 
-              <Link href={`/productions/${id}/analytics`} className="group">
-                <div className="bg-card-bg/60 backdrop-blur-md border border-card-border rounded-[1.5rem] p-5 h-full transition-all hover:bg-card-bg hover:border-pink-500/30  active:scale-95">
-                  <BarChart3 className="text-pink-400 mb-4" size={20} />
-                  <h3 className="text-xs font-black text-foreground uppercase  mb-1">Analytics</h3>
-                  <p className="text-[10px] text-muted-foreground font-bold leading-relaxed uppercase ">Post-Show Stats</p>
+              <Link href={`/productions/${id}/analytics`} className="group relative block">
+                <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6 h-full transition-all hover:bg-background/80 hover:border-pink-500/40 relative overflow-hidden active:scale-[0.98]">
+                  <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none group-hover:scale-110 group-hover:opacity-10 transition-all duration-500">
+                    <BarChart3 size={100} className="text-pink-500" />
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl bg-pink-500/10 flex items-center justify-center border border-pink-500/20 mb-6 group-hover:bg-pink-600 group-hover:text-white transition-colors duration-300">
+                    <BarChart3 size={22} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-black text-foreground uppercase tracking-widest mb-1.5">Analytics</h3>
+                    <p className="text-[10px] text-muted font-bold leading-relaxed uppercase group-hover:text-muted-foreground transition-colors">Insights & Performance</p>
+                  </div>
+                  <div className="mt-6 flex items-center gap-2 text-[9px] font-black text-pink-400 uppercase opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                    Review Stats <ChevronRight size={12} />
+                  </div>
                 </div>
               </Link>
             </div>
