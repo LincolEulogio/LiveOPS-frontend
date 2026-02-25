@@ -75,14 +75,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60] min-[769px]:hidden"
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60] lg:hidden"
             />
             <motion.aside
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 left-0 w-[85%] max-w-[320px] bg-card-bg/95 backdrop-blur-3xl border-r border-card-border z-[70] flex flex-col min-[769px]:hidden"
+              className="fixed inset-y-0 left-0 w-[85%] max-w-[320px] bg-card-bg/95 backdrop-blur-3xl border-r border-card-border z-[70] flex flex-col lg:hidden"
             >
               <DashboardSidebar
                 pathname={pathname}
@@ -126,7 +126,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
           </div>
 
-          <div className="max-w-[1800px] mx-auto min-[769px]:p-10 lg:p-12 relative min-h-full flex flex-col">
+          <div className="max-w-[1800px] mx-auto p-6 lg:p-12 relative min-h-full flex flex-col">
             <div className="flex-1">
               {children}
             </div>

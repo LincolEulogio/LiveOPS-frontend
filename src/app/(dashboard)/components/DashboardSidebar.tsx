@@ -25,8 +25,9 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
     onCloseMobile,
 }) => {
     const sidebarContent = (
-        <>
-            <div className="h-20 flex items-center justify-between px-8 border-b border-card-border/50 bg-white/[0.02]">
+        <div className="flex flex-col h-full overflow-hidden">
+            {/* Logo/Header - Fixed */}
+            <div className="h-20 flex items-center justify-between px-8 border-b border-card-border/50 bg-white/[0.02] shrink-0">
                 <NextLink href="/productions" className="flex items-center gap-3 group/logo">
                     <div className="w-10 h-10 bg-indigo-600 group-hover:bg-indigo-500 rounded-xl flex items-center justify-center transition-all group-hover:scale-110">
                         <Zap size={22} className="text-white" fill="currentColor" />
@@ -46,7 +47,8 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
                 )}
             </div>
 
-            <nav className="flex-1 overflow-y-auto py-8 px-5 space-y-2 custom-scrollbar">
+            {/* Links - Scrollable */}
+            <nav className="flex-1 overflow-y-auto py-8 px-5 space-y-2 custom-scrollbar min-h-0">
                 <p className="px-4 text-[9px] font-black text-muted uppercase  mb-4 opacity-40">Core Systems</p>
 
                 <SidebarLink
@@ -115,7 +117,8 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
                 </Guard>
             </nav>
 
-            <div className="p-6 bg-white/[0.03] border-t border-card-border/50">
+            {/* Profile/Logout - Fixed */}
+            <div className="p-6 bg-white/[0.03] border-t border-card-border/50 shrink-0">
                 <div className="p-4 bg-background/60 backdrop-blur-md rounded-2xl border border-card-border/60 flex items-center gap-4 mb-4 relative overflow-hidden group/user">
                     <div className="absolute inset-x-0 bottom-0 h-1 bg-indigo-600/20" />
                     <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-lg font-black text-white shrink-0 group-hover/user:scale-110 transition-all">
@@ -141,7 +144,7 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
                     <div className="w-1.5 h-1.5 rounded-full bg-muted/20 group-hover:bg-white" />
                 </button>
             </div>
-        </>
+        </div>
     );
 
     if (isMobile) {
@@ -149,7 +152,7 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
     }
 
     return (
-        <aside className="w-[280px] border-r border-card-border bg-card-bg/40 backdrop-blur-2xl flex flex-col hidden min-[769px]:flex shrink-0 relative overflow-hidden group/sidebar">
+        <aside className="w-[280px] border-r border-card-border bg-card-bg/40 backdrop-blur-2xl flex flex-col hidden lg:flex shrink-0 relative overflow-hidden group/sidebar h-screen">
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
             {sidebarContent}
         </aside>
