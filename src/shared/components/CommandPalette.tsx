@@ -123,7 +123,7 @@ export const CommandPalette = () => {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: -20 }}
                         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="relative w-full max-w-2xl bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[60vh] ring-1 ring-white/10"
+                        className="relative w-full max-w-2xl bg-stone-900 border border-stone-800 rounded-2xl  overflow-hidden flex flex-col max-h-[60vh] ring-1 ring-white/10"
                     >
                         {/* Search Input */}
                         <div className="flex items-center px-4 py-4 border-b border-stone-800">

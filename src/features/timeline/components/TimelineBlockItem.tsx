@@ -34,7 +34,7 @@ export const TimelineBlockItem = ({
 
     const getStatusColor = () => {
         switch (block.status) {
-            case TimelineStatus.ACTIVE: return 'border-indigo-500 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.2)]';
+            case TimelineStatus.ACTIVE: return 'border-indigo-500 bg-indigo-500/10 ';
             case TimelineStatus.COMPLETED: return 'border-emerald-500/50 bg-emerald-500/5 opacity-60';
             default: return 'border-card-border bg-card-bg/40';
         }
@@ -84,7 +84,7 @@ export const TimelineBlockItem = ({
                         <button
                             onClick={() => onStart(block.id)}
                             disabled={isMutating}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-lg shadow-indigo-600/20 disabled:opacity-50"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all   disabled:opacity-50"
                             title="Start Block"
                         >
                             <Play size={16} fill="currentColor" />
@@ -95,7 +95,7 @@ export const TimelineBlockItem = ({
                         <button
                             onClick={() => onComplete(block.id)}
                             disabled={isMutating}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-lg shadow-emerald-600/20 disabled:opacity-50"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-all  disabled:opacity-50"
                             title="Complete Block"
                         >
                             <CheckCircle size={16} />

@@ -43,7 +43,7 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
     const StatItem = ({ label, value, active, colorClass }: { label: string, value: string, active: boolean, colorClass: string }) => (
         <div className={cn(
             "px-4 py-2.5 rounded-xl border flex items-center gap-3 transition-all flex-1 min-w-[140px]",
-            active ? `${colorClass} shadow-lg` : "bg-card-bg/40 border-card-border/50 text-muted opacity-60"
+            active ? `${colorClass} ` : "bg-card-bg/40 border-card-border/50 text-muted opacity-60"
         )}>
             <div className={cn("w-1.5 h-1.5 rounded-full", active ? "animate-pulse bg-current" : "bg-muted")} />
             <span className="text-[10px] font-black uppercase ">{label}</span>
@@ -62,7 +62,7 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
 
             {/* Bus Monitor Matrix */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="group relative bg-background/50 border border-card-border p-6 rounded-3xl overflow-hidden transition-all hover:bg-background shadow-inner">
+                <div className="group relative bg-background/50 border border-card-border p-6 rounded-3xl overflow-hidden transition-all hover:bg-background ">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <Monitor size={60} />
                     </div>
@@ -81,7 +81,7 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                     </div>
                 </div>
 
-                <div className="group relative bg-background/50 border border-card-border p-6 rounded-3xl overflow-hidden transition-all hover:bg-background shadow-inner">
+                <div className="group relative bg-background/50 border border-card-border p-6 rounded-3xl overflow-hidden transition-all hover:bg-background ">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <Monitor size={60} />
                     </div>
@@ -107,7 +107,7 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                         <button
                             onClick={() => sendCommand({ type: 'VMIX_CUT' })}
                             disabled={isPending}
-                            className="flex-1 bg-red-600 hover:bg-red-500 text-white rounded-[2rem] p-8 flex flex-col items-center gap-3 transition-all active:scale-95 shadow-xl shadow-red-600/20 border border-red-500/50"
+                            className="flex-1 bg-red-600 hover:bg-red-500 text-white rounded-[2rem] p-8 flex flex-col items-center gap-3 transition-all active:scale-95   border border-red-500/50"
                         >
                             <Zap size={32} fill="currentColor" />
                             <span className="text-xs font-black uppercase ">Instant Cut</span>
@@ -116,7 +116,7 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                         <button
                             onClick={() => sendCommand({ type: 'VMIX_FADE', duration: fadeDuration })}
                             disabled={isPending}
-                            className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[2rem] p-8 flex flex-col items-center gap-3 transition-all active:scale-95 shadow-xl shadow-indigo-600/20 border border-indigo-500/50"
+                            className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[2rem] p-8 flex flex-col items-center gap-3 transition-all active:scale-95   border border-indigo-500/50"
                         >
                             <Repeat size={32} />
                             <span className="text-xs font-black uppercase ">Auto Fade</span>
@@ -161,7 +161,7 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                                 className={cn(
                                     "aspect-square rounded-xl border flex items-center justify-center font-black text-xs transition-all active:scale-90 relative overflow-hidden",
                                     state?.activeInput === input
-                                        ? "bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-600/30"
+                                        ? "bg-emerald-600 border-emerald-500 text-white "
                                         : state?.previewInput === input
                                             ? "bg-orange-500/20 border-orange-500 text-orange-400 animate-pulse"
                                             : "bg-background border-card-border text-muted-foreground hover:border-indigo-500/50 hover:text-foreground hover:bg-white/5"

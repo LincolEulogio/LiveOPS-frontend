@@ -36,14 +36,14 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
                         className={cn(
-                            "group flex flex-col p-8 bg-card-bg/60 backdrop-blur-xl border border-card-border/60 rounded-[2.5rem] transition-all duration-500 relative overflow-hidden shadow-xl hover:bg-white/[0.04] hover:-translate-y-1",
+                            "group flex flex-col p-8 bg-card-bg/60 backdrop-blur-xl border border-card-border/60 rounded-[2.5rem] transition-all duration-500 relative overflow-hidden  hover:bg-white/[0.04] hover:-translate-y-1",
                             !rule.isEnabled && "opacity-60 grayscale-[0.8] brightness-75"
                         )}
                     >
                         {/* Status Accent Bar */}
                         <div className={cn(
                             "absolute left-0 top-0 bottom-0 w-1.5 transition-all duration-500",
-                            rule.isEnabled ? "bg-indigo-600 shadow-[2px_0_15px_rgba(99,102,241,0.4)]" : "bg-card-border"
+                            rule.isEnabled ? "bg-indigo-600 " : "bg-card-border"
                         )} />
 
                         {/* Interactive Toggle & Header */}
@@ -70,7 +70,7 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
                             <div className="flex items-center gap-4 relative z-10">
                                 <div className="space-y-1 flex-1">
                                     <span className="text-[8px] font-black text-muted uppercase ">Input Stimulus</span>
-                                    <div className="flex items-center gap-2 px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-[10px] font-black text-amber-500 truncate shadow-inner">
+                                    <div className="flex items-center gap-2 px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-[10px] font-black text-amber-500 truncate ">
                                         <Activity size={10} />
                                         {rule.triggers[0]?.eventType.replace('.', ' ').toUpperCase() || 'MANUAL'}
                                     </div>
@@ -84,7 +84,7 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
 
                                 <div className="space-y-1 flex-1">
                                     <span className="text-[8px] font-black text-muted uppercase ">Sequence Output</span>
-                                    <div className="flex items-center gap-2 px-3 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-[10px] font-black text-indigo-400 truncate shadow-inner">
+                                    <div className="flex items-center gap-2 px-3 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-[10px] font-black text-indigo-400 truncate ">
                                         <Zap size={10} />
                                         {rule.actions.length} ACTIONS
                                     </div>
@@ -123,14 +123,14 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => onEdit(rule)}
-                                    className="p-2.5 bg-background border border-card-border text-muted hover:text-indigo-400 hover:border-indigo-500/30 rounded-xl transition-all active:scale-90 shadow-sm"
+                                    className="p-2.5 bg-background border border-card-border text-muted hover:text-indigo-400 hover:border-indigo-500/30 rounded-xl transition-all active:scale-90 "
                                     title="Protocol Edit"
                                 >
                                     <Edit2 size={14} />
                                 </button>
                                 <button
                                     onClick={() => onDelete(rule.id)}
-                                    className="p-2.5 bg-background border border-card-border text-muted hover:text-red-400 hover:border-red-500/30 rounded-xl transition-all active:scale-90 shadow-sm"
+                                    className="p-2.5 bg-background border border-card-border text-muted hover:text-red-400 hover:border-red-500/30 rounded-xl transition-all active:scale-90 "
                                     title="Decommission"
                                 >
                                     <Trash2 size={14} />

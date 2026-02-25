@@ -19,7 +19,7 @@ export default function AutomationPage() {
             <div className="flex items-center gap-4">
                 <Link
                     href={`/productions/${id}`}
-                    className="p-2 bg-stone-900 border border-stone-800 rounded-xl hover:bg-stone-800 text-stone-400 hover:text-white transition-all shadow-lg"
+                    className="p-2 bg-stone-900 border border-stone-800 rounded-xl hover:bg-stone-800 text-stone-400 hover:text-white transition-all "
                 >
                     <ArrowLeft size={20} />
                 </Link>

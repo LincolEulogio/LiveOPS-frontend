@@ -59,7 +59,7 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                             className={cn(
                                 "group relative w-full flex items-center justify-between p-4 rounded-2xl border transition-all overflow-hidden",
                                 state.currentScene === scene
-                                    ? "bg-indigo-600 border-indigo-500 text-white shadow-xl shadow-indigo-600/30 active:scale-[0.98]"
+                                    ? "bg-indigo-600 border-indigo-500 text-white   active:scale-[0.98]"
                                     : "bg-background border-card-border text-muted hover:border-indigo-500/50 hover:text-foreground hover:bg-white/5 active:scale-[0.99]"
                             )}
                         >
@@ -102,9 +102,9 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                             onClick={() => sendCommand({ type: state?.isStreaming ? 'STOP_STREAM' : 'START_STREAM' })}
                             disabled={isPending}
                             className={cn(
-                                "flex flex-col items-center justify-center p-8 rounded-3xl border transition-all gap-4 shadow-lg active:scale-95 group",
+                                "flex flex-col items-center justify-center p-8 rounded-3xl border transition-all gap-4  active:scale-95 group",
                                 state?.isStreaming
-                                    ? "bg-red-500 border-red-400 text-white shadow-red-500/20"
+                                    ? "bg-red-500 border-red-400 text-white "
                                     : "bg-background border-card-border text-muted hover:border-emerald-500/50 hover:text-emerald-500 hover:bg-emerald-500/5"
                             )}
                         >
@@ -123,9 +123,9 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                             onClick={() => sendCommand({ type: state?.isRecording ? 'STOP_RECORD' : 'START_RECORD' })}
                             disabled={isPending}
                             className={cn(
-                                "flex flex-col items-center justify-center p-8 rounded-3xl border transition-all gap-4 shadow-lg active:scale-95 group",
+                                "flex flex-col items-center justify-center p-8 rounded-3xl border transition-all gap-4  active:scale-95 group",
                                 state?.isRecording
-                                    ? "bg-indigo-600 border-indigo-400 text-white shadow-indigo-600/20"
+                                    ? "bg-indigo-600 border-indigo-400 text-white "
                                     : "bg-background border-card-border text-muted hover:border-indigo-500/50 hover:text-indigo-500 hover:bg-indigo-500/5"
                             )}
                         >

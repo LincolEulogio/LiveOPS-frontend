@@ -84,7 +84,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className={cn(
-                "bg-card-bg/60 backdrop-blur-2xl border rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 relative flex flex-col group",
+                "bg-card-bg/60 backdrop-blur-2xl border rounded-[2.5rem] overflow-hidden  transition-all duration-500 relative flex flex-col group",
                 member.isOnline ? "border-card-border/60 hover:border-indigo-500/40" : "border-card-border/30 opacity-60 grayscale-[0.5]"
             )}
         >
@@ -116,13 +116,13 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
             <div className="p-8 pb-4 flex items-center gap-6 relative z-10">
                 <div className="relative group/avatar">
                     <div className={cn(
-                        "w-20 h-20 rounded-[2.5rem] flex items-center justify-center bg-background/60 text-foreground font-black text-2xl border shadow-inner transition-all duration-500 group-hover/avatar:scale-110",
+                        "w-20 h-20 rounded-[2.5rem] flex items-center justify-center bg-background/60 text-foreground font-black text-2xl border  transition-all duration-500 group-hover/avatar:scale-110",
                         member.isOnline ? "border-indigo-500/30 text-indigo-400" : "border-card-border text-muted"
                     )}>
                         {member.userName.substring(0, 2).toUpperCase()}
                     </div>
                     {member.isOnline && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 border-4 border-card-bg rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] animate-pulse" />
+                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 border-4 border-card-bg rounded-full  animate-pulse" />
                     )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -138,7 +138,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
             </div>
 
             {/* Dynamic Status Module */}
-            <div className="mx-6 mb-6 p-6 bg-background/40 backdrop-blur-md rounded-[2rem] border border-card-border/60 shadow-inner flex flex-col justify-center relative overflow-hidden group/status">
+            <div className="mx-6 mb-6 p-6 bg-background/40 backdrop-blur-md rounded-[2rem] border border-card-border/60  flex flex-col justify-center relative overflow-hidden group/status">
                 <div className="flex items-center justify-between mb-4">
                     <p className="text-[9px] font-black text-muted uppercase ">Operational Phase</p>
                     <p className="text-[8px] font-black text-muted/40 uppercase ">Live Feedback</p>
@@ -147,10 +147,10 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className={cn(
-                            "w-2.5 h-2.5 rounded-full transition-all duration-500 shadow-lg",
-                            currentStatus === 'AL AIRE' ? 'bg-red-500 animate-pulse shadow-red-500/50' :
+                            "w-2.5 h-2.5 rounded-full transition-all duration-500 ",
+                            currentStatus === 'AL AIRE' ? 'bg-red-500 animate-pulse ' :
                                 currentStatus === 'IDLE' ? 'bg-muted/40' :
-                                    'bg-indigo-500 shadow-indigo-500/40'
+                                    'bg-indigo-500 '
                         )} />
                         <span className={cn(
                             "text-base font-black uppercase  italic transition-colors",
@@ -173,7 +173,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: -20 }}
                                     className={cn(
-                                        "flex items-center gap-2 px-4 py-2 rounded-xl border transition-all shadow-lg",
+                                        "flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ",
                                         display.bg, display.border
                                     )}
                                 >
@@ -219,7 +219,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                             </span>
 
                             {isPending && (
-                                <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
+                                <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse " />
                             )}
                         </button>
                     );
@@ -234,7 +234,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
 
             {/* Advanced Chat Feed */}
             {directHistory.length > 0 && (
-                <div className="mx-6 mb-6 bg-background/60 backdrop-blur-md border border-card-border/60 rounded-[2rem] overflow-hidden flex flex-col h-[320px] shadow-inner">
+                <div className="mx-6 mb-6 bg-background/60 backdrop-blur-md border border-card-border/60 rounded-[2rem] overflow-hidden flex flex-col h-[320px] ">
                     <div className="px-6 py-4 bg-white/[0.04] border-b border-card-border/40 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <MessageSquare size={14} className="text-indigo-400" />
@@ -253,10 +253,10 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                             return (
                                 <div key={i} className={cn("flex w-full", isMine ? 'justify-end' : 'justify-start')}>
                                     <div className={cn(
-                                        "max-w-[90%] p-4 rounded-2xl text-[11px] font-bold leading-relaxed border shadow-lg",
+                                        "max-w-[90%] p-4 rounded-2xl text-[11px] font-bold leading-relaxed border ",
                                         isMine
-                                            ? 'bg-indigo-600 border-indigo-500 text-white rounded-br-none shadow-indigo-600/10'
-                                            : 'bg-background/80 border-card-border text-foreground rounded-bl-none shadow-black/20'
+                                            ? 'bg-indigo-600 border-indigo-500 text-white rounded-br-none '
+                                            : 'bg-background/80 border-card-border text-foreground rounded-bl-none '
                                     )}>
                                         <div className={cn(
                                             "text-[8px] font-black uppercase  mb-2 opacity-60",
@@ -295,7 +295,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                             setChatMsg('');
                         }
                     }}
-                    className="group/form relative flex items-center bg-background border border-card-border rounded-2xl overflow-hidden focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all shadow-inner"
+                    className="group/form relative flex items-center bg-background border border-card-border rounded-2xl overflow-hidden focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all "
                 >
                     <input
                         type="text"
@@ -307,7 +307,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                     <button
                         type="submit"
                         disabled={!chatMsg.trim() || !member.isOnline}
-                        className="mr-2 p-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-lg transition-all active:scale-90 disabled:opacity-20 disabled:scale-100"
+                        className="mr-2 p-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl  transition-all active:scale-90 disabled:opacity-20 disabled:scale-100"
                     >
                         <Send size={16} className="group-hover/form:translate-x-0.5 group-hover/form:-translate-y-0.5 transition-transform" />
                     </button>

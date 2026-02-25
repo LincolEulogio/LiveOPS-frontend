@@ -56,14 +56,14 @@ export const MediaSidebar = () => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden shadow-2xl relative group">
+        <div className="flex flex-col h-full bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden  relative group">
             {/* Tactical Scanline */}
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent animate-pulse" />
 
             {/* Header */}
             <div className="p-6 border-b border-card-border/50 bg-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-indigo-600/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shadow-inner">
+                    <div className="w-10 h-10 bg-indigo-600/10 rounded-xl flex items-center justify-center border border-indigo-500/20 ">
                         <FolderOpen size={20} className="text-indigo-400" />
                     </div>
                     <div>
@@ -95,11 +95,11 @@ export const MediaSidebar = () => {
                         placeholder="Search media matrix..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full bg-background/50 border border-card-border rounded-xl pl-12 pr-4 py-3 text-xs font-bold text-foreground placeholder:text-muted/50 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/50 transition-all shadow-inner uppercase "
+                        className="w-full bg-background/50 border border-card-border rounded-xl pl-12 pr-4 py-3 text-xs font-bold text-foreground placeholder:text-muted/50 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/50 transition-all  uppercase "
                     />
                 </div>
 
-                <div className="flex items-center gap-1 p-1 bg-background/40 rounded-xl border border-card-border shadow-inner">
+                <div className="flex items-center gap-1 p-1 bg-background/40 rounded-xl border border-card-border ">
                     {(['all', 'video', 'audio', 'image'] as const).map(f => (
                         <button
                             key={f}
@@ -107,7 +107,7 @@ export const MediaSidebar = () => {
                             className={cn(
                                 "flex-1 py-2 text-[9px] font-black uppercase  rounded-lg transition-all relative overflow-hidden",
                                 filter === f
-                                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
+                                    ? "bg-indigo-600 text-white  "
                                     : "text-muted hover:text-foreground hover:bg-white/5"
                             )}
                         >
@@ -130,9 +130,9 @@ export const MediaSidebar = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             key={asset.id}
-                            className="group flex items-center gap-4 p-3 bg-white/[0.03] border border-white/5 rounded-[1.25rem] hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all cursor-pointer shadow-lg active:scale-[0.98]"
+                            className="group flex items-center gap-4 p-3 bg-white/[0.03] border border-white/5 rounded-[1.25rem] hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all cursor-pointer  active:scale-[0.98]"
                         >
-                            <div className="w-12 h-12 rounded-xl bg-background/60 border border-card-border flex items-center justify-center flex-shrink-0 text-muted group-hover:text-indigo-400 transition-all shadow-inner">
+                            <div className="w-12 h-12 rounded-xl bg-background/60 border border-card-border flex items-center justify-center flex-shrink-0 text-muted group-hover:text-indigo-400 transition-all ">
                                 {asset.type === 'video' && <Film size={20} />}
                                 {asset.type === 'audio' && <Music size={20} />}
                                 {asset.type === 'image' && <ImageIcon size={20} />}
@@ -149,7 +149,7 @@ export const MediaSidebar = () => {
                             <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
                                 <button
                                     onClick={(e) => { e.stopPropagation(); triggerAsset(asset); }}
-                                    className="p-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 shadow-xl shadow-indigo-600/30 active:scale-90"
+                                    className="p-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500   active:scale-90"
                                 >
                                     <Play size={14} fill="currentColor" />
                                 </button>
@@ -176,7 +176,7 @@ export const MediaSidebar = () => {
 
             {/* Tactical Footer / Import Hub */}
             <div className="p-6 border-t border-card-border/30 bg-black/20">
-                <button className="w-full py-4 flex items-center justify-center gap-3 bg-indigo-600/10 border border-dashed border-indigo-500/30 rounded-2xl text-[10px] font-black text-indigo-400 uppercase  hover:bg-indigo-600 hover:text-white hover:border-solid hover:border-indigo-500 transition-all group shadow-xl hover:shadow-indigo-600/20 active:scale-95">
+                <button className="w-full py-4 flex items-center justify-center gap-3 bg-indigo-600/10 border border-dashed border-indigo-500/30 rounded-2xl text-[10px] font-black text-indigo-400 uppercase  hover:bg-indigo-600 hover:text-white hover:border-solid hover:border-indigo-500 transition-all group  hover: active:scale-95">
                     <Plus size={16} className="group-hover:rotate-90 transition-transform duration-500" />
                     Initialize Node
                     <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />

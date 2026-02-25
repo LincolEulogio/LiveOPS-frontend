@@ -63,7 +63,7 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
     };
 
     return (
-        <div className="bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
+        <div className="bg-card-bg border border-card-border rounded-2xl p-6 ">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3 text-foreground">
                     <Cpu className="text-indigo-400" size={20} />
@@ -98,7 +98,7 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
                         ) : (
                             <button
                                 onClick={connectStreamDeck}
-                                className="p-1 px-3 bg-indigo-600 hover:bg-indigo-500 text-[10px] font-black text-white rounded-lg transition-all shadow-lg shadow-indigo-600/20"
+                                className="p-1 px-3 bg-indigo-600 hover:bg-indigo-500 text-[10px] font-black text-white rounded-lg transition-all  "
                             >
                                 CONNECT
                             </button>

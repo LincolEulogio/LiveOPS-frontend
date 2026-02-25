@@ -41,7 +41,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-card-bg border border-card-border rounded-xl p-6 shadow-xl">
+    <div className="bg-card-bg border border-card-border rounded-xl p-6 ">
       <h2 className="text-xl font-semibold text-foreground mb-6">Log in</h2>
 
       {error && (

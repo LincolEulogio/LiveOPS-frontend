@@ -84,7 +84,7 @@ export default function NewProductionPage() {
         <p className="text-muted text-sm mt-1">Setup a new live streaming environment</p>
       </div>
 
-      <div className="bg-card-bg border border-card-border rounded-xl p-6 shadow-xl">
+      <div className="bg-card-bg border border-card-border rounded-xl p-6 ">
         {error && (
           <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-md mb-6 text-sm">
             {error}

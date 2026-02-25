@@ -22,7 +22,7 @@ export const ThemeSwitcher = () => {
                     className={cn(
                         "p-2 rounded-xl transition-all flex items-center gap-2 group",
                         theme === t.id
-                            ? "bg-background text-foreground shadow-sm border border-card-border"
+                            ? "bg-background text-foreground  border border-card-border"
                             : "text-muted hover:text-foreground hover:bg-card-border/30"
                     )}
                     title={`Switch to ${t.name} mode`}

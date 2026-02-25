@@ -54,14 +54,14 @@ export const IntercomPanel = ({ productionId }: Props) => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] shadow-2xl overflow-hidden relative">
+        <div className="flex flex-col h-full bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem]  overflow-hidden relative">
             {/* Tactical Header */}
             <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-5 border-b border-card-border/50 bg-white/5">
                 <div className="flex items-center gap-3">
                     <div className="relative">
                         <div className={cn(
                             "w-2.5 h-2.5 rounded-full",
-                            isConnected ? "bg-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.5)]" : "bg-red-500"
+                            isConnected ? "bg-emerald-500 animate-pulse " : "bg-red-500"
                         )} />
                         <div className="absolute inset-0 bg-emerald-500/20 blur-md rounded-full pointer-events-none" />
                     </div>
@@ -82,7 +82,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
 
             {/* Quick Tactical Templates Bar */}
             {templates.length > 0 && (
-                <div className="p-3 bg-indigo-600/5 border-b border-card-border/30 flex gap-2 overflow-x-auto no-scrollbar shadow-inner">
+                <div className="p-3 bg-indigo-600/5 border-b border-card-border/30 flex gap-2 overflow-x-auto no-scrollbar ">
                     <AnimatePresence>
                         {templates.map((t) => (
                             <motion.button
@@ -90,7 +90,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 key={t.id}
                                 onClick={() => sendCommand(t.name, { templateId: t.id })}
-                                className="flex-shrink-0 flex items-center gap-2 px-4 py-2 bg-background hover:bg-card-bg border border-card-border rounded-[1rem] transition-all active:scale-95 group shadow-sm"
+                                className="flex-shrink-0 flex items-center gap-2 px-4 py-2 bg-background hover:bg-card-bg border border-card-border rounded-[1rem] transition-all active:scale-95 group "
                             >
                                 <Zap size={12} className="text-amber-500 group-hover:scale-110 transition-transform" fill="currentColor" />
                                 <span className="text-[10px] font-black text-foreground uppercase ">{t.name}</span>
@@ -141,7 +141,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                             onChange={(e) => setMessage(e.target.value)}
                             onKeyDown={handleKeyDown}
                             placeholder="Type tactical command..."
-                            className="w-full bg-background border border-card-border rounded-2xl pl-5 pr-14 py-4 text-sm text-foreground placeholder:text-muted/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[55px] max-h-[150px] font-bold uppercase  shadow-inner"
+                            className="w-full bg-background border border-card-border rounded-2xl pl-5 pr-14 py-4 text-sm text-foreground placeholder:text-muted/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[55px] max-h-[150px] font-bold uppercase  "
                             rows={1}
                         />
                         <button
@@ -150,7 +150,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                             className={cn(
                                 "absolute right-3.5 top-3.5 p-3 rounded-xl transition-all active:scale-90",
                                 message.trim()
-                                    ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/40 hover:bg-indigo-500"
+                                    ? "bg-indigo-600 text-white   hover:bg-indigo-500"
                                     : "text-muted/20 bg-card-bg/50 cursor-not-allowed"
                             )}
                         >

@@ -339,7 +339,7 @@ const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: an
       >
         <div className="flex items-center gap-3">
           <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
-          <span className="text-[10px] font-black uppercase ">Terminate Session</span>
+          <span className="text-[12px] capitalize ">Terminate Session</span>
         </div>
         <div className="w-1.5 h-1.5 rounded-full bg-muted/20 group-hover:bg-white" />
       </button>
@@ -359,7 +359,7 @@ const SidebarLink = ({ href, icon: Icon, label, active }: any) => (
   >
     <div className="flex items-center gap-4 relative z-10">
       <Icon size={20} className={cn("transition-transform group-hover/link:scale-110", active ? "text-white" : "text-indigo-400")} />
-      <span className="text-[10px] font-black uppercase ">{label}</span>
+      <span className="text-[12px] font-bold capitalize ">{label}</span>
     </div>
     {active && (
       <div className="w-1.5 h-1.5 rounded-full bg-white relative z-10" />

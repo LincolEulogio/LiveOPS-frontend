@@ -41,7 +41,7 @@ export const CommandItem = ({ command, onAck }: Props) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className={cn(
-                "group flex flex-col gap-3 p-4 rounded-3xl border transition-all relative overflow-hidden shadow-lg",
+                "group flex flex-col gap-3 p-4 rounded-3xl border transition-all relative overflow-hidden ",
                 isFromMe
                     ? "bg-indigo-600/5 border-indigo-500/30 ml-4"
                     : "bg-background/40 border-card-border/50 mr-4 backdrop-blur-md"
@@ -63,7 +63,7 @@ export const CommandItem = ({ command, onAck }: Props) => {
                     isFromMe && "flex-row-reverse"
                 )}>
                     <div className={cn(
-                        "w-8 h-8 rounded-xl flex items-center justify-center border shadow-inner",
+                        "w-8 h-8 rounded-xl flex items-center justify-center border ",
                         isFromMe
                             ? "bg-indigo-600 border-indigo-500 text-white"
                             : "bg-background border-card-border text-muted"
@@ -98,7 +98,7 @@ export const CommandItem = ({ command, onAck }: Props) => {
                 isFromMe ? "items-end" : "items-start"
             )}>
                 <div className={cn(
-                    "relative max-w-full p-4 rounded-2xl text-[13px] font-semibold leading-relaxed shadow-inner",
+                    "relative max-w-full p-4 rounded-2xl text-[13px] font-semibold leading-relaxed ",
                     isFromMe
                         ? "bg-indigo-600 text-white rounded-tr-none"
                         : "bg-background/60 text-foreground border border-card-border/30 rounded-tl-none font-bold"
@@ -108,10 +108,10 @@ export const CommandItem = ({ command, onAck }: Props) => {
 
                 {command.requiresAck && (
                     <div className={cn(
-                        "flex items-center gap-2 px-3 py-1 rounded-full border text-[9px] font-black  uppercase transition-all shadow-lg",
+                        "flex items-center gap-2 px-3 py-1 rounded-full border text-[9px] font-black  uppercase transition-all ",
                         totalAcks > 0
-                            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-emerald-500/5"
-                            : "bg-amber-500/10 border-amber-500/30 text-amber-500 shadow-amber-500/5"
+                            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 "
+                            : "bg-amber-500/10 border-amber-500/30 text-amber-500 "
                     )}>
                         <div className={cn("w-1.5 h-1.5 rounded-full", totalAcks > 0 ? "bg-emerald-500" : "bg-amber-500 animate-pulse")} />
                         {totalAcks > 0 ? `${totalAcks} CONFIRMED` : 'WAITING FOR ACK'}
@@ -151,7 +151,7 @@ export const CommandItem = ({ command, onAck }: Props) => {
                 <div className="mt-2 flex gap-2">
                     <button
                         onClick={() => onAck(command.id, 'ROGER')}
-                        className="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-black rounded-xl transition-all uppercase  shadow-xl shadow-emerald-600/20 active:scale-95 border border-emerald-500/50"
+                        className="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-black rounded-xl transition-all uppercase   active:scale-95 border border-emerald-500/50"
                     >
                         Confirm Roger
                     </button>

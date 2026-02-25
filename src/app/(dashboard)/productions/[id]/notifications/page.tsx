@@ -14,7 +14,7 @@ export default function NotificationsPage() {
 
     return (
         <div className="max-w-7xl mx-auto space-y-8">
-            <div className="flex items-center justify-between bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-xl">
+            <div className="flex items-center justify-between bg-stone-900 border border-stone-800 p-6 rounded-2xl ">
                 <div className="flex items-center gap-4">
                     <Link
                         href={`/productions/${id}`}
@@ -31,7 +31,7 @@ export default function NotificationsPage() {
                 </div>
             </div>
 
-            <div className="bg-stone-900 border border-stone-800 p-8 rounded-2xl shadow-xl">
+            <div className="bg-stone-900 border border-stone-800 p-8 rounded-2xl ">
                 <WebhookManager productionId={id} />
             </div>
         </div>

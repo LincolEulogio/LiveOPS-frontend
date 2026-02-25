@@ -68,7 +68,7 @@ export const DeviceView = () => {
             <div className="flex flex-col items-center justify-start min-h-[85vh] text-center py-12 bg-background safe-area-inset-bottom">
                 {/* Top Status Bar - Floating Style */}
                 <div className="w-full flex items-center justify-between mb-12">
-                    <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-card-bg/60 backdrop-blur-xl border border-card-border shadow-sm">
+                    <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-card-bg/60 backdrop-blur-xl border border-card-border ">
                         <div className="relative">
                             {isConnected ? (
                                 <>
@@ -104,7 +104,7 @@ export const DeviceView = () => {
 
                     <div className="relative group">
                         <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-[2.5rem] blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
-                        <div className="relative bg-card-bg border border-card-border p-6 sm:p-8 rounded-[2rem] shadow-xl overflow-hidden min-h-[160px] flex flex-col justify-center">
+                        <div className="relative bg-card-bg border border-card-border p-6 sm:p-8 rounded-[2rem]  overflow-hidden min-h-[160px] flex flex-col justify-center">
                             {activeBlock ? (
                                 <>
                                     <div className="flex items-center gap-2 mb-3">
@@ -133,7 +133,7 @@ export const DeviceView = () => {
                 </motion.div>
 
                 {/* WhatsApp Style Chat Panel */}
-                <div className="w-full max-w-sm bg-card-bg/40 backdrop-blur-xl border border-card-border/60 rounded-[2.5rem] flex flex-col h-[380px] shadow-2xl overflow-hidden">
+                <div className="w-full max-w-sm bg-card-bg/40 backdrop-blur-xl border border-card-border/60 rounded-[2.5rem] flex flex-col h-[380px]  overflow-hidden">
                     <div className="p-4 border-b border-card-border/50 bg-card-bg/50 flex justify-between items-center">
                         <h4 className="text-[11px] uppercase font-black  text-indigo-400 flex items-center gap-2">
                             <MessageCircle size={14} /> Canal de Comandos
@@ -154,7 +154,7 @@ export const DeviceView = () => {
                                         >
                                             <div
                                                 className={`
-                                                    max-w-[85%] px-4 py-3 text-[12px] font-medium leading-normal shadow-sm
+                                                    max-w-[85%] px-4 py-3 text-[12px] font-medium leading-normal 
                                                     ${isMine
                                                         ? 'bg-indigo-600 text-white rounded-[1.5rem] rounded-tr-[4px] border border-indigo-500/30 ring-4 ring-indigo-600/5'
                                                         : 'bg-background text-foreground rounded-[1.5rem] rounded-tl-[4px] border border-card-border/80 ring-4 ring-black/5'
@@ -205,7 +205,7 @@ export const DeviceView = () => {
                                 className={cn(
                                     "p-2.5 rounded-full transition-all active:scale-90 group/send",
                                     customMessage.trim()
-                                        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 border border-indigo-500"
+                                        ? "bg-indigo-600 text-white   border border-indigo-500"
                                         : "bg-white/5 text-muted border border-transparent"
                                 )}
                             >
@@ -291,7 +291,7 @@ export const DeviceView = () => {
                         animate={{ scale: 1, y: 0 }}
                         transition={{ type: "spring", damping: 12 }}
                     >
-                        <h1 className="text-6xl sm:text-7xl md:text-9xl font-black uppercase er leading-[0.85] drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)]">
+                        <h1 className="text-6xl sm:text-7xl md:text-9xl font-black uppercase er leading-[0.85] ">
                             {activeAlert.message}
                         </h1>
                     </motion.div>
@@ -300,7 +300,7 @@ export const DeviceView = () => {
                 <div className="w-full max-w-sm grid grid-cols-2 gap-3 z-10">
                     <button
                         onClick={() => acknowledgeAlert(activeAlert.id, 'Confirmado')}
-                        className="col-span-2 flex items-center justify-center gap-3 bg-white text-black py-6 rounded-[2.5rem] font-black uppercase  active:scale-95 transition-all shadow-2xl text-lg"
+                        className="col-span-2 flex items-center justify-center gap-3 bg-white text-black py-6 rounded-[2.5rem] font-black uppercase  active:scale-95 transition-all  text-lg"
                     >
                         <CheckCircle size={28} />
                         CONFIRMADO

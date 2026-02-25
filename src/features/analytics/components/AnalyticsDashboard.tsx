@@ -79,7 +79,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                 <div className="flex items-center gap-4">
                     <Link
                         href={`/productions/${productionId}`}
-                        className="p-2 bg-card-bg border border-card-border rounded-xl text-muted hover:text-foreground hover:border-indigo-500/50 transition-all shadow-lg"
+                        className="p-2 bg-card-bg border border-card-border rounded-xl text-muted hover:text-foreground hover:border-indigo-500/50 transition-all "
                         title="Back to Dashboard"
                     >
                         <ArrowLeft size={20} />
@@ -106,7 +106,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
 
             {/* Post-Show Report Highlight */}
             {report && (
-                <div className="bg-gradient-to-br from-indigo-900/40 to-stone-900 border border-indigo-500/30 rounded-2xl p-6 shadow-2xl">
+                <div className="bg-gradient-to-br from-indigo-900/40 to-stone-900 border border-indigo-500/30 rounded-2xl p-6 ">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-lg font-bold  text-indigo-400 uppercase flex items-center gap-2">
                             <CheckCircle size={20} />
@@ -144,7 +144,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
             <div className="grid grid-cols-2 gap-6">
 
                 {/* Bitrate Chart */}
-                <div className="col-span-2 bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
+                <div className="col-span-2 bg-card-bg border border-card-border rounded-2xl p-6 ">
                     <h3 className="text-sm font-bold text-muted uppercase  flex items-center gap-2 mb-6">
                         <WifiHigh size={16} className="text-emerald-500" />
                         Network Bitrate (kbps)
@@ -168,7 +168,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                 </div>
 
                 {/* CPU Chart */}
-                <div className="bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
+                <div className="bg-card-bg border border-card-border rounded-2xl p-6 ">
                     <h3 className="text-sm font-bold text-muted uppercase  flex items-center gap-2 mb-6">
                         <Cpu size={16} className="text-amber-500" />
                         Encoder CPU Usage (%)
@@ -189,7 +189,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                 </div>
 
                 {/* FPS & Drops Chart */}
-                <div className="bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
+                <div className="bg-card-bg border border-card-border rounded-2xl p-6 ">
                     <h3 className="text-sm font-bold text-muted uppercase  flex items-center gap-2 mb-6">
                         <AlertTriangle size={16} className="text-red-500" />
                         Dropped Frames

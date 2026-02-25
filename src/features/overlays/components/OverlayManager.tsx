@@ -92,7 +92,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                         key={template.id}
                         className={cn(
                             "bg-card-bg border rounded-3xl p-6 transition-all group overflow-hidden relative",
-                            template.isActive ? "border-indigo-500 shadow-xl shadow-indigo-500/10" : "border-card-border"
+                            template.isActive ? "border-indigo-500  " : "border-card-border"
                         )}
                     >
                         {template.isActive && (
@@ -152,7 +152,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
             {/* Create Overlay Modal */}
             {isCreateModalOpen && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-                    <div className="bg-card-bg border border-card-border rounded-xl p-6 w-full max-w-sm shadow-2xl overflow-hidden relative">
+                    <div className="bg-card-bg border border-card-border rounded-xl p-6 w-full max-w-sm  overflow-hidden relative">
                         <div className="absolute top-0 right-0 p-4">
                             <button onClick={() => {
                                 setIsCreateModalOpen(false);

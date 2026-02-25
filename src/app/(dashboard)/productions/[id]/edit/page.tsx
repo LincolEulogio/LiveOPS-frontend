@@ -162,7 +162,7 @@ export default function EditProductionPage() {
                 <p className="text-muted text-sm mt-1">Update your live streaming configuration</p>
             </div>
 
-            <div className="bg-card-bg border border-card-border rounded-xl p-6 shadow-xl">
+            <div className="bg-card-bg border border-card-border rounded-xl p-6 ">
                 {error && (
                     <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-md mb-6 text-sm">
                         {error}
@@ -338,7 +338,7 @@ export default function EditProductionPage() {
                             type="button"
                             onClick={handleAddMember}
                             disabled={!selectedEmail || isManagingTeam}
-                            className="px-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-sm font-bold shadow-lg shadow-indigo-600/20"
+                            className="px-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-sm font-bold  "
                         >
                             <Plus size={18} /> {isManagingTeam ? 'Adding...' : 'Add'}
                         </button>

@@ -57,7 +57,7 @@ export const ExecutionLogs = ({ logs, isLoading }: Props) => {
                         )} />
 
                         <div className={cn(
-                            "mt-0.5 p-2 rounded-xl border shrink-0 flex items-center justify-center shadow-inner",
+                            "mt-0.5 p-2 rounded-xl border shrink-0 flex items-center justify-center ",
                             log.status === 'SUCCESS'
                                 ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
                                 : "bg-red-500/10 border-red-500/20 text-red-400"

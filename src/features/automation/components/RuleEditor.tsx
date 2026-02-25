@@ -159,7 +159,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                 initial={{ opacity: 0, scale: 0.9, y: 40 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 40 }}
-                className="relative w-full h-full md:h-auto md:max-h-[80vh] max-w-[1400px] bg-card-bg/60 backdrop-blur-2xl border border-card-border md:rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col"
+                className="relative w-full h-full md:h-auto md:max-h-[80vh] max-w-[1400px] bg-card-bg/60 backdrop-blur-2xl border border-card-border md:rounded-[3rem]  overflow-hidden flex flex-col"
             >
                 {/* Visual Header Decoration */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
@@ -167,7 +167,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 md:p-10 border-b border-card-border/50 bg-white/5 relative z-10">
                     <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-inner">
+                        <div className="w-16 h-16 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 ">
                             <Zap size={32} className="text-indigo-400" />
                         </div>
                         <div>
@@ -218,16 +218,16 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                             exit={{ opacity: 0, scale: 0.8 }}
                                             key={field.id}
                                             className={cn(
-                                                "group relative p-6 rounded-3xl border transition-all cursor-pointer shadow-xl",
+                                                "group relative p-6 rounded-3xl border transition-all cursor-pointer ",
                                                 activeNodeIndex === -1
-                                                    ? "bg-indigo-600/10 border-indigo-500 shadow-indigo-600/10 scale-105 z-20"
+                                                    ? "bg-indigo-600/10 border-indigo-500  scale-105 z-20"
                                                     : "bg-card-bg/60 backdrop-blur-md border-card-border/60 hover:border-indigo-500/50"
                                             )}
                                             onClick={() => setActiveNodeIndex(-1)}
                                         >
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-5">
-                                                    <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner border", eTypeDef.color.replace('text-', 'border-').replace('bg-', 'bg-').split(' ')[0], "border-white/10")}>
+                                                    <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center  border", eTypeDef.color.replace('text-', 'border-').replace('bg-', 'bg-').split(' ')[0], "border-white/10")}>
                                                         <Icon size={24} />
                                                     </div>
                                                     <div>
@@ -248,7 +248,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         {/* Connecting Line Vector */}
                         <div className="flex flex-col items-center my-6 gap-2">
                             <div className="w-0.5 h-12 bg-gradient-to-b from-indigo-500/50 to-indigo-500" />
-                            <div className="p-2 bg-indigo-500 rounded-full shadow-[0_0_20px_rgba(99,102,241,0.5)]">
+                            <div className="p-2 bg-indigo-500 rounded-full ">
                                 <ArrowDown size={14} className="text-white" />
                             </div>
                             <div className="w-0.5 h-12 bg-gradient-to-b from-indigo-500 to-indigo-500/50" />
@@ -273,9 +273,9 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                         >
                                             <div
                                                 className={cn(
-                                                    "group p-6 rounded-3xl border transition-all cursor-pointer shadow-xl",
+                                                    "group p-6 rounded-3xl border transition-all cursor-pointer ",
                                                     activeNodeIndex === index
-                                                        ? "bg-indigo-600/10 border-indigo-500 shadow-indigo-600/10 scale-105 z-20"
+                                                        ? "bg-indigo-600/10 border-indigo-500  scale-105 z-20"
                                                         : "bg-card-bg/60 backdrop-blur-md border-card-border/60 hover:border-indigo-500/50"
                                                 )}
                                                 onClick={() => setActiveNodeIndex(index)}
@@ -283,7 +283,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-5">
                                                         <div className={cn("w-12 h-12 rounded-2xl border flex items-center justify-center shrink-0 relative", aTypeDef.color)}>
-                                                            <div className="absolute -top-3 -left-3 w-8 h-8 bg-card-bg border-4 border-background rounded-full flex items-center justify-center text-xs font-black text-indigo-400 shadow-lg">
+                                                            <div className="absolute -top-3 -left-3 w-8 h-8 bg-card-bg border-4 border-background rounded-full flex items-center justify-center text-xs font-black text-indigo-400 ">
                                                                 {index + 1}
                                                             </div>
                                                             <Icon size={24} />
@@ -316,7 +316,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                     appendAction({ actionType: 'obs.changeScene', order: actionFields.length, payload: {} });
                                     setActiveNodeIndex(actionFields.length);
                                 }}
-                                className="w-full border-2 border-dashed border-card-border/60 hover:border-indigo-500/60 bg-white/5 hover:bg-white/10 p-6 rounded-3xl flex items-center justify-center gap-4 transition-all group mt-6 shadow-inner"
+                                className="w-full border-2 border-dashed border-card-border/60 hover:border-indigo-500/60 bg-white/5 hover:bg-white/10 p-6 rounded-3xl flex items-center justify-center gap-4 transition-all group mt-6 "
                             >
                                 <div className="w-10 h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all">
                                     <Plus size={20} />
@@ -335,13 +335,13 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                 <Activity size={16} className="text-indigo-400" />
                                 <h3 className="text-xs font-black text-foreground/50 uppercase ">Initial Identity</h3>
                             </div>
-                            <div className="space-y-5 bg-white/5 p-6 rounded-3xl border border-white/5 shadow-inner">
+                            <div className="space-y-5 bg-white/5 p-6 rounded-3xl border border-white/5 ">
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-muted uppercase  pl-1">Rule Designation</label>
                                     <input
                                         {...register('name')}
                                         placeholder="Identification handle..."
-                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all uppercase  shadow-inner"
+                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all uppercase  "
                                     />
                                     {errors.name && <p className="text-[9px] text-red-400 font-black uppercase mt-1  px-1">{errors.name.message}</p>}
                                 </div>
@@ -351,7 +351,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                         {...register('description')}
                                         rows={2}
                                         placeholder="Instructional context..."
-                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-bold text-foreground outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all resize-none shadow-inner"
+                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-bold text-foreground outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all resize-none "
                                     />
                                 </div>
                             </div>
@@ -384,7 +384,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                     </select>
                                                 </div>
 
-                                                <div className="p-6 bg-indigo-600/5 border border-white/5 rounded-3xl shadow-inner space-y-6">
+                                                <div className="p-6 bg-indigo-600/5 border border-white/5 rounded-3xl  space-y-6">
                                                     <div className="flex items-center gap-2 mb-2">
                                                         <Activity size={14} className="text-indigo-400" />
                                                         <span className="text-[10px] font-black text-muted uppercase ">Operational Logic</span>
@@ -396,7 +396,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                             <input
                                                                 type="number"
                                                                 {...register(`triggers.${index}.condition.secondsBefore`, { valueAsNumber: true })}
-                                                                className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none shadow-inner"
+                                                                className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none "
                                                             />
                                                         </div>
                                                     )}
@@ -407,7 +407,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                             <input
                                                                 placeholder="Leave blank for universal listen..."
                                                                 {...register(`triggers.${index}.condition.sceneName`)}
-                                                                className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-inner"
+                                                                className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none focus:ring-2 focus:ring-indigo-500/50 "
                                                             />
                                                         </div>
                                                     )}
@@ -427,7 +427,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                             </select>
                                         </div>
 
-                                        <div className="p-6 bg-emerald-600/5 border border-white/5 rounded-3xl shadow-inner space-y-6">
+                                        <div className="p-6 bg-emerald-600/5 border border-white/5 rounded-3xl  space-y-6">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Activity size={14} className="text-emerald-400" />
                                                 <span className="text-[10px] font-black text-muted uppercase ">Payload Configuration</span>
@@ -439,7 +439,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                         <label className="text-[10px] font-black text-muted uppercase  pl-1">Transmission Template</label>
                                                         <select
                                                             {...register(`actions.${activeNodeIndex}.payload.templateId`)}
-                                                            className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-[11px] font-bold text-foreground outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner appearance-none"
+                                                            className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-[11px] font-bold text-foreground outline-none focus:ring-2 focus:ring-indigo-500  appearance-none"
                                                         >
                                                             <option value="">MANUAL OVERRIDE ONLY</option>
                                                             {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -449,7 +449,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                         <label className="text-[10px] font-black text-muted uppercase  pl-1">Downlink Recipient</label>
                                                         <select
                                                             {...register(`actions.${activeNodeIndex}.payload.targetRoleId`)}
-                                                            className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-[11px] font-bold text-foreground outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner appearance-none"
+                                                            className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-[11px] font-bold text-foreground outline-none focus:ring-2 focus:ring-indigo-500  appearance-none"
                                                         >
                                                             <option value="">GLOBAL BROADCAST</option>
                                                             {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
@@ -460,7 +460,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                         <input
                                                             placeholder="Inject dynamic alert sequence..."
                                                             {...register(`actions.${activeNodeIndex}.payload.message`)}
-                                                            className="w-full bg-background/50 border border-card-border rounded-xl px-4 py-3 text-sm font-bold text-foreground outline-none shadow-inner transition-all focus:ring-2 focus:ring-indigo-500"
+                                                            className="w-full bg-background/50 border border-card-border rounded-xl px-4 py-3 text-sm font-bold text-foreground outline-none  transition-all focus:ring-2 focus:ring-indigo-500"
                                                         />
                                                     </div>
                                                 </div>
@@ -472,7 +472,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                     <input
                                                         placeholder="Exact scene nomenclature..."
                                                         {...register(`actions.${activeNodeIndex}.payload.sceneName`)}
-                                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none shadow-inner"
+                                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none "
                                                     />
                                                 </div>
                                             )}
@@ -483,7 +483,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                     <input
                                                         placeholder="Port Address / Name..."
                                                         {...register(`actions.${activeNodeIndex}.payload.input`)}
-                                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none shadow-inner"
+                                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none "
                                                     />
                                                 </div>
                                             )}
@@ -501,7 +501,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         <button
                             type="button"
                             onClick={handleTest}
-                            className="w-14 h-14 bg-amber-500/10 hover:bg-amber-500 text-amber-500 hover:text-white border border-amber-500/20 rounded-2xl flex items-center justify-center transition-all shadow-xl shadow-amber-500/10 active:scale-90 group"
+                            className="w-14 h-14 bg-amber-500/10 hover:bg-amber-500 text-amber-500 hover:text-white border border-amber-500/20 rounded-2xl flex items-center justify-center transition-all   active:scale-90 group"
                             title="Dry Run Protocol"
                         >
                             <Play size={24} className="group-hover:scale-110 transition-transform" />
@@ -522,7 +522,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         <button
                             onClick={handleSubmit(onSave)}
                             disabled={isSubmitting}
-                            className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-black px-10 py-5 rounded-2xl transition-all shadow-2xl shadow-indigo-600/30 uppercase text-[10px]  flex items-center justify-center gap-4 active:scale-95 overflow-hidden group"
+                            className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-black px-10 py-5 rounded-2xl transition-all   uppercase text-[10px]  flex items-center justify-center gap-4 active:scale-95 overflow-hidden group"
                         >
                             {isSubmitting ? (
                                 <Activity size={18} className="animate-spin" />

@@ -89,7 +89,7 @@ export default function TeamManagementPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Assignment Form */}
                 <div className="lg:col-span-1">
-                    <div className="bg-card-bg border border-card-border rounded-2xl p-6 sticky top-6 shadow-xl">
+                    <div className="bg-card-bg border border-card-border rounded-2xl p-6 sticky top-6 ">
                         <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                             <UserPlus size={20} className="text-indigo-400" />
                             Add Member
@@ -128,7 +128,7 @@ export default function TeamManagementPage() {
                             <button
                                 type="submit"
                                 disabled={assignMutation.isPending || !email}
-                                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm shadow-lg shadow-indigo-600/20 mt-2"
+                                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm   mt-2"
                             >
                                 {assignMutation.isPending ? 'Assigning...' : 'Add to Team'}
                             </button>
@@ -138,7 +138,7 @@ export default function TeamManagementPage() {
 
                 {/* Member List */}
                 <div className="lg:col-span-2">
-                    <div className="bg-card-bg border border-card-border rounded-2xl overflow-hidden shadow-xl">
+                    <div className="bg-card-bg border border-card-border rounded-2xl overflow-hidden ">
                         <div className="p-6 border-b border-card-border">
                             <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
                                 <Shield size={20} className="text-indigo-400" />

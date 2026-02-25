@@ -19,7 +19,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
             "p-4 rounded-xl border transition-all relative overflow-hidden group",
             message.status === 'PENDING' ? "bg-background border-card-border" :
                 message.status === 'APPROVED' ? "bg-emerald-900/20 border-emerald-500/30" :
-                    message.status === 'ON_AIR' ? "bg-indigo-900/40 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]" :
+                    message.status === 'ON_AIR' ? "bg-indigo-900/40 border-indigo-500" :
                         "bg-red-900/10 border-red-500/20 opacity-50",
             className
         )}>
@@ -80,7 +80,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
                 <div className="mt-4 flex gap-2 pt-3 border-t border-emerald-500/20 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                         onClick={() => onSendToAir?.(message.id)}
-                        className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-bold shadow-lg transition-all"
+                        className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-bold  transition-all"
                     >
                         <Tv size={14} /> Send to Graphics
                     </button>

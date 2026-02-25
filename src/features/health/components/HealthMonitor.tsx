@@ -25,7 +25,7 @@ export const HealthMonitor = ({ productionId }: Props) => {
 
     if (!lastStats && history.length === 0) {
         return (
-            <div className="p-10 bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] flex flex-col items-center justify-center text-center space-y-6 shadow-2xl relative overflow-hidden">
+            <div className="p-10 bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] flex flex-col items-center justify-center text-center space-y-6  relative overflow-hidden">
                 <div className="absolute inset-0 bg-indigo-500/5 opacity-50 blur-3xl rounded-full" />
                 <Activity className="text-indigo-400/30 animate-pulse relative z-10" size={48} />
                 <div className="relative z-10">
@@ -37,7 +37,7 @@ export const HealthMonitor = ({ productionId }: Props) => {
     }
 
     return (
-        <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl relative">
+        <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden flex flex-col  relative">
             {/* Visual Scanline Effect */}
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent animate-pulse" />
 
@@ -59,10 +59,10 @@ export const HealthMonitor = ({ productionId }: Props) => {
                     </div>
                 </div>
                 <div className={cn(
-                    "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase  border transition-all shadow-lg",
+                    "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase  border transition-all ",
                     isHealthy
                         ? "bg-emerald-600/10 text-emerald-400 border-emerald-500/30"
-                        : "bg-red-600 text-white border-red-500 shadow-red-600/20 animate-pulse"
+                        : "bg-red-600 text-white border-red-500  animate-pulse"
                 )}>
                     {isHealthy ? "Operational" : "Degraded"}
                 </div>
@@ -70,7 +70,7 @@ export const HealthMonitor = ({ productionId }: Props) => {
 
             {/* Metrics Grid */}
             <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-background/40 backdrop-blur-md border border-card-border/60 p-5 rounded-[1.5rem] shadow-inner relative overflow-hidden group">
+                <div className="bg-background/40 backdrop-blur-md border border-card-border/60 p-5 rounded-[1.5rem]  relative overflow-hidden group">
                     <div className="flex items-center justify-between mb-3 relative z-10">
                         <div className="flex items-center gap-2">
                             <Cpu size={14} className="text-indigo-400" />
@@ -86,7 +86,7 @@ export const HealthMonitor = ({ productionId }: Props) => {
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-500/10 group-hover:bg-indigo-500/20 transition-all" />
                 </div>
 
-                <div className="bg-background/40 backdrop-blur-md border border-card-border/60 p-5 rounded-[1.5rem] shadow-inner relative overflow-hidden group">
+                <div className="bg-background/40 backdrop-blur-md border border-card-border/60 p-5 rounded-[1.5rem]  relative overflow-hidden group">
                     <div className="flex items-center justify-between mb-3 relative z-10">
                         <div className="flex items-center gap-2">
                             <Zap size={14} className="text-amber-400" />
@@ -104,7 +104,7 @@ export const HealthMonitor = ({ productionId }: Props) => {
 
             {/* Tactical Chart Surface */}
             <div className="h-48 w-full px-4 pb-6 mt-2">
-                <div className="w-full h-full bg-black/20 rounded-[1.5rem] border border-white/5 p-4 shadow-inner relative">
+                <div className="w-full h-full bg-black/20 rounded-[1.5rem] border border-white/5 p-4  relative">
                     <div className="absolute top-3 left-6 flex items-center gap-2 opacity-30">
                         <Activity size={10} className="text-indigo-400" />
                         <span className="text-[8px] font-black uppercase ">Historical Flux</span>
@@ -147,7 +147,7 @@ export const HealthMonitor = ({ productionId }: Props) => {
 
             {/* Urgent Alerts Hub */}
             {lastStats && lastStats.skippedFrames > 0 && (
-                <div className="mx-6 mb-6 p-4 bg-red-600 border border-red-500 rounded-[1.5rem] flex items-center gap-4 animate-pulse shadow-xl shadow-red-600/20">
+                <div className="mx-6 mb-6 p-4 bg-red-600 border border-red-500 rounded-[1.5rem] flex items-center gap-4 animate-pulse  ">
                     <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
                         <AlertCircle size={20} className="text-white" />
                     </div>

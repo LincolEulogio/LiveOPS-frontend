@@ -67,7 +67,7 @@ export const AuditLogView = ({ productionId }: Props) => {
     }
 
     return (
-        <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2rem] overflow-hidden shadow-2xl relative">
+        <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2rem] overflow-hidden  relative">
             {/* Visual Scanline Header Decoration */}
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
 

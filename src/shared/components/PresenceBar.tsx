@@ -27,7 +27,7 @@ export const PresenceBar = () => {
                         </span>
 
                         {/* Tooltip hint */}
-                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-card-bg border border-card-border rounded text-[9px] font-bold text-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-2xl z-50">
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-card-bg border border-card-border rounded text-[9px] font-bold text-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none  z-50">
                             {member.userName}
                             <span className="block text-muted uppercase text-[7px]">{member.roleName}</span>
                             {member.status !== 'IDLE' && (

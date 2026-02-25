@@ -102,13 +102,13 @@ export const RundownTable = ({
                                 >
                                     {/* Action Indicators */}
                                     {inProgram && (
-                                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-600 shadow-[2px_0_15px_rgba(220,38,38,0.5)] z-10" />
+                                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-600  z-10" />
                                     )}
                                     {inPreview && (
-                                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-600 shadow-[2px_0_15px_rgba(16,185,129,0.3)] z-10" />
+                                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-600 z-10" />
                                     )}
                                     {block.status === TimelineStatus.ACTIVE && !inProgram && (
-                                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-600 shadow-[2px_0_15px_rgba(99,102,241,0.3)] z-10" />
+                                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-600 z-10" />
                                     )}
 
                                     <td className="pl-8 pr-4 py-6 text-[11px] font-black font-mono text-muted/50">
@@ -132,8 +132,8 @@ export const RundownTable = ({
                                     <td className="px-4 py-6">
                                         <div className="flex items-center gap-3">
                                             <div className={cn(
-                                                "w-2.5 h-2.5 rounded-full shadow-inner",
-                                                inProgram ? "bg-red-500 animate-pulse shadow-red-500/50" : inPreview ? "bg-emerald-500 shadow-emerald-500/50" : "bg-card-border"
+                                                "w-2.5 h-2.5 rounded-full ",
+                                                inProgram ? "bg-red-500 animate-pulse 0" : inPreview ? "bg-emerald-500 " : "bg-card-border"
                                             )} />
                                             <div className="px-3 py-1 bg-white/[0.03] border border-white/5 rounded-lg">
                                                 <span className={cn(
@@ -154,11 +154,11 @@ export const RundownTable = ({
 
                                     <td className="px-4 py-6 text-center">
                                         <div className={cn(
-                                            "inline-flex items-center gap-2 px-3 py-1.5 rounded-xl font-mono text-[11px] font-black shadow-inner border transition-colors",
+                                            "inline-flex items-center gap-2 px-3 py-1.5 rounded-xl font-mono text-[11px] font-black  border transition-colors",
                                             block.status === TimelineStatus.ACTIVE
                                                 ? isOvertime
-                                                    ? "bg-red-600/10 border-red-500/30 text-red-500 animate-pulse shadow-red-600/10"
-                                                    : "bg-indigo-600/10 border-indigo-500/30 text-indigo-400 shadow-indigo-600/10"
+                                                    ? "bg-red-600/10 border-red-500/30 text-red-500 animate-pulse "
+                                                    : "bg-indigo-600/10 border-indigo-500/30 text-indigo-400 "
                                                 : block.status === TimelineStatus.COMPLETED
                                                     ? "bg-white/5 border-transparent text-muted/40"
                                                     : "bg-black/20 border-white/5 text-muted/60"
@@ -174,7 +174,7 @@ export const RundownTable = ({
                                             {block.status === TimelineStatus.PENDING && canControl && (
                                                 <button
                                                     onClick={() => onStart(block.id)}
-                                                    className="p-3 bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-white rounded-xl transition-all border border-indigo-500/20 active:scale-90 shadow-lg"
+                                                    className="p-3 bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-white rounded-xl transition-all border border-indigo-500/20 active:scale-90 "
                                                     title="Deploy Segment"
                                                 >
                                                     <Play size={14} fill="currentColor" />
@@ -183,7 +183,7 @@ export const RundownTable = ({
                                             {block.status === TimelineStatus.ACTIVE && canControl && (
                                                 <button
                                                     onClick={() => onComplete(block.id)}
-                                                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-all active:scale-95 shadow-xl shadow-emerald-600/20 flex items-center gap-2 text-[10px] font-black uppercase "
+                                                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-all active:scale-95   flex items-center gap-2 text-[10px] font-black uppercase "
                                                     title="Secure Segment"
                                                 >
                                                     <CheckCircle2 size={14} />
@@ -193,7 +193,7 @@ export const RundownTable = ({
                                             {block.status !== TimelineStatus.PENDING && canControl && (
                                                 <button
                                                     onClick={() => onReset(block.id)}
-                                                    className="p-3 bg-background border border-card-border text-muted hover:text-orange-400 rounded-xl transition-all active:scale-90 shadow-sm"
+                                                    className="p-3 bg-background border border-card-border text-muted hover:text-orange-400 rounded-xl transition-all active:scale-90 "
                                                     title="Abort / Re-queue"
                                                 >
                                                     <RotateCcw size={14} />

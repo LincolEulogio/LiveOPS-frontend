@@ -19,7 +19,7 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
     );
 
     return (
-        <div className="bg-card-bg border border-card-border rounded-3xl overflow-hidden flex flex-col h-[600px] shadow-2xl">
+        <div className="bg-card-bg border border-card-border rounded-3xl overflow-hidden flex flex-col h-[600px] ">
             {/* Search Header */}
             <div className="p-4 border-b border-card-border bg-card-bg/50 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div className="flex items-center gap-3">

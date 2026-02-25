@@ -110,7 +110,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
             disabled={disabled}
             className={cn(
                 "p-2.5 rounded-xl transition-all active:scale-95 flex items-center justify-center min-w-[38px] min-h-[38px]",
-                isActive ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20" : "text-muted hover:bg-card-border hover:text-foreground"
+                isActive ? "bg-indigo-600 text-white  " : "text-muted hover:bg-card-border hover:text-foreground"
             )}
             title={title}
         >
@@ -119,7 +119,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
     );
 
     return (
-        <div className="flex flex-col h-full bg-card-bg/80 backdrop-blur-2xl rounded-[2.5rem] border border-card-border overflow-hidden shadow-2xl relative">
+        <div className="flex flex-col h-full bg-card-bg/80 backdrop-blur-2xl rounded-[2.5rem] border border-card-border overflow-hidden  relative">
             {/* Real-time Indicator Top Border */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0 pointer-events-none" />
 
@@ -213,7 +213,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
             {/* Tactical Status Footer */}
             <div className="p-3 bg-white/5 border-t border-card-border/50 flex items-center justify-between px-6">
                 <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse " />
                     <span className="text-[9px] text-muted font-black uppercase ">
                         Live Sync: {isSyncing ? 'Pushing Changes...' : 'Synchronized'}
                     </span>

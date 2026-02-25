@@ -39,7 +39,7 @@ export const GuestDashboard = ({ productionId }: Props) => {
     return (
         <div className="fixed inset-0 z-[100] flex flex-col h-screen bg-background overflow-hidden">
             {/* Header (Simplified) */}
-            <header className="h-16 lg:h-20 flex items-center justify-between px-4 sm:px-6 border-b border-card-border bg-card-bg shadow-md">
+            <header className="h-16 lg:h-20 flex items-center justify-between px-4 sm:px-6 border-b border-card-border bg-card-bg ">
                 <div className="flex items-center gap-3 sm:gap-4 truncate mr-2">
                     <div className="w-9 h-9 sm:w-10 sm:h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shrink-0">
                         <Video size={18} className="text-indigo-400" />
@@ -55,7 +55,7 @@ export const GuestDashboard = ({ productionId }: Props) => {
                     <div className={cn(
                         "px-3 sm:px-4 py-1.5 rounded-full border text-[9px] sm:text-xs font-black uppercase  flex items-center gap-1.5 sm:gap-2 transition-all",
                         isLive
-                            ? "bg-red-500/20 border-red-500 text-red-500 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+                            ? "bg-red-500/20 border-red-500 text-red-500 animate-pulse "
                             : "bg-background border-card-border text-muted"
                     )}>
                         <Radio size={12} className={isLive ? "animate-bounce" : ""} />
@@ -65,7 +65,7 @@ export const GuestDashboard = ({ productionId }: Props) => {
                     {/* Mobile Chat Toggle */}
                     <button
                         onClick={() => setIsChatOpen(!isChatOpen)}
-                        className="lg:hidden p-2 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-600/20"
+                        className="lg:hidden p-2 bg-indigo-600 text-white rounded-xl  "
                     >
                         {isChatOpen ? <CloseIcon size={18} /> : <MessageSquare size={18} />}
                     </button>
@@ -81,7 +81,7 @@ export const GuestDashboard = ({ productionId }: Props) => {
                         isLive ? 'bg-red-500' : 'bg-indigo-500'
                     )} />
 
-                    <div className="text-center space-y-4 sm:space-y-6 z-10 w-full max-w-2xl px-4 sm:px-10 py-10 sm:py-16 rounded-[2rem] sm:rounded-[3rem] bg-card-bg/40 border border-card-border/50 backdrop-blur-xl shadow-2xl">
+                    <div className="text-center space-y-4 sm:space-y-6 z-10 w-full max-w-2xl px-4 sm:px-10 py-10 sm:py-16 rounded-[2rem] sm:rounded-[3rem] bg-card-bg/40 border border-card-border/50 backdrop-blur-xl ">
                         {isLive ? (
                             <div className="animate-in fade-in zoom-in duration-700">
                                 <div className="relative inline-block mb-4">
@@ -108,14 +108,14 @@ export const GuestDashboard = ({ productionId }: Props) => {
                         <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
                             <Link
                                 href={`/productions/${productionId}/room`}
-                                className="w-full sm:w-auto px-6 py-4 bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/50 rounded-2xl text-white font-black text-xs uppercase  transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-3 active:scale-95 group"
+                                className="w-full sm:w-auto px-6 py-4 bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/50 rounded-2xl text-white font-black text-xs uppercase  transition-all   flex items-center justify-center gap-3 active:scale-95 group"
                             >
                                 <Radio size={18} className="group-hover:animate-pulse" /> Join Stream Source
                             </Link>
                             <Link
                                 href={`/productions/${productionId}/prompter`}
                                 target="_blank"
-                                className="w-full sm:w-auto px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-foreground font-black text-xs uppercase  transition-all shadow-lg flex items-center justify-center gap-3 active:scale-95"
+                                className="w-full sm:w-auto px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-foreground font-black text-xs uppercase  transition-all  flex items-center justify-center gap-3 active:scale-95"
                             >
                                 <Video size={18} /> Teleprompter
                             </Link>
@@ -125,7 +125,7 @@ export const GuestDashboard = ({ productionId }: Props) => {
 
                 {/* Right Panel: Chat (Responsive behavior) */}
                 <div className={cn(
-                    "fixed inset-y-0 right-0 w-[320px] sm:w-[400px] border-l border-card-border bg-card-bg flex flex-col shadow-2xl z-50 transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:z-20",
+                    "fixed inset-y-0 right-0 w-[320px] sm:w-[400px] border-l border-card-border bg-card-bg flex flex-col  z-50 transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:z-20",
                     isChatOpen ? "translate-x-0" : "translate-x-full"
                 )}>
                     <div className="p-4 sm:p-5 border-b border-card-border bg-card-bg/50 flex items-center justify-between">

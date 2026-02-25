@@ -28,14 +28,14 @@ export const SceneTagView = (props: NodeViewProps) => {
                 onClick={handleTrigger}
                 className={cn(
                     "flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase  transition-all",
-                    "bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/20 hover:border-indigo-500/50 shadow-sm",
+                    "bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/20 hover:border-indigo-500/50 ",
                     isPending && "opacity-50 cursor-not-allowed animate-pulse"
                 )}
                 title={`Cambiar a escena: ${sceneName}`}
             >
                 <Video size={10} className="text-indigo-400" />
                 <span className="truncate max-w-[100px]">{sceneName}</span>
-                <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(99,102,241,0.5)]" />
+                <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse" />
             </button>
         </NodeViewWrapper>
     );

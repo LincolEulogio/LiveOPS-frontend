@@ -55,12 +55,12 @@ export function StreamingDashboard({ productionId, engineType }: StreamingDashbo
     return (
         <div className="space-y-6">
             {/* Compact Real-time Status Bar */}
-            <div className="bg-card-bg/60 backdrop-blur-xl border border-card-border rounded-2xl p-2 sm:p-3 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+            <div className="bg-card-bg/60 backdrop-blur-xl border border-card-border rounded-2xl p-2 sm:p-3 flex flex-wrap items-center justify-between gap-4 ">
                 <div className="flex items-center gap-4 sm:gap-6 pl-2">
                     <div className="flex items-center gap-2.5">
                         <div className={cn(
                             "w-2 h-2 rounded-full transition-all duration-500",
-                            isSocketConnected ? "bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]" : "bg-red-500 animate-pulse"
+                            isSocketConnected ? "bg-emerald-500 " : "bg-red-500 animate-pulse"
                         )} />
                         <span className="text-[9px] font-black text-muted uppercase ">Gateway</span>
                     </div>
@@ -87,7 +87,7 @@ export function StreamingDashboard({ productionId, engineType }: StreamingDashbo
             </div>
 
             {/* Engine Specific Controls - Premium Container */}
-            <div className="bg-card-bg/80 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden shadow-2xl relative">
+            <div className="bg-card-bg/80 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden  relative">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-20" />
 
                 <div className="p-1 px-8 bg-white/5 border-b border-card-border/50 flex items-center justify-between">

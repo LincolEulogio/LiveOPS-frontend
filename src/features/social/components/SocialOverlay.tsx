@@ -81,12 +81,12 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                         exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
                         className="relative flex items-center max-w-7xl"
                     >
-                        <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl rounded-[32px] border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)]" />
+                        <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl rounded-[32px] border border-white/10 " />
                         <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[34px] opacity-20 blur-sm animate-pulse" />
 
                         <div className="relative flex items-center p-6 gap-6">
                             <div className="relative flex-shrink-0">
-                                <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl">
+                                <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-white/20 ">
                                     {activeMessage.authorAvatar ? (
                                         <img src={activeMessage.authorAvatar} alt={activeMessage.author} className="w-full h-full object-cover" />
                                     ) : (
@@ -98,7 +98,7 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                                     )}
                                 </div>
                                 <div className={cn(
-                                    "absolute -bottom-2 -right-2 p-1.5 rounded-lg shadow-lg border border-white/20",
+                                    "absolute -bottom-2 -right-2 p-1.5 rounded-lg  border border-white/20",
                                     activeMessage.platform.toLowerCase() === 'youtube' && "bg-red-600",
                                     activeMessage.platform.toLowerCase() === 'twitch' && "bg-purple-600",
                                     activeMessage.platform.toLowerCase() === 'facebook' && "bg-blue-600",
@@ -114,7 +114,7 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                                     <h3 className="text-xl font-black text-white  uppercase">
                                         {activeMessage.author}
                                     </h3>
-                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,1)]" />
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse " />
                                 </div>
                                 <p className="text-2xl font-bold text-foreground leading-tight">
                                     {activeMessage.content}
@@ -132,7 +132,7 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                         exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
                         className="relative flex flex-col max-w-2xl w-full"
                     >
-                        <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl rounded-[32px] border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)]" />
+                        <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl rounded-[32px] border border-white/10 " />
 
                         <div className="relative p-8">
                             <div className="flex items-center gap-3 mb-6">
@@ -153,7 +153,7 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                                                 <motion.div
                                                     initial={{ width: 0 }}
                                                     animate={{ width: `${percentage}%` }}
-                                                    className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                                                    className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full "
                                                 />
                                             </div>
                                         </div>

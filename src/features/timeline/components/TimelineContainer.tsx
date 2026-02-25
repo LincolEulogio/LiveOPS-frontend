@@ -69,7 +69,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
             background: '#0f172a',
             color: '#f8fafc',
             customClass: {
-                popup: 'rounded-[1.5rem] border border-white/10 shadow-2xl backdrop-blur-xl'
+                popup: 'rounded-[1.5rem] border border-white/10  backdrop-blur-xl'
             }
         });
 
@@ -186,7 +186,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
     const hasNext = blocks.some(b => b.status === 'PENDING');
 
     return (
-        <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col group/timeline h-full">
+        <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden  flex flex-col group/timeline h-full">
             {/* Visual Scanline */}
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent opacity-0 group-hover/timeline:opacity-100 transition-opacity" />
 
@@ -197,7 +197,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
                 </div>
 
                 <div className="relative z-10 flex items-center gap-4">
-                    <div className="w-12 h-12 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-inner">
+                    <div className="w-12 h-12 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 ">
                         <Layout className="text-indigo-400" size={24} />
                     </div>
                     <div>
@@ -216,9 +216,9 @@ export const TimelineContainer = ({ productionId }: Props) => {
                                 onClick={handleSmartNext}
                                 disabled={!hasNext}
                                 className={cn(
-                                    "flex-1 lg:flex-none flex items-center justify-center gap-3 px-5 py-3 rounded-xl transition-all text-[10px] font-black uppercase  shadow-xl",
+                                    "flex-1 lg:flex-none flex items-center justify-center gap-3 px-5 py-3 rounded-xl transition-all text-[10px] font-black uppercase  ",
                                     hasNext
-                                        ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30"
+                                        ? "bg-indigo-600 hover:bg-indigo-500 text-white "
                                         : "bg-background/50 text-muted border border-card-border cursor-not-allowed"
                                 )}
                             >

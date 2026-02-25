@@ -74,7 +74,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                 showConfirmButton: false,
                 timer: 1500,
                 customClass: {
-                    popup: 'border border-card-border rounded-3xl shadow-2xl',
+                    popup: 'border border-card-border rounded-3xl ',
                 }
             });
 
@@ -140,7 +140,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                     setView('form');
                     setIsManagerOpen(true);
                 }}
-                className="p-2.5 bg-card-bg hover:bg-card-border/50 border border-card-border rounded-xl text-muted hover:text-foreground transition-all shadow-lg group"
+                className="p-2.5 bg-card-bg hover:bg-card-border/50 border border-card-border rounded-xl text-muted hover:text-foreground transition-all  group"
                 title="Nueva Plantilla"
             >
                 <Settings size={18} className="group-hover:rotate-90 transition-transform duration-500" />
@@ -161,10 +161,10 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                                className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-md bg-card-bg/60 backdrop-blur-2xl border border-card-border shadow-[0_40px_100px_rgba(0,0,0,1)] z-[2001] flex flex-col rounded-[24px] overflow-hidden max-h-[85vh]"
+                                className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-md bg-card-bg/60 backdrop-blur-2xl border border-card-border z-[2001] flex flex-col rounded-[24px] overflow-hidden max-h-[85vh]"
                             >
                                 {/* Header */}
-                                <div className="p-6 border-b border-card-border flex items-center justify-between bg-card-bg shadow-sm relative z-10">
+                                <div className="p-6 border-b border-card-border flex items-center justify-between bg-card-bg  relative z-10">
                                     <div className="flex items-center gap-3">
                                         <div className="p-2 bg-indigo-500/10 rounded-xl">
                                             {view === 'form' ? <Zap size={20} className="text-indigo-400" /> : <List size={20} className="text-indigo-400" />}
@@ -238,7 +238,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                                     key={c}
                                                                     type="button"
                                                                     onClick={() => setColor(c)}
-                                                                    className={`h-8 rounded-lg transition-all ${color === c ? 'ring-2 ring-white ring-offset-4 ring-offset-background scale-110 shadow-lg' : 'hover:scale-105 hover:opacity-80'}`}
+                                                                    className={`h-8 rounded-lg transition-all ${color === c ? 'ring-2 ring-white ring-offset-4 ring-offset-background scale-110 ' : 'hover:scale-105 hover:opacity-80'}`}
                                                                     style={{ backgroundColor: c }}
                                                                 />
                                                             ))}
@@ -259,7 +259,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                         <button
                                                             type="submit"
                                                             disabled={isMutating || !name.trim()}
-                                                            className="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-xs uppercase  transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:bg-card-border disabled:shadow-none"
+                                                            className="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-xs uppercase  transition-all   flex items-center justify-center gap-2 disabled:opacity-50 disabled:bg-card-border"
                                                         >
                                                             {isMutating ? (
                                                                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -302,10 +302,10 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                         >
                                                             <div className="flex items-center gap-4">
                                                                 <div
-                                                                    className="w-10 h-10 rounded-xl shadow-inner flex items-center justify-center"
+                                                                    className="w-10 h-10 rounded-xl  flex items-center justify-center"
                                                                     style={{ backgroundColor: t.color + '20' }}
                                                                 >
-                                                                    <div className="w-3 h-3 rounded-full shadow-lg" style={{ backgroundColor: t.color }} />
+                                                                    <div className="w-3 h-3 rounded-full " style={{ backgroundColor: t.color }} />
                                                                 </div>
                                                                 <div>
                                                                     <h4 className="text-[12px] font-black text-foreground uppercase ">{t.name}</h4>

@@ -62,7 +62,7 @@ export const HardwareManager = ({ productionId }: Props) => {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center p-20 bg-card-bg/40 backdrop-blur-xl border border-card-border rounded-[2.5rem] shadow-2xl">
+            <div className="flex flex-col items-center justify-center p-20 bg-card-bg/40 backdrop-blur-xl border border-card-border rounded-[2.5rem] ">
                 <div className="relative mb-6">
                     <Loader2 size={48} className="animate-spin text-indigo-500 opacity-20" />
                     <Cpu size={24} className="absolute inset-0 m-auto text-indigo-400 animate-pulse" />
@@ -78,13 +78,13 @@ export const HardwareManager = ({ productionId }: Props) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
                 {/* Device List - Premium Surface */}
-                <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden group/devices">
+                <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-8 md:p-10  relative overflow-hidden group/devices">
                     {/* Tactical Scanline */}
                     <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent animate-pulse" />
 
                     <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-inner">
+                            <div className="w-12 h-12 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 ">
                                 <Keyboard size={24} className="text-indigo-400" />
                             </div>
                             <div>
@@ -101,7 +101,7 @@ export const HardwareManager = ({ productionId }: Props) => {
                     </div>
 
                     {error && (
-                        <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase  p-4 rounded-2xl mb-6 shadow-lg shadow-red-500/5 animate-pulse">
+                        <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase  p-4 rounded-2xl mb-6   animate-pulse">
                             <span className="flex items-center gap-3"><X size={14} /> {error}</span>
                         </div>
                     )}
@@ -119,11 +119,11 @@ export const HardwareManager = ({ productionId }: Props) => {
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     key={d.id}
-                                    className="flex justify-between items-center p-5 bg-background/40 backdrop-blur-md rounded-2xl border border-card-border/60 shadow-inner hover:border-indigo-500/30 transition-all group/item"
+                                    className="flex justify-between items-center p-5 bg-background/40 backdrop-blur-md rounded-2xl border border-card-border/60  hover:border-indigo-500/30 transition-all group/item"
                                 >
                                     <div className="flex items-center gap-4">
                                         <div className={cn(
-                                            "w-10 h-10 rounded-xl flex items-center justify-center shadow-inner border border-white/5",
+                                            "w-10 h-10 rounded-xl flex items-center justify-center  border border-white/5",
                                             d.type === 'hid' ? "bg-indigo-500/10 text-indigo-400" : "bg-emerald-500/10 text-emerald-400"
                                         )}>
                                             {d.type === 'hid' ? <Keyboard size={18} /> : <RadioReceiver size={18} />}
@@ -135,7 +135,7 @@ export const HardwareManager = ({ productionId }: Props) => {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <span className="text-[8px] font-black text-muted uppercase  opacity-40">Healthy</span>
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500  animate-pulse" />
                                     </div>
                                 </motion.div>
                             ))
@@ -144,7 +144,7 @@ export const HardwareManager = ({ productionId }: Props) => {
 
                     <button
                         onClick={requestHIDDevice}
-                        className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[10px] font-black uppercase  transition-all flex justify-center items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] group"
+                        className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[10px] font-black uppercase  transition-all flex justify-center items-center gap-3   active:scale-[0.98] group"
                     >
                         <Plus size={16} className="group-hover:rotate-90 transition-transform" />
                         Pair HID Interface
@@ -155,12 +155,12 @@ export const HardwareManager = ({ productionId }: Props) => {
                 </div>
 
                 {/* Logic Bridge Surface */}
-                <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden flex flex-col group/bridge">
+                <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-8 md:p-10  relative overflow-hidden flex flex-col group/bridge">
                     <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent animate-pulse" />
 
                     <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center border border-amber-500/20 shadow-inner">
+                            <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center border border-amber-500/20 ">
                                 <Zap size={24} className="text-amber-400" />
                             </div>
                             <div>
@@ -185,10 +185,10 @@ export const HardwareManager = ({ productionId }: Props) => {
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.9 }}
                                     key={mapping.id}
-                                    className="flex justify-between items-center p-4 bg-background/40 backdrop-blur-md rounded-2xl border border-card-border/60 shadow-inner group/map-item hover:border-amber-500/30 transition-all"
+                                    className="flex justify-between items-center p-4 bg-background/40 backdrop-blur-md rounded-2xl border border-card-border/60  group/map-item hover:border-amber-500/30 transition-all"
                                 >
                                     <div className="flex items-center gap-4 shrink-0">
-                                        <div className="px-3 py-1.5 bg-background border border-card-border rounded-lg text-[9px] font-black font-mono text-indigo-400 uppercase  shadow-lg">
+                                        <div className="px-3 py-1.5 bg-background border border-card-border rounded-lg text-[9px] font-black font-mono text-indigo-400 uppercase  ">
                                             {mapping.mapKey}
                                         </div>
                                         <ArrowRight size={14} className="text-muted/40 group-hover/map-item:translate-x-1 transition-transform" />
@@ -223,13 +223,13 @@ export const HardwareManager = ({ productionId }: Props) => {
                         {!isAssigning ? (
                             <button
                                 onClick={() => setIsAssigning(true)}
-                                className="w-full py-5 bg-background/50 hover:bg-white/5 border border-dashed border-card-border rounded-2xl text-[10px] font-black text-muted hover:text-indigo-400 hover:border-indigo-500/50 transition-all uppercase  shadow-inner font-mono"
+                                className="w-full py-5 bg-background/50 hover:bg-white/5 border border-dashed border-card-border rounded-2xl text-[10px] font-black text-muted hover:text-indigo-400 hover:border-indigo-500/50 transition-all uppercase   font-mono"
                             >
                                 + Initialize New Binding
                             </button>
                         ) : (
                             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <div className="p-8 bg-indigo-600/5 border border-indigo-500/20 rounded-[2rem] text-center shadow-inner relative overflow-hidden">
+                                <div className="p-8 bg-indigo-600/5 border border-indigo-500/20 rounded-[2rem] text-center  relative overflow-hidden">
                                     <div className="absolute inset-0 bg-indigo-500/5 opacity-30 animate-pulse pointer-events-none" />
 
                                     {!lastEvent ? (
@@ -246,7 +246,7 @@ export const HardwareManager = ({ productionId }: Props) => {
                                         <div className="space-y-8 relative z-10">
                                             <div className="space-y-2">
                                                 <p className="text-[9px] font-black text-indigo-400 uppercase  opacity-60">Intercept Identification:</p>
-                                                <div className="inline-block px-5 py-3 bg-indigo-600 border border-indigo-500 text-white font-mono text-xs font-black rounded-xl shadow-2xl shadow-indigo-600/40 uppercase ">
+                                                <div className="inline-block px-5 py-3 bg-indigo-600 border border-indigo-500 text-white font-mono text-xs font-black rounded-xl   uppercase ">
                                                     {lastEvent.type} <span className="mx-2 opacity-50">::</span> {lastEvent.key}
                                                 </div>
                                             </div>
@@ -264,7 +264,7 @@ export const HardwareManager = ({ productionId }: Props) => {
                                                             <button
                                                                 key={m.id}
                                                                 onClick={() => handleAssign(m.id)}
-                                                                className="w-full text-left px-5 py-4 bg-background/40 hover:bg-white/5 border border-card-border/60 hover:border-indigo-500/30 rounded-2xl transition-all group/macro shadow-lg"
+                                                                className="w-full text-left px-5 py-4 bg-background/40 hover:bg-white/5 border border-card-border/60 hover:border-indigo-500/30 rounded-2xl transition-all group/macro "
                                                             >
                                                                 <div className="flex items-center justify-between">
                                                                     <div className="flex flex-col">

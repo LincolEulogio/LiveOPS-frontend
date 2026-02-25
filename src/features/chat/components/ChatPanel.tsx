@@ -131,7 +131,7 @@ export const ChatPanel = ({ productionId }: Props) => {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
-                    "absolute left-[-32px] top-1/2 -translate-y-1/2 w-8 h-16 bg-card-bg border-l border-y border-card-border rounded-l-xl flex items-center justify-center text-muted hover:text-foreground transition-colors group shadow-2xl",
+                    "absolute left-[-32px] top-1/2 -translate-y-1/2 w-8 h-16 bg-card-bg border-l border-y border-card-border rounded-l-xl flex items-center justify-center text-muted hover:text-foreground transition-colors group ",
                     !isOpen && "left-[-40px] opacity-100"
                 )}
             >
@@ -145,7 +145,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                 )}
             </button>
 
-            <div className="flex-1 bg-background/90 backdrop-blur-2xl border-l border-card-border flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="flex-1 bg-background/90 backdrop-blur-2xl border-l border-card-border flex flex-col ">
                 {/* Header */}
                 <div className="p-4 border-b border-card-border/50 bg-card-bg/30 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -206,7 +206,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                                     </span>
                                 </div>
                                 <div className={cn(
-                                    "px-3 py-2 rounded-2xl text-sm leading-snug break-words shadow-sm",
+                                    "px-3 py-2 rounded-2xl text-sm leading-snug break-words ",
                                     isMe
                                         ? "bg-indigo-600 text-white rounded-tr-none"
                                         : "bg-card-bg text-foreground border border-card-border rounded-tl-none"
@@ -218,7 +218,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                                             return (
                                                 <span key={idx} className={cn(
                                                     "font-black px-1 rounded",
-                                                    isMeMentioned ? "bg-yellow-400 text-black shadow-lg" : "text-indigo-300"
+                                                    isMeMentioned ? "bg-yellow-400 text-black " : "text-indigo-300"
                                                 )}>
                                                     {word}{' '}
                                                 </span>
@@ -250,7 +250,7 @@ export const ChatPanel = ({ productionId }: Props) => {
 
                     {/* Suggestions Popup */}
                     {suggestions && (
-                        <div className="absolute bottom-full left-4 w-[calc(100%-32px)] bg-card-bg border border-card-border rounded-xl overflow-hidden shadow-2xl mb-2 animate-in slide-in-from-bottom-2 duration-200 z-50">
+                        <div className="absolute bottom-full left-4 w-[calc(100%-32px)] bg-card-bg border border-card-border rounded-xl overflow-hidden  mb-2 animate-in slide-in-from-bottom-2 duration-200 z-50">
                             {suggestions.map((s, i) => (
                                 <button
                                     key={s.id}
@@ -282,7 +282,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                             className={cn(
                                 "absolute right-2 bottom-2 p-2 rounded-xl transition-all",
                                 message.trim()
-                                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 hover:scale-105 active:scale-95"
+                                    ? "bg-indigo-600 text-white   hover:scale-105 active:scale-95"
                                     : "text-muted/50 cursor-not-allowed"
                             )}
                         >

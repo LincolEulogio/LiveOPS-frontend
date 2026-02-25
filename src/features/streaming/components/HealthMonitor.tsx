@@ -104,7 +104,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
     const isEngineConnected = latest && (new Date().getTime() - new Date(latest.timestamp).getTime() < 5000);
 
     return (
-        <div className="flex flex-col gap-6 p-6 bg-card-bg border border-card-border rounded-2xl shadow-2xl overflow-hidden relative">
+        <div className="flex flex-col gap-6 p-6 bg-card-bg border border-card-border rounded-2xl  overflow-hidden relative">
             {/* Background Accent */}
             <div className={cn(
                 "absolute top-0 right-0 w-64 h-64 blur-[100px] -mr-32 -mt-32 opacity-10 transition-colors duration-1000",
@@ -117,7 +117,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                     <div className={cn(
                         "p-2 rounded-lg transition-all duration-500",
                         isEngineConnected
-                            ? (hasIssues ? "bg-red-500/20 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)]" : "bg-emerald-500/20 text-emerald-400")
+                            ? (hasIssues ? "bg-red-500/20 text-red-400 " : "bg-emerald-500/20 text-emerald-400")
                             : "bg-muted/10 text-muted"
                     )}>
                         <Activity className={cn(
@@ -143,7 +143,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                             : !isEngineConnected
                                 ? "bg-muted/10 border-card-border text-muted"
                                 : hasIssues
-                                    ? "bg-red-500/10 border-red-500/20 text-red-400 shadow-[0_0_10px_rgba(239,68,68,0.1)]"
+                                    ? "bg-red-500/10 border-red-500/20 text-red-400 "
                                     : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
                     )}>
                         {!isConnected ? <><Link2Off size={12} className="animate-pulse" /> Sin Conexión</>
@@ -225,7 +225,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                     </div>
                 </div>
                 <div className="flex items-center gap-2 text-muted">
-                    <div className={cn("w-1.5 h-1.5 rounded-full transition-all duration-500", isEngineConnected ? "bg-emerald-500 animate-pulse shadow-emerald-500/50 shadow-[0_0_8px]" : "bg-muted")} />
+                    <div className={cn("w-1.5 h-1.5 rounded-full transition-all duration-500", isEngineConnected ? "bg-emerald-500 animate-pulse " : "bg-muted")} />
                     TELEMETRÍA ACTIVA
                 </div>
             </div>
@@ -257,7 +257,7 @@ const MetricCard = ({ label, value, icon: Icon, color, status = 'normal', toolti
     };
 
     return (
-        <div className={cn("p-5 rounded-2xl border bg-background/40 flex flex-col gap-4 transition-all hover:border-indigo-500/50 group shadow-sm", statusMap[status])} title={tooltip}>
+        <div className={cn("p-5 rounded-2xl border bg-background/40 flex flex-col gap-4 transition-all hover:border-indigo-500/50 group ", statusMap[status])} title={tooltip}>
             <div className="flex items-center justify-between">
                 <span className="text-[10px] font-black text-muted uppercase  opacity-60">{label}</span>
                 <div className={cn("p-2 rounded-xl", colorMap[color])}><Icon size={14} /></div>

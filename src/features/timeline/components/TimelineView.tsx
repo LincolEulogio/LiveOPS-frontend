@@ -130,7 +130,7 @@ export const TimelineView = () => {
                 <button
                     onClick={handleAddBlock}
                     disabled={isMutating}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all shadow-lg shadow-indigo-600/20 font-bold text-xs uppercase "
+                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all   font-bold text-xs uppercase "
                 >
                     <Plus size={16} />
                     Add Segment

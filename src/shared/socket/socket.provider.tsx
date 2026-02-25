@@ -113,7 +113,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       {children}
       {!isAuthRoute && !isConnected && isConnecting && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]">
-          <div className="bg-stone-900 border border-stone-800 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="bg-stone-900 border border-stone-800 px-6 py-3 rounded-2xl  flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <Loader2 className="animate-spin text-indigo-500" size={20} />
             <div className="flex flex-col">
               <span className="text-sm font-bold text-white ">Sync Interrupted</span>
@@ -124,7 +124,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       )}
       {!isAuthRoute && !isConnected && !isConnecting && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]">
-          <div className="bg-red-500/10 border border-red-500/20 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-4">
+          <div className="bg-red-500/10 border border-red-500/20 px-6 py-3 rounded-2xl  flex items-center gap-4">
             <WifiOff className="text-red-500" size={20} />
             <div className="flex flex-col">
               <span className="text-sm font-bold text-red-500 ">Backend Offline</span>

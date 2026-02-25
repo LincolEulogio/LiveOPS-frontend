@@ -42,9 +42,9 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 pb-12 p-4">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-card-bg border border-card-border p-8 rounded-2xl shadow-xl">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-card-bg border border-card-border p-8 rounded-2xl ">
         <div className="flex flex-col md:flex-row items-center gap-6">
-          <div className="w-24 h-24 rounded-full bg-indigo-600 flex items-center justify-center text-4xl font-bold text-white shadow-lg shadow-indigo-600/20">
+          <div className="w-24 h-24 rounded-full bg-indigo-600 flex items-center justify-center text-4xl font-bold text-white  ">
             {user.name?.charAt(0) || user.email.charAt(0).toUpperCase()}
           </div>
           <div className="text-center md:text-left">
@@ -75,7 +75,7 @@ export default function ProfilePage() {
 
       {isEditing && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-          <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-md shadow-2xl overflow-hidden relative">
+          <div className="bg-card-bg border border-card-border rounded-xl p-8 w-full max-w-md  overflow-hidden relative">
             <div className="absolute top-0 right-0 p-4">
               <button onClick={() => setIsEditing(false)} className="text-muted hover:text-foreground transition-colors">
                 <X size={20} />
@@ -119,7 +119,7 @@ export default function ProfilePage() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold uppercase  transition-colors disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-indigo-500/20"
+                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold uppercase  transition-colors disabled:opacity-50 flex items-center gap-2  "
                 >
                   {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                   Save Changes

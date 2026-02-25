@@ -179,7 +179,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
     const selectedLayer = config.layers.find(l => l.id === selectedLayerId);
 
     return (
-        <div className="flex flex-col md:flex-row h-auto md:h-[800px] w-full bg-background rounded-3xl overflow-hidden border border-card-border shadow-2xl mb-5">
+        <div className="flex flex-col md:flex-row h-auto md:h-[800px] w-full bg-background rounded-3xl overflow-hidden border border-card-border  mb-5">
             {/* Toolbar */}
             <div className="w-full md:w-16 h-14 md:h-full bg-card-bg border-b md:border-b-0 md:border-r border-card-border flex flex-row md:flex-col items-center justify-center md:justify-start md:py-6 gap-2 sm:gap-6 px-4 md:px-0">
                 <button onClick={() => addLayer('text')} className="p-3 text-muted hover:text-foreground transition-colors" title="Add Text">
@@ -192,7 +192,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                     <Box size={18} className="md:w-5 md:h-5" />
                 </button>
                 <div className="md:mt-auto flex flex-col gap-4">
-                    <button onClick={() => onSave(config)} className="p-2 sm:p-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-600/20 active:scale-95">
+                    <button onClick={() => onSave(config)} className="p-2 sm:p-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition-colors   active:scale-95">
                         <Save size={18} className="md:w-5 md:h-5" />
                     </button>
                 </div>
@@ -208,7 +208,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                             onClick={() => setPreviewMode(!previewMode)}
                             className={cn(
                                 "text-[9px] sm:text-[10px] font-black uppercase  px-3 py-1.5 rounded-full border transition-all whitespace-nowrap",
-                                previewMode ? "bg-indigo-500 text-white border-indigo-400 shadow-lg shadow-indigo-500/20" : "bg-card-border/50 text-muted border-card-border hover:text-foreground"
+                                previewMode ? "bg-indigo-500 text-white border-indigo-400" : "bg-card-border/50 text-muted border-card-border hover:text-foreground"
                             )}
                         >
                             {previewMode ? 'Live Preview: ON' : 'Preview Bindings'}
@@ -226,7 +226,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
 
                 <div className="flex-1 flex items-center justify-center p-4 sm:p-10 md:p-20 overflow-auto bg-[radial-gradient(#ffffff10_1px,transparent_1px)] [background-size:20px_20px] no-scrollbar">
                     <div
-                        className="bg-card-bg shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-hidden"
+                        className="bg-card-bg relative overflow-hidden"
                         style={{
                             width: config.width,
                             height: config.height,
@@ -243,7 +243,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                 onMouseDown={(e) => handleLayerMouseDown(e, layer)}
                                 className={cn(
                                     "absolute border group transition-shadow",
-                                    selectedLayerId === layer.id ? "border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.4)] z-50" : "border-transparent hover:border-white/20 select-none"
+                                    selectedLayerId === layer.id ? "border-indigo-500 z-50" : "border-transparent hover:border-white/20 select-none"
                                 )}
                                 style={{
                                     left: layer.x,
@@ -302,7 +302,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                 className={cn(
                                     "flex items-center gap-3 p-2.5 rounded-xl cursor-pointer transition-all border group",
                                     selectedLayerId === l.id
-                                        ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20"
+                                        ? "bg-indigo-600 border-indigo-500 text-white  "
                                         : "text-muted hover:bg-white/5 border-transparent"
                                 )}
                             >
@@ -476,7 +476,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                             <div className="pt-6 border-t border-card-border/50">
                                 <button
                                     onClick={() => confirm('¿Eliminar esta capa?') && deleteLayer(selectedLayer.id)}
-                                    className="w-full p-4 bg-red-500/5 text-red-500 border border-red-500/10 rounded-2xl hover:bg-red-500 hover:text-white transition-all text-[10px] font-black uppercase  shadow-lg shadow-red-500/5"
+                                    className="w-full p-4 bg-red-500/5 text-red-500 border border-red-500/10 rounded-2xl hover:bg-red-500 hover:text-white transition-all text-[10px] font-black uppercase   "
                                 >
                                     Deconstruct Layer
                                 </button>

@@ -29,7 +29,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
     return (
         <div className="h-full flex flex-col space-y-6 animate-in fade-in duration-500">
             {/* Header */}
-            <div className="flex justify-between items-center bg-card-bg border border-card-border p-6 rounded-3xl shadow-xl">
+            <div className="flex justify-between items-center bg-card-bg border border-card-border p-6 rounded-3xl ">
                 <div>
                     <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
                         <MessageSquare className="text-pink-500" />
@@ -48,7 +48,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
             <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
 
                 {/* Inbox Column */}
-                <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-xl flex flex-col min-h-0">
+                <div className="bg-card-bg border border-card-border rounded-3xl p-6  flex flex-col min-h-0">
                     <h2 className="text-sm font-bold text-foreground uppercase  flex items-center gap-2 mb-4 shrink-0">
                         <ShieldCheck size={16} className="text-emerald-400" />
                         Inbox / Moderation ({pendingMessages.length})
@@ -73,7 +73,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
                 </div>
 
                 {/* Approved Queue */}
-                <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-xl flex flex-col min-h-0">
+                <div className="bg-card-bg border border-card-border rounded-3xl p-6  flex flex-col min-h-0">
                     <h2 className="text-sm font-bold text-foreground uppercase  flex items-center gap-2 mb-4 shrink-0">
                         <CheckBadgeIcon className="text-blue-400" />
                         Approved Queue ({approvedMessages.length})
@@ -98,7 +98,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
                 </div>
 
                 {/* On-Air View */}
-                <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-xl flex flex-col">
+                <div className="bg-card-bg border border-card-border rounded-3xl p-6  flex flex-col">
                     <h2 className="text-sm font-bold text-foreground uppercase  flex items-center gap-2 mb-4 shrink-0">
                         <Tv size={16} className="text-indigo-400" />
                         Currently On-Air
@@ -107,7 +107,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
                     <div className="flex-1 flex flex-col">
                         {onAirMessage ? (
                             <div className="space-y-4">
-                                <div className="p-1 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-2xl shadow-indigo-500/20">
+                                <div className="p-1 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500  ">
                                     <SocialMessageCard
                                         message={onAirMessage}
                                         className="bg-background border-0"

@@ -152,7 +152,7 @@ export const PrompterView = ({ productionId }: Props) => {
     }
 
     return (
-        <div className="h-[calc(100vh-140px)] bg-background rounded-3xl border border-card-border shadow-2xl relative overflow-hidden group ">
+        <div className="h-[calc(100vh-140px)] bg-background rounded-3xl border border-card-border  relative overflow-hidden group ">
 
             {/* Capa de Scroll para el Contenido */}
             <div
@@ -194,7 +194,7 @@ export const PrompterView = ({ productionId }: Props) => {
                 <div
                     onClick={resetToTop}
                     title="Reiniciar Guion"
-                    className="h-[2px] bg-red-600/40 cursor-pointer pointer-events-auto hover:bg-red-600/60 transition-colors shadow-[0_0_8px_rgba(220,38,38,0.2)]"
+                    className="h-[2px] bg-red-600/40 cursor-pointer pointer-events-auto hover:bg-red-600/60 transition-colors "
                 />
             </div>
             {/* Flecha fija en el borde (Triángulo) */}
@@ -202,12 +202,12 @@ export const PrompterView = ({ productionId }: Props) => {
                 <div
                     onClick={resetToTop}
                     title="Reiniciar Guion"
-                    className="w-0 h-0 border-y-[12px] border-y-transparent border-l-[16px] border-l-red-600 cursor-pointer pointer-events-auto hover:scale-125 transition-transform active:scale-95 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                    className="w-0 h-0 border-y-[12px] border-y-transparent border-l-[16px] border-l-red-600 cursor-pointer pointer-events-auto hover:scale-125 transition-transform active:scale-95 "
                 />
             </div>
 
             {/* Controles Laterales (Verticales) */}
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-card-bg/90 border border-card-border p-3 rounded-2xl flex flex-col items-center gap-4 z-50 shadow-2xl backdrop-blur-md">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-card-bg/90 border border-card-border p-3 rounded-2xl flex flex-col items-center gap-4 z-50  backdrop-blur-md">
 
                 {/* Font Size */}
                 <div className="flex flex-col items-center gap-1">
@@ -247,7 +247,7 @@ export const PrompterView = ({ productionId }: Props) => {
                             setIsPlaying(!isPlaying);
                         }}
                         className={cn(
-                            "w-12 h-12 flex items-center justify-center rounded-xl shadow-lg transition-all",
+                            "w-12 h-12 flex items-center justify-center rounded-xl  transition-all",
                             isPlaying ? "bg-red-500 hover:bg-red-600 text-white" : "bg-emerald-500 hover:bg-emerald-600 text-white"
                         )}
                         title={isPlaying ? "Pause" : "Play"}

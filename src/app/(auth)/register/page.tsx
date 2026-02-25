@@ -75,7 +75,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="bg-card-bg border border-card-border rounded-xl p-6 shadow-xl">
+    <div className="bg-card-bg border border-card-border rounded-xl p-6 ">
       <h2 className="text-xl font-semibold text-foreground mb-6">Create an account</h2>
 
       {error && (

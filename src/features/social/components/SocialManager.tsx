@@ -102,7 +102,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                                 <span className="text-xs font-black text-red-500 uppercase er truncate max-w-[200px]">
                                     Sending: {onAirMessage.author}
                                 </span>
-                                <div className="w-2 h-2 rounded-full bg-red-600 animate-ping shadow-[0_0_12px_rgba(220,38,38,0.8)]" />
+                                <div className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
                             </motion.div>
                         ) : (
                             <span className="text-[10px] font-black text-muted/40 uppercase  flex items-center gap-2">
@@ -115,7 +115,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                 {onAirMessage && (
                     <button
                         onClick={clearActive}
-                        className="px-4 py-1 bg-red-600 hover:bg-red-500 text-white text-[10px] font-black uppercase  rounded-lg transition-all active:scale-95 shadow-lg shadow-red-600/20 cursor-pointer text-xs"
+                        className="px-4 py-1 bg-red-600 hover:bg-red-500 text-white text-[10px] font-black uppercase  rounded-lg transition-all active:scale-95   cursor-pointer text-xs"
                     >
                         Kill Feed
                     </button>
@@ -138,13 +138,13 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                             className={cn(
                                 "group relative overflow-hidden p-4 rounded-3xl border transition-all duration-300",
                                 msg.status === 'ON_AIR'
-                                    ? "bg-red-500/5 border-red-500/50 shadow-2xl scale-[1.02] z-10"
+                                    ? "bg-red-500/5 border-red-500/50  scale-[1.02] z-10"
                                     : "bg-background/40 border-card-border/50 hover:bg-background/60 hover:border-indigo-500/30"
                             )}
                         >
                             <div className="flex gap-4">
                                 <div className="relative shrink-0 flex flex-col items-center gap-1">
-                                    <div className="w-12 h-12 rounded-[1.25rem] overflow-hidden bg-card-bg border border-card-border shadow-inner">
+                                    <div className="w-12 h-12 rounded-[1.25rem] overflow-hidden bg-card-bg border border-card-border ">
                                         {msg.authorAvatar ? (
                                             <img src={msg.authorAvatar} alt={msg.author} className="w-full h-full object-cover" />
                                         ) : (
@@ -155,9 +155,9 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                                     </div>
                                     <div className={cn(
                                         "px-2 py-0.5 rounded-lg border flex items-center justify-center transition-colors",
-                                        msg.platform.toLowerCase() === 'youtube' && "bg-red-600 border-red-500 shadow-lg shadow-red-600/20",
-                                        msg.platform.toLowerCase() === 'twitch' && "bg-purple-600 border-purple-500 shadow-lg shadow-purple-600/20",
-                                        msg.platform.toLowerCase() === 'facebook' && "bg-blue-600 border-blue-500 shadow-lg shadow-blue-600/20",
+                                        msg.platform.toLowerCase() === 'youtube' && "bg-red-600 border-red-500  ",
+                                        msg.platform.toLowerCase() === 'twitch' && "bg-purple-600 border-purple-500  ",
+                                        msg.platform.toLowerCase() === 'facebook' && "bg-blue-600 border-blue-500  ",
                                     )}>
                                         {msg.platform.toLowerCase() === 'youtube' && <Youtube size={10} className="text-white" />}
                                         {msg.platform.toLowerCase() === 'twitch' && <Twitch size={10} className="text-white" />}
@@ -180,7 +180,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                                     {msg.status === 'PENDING' && (
                                         <button
                                             onClick={() => handleUpdateStatus(msg.id, 'APPROVED')}
-                                            className="p-3 bg-white/5 border border-card-border hover:border-emerald-500/50 text-emerald-400 rounded-2xl hover:bg-emerald-500 hover:text-white transition-all active:scale-90 shadow-sm"
+                                            className="p-3 bg-white/5 border border-card-border hover:border-emerald-500/50 text-emerald-400 rounded-2xl hover:bg-emerald-500 hover:text-white transition-all active:scale-90 "
                                             title="Validate User"
                                         >
                                             <Eye size={16} />
@@ -189,7 +189,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                                     {(msg.status === 'PENDING' || msg.status === 'APPROVED') && (
                                         <button
                                             onClick={() => handleUpdateStatus(msg.id, 'ON_AIR')}
-                                            className="p-3 bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-500 text-indigo-400 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all active:scale-90 shadow-lg"
+                                            className="p-3 bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-500 text-indigo-400 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all active:scale-90 "
                                             title="Push to Air"
                                         >
                                             <Share2 size={16} />
@@ -198,7 +198,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                                     {msg.status === 'ON_AIR' && (
                                         <button
                                             onClick={() => handleUpdateStatus(msg.id, 'APPROVED')}
-                                            className="p-3 bg-red-600 text-white rounded-2xl hover:bg-red-500 transition-all active:scale-90 shadow-xl shadow-red-600/20"
+                                            className="p-3 bg-red-600 text-white rounded-2xl hover:bg-red-500 transition-all active:scale-90  "
                                             title="Retirar"
                                         >
                                             <EyeOff size={16} />

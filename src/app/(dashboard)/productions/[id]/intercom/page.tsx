@@ -55,13 +55,13 @@ export default function IntercomPage() {
                 <div className="flex bg-card-bg p-1 rounded-xl border border-card-border">
                     <button
                         onClick={() => setViewMode('dashboard')}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase  transition-all ${viewMode === 'dashboard' ? 'bg-background text-foreground shadow-lg border border-card-border' : 'text-muted hover:text-foreground'}`}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase  transition-all ${viewMode === 'dashboard' ? 'bg-background text-foreground  border border-card-border' : 'text-muted hover:text-foreground'}`}
                     >
                         <AppWindow size={14} /> Dashboard
                     </button>
                     <button
                         onClick={() => setViewMode('device')}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase  transition-all ${viewMode === 'device' ? 'bg-background text-foreground shadow-lg border border-card-border' : 'text-muted hover:text-foreground'}`}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase  transition-all ${viewMode === 'device' ? 'bg-background text-foreground  border border-card-border' : 'text-muted hover:text-foreground'}`}
                     >
                         <Smartphone size={14} /> Mobile
                     </button>
@@ -74,7 +74,7 @@ export default function IntercomPage() {
 
             {/* Vibration Unlock Overlay (Required by browsers) */}
             {viewMode === 'device' && (
-                <div className="fixed bottom-32 left-6 right-6 lg:left-auto lg:w-80 p-4 bg-indigo-600/90 backdrop-blur-xl border border-indigo-400/30 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-[60] flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                <div className="fixed bottom-32 left-6 right-6 lg:left-auto lg:w-80 p-4 bg-indigo-600/90 backdrop-blur-xl border border-indigo-400/30 rounded-2xl z-[60] flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
                     <div className="bg-white/20 p-2.5 rounded-xl">
                         <Smartphone size={20} className="text-white animate-bounce" />
                     </div>

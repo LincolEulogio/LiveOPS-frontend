@@ -79,7 +79,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 1.1 }}
-                            className="w-full max-w-md bg-card-bg border-2 border-indigo-500/50 rounded-[40px] p-8 shadow-2xl shadow-indigo-500/10 flex flex-col items-center text-center relative z-10"
+                            className="w-full max-w-md bg-card-bg border-2 border-indigo-500/50 rounded-[40px] p-8   flex flex-col items-center text-center relative z-10"
                         >
                             <div
                                 className="absolute inset-0 opacity-5 rounded-[40px] pointer-events-none"
@@ -102,25 +102,25 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                             <div className="grid grid-cols-2 gap-3 w-full mb-6">
                                 <button
                                     onClick={() => handleRespond('OK')}
-                                    className="py-5 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-black uppercase  text-sm shadow-lg shadow-green-600/20 active:scale-95 transition-all"
+                                    className="py-5 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-black uppercase  text-sm   active:scale-95 transition-all"
                                 >
                                     OK
                                 </button>
                                 <button
                                     onClick={() => handleRespond('COPIADO')}
-                                    className="py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase  text-sm shadow-lg shadow-indigo-600/20 active:scale-95 transition-all"
+                                    className="py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase  text-sm   active:scale-95 transition-all"
                                 >
                                     COPIADO
                                 </button>
                                 <button
                                     onClick={() => handleRespond('FALA')}
-                                    className="py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-black uppercase  text-sm shadow-lg shadow-red-600/20 active:scale-95 transition-all"
+                                    className="py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-black uppercase  text-sm   active:scale-95 transition-all"
                                 >
                                     FALA
                                 </button>
                                 <button
                                     onClick={() => handleRespond('DUDA')}
-                                    className="py-5 bg-amber-500 hover:bg-amber-400 text-white rounded-2xl font-black uppercase  text-sm shadow-lg shadow-amber-500/20 active:scale-95 transition-all"
+                                    className="py-5 bg-amber-500 hover:bg-amber-400 text-white rounded-2xl font-black uppercase  text-sm   active:scale-95 transition-all"
                                 >
                                     DUDA
                                 </button>
@@ -159,7 +159,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                                             input.value = '';
                                         }
                                     }}
-                                    className="p-3 bg-foreground text-background rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-lg"
+                                    className="p-3 bg-foreground text-background rounded-xl hover:opacity-90 active:scale-95 transition-all "
                                 >
                                     <Send size={16} />
                                 </button>

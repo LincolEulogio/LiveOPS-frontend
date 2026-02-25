@@ -48,13 +48,13 @@ export const AutomationDashboard = ({ productionId }: Props) => {
     return (
         <div className="space-y-8 pb-20">
             {/* Tactical Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-card-bg/60 backdrop-blur-2xl border border-card-border p-6 sm:p-10 rounded-[2.5rem] shadow-2xl overflow-hidden relative group">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-card-bg/60 backdrop-blur-2xl border border-card-border p-6 sm:p-10 rounded-[2.5rem]  overflow-hidden relative group">
                 <div className="absolute top-0 right-0 p-10 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-0 transition-transform duration-700">
                     <Zap size={180} />
                 </div>
 
                 <div className="relative z-10 flex items-center gap-6">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-600/10 rounded-[2rem] flex items-center justify-center border border-indigo-500/20 shadow-inner">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-600/10 rounded-[2rem] flex items-center justify-center border border-indigo-500/20 ">
                         <Zap className="text-indigo-400" size={32} />
                     </div>
                     <div>
@@ -69,7 +69,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
 
                 <button
                     onClick={handleCreate}
-                    className="relative z-10 flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black uppercase  text-xs transition-all shadow-xl shadow-indigo-600/20 group active:scale-95"
+                    className="relative z-10 flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black uppercase  text-xs transition-all   group active:scale-95"
                 >
                     <Plus size={18} className="group-hover:rotate-90 transition-transform duration-500" />
                     Initialize New Rule
@@ -78,7 +78,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
 
             {/* Quick Macro Control Surface */}
             {manualMacros.length > 0 && (
-                <div className="bg-card-bg/40 backdrop-blur-xl border border-card-border rounded-3xl p-3 sm:p-4 flex items-center gap-4 overflow-x-auto no-scrollbar shadow-inner group">
+                <div className="bg-card-bg/40 backdrop-blur-xl border border-card-border rounded-3xl p-3 sm:p-4 flex items-center gap-4 overflow-x-auto no-scrollbar  group">
                     <div className="flex items-center gap-3 pr-6 border-r border-card-border shrink-0">
                         <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
                             <Zap size={14} fill="currentColor" />
@@ -117,7 +117,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                                 className={cn(
                                     "flex-1 sm:flex-none flex items-center justify-center gap-3 px-6 py-3 rounded-2xl text-[11px] font-black uppercase  transition-all relative overflow-hidden",
                                     activeTab === tab.id
-                                        ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/30"
+                                        ? "bg-indigo-600 text-white  "
                                         : "text-muted hover:text-foreground hover:bg-white/5",
                                     tab.mobileOnly && "lg:hidden"
                                 )}
@@ -150,7 +150,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                                 )}
 
                                 {activeTab === 'history' && (
-                                    <div className="bg-card-bg/60 backdrop-blur-xl border border-card-border rounded-[2.5rem] p-6 lg:p-10 shadow-2xl h-[700px] flex flex-col">
+                                    <div className="bg-card-bg/60 backdrop-blur-xl border border-card-border rounded-[2.5rem] p-6 lg:p-10  h-[700px] flex flex-col">
                                         <ExecutionLogs logs={logs} isLoading={isLoading} />
                                     </div>
                                 )}
@@ -165,7 +165,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
 
                 {/* Desktop-Only Sidebar History */}
                 <div className="hidden min-[1200px]:block min-[1200px]:col-span-4 min-[1440px]:col-span-3 space-y-8">
-                    <div className="bg-card-bg/80 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden flex flex-col h-[800px]">
+                    <div className="bg-card-bg/80 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-8  relative overflow-hidden flex flex-col h-[800px]">
                         <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none">
                             <History size={150} />
                         </div>
@@ -175,7 +175,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                                 <h2 className="text-[10px] font-black text-indigo-400 uppercase ">Operational</h2>
                                 <p className="text-lg font-black text-foreground uppercase ">System Logs</p>
                             </div>
-                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
+                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse "></div>
                         </div>
 
                         <div className="flex-1 overflow-y-auto no-scrollbar pb-6 relative z-10">
@@ -183,7 +183,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                         </div>
 
                         <div className="pt-6 border-t border-card-border/50 relative z-10">
-                            <button className="w-full flex items-center justify-center gap-3 p-4 bg-background/50 hover:bg-indigo-600 rounded-2xl text-[10px] font-black text-muted hover:text-white uppercase  transition-all group active:scale-95 shadow-lg">
+                            <button className="w-full flex items-center justify-center gap-3 p-4 bg-background/50 hover:bg-indigo-600 rounded-2xl text-[10px] font-black text-muted hover:text-white uppercase  transition-all group active:scale-95 ">
                                 Master Activity Grid <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>

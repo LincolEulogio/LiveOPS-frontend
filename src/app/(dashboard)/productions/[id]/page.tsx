@@ -60,7 +60,7 @@ export default function ProductionDetailPage() {
         </p>
         <Link
           href="/productions"
-          className="px-8 py-3 bg-red-500 text-white font-black uppercase  rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95"
+          className="px-8 py-3 bg-red-500 text-white font-black uppercase  rounded-2xl hover:bg-red-600 transition-all   active:scale-95"
         >
           Return to Console
         </Link>
@@ -74,7 +74,7 @@ export default function ProductionDetailPage() {
       className={cn(
         "flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase  transition-all relative overflow-hidden",
         activeTab === tabId
-          ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/30"
+          ? "bg-indigo-600 text-white  "
           : "text-muted hover:text-foreground hover:bg-card-bg"
       )}
     >
@@ -94,7 +94,7 @@ export default function ProductionDetailPage() {
       {/* Header - Glass Container */}
       <div className="relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-[2.5rem] blur opacity-10" />
-        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center bg-card-bg/80 backdrop-blur-2xl border border-card-border p-6 sm:p-8 rounded-[2rem] shadow-2xl gap-6 overflow-hidden">
+        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center bg-card-bg/80 backdrop-blur-2xl border border-card-border p-6 sm:p-8 rounded-[2rem]  gap-6 overflow-hidden">
           <div className="flex items-center gap-5 min-w-0">
             <div className="w-16 h-16 rounded-[1.5rem] bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 shrink-0">
               {production.engineType === EngineType.OBS ? (
@@ -124,14 +124,14 @@ export default function ProductionDetailPage() {
             <Link
               href={`/productions/${id}/talent`}
               target="_blank"
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-background border border-card-border text-foreground rounded-2xl font-black text-[10px] uppercase  hover:bg-card-border transition-all shadow-lg active:scale-95"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-background border border-card-border text-foreground rounded-2xl font-black text-[10px] uppercase  hover:bg-card-border transition-all  active:scale-95"
             >
               <ExternalLink size={14} className="text-indigo-400" />
               Talent View
             </Link>
             <Link
               href={`/productions/${id}/edit`}
-              className="p-3 bg-background border border-card-border rounded-2xl hover:bg-card-border transition-all text-muted hover:text-indigo-400 shadow-lg active:scale-95"
+              className="p-3 bg-background border border-card-border rounded-2xl hover:bg-card-border transition-all text-muted hover:text-indigo-400  active:scale-95"
               title="Configuración del Motor"
             >
               <Settings size={20} />
@@ -141,7 +141,7 @@ export default function ProductionDetailPage() {
       </div>
 
       {/* Mobile-Only Tab Navigation */}
-      <div className="lg:hidden flex bg-card-bg/40 backdrop-blur-xl border border-card-border p-1.5 rounded-[1.5rem] shadow-xl overflow-x-auto no-scrollbar gap-1">
+      <div className="lg:hidden flex bg-card-bg/40 backdrop-blur-xl border border-card-border p-1.5 rounded-[1.5rem]  overflow-x-auto no-scrollbar gap-1">
         <TabButton id="overview" label="Panel" icon={Layout} />
         <TabButton id="streaming" label="Broadcast" icon={Zap} />
         <TabButton id="script" label="Rundown" icon={FileText} />
@@ -177,19 +177,19 @@ export default function ProductionDetailPage() {
               <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 no-scrollbar">
                 <Link
                   href={`/productions/${id}/prompter`}
-                  className="flex items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-xl text-[10px] font-black text-foreground uppercase  hover:bg-card-border transition-all shadow-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-xl text-[10px] font-black text-foreground uppercase  hover:bg-card-border transition-all "
                 >
                   <Monitor size={14} className="text-emerald-400" /> Teleprompter
                 </Link>
                 <Link
                   href={`/productions/${id}/team`}
-                  className="flex items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-xl text-[10px] font-black text-foreground uppercase  hover:bg-card-border transition-all shadow-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-xl text-[10px] font-black text-foreground uppercase  hover:bg-card-border transition-all "
                 >
                   <Users size={14} className="text-indigo-400" /> Team Editor
                 </Link>
               </div>
             </div>
-            <div className="h-[400px] sm:h-[650px] bg-card-bg/30 border border-card-border/50 rounded-[2rem] overflow-hidden shadow-inner">
+            <div className="h-[400px] sm:h-[650px] bg-card-bg/30 border border-card-border/50 rounded-[2rem] overflow-hidden ">
               <ScriptEditor productionId={id} />
             </div>
           </section>
@@ -204,7 +204,7 @@ export default function ProductionDetailPage() {
                 Social Media Manager
               </h2>
             </div>
-            <div className="h-[450px] bg-card-bg/30 border border-card-border/50 rounded-[2rem] overflow-hidden shadow-2xl">
+            <div className="h-[450px] bg-card-bg/30 border border-card-border/50 rounded-[2rem] overflow-hidden ">
               <SocialManager productionId={id} />
             </div>
           </section>
@@ -233,7 +233,7 @@ export default function ProductionDetailPage() {
             <PeripheralManager productionId={id} />
 
             {/* Team Snapshot Card */}
-            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6 shadow-2xl relative overflow-hidden">
+            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6  relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
                 <Users size={80} />
               </div>
@@ -250,7 +250,7 @@ export default function ProductionDetailPage() {
               <div className="space-y-4 mb-8">
                 {production.users?.slice(0, 4).map((u: any) => (
                   <div key={u.userId} className="flex items-center gap-3 p-2 hover:bg-white/5 rounded-2xl transition-colors cursor-default border border-transparent hover:border-white/5">
-                    <div className="w-10 h-10 rounded-xl bg-background border border-card-border flex items-center justify-center text-xs font-black text-indigo-400 shadow-inner">
+                    <div className="w-10 h-10 rounded-xl bg-background border border-card-border flex items-center justify-center text-xs font-black text-indigo-400 ">
                       {u.user.name?.[0]?.toUpperCase() || 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -269,7 +269,7 @@ export default function ProductionDetailPage() {
               <Guard requiredPermissions={['production:manage']}>
                 <Link
                   href={`/productions/${id}/team`}
-                  className="flex items-center justify-center w-full px-4 py-4 bg-background border border-card-border text-foreground text-[10px] font-black uppercase  rounded-2xl transition-all hover:bg-indigo-600 hover:text-white hover:border-indigo-500/50 shadow-lg active:scale-95"
+                  className="flex items-center justify-center w-full px-4 py-4 bg-background border border-card-border text-foreground text-[10px] font-black uppercase  rounded-2xl transition-all hover:bg-indigo-600 hover:text-white hover:border-indigo-500/50  active:scale-95"
                 >
                   Manage Crew Access
                 </Link>
@@ -279,7 +279,7 @@ export default function ProductionDetailPage() {
             {/* Quick Links / Utility Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
               <Link href={`/productions/${id}/automation`} className="group">
-                <div className="bg-card-bg/60 backdrop-blur-md border border-card-border rounded-[1.5rem] p-5 h-full transition-all hover:bg-card-bg hover:border-indigo-500/30 shadow-xl active:scale-95">
+                <div className="bg-card-bg/60 backdrop-blur-md border border-card-border rounded-[1.5rem] p-5 h-full transition-all hover:bg-card-bg hover:border-indigo-500/30  active:scale-95">
                   <Zap className="text-indigo-400 mb-4 group-hover:animate-pulse" size={20} />
                   <h3 className="text-xs font-black text-foreground uppercase  mb-1">Automation</h3>
                   <p className="text-[10px] text-muted-foreground font-bold leading-relaxed uppercase ">Rules & Macros</p>
@@ -287,7 +287,7 @@ export default function ProductionDetailPage() {
               </Link>
 
               <Link href={`/productions/${id}/analytics`} className="group">
-                <div className="bg-card-bg/60 backdrop-blur-md border border-card-border rounded-[1.5rem] p-5 h-full transition-all hover:bg-card-bg hover:border-pink-500/30 shadow-xl active:scale-95">
+                <div className="bg-card-bg/60 backdrop-blur-md border border-card-border rounded-[1.5rem] p-5 h-full transition-all hover:bg-card-bg hover:border-pink-500/30  active:scale-95">
                   <BarChart3 className="text-pink-400 mb-4" size={20} />
                   <h3 className="text-xs font-black text-foreground uppercase  mb-1">Analytics</h3>
                   <p className="text-[10px] text-muted-foreground font-bold leading-relaxed uppercase ">Post-Show Stats</p>

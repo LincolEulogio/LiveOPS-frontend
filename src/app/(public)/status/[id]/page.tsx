@@ -78,7 +78,7 @@ export default function PublicStatusPage() {
             <nav className="border-b border-card-border bg-background/80 backdrop-blur-xl sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl flex items-center justify-center  ">
                             <Zap className="text-white fill-white" size={20} />
                         </div>
                         <div>
@@ -102,7 +102,7 @@ export default function PublicStatusPage() {
                 {/* Hero Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-8">
-                        <div className="bg-card-bg border border-card-border p-8 rounded-[2rem] shadow-2xl relative overflow-hidden group">
+                        <div className="bg-card-bg border border-card-border p-8 rounded-[2rem]  relative overflow-hidden group">
                             {/* Background Glow */}
                             <div className={cn(
                                 "absolute top-0 right-0 w-96 h-96 blur-[120px] -mr-48 -mt-48 transition-colors duration-1000",
@@ -157,7 +157,7 @@ export default function PublicStatusPage() {
                         </div>
 
                         {/* Performance Chart */}
-                        <div className="bg-card-bg border border-card-border p-8 rounded-[2rem] shadow-2xl space-y-6">
+                        <div className="bg-card-bg border border-card-border p-8 rounded-[2rem]  space-y-6">
                             <div className="flex items-center justify-between">
                                 <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
                                     <Activity className="text-indigo-400" size={20} />
@@ -188,7 +188,7 @@ export default function PublicStatusPage() {
 
                     {/* Side Info */}
                     <div className="space-y-6">
-                        <div className="bg-card-bg border border-card-border p-8 rounded-[2rem] shadow-2xl">
+                        <div className="bg-card-bg border border-card-border p-8 rounded-[2rem] ">
                             <h3 className="font-bold text-foreground mb-6 uppercase text-xs  flex items-center gap-2">
                                 <Clock className="text-indigo-400" size={16} /> Último Reporte
                             </h3>
@@ -208,7 +208,7 @@ export default function PublicStatusPage() {
                             </div>
                         </div>
 
-                        <div className="bg-indigo-600 p-8 rounded-[2rem] shadow-2xl shadow-indigo-500/10 text-white space-y-4">
+                        <div className="bg-indigo-600 p-8 rounded-[2rem]   text-white space-y-4">
                             <h3 className="font-black text-xl  italic">LiveOPS Professional</h3>
                             <p className="text-indigo-100 text-sm leading-relaxed">
                                 Esta es una página de estado segura y de solo lectura generada por LiveOPS para transparencia con el cliente.

@@ -145,7 +145,7 @@ export const TimelineCRUD = ({
             ></div>
 
             {/* Dialog */}
-            <div className="relative w-full max-w-lg max-h-[50vh] bg-card-bg border border-card-border rounded-[2rem] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="relative w-full max-w-lg max-h-[50vh] bg-card-bg border border-card-border rounded-[2rem]  flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
                 <div className="flex items-center justify-between p-6 border-b border-card-border">
                     <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                         {editingBlock ? 'Editar Bloque' : 'Añadir Bloque a Escaleta'}
@@ -252,7 +252,7 @@ export const TimelineCRUD = ({
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="flex-[2] bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-[10px] font-black uppercase  py-4 rounded-2xl transition-all shadow-xl shadow-indigo-600/30 active:scale-95 flex items-center justify-center gap-2"
+                            className="flex-[2] bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-[10px] font-black uppercase  py-4 rounded-2xl transition-all   active:scale-95 flex items-center justify-center gap-2"
                         >
                             {isSubmitting ? (
                                 <>

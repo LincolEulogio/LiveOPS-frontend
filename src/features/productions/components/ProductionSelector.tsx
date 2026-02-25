@@ -27,12 +27,12 @@ export const ProductionSelector = () => {
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
-                <button className="flex items-center gap-2 sm:gap-4 px-4 sm:px-6 py-3.5 bg-background shadow-inner hover:bg-white/[0.02] border border-card-border/60 rounded-[1.25rem] transition-all group min-w-[200px] sm:min-w-[240px] flex-1 sm:flex-initial justify-between relative overflow-hidden active:scale-95">
+                <button className="flex items-center gap-2 sm:gap-4 px-4 sm:px-6 py-3.5 bg-background  hover:bg-white/[0.02] border border-card-border/60 rounded-[1.25rem] transition-all group min-w-[200px] sm:min-w-[240px] flex-1 sm:flex-initial justify-between relative overflow-hidden active:scale-95">
                     {/* Hover Glow */}
                     <div className="absolute inset-x-0 bottom-0 h-0.5 bg-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                     <div className="flex items-center gap-3 sm:gap-4 relative z-10 flex-1 min-w-0">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 shadow-inner group-hover:bg-indigo-600/20 transition-all shrink-0">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20  group-hover:bg-indigo-600/20 transition-all shrink-0">
                             <Server size={16} className="text-indigo-400 sm:w-[18px] sm:h-[18px]" />
                         </div>
                         <div className="text-left flex-1 min-w-0">
@@ -48,7 +48,7 @@ export const ProductionSelector = () => {
 
             <DropdownMenu.Portal>
                 <DropdownMenu.Content
-                    className="z-50 min-w-[280px] bg-card-bg/95 backdrop-blur-3xl border border-card-border/60 rounded-[2rem] p-3 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] animate-in fade-in zoom-in duration-300 relative overflow-hidden"
+                    className="z-50 min-w-[280px] bg-card-bg/95 backdrop-blur-3xl border border-card-border/60 rounded-[2rem] p-3  animate-in fade-in zoom-in duration-300 relative overflow-hidden"
                     align="start"
                     sideOffset={12}
                 >
@@ -73,15 +73,15 @@ export const ProductionSelector = () => {
                                 className={cn(
                                     "flex items-center justify-between px-5 py-4 rounded-2xl cursor-default outline-none transition-all group/item relative overflow-hidden active:scale-[0.98]",
                                     activeProductionId === prod.id
-                                        ? 'bg-indigo-600 shadow-xl shadow-indigo-600/30'
+                                        ? 'bg-indigo-600  '
                                         : 'text-muted hover:bg-white/5 hover:text-foreground border border-transparent hover:border-white/5'
                                 )}
                             >
                                 <div className="flex items-center gap-4">
                                     <div className={cn(
-                                        "w-2.5 h-2.5 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.2)]",
-                                        prod.status === 'ACTIVE' ? "bg-emerald-500 shadow-emerald-500/50" : "bg-amber-500 shadow-amber-500/50",
-                                        activeProductionId === prod.id && "bg-white shadow-white/50"
+                                        "w-2.5 h-2.5 rounded-full",
+                                        prod.status === 'ACTIVE' ? "bg-emerald-500 " : "bg-amber-500 ",
+                                        activeProductionId === prod.id && "bg-white"
                                     )} />
                                     <div className="flex flex-col">
                                         <span className={cn(

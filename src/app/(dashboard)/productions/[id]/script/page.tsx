@@ -59,7 +59,7 @@ export default function ScriptPreparationPage() {
                             <DropdownMenu.Content
                                 align="end"
                                 sideOffset={5}
-                                className="min-w-[180px] bg-card-bg border border-card-border rounded-xl p-1 shadow-2xl z-50 animate-in fade-in zoom-in duration-100"
+                                className="min-w-[180px] bg-card-bg border border-card-border rounded-xl p-1  z-50 animate-in fade-in zoom-in duration-100"
                             >
                                 <DropdownMenu.Item className="flex items-center gap-2 px-3 py-2 text-[11px] font-bold text-muted hover:text-foreground hover:bg-card-border rounded-lg outline-none cursor-pointer transition-colors">
                                     <Download size={14} className="text-indigo-400" />
@@ -83,7 +83,7 @@ export default function ScriptPreparationPage() {
             </div>
 
             {/* Editor Container */}
-            <div className="flex-1 min-h-0 bg-background border border-card-border rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+            <div className="flex-1 min-h-0 bg-background border border-card-border rounded-2xl  overflow-hidden flex flex-col">
                 <div className="flex-1 flex flex-col min-h-0">
                     <ScriptEditor productionId={id} />
                 </div>

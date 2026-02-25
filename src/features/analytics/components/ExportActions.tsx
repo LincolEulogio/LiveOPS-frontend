@@ -64,7 +64,7 @@ export const ExportActions = ({ productionId }: Props) => {
     };
 
     return (
-        <div className="flex flex-col gap-4 p-6 bg-card-bg border border-card-border rounded-3xl shadow-xl">
+        <div className="flex flex-col gap-4 p-6 bg-card-bg border border-card-border rounded-3xl ">
             <div className="flex items-center gap-3 mb-2">
                 <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400">
                     <Download size={18} />
