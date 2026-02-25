@@ -17,8 +17,11 @@ import {
     Bold, Italic, Underline as UnderlineIcon, List, ListOrdered,
     Type, Save, Cloud, CloudOff, AlertCircle,
     Heading1, Heading2, Heading3, Heading4, Heading5, Heading6,
-    Zap, Hash, AlignLeft
+    Zap, Hash, AlignLeft, Sparkles, MessageSquare, Bot, X
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { aiService } from '@/features/ai/api/ai.service';
+import { toast } from 'sonner';
 import { cn } from '@/shared/utils/cn';
 
 interface Props {
@@ -34,6 +37,26 @@ export const ScriptEditor = ({ productionId }: Props) => {
     const { doc, awareness, isLoaded, syncScroll, isSyncing, lastSyncTime } = useScript(productionId);
     const user = useAuthStore((state) => state.user);
     const [, setTick] = React.useState(0);
+    const [aiSuggestion, setAiSuggestion] = React.useState<string | null>(null);
+    const [isAiLoading, setIsAiLoading] = React.useState(false);
+
+    const handleAiSuggest = async () => {
+        if (!editor) return;
+
+        const { from, to } = editor.state.selection;
+        const text = editor.state.doc.textBetween(from, to, ' ') || editor.getText();
+
+        setIsAiLoading(true);
+        try {
+            const { suggestion } = await aiService.suggestScriptContent('Segmento del Guion', text);
+            setAiSuggestion(suggestion);
+        } catch (error) {
+            console.error('AI Suggestion failed:', error);
+            setAiSuggestion("SYSTEM ALERT: Failed to reach creative intelligence nodes. Please check your network or Gemini API key.");
+        } finally {
+            setIsAiLoading(false);
+        }
+    };
 
     const editor = useEditor({
         immediatelyRender: false,
@@ -170,6 +193,18 @@ export const ScriptEditor = ({ productionId }: Props) => {
                         icon={AlignLeft}
                         title="Párrafo"
                     />
+                    <div className="w-px h-6 bg-card-border/50 mx-2 shrink-0" />
+                    <button
+                        onClick={handleAiSuggest}
+                        disabled={isAiLoading}
+                        className={cn(
+                            "flex items-center gap-2 px-4 py-2 bg-indigo-600/10 text-indigo-400 rounded-xl hover:bg-indigo-600 hover:text-white transition-all text-[10px] font-black uppercase active:scale-95",
+                            isAiLoading && "opacity-50 pointer-events-none"
+                        )}
+                    >
+                        {isAiLoading ? <Bot size={14} className="animate-bounce" /> : <Sparkles size={14} />}
+                        AI Assistant
+                    </button>
                 </div>
 
                 <div className="flex items-center gap-6 justify-between sm:justify-end px-2">
@@ -208,6 +243,51 @@ export const ScriptEditor = ({ productionId }: Props) => {
                         className="cursor-text"
                     />
                 </div>
+
+                {/* AI Suggestion Overlay */}
+                <AnimatePresence>
+                    {aiSuggestion && (
+                        <motion.div
+                            initial={{ x: 400, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: 400, opacity: 0 }}
+                            className="absolute right-6 top-24 bottom-24 w-80 bg-card-bg/95 backdrop-blur-3xl border border-indigo-500/30 rounded-3xl p-6 shadow-2xl z-50 flex flex-col"
+                        >
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center gap-2">
+                                    <Sparkles size={16} className="text-indigo-400" />
+                                    <span className="text-xs font-black text-foreground uppercase tracking-widest">Livia AI Suggestions</span>
+                                </div>
+                                <button
+                                    onClick={() => setAiSuggestion(null)}
+                                    className="p-2 hover:bg-white/10 rounded-lg text-muted"
+                                >
+                                    <X size={14} />
+                                </button>
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto no-scrollbar space-y-4">
+                                <div className="prose prose-sm prose-invert text-muted">
+                                    {aiSuggestion.split('\n').map((line, i) => (
+                                        <p key={i} className="mb-2 leading-relaxed text-[11px] font-medium">{line}</p>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="mt-6 pt-6 border-t border-card-border/50">
+                                <button
+                                    onClick={() => {
+                                        editor?.chain().focus().insertContent(`\n\n> AI SUGGESTION:\n${aiSuggestion}`).run();
+                                        setAiSuggestion(null);
+                                    }}
+                                    className="w-full py-3 bg-indigo-600 text-white text-[10px] font-black uppercase rounded-xl hover:bg-indigo-500 transition-all active:scale-95"
+                                >
+                                    Insert in Script
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* Tactical Status Footer */}

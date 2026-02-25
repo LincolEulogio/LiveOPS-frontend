@@ -39,7 +39,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
     const { data: telemetry, isLoading: telLoading } = useQuery({
         queryKey: ['analytics', productionId, 'telemetry'],
         queryFn: (): Promise<TelemetryLog[]> => {
-            return api.get<TelemetryLog[]>(`/productions/${productionId}/analytics/telemetry?minutes=120`);
+            return api.get<TelemetryLog[]>(`/productions/${productionId}/analytics/telemetry?minutes=60`).catch(() => []);
         },
         enabled: !!productionId,
         refetchInterval: isLive ? 10000 : false, // Poll if live

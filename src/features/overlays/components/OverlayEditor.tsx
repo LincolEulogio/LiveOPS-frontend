@@ -148,7 +148,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
             height: type === 'text' ? 80 : 200,
             opacity: 1,
             zIndex: config.layers.length,
-            content: type === 'text' ? 'LOWER THIRD TEXT' : (type === 'shape' ? '#6366f1' : 'https://via.placeholder.com/200'),
+            content: type === 'text' ? 'LOWER THIRD TEXT' : (type === 'shape' ? '#6366f1' : 'https://placehold.co/200/1c1917/6366f1'),
             style: {
                 fontSize: 48,
                 color: '#ffffff',

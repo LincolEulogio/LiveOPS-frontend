@@ -20,6 +20,7 @@ import { MediaSidebar } from '@/features/media/components/MediaSidebar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { IntegrationsPanel } from '@/features/productions/components/IntegrationsPanel';
+import { AiBriefing } from '@/features/ai/components/AiBriefing';
 
 export default function ProductionDetailPage() {
   const params = useParams();
@@ -220,6 +221,9 @@ export default function ProductionDetailPage() {
         {/* Sidebar: Utils & Team - Sticky for Desktop (Bento Intelligence Column) */}
         <div className={cn("min-[1280px]:col-span-4 min-[1440px]:col-span-3 space-y-8", activeTab !== 'overview' && 'hidden min-[1280px]:block')}>
           <div className="lg:sticky lg:top-8 space-y-8 pb-20">
+            {/* AI Production Briefing */}
+            <AiBriefing productionId={id} />
+
             {/* Sidebar Media */}
             <div className="h-[400px] lg:h-[450px]">
               <MediaSidebar />
@@ -228,6 +232,28 @@ export default function ProductionDetailPage() {
             {/* Intercom Quick Access */}
             <div className="h-[450px]">
               <IntercomPanel productionId={id} />
+            </div>
+
+            {/* Social & Moderation Quick Link Card */}
+            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform">
+                <Share2 size={80} className="text-pink-500" />
+              </div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-pink-500/10 flex items-center justify-center border border-pink-500/20">
+                  <Share2 size={18} className="text-pink-500" />
+                </div>
+                <h2 className="text-sm font-black text-foreground uppercase">Social & Moderation</h2>
+              </div>
+              <p className="text-[11px] text-muted font-medium leading-relaxed mb-8 uppercase">
+                Moderate live chats and inject fan comments directly to on-air graphics.
+              </p>
+              <Link
+                href={`/productions/${id}/social`}
+                className="flex items-center justify-center w-full px-4 py-4 bg-background border border-card-border text-foreground text-[10px] font-black uppercase rounded-2xl transition-all hover:bg-pink-600 hover:text-white hover:border-pink-500/50 active:scale-95"
+              >
+                Open Social Inbox
+              </Link>
             </div>
 
             {/* Hardware/Peripherals */}

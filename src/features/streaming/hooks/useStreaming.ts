@@ -21,20 +21,20 @@ export const useStreaming = (productionId: string | undefined) => {
 
     useEffect(() => {
         if (initialData && productionId) {
-            if (!currentState?.isConnected) {
+            // Only update connection status from REST if we don't have a newer WS status
+            // or if we are transitioning to "Connected"
+            const shouldUpdateConnection = !currentState || initialData.isConnected === true;
+
+            if (shouldUpdateConnection) {
                 setStreamingState(productionId, initialData);
             } else {
-                // We are already online. 
-                // Only merge metadata, but DO NOT allow initialData to set isConnected to false
-                if (initialData.isConnected === false) {
-                    const { isConnected, ...metaOnly } = initialData;
-                    updateStreamingState(productionId, metaOnly);
-                } else {
-                    updateStreamingState(productionId, initialData);
-                }
+                // Keep current connection status, but sync metadata (inputs, etc)
+                const { isConnected, ...metaOnly } = initialData;
+                updateStreamingState(productionId, metaOnly);
             }
         }
-    }, [initialData, productionId, setStreamingState, updateStreamingState, currentState?.isConnected]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialData, productionId, setStreamingState, updateStreamingState]);
 
     // 2. Real-time Listeners
     useEffect(() => {

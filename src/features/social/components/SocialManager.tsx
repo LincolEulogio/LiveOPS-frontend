@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import {
     MessageSquare, Share2, Youtube,
     Twitch, Facebook, Trash2,
-    Eye, EyeOff, Filter, Activity, Zap
+    Eye, EyeOff, Filter, Activity, Zap, Shield, Bot, Sparkles
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,6 +18,7 @@ interface SocialManagerProps {
 export const SocialManager = ({ productionId }: SocialManagerProps) => {
     const { messages, activePoll, updateStatus, onAirMessage, isLoading } = useSocial(productionId);
     const [filter, setFilter] = useState<string>('');
+    const [aiShield, setAiShield] = useState(false);
 
     const handleUpdateStatus = async (messageId: string, status: SocialMessage['status']) => {
         try {
@@ -70,6 +71,20 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                         title="Simulate Event"
                     >
                         <Zap size={16} />
+                    </button>
+
+                    <button
+                        onClick={() => setAiShield(!aiShield)}
+                        className={cn(
+                            "flex items-center gap-2 px-4 py-2 border rounded-xl transition-all active:scale-95 text-[10px] font-black uppercase",
+                            aiShield
+                                ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20"
+                                : "bg-background border-card-border text-muted hover:text-indigo-400"
+                        )}
+                        title="AI Autopilot Moderation"
+                    >
+                        {aiShield ? <Bot size={14} className="animate-pulse" /> : <Shield size={14} />}
+                        <span className="hidden sm:inline">AI Shield</span>
                     </button>
 
                     <div className="relative flex items-center">
@@ -128,91 +143,94 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
             {/* Unified Communication Feed */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
                 <AnimatePresence mode="popLayout">
-                    {messages.filter((m: SocialMessage) => !filter || m.status === filter).map((msg: SocialMessage) => (
-                        <motion.div
-                            layout
-                            key={msg.id}
-                            initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            className={cn(
-                                "group relative overflow-hidden p-4 rounded-3xl border transition-all duration-300",
-                                msg.status === 'ON_AIR'
-                                    ? "bg-red-500/5 border-red-500/50  scale-[1.02] z-10"
-                                    : "bg-background/40 border-card-border/50 hover:bg-background/60 hover:border-indigo-500/30"
-                            )}
-                        >
-                            <div className="flex gap-4">
-                                <div className="relative shrink-0 flex flex-col items-center gap-1">
-                                    <div className="w-12 h-12 rounded-[1.25rem] overflow-hidden bg-card-bg border border-card-border ">
-                                        {msg.authorAvatar ? (
-                                            <img src={msg.authorAvatar} alt={msg.author} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center font-black text-indigo-400 text-sm bg-indigo-500/5">
-                                                {msg.author.charAt(0).toUpperCase()}
-                                            </div>
+                    {messages
+                        .filter((m: SocialMessage) => !filter || m.status === filter)
+                        .filter((m: SocialMessage) => !aiShield || m.aiSentiment !== 'NEGATIVO')
+                        .map((msg: SocialMessage) => (
+                            <motion.div
+                                layout
+                                key={msg.id}
+                                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                className={cn(
+                                    "group relative overflow-hidden p-4 rounded-3xl border transition-all duration-300",
+                                    msg.status === 'ON_AIR'
+                                        ? "bg-red-500/5 border-red-500/50  scale-[1.02] z-10"
+                                        : "bg-background/40 border-card-border/50 hover:bg-background/60 hover:border-indigo-500/30"
+                                )}
+                            >
+                                <div className="flex gap-4">
+                                    <div className="relative shrink-0 flex flex-col items-center gap-1">
+                                        <div className="w-12 h-12 rounded-[1.25rem] overflow-hidden bg-card-bg border border-card-border ">
+                                            {msg.authorAvatar && msg.authorAvatar !== "" ? (
+                                                <img src={msg.authorAvatar} alt={msg.author} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center font-black text-indigo-400 text-sm bg-indigo-500/5">
+                                                    {msg.author.charAt(0).toUpperCase()}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className={cn(
+                                            "px-2 py-0.5 rounded-lg border flex items-center justify-center transition-colors",
+                                            msg.platform.toLowerCase() === 'youtube' && "bg-red-600 border-red-500  ",
+                                            msg.platform.toLowerCase() === 'twitch' && "bg-purple-600 border-purple-500  ",
+                                            msg.platform.toLowerCase() === 'facebook' && "bg-blue-600 border-blue-500  ",
+                                        )}>
+                                            {msg.platform.toLowerCase() === 'youtube' && <Youtube size={10} className="text-white" />}
+                                            {msg.platform.toLowerCase() === 'twitch' && <Twitch size={10} className="text-white" />}
+                                            {msg.platform.toLowerCase() === 'facebook' && <Facebook size={10} className="text-white" />}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-1 min-w-0 flex flex-col py-1">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-[11px] font-black text-foreground uppercase  truncate pr-4">{msg.author}</span>
+                                            <span className="text-[9px] font-bold text-muted uppercase ">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                        </div>
+                                        <p className="text-[11px] sm:text-xs text-foreground/80 leading-snug font-medium italic">
+                                            "{msg.content}"
+                                        </p>
+                                    </div>
+
+                                    {/* Tactical Moderation Sidebar (Slide in on Desktop, Always on Mobile) */}
+                                    <div className="flex flex-col gap-2 shrink-0 self-center">
+                                        {msg.status === 'PENDING' && (
+                                            <button
+                                                onClick={() => handleUpdateStatus(msg.id, 'APPROVED')}
+                                                className="p-3 bg-white/5 border border-card-border hover:border-emerald-500/50 text-emerald-400 rounded-2xl hover:bg-emerald-500 hover:text-white transition-all active:scale-90 "
+                                                title="Validate User"
+                                            >
+                                                <Eye size={16} />
+                                            </button>
+                                        )}
+                                        {(msg.status === 'PENDING' || msg.status === 'APPROVED') && (
+                                            <button
+                                                onClick={() => handleUpdateStatus(msg.id, 'ON_AIR')}
+                                                className="p-3 bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-500 text-indigo-400 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all active:scale-90 "
+                                                title="Push to Air"
+                                            >
+                                                <Share2 size={16} />
+                                            </button>
+                                        )}
+                                        {msg.status === 'ON_AIR' && (
+                                            <button
+                                                onClick={() => handleUpdateStatus(msg.id, 'APPROVED')}
+                                                className="p-3 bg-red-600 text-white rounded-2xl hover:bg-red-500 transition-all active:scale-90  "
+                                                title="Retirar"
+                                            >
+                                                <EyeOff size={16} />
+                                            </button>
                                         )}
                                     </div>
-                                    <div className={cn(
-                                        "px-2 py-0.5 rounded-lg border flex items-center justify-center transition-colors",
-                                        msg.platform.toLowerCase() === 'youtube' && "bg-red-600 border-red-500  ",
-                                        msg.platform.toLowerCase() === 'twitch' && "bg-purple-600 border-purple-500  ",
-                                        msg.platform.toLowerCase() === 'facebook' && "bg-blue-600 border-blue-500  ",
-                                    )}>
-                                        {msg.platform.toLowerCase() === 'youtube' && <Youtube size={10} className="text-white" />}
-                                        {msg.platform.toLowerCase() === 'twitch' && <Twitch size={10} className="text-white" />}
-                                        {msg.platform.toLowerCase() === 'facebook' && <Facebook size={10} className="text-white" />}
-                                    </div>
                                 </div>
 
-                                <div className="flex-1 min-w-0 flex flex-col py-1">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-[11px] font-black text-foreground uppercase  truncate pr-4">{msg.author}</span>
-                                        <span className="text-[9px] font-bold text-muted uppercase ">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                                    </div>
-                                    <p className="text-[11px] sm:text-xs text-foreground/80 leading-snug font-medium italic">
-                                        "{msg.content}"
-                                    </p>
-                                </div>
-
-                                {/* Tactical Moderation Sidebar (Slide in on Desktop, Always on Mobile) */}
-                                <div className="flex flex-col gap-2 shrink-0 self-center">
-                                    {msg.status === 'PENDING' && (
-                                        <button
-                                            onClick={() => handleUpdateStatus(msg.id, 'APPROVED')}
-                                            className="p-3 bg-white/5 border border-card-border hover:border-emerald-500/50 text-emerald-400 rounded-2xl hover:bg-emerald-500 hover:text-white transition-all active:scale-90 "
-                                            title="Validate User"
-                                        >
-                                            <Eye size={16} />
-                                        </button>
-                                    )}
-                                    {(msg.status === 'PENDING' || msg.status === 'APPROVED') && (
-                                        <button
-                                            onClick={() => handleUpdateStatus(msg.id, 'ON_AIR')}
-                                            className="p-3 bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-500 text-indigo-400 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all active:scale-90 "
-                                            title="Push to Air"
-                                        >
-                                            <Share2 size={16} />
-                                        </button>
-                                    )}
-                                    {msg.status === 'ON_AIR' && (
-                                        <button
-                                            onClick={() => handleUpdateStatus(msg.id, 'APPROVED')}
-                                            className="p-3 bg-red-600 text-white rounded-2xl hover:bg-red-500 transition-all active:scale-90  "
-                                            title="Retirar"
-                                        >
-                                            <EyeOff size={16} />
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Decorative Air Wave for Active Message */}
-                            {msg.status === 'ON_AIR' && (
-                                <div className="absolute bottom-0 right-0 w-24 h-24 -mr-12 -mb-12 bg-red-600/5 rounded-full blur-3xl pointer-events-none" />
-                            )}
-                        </motion.div>
-                    ))}
+                                {/* Decorative Air Wave for Active Message */}
+                                {msg.status === 'ON_AIR' && (
+                                    <div className="absolute bottom-0 right-0 w-24 h-24 -mr-12 -mb-12 bg-red-600/5 rounded-full blur-3xl pointer-events-none" />
+                                )}
+                            </motion.div>
+                        ))}
                 </AnimatePresence>
 
                 {!isLoading && messages.length === 0 && (

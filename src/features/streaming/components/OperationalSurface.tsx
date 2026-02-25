@@ -122,7 +122,7 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                         </div>
 
                         <div className="w-full h-full flex items-center justify-center bg-black">
-                            {(previewUrl && !imgErrors['preview']) ? (
+                            {(previewUrl && previewUrl !== "" && !imgErrors['preview']) ? (
                                 <img
                                     src={previewUrl}
                                     alt="Preview"
@@ -176,7 +176,7 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 min-h-[400px]">
                     {/* Big Program at the start or end */}
                     <div className="col-span-2 row-span-2 relative rounded-2xl overflow-hidden border-2 border-red-500 shadow-xl shadow-red-500/10 bg-black flex items-center justify-center">
-                        {programUrl ? (
+                        {programUrl && programUrl !== "" ? (
                             <img src={programUrl} className="w-full h-full object-cover" alt="Program" />
                         ) : (
                             <Monitor size={48} className="text-muted/20" />
@@ -199,7 +199,7 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                                 <img
                                     src={`${vmixBaseUrl}/thumbnails/${input.key}.jpg?t=${tick}`}
                                     className="w-full h-full object-cover"
-                                    onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/320x180?text=No+Signal')}
+                                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/200x180/1c1917/6366f1?text=No+Signal')}
                                     alt={input.title}
                                 />
                             ) : (

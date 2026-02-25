@@ -31,7 +31,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
 
             <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-full bg-card-bg flex shrink-0 items-center justify-center overflow-hidden border border-card-border">
-                    {message.authorAvatar ? (
+                    {message.authorAvatar && message.authorAvatar !== "" ? (
                         <img src={message.authorAvatar} alt={message.author} className="w-full h-full object-cover" />
                     ) : (
                         <span className="text-sm font-bold text-muted">{message.author.charAt(0).toUpperCase()}</span>
