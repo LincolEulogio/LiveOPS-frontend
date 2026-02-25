@@ -227,7 +227,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.5, y: 20 }}
                 onClick={scrollToTop}
-                className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.25rem] shadow-2xl shadow-indigo-600/40 flex items-center justify-center border border-indigo-400/30 group active:scale-90 transition-all"
+                className="fixed bottom-28 right-8 z-[100] w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.25rem] shadow-2xl shadow-indigo-600/40 flex items-center justify-center border border-indigo-400/30 group active:scale-90 transition-all"
                 whileHover={{ y: -5 }}
               >
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[1.25rem]" />

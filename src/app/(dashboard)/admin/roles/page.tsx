@@ -64,8 +64,8 @@ export default function AdminRolesPage() {
     }
 
     return (
-        <div className="max-w-6xl mx-auto space-y-6">
-            <div className="flex justify-between items-end">
+        <div className="max-w-6xl mx-auto space-y-6 p-6">
+            <div className="flex flex-col gap-4 md:flex-row justify-between items-end">
                 <div>
                     <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
                         <Shield className="text-indigo-400" /> Roles & Permissions
@@ -74,7 +74,7 @@ export default function AdminRolesPage() {
                 </div>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20"
+                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20"
                 >
                     <Plus size={16} /> New Role
                 </button>

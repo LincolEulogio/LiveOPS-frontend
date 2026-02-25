@@ -41,7 +41,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 pb-12">
+    <div className="max-w-7xl mx-auto space-y-8 pb-12 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-card-bg border border-card-border p-8 rounded-2xl shadow-xl">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <div className="w-24 h-24 rounded-full bg-indigo-600 flex items-center justify-center text-4xl font-bold text-white shadow-lg shadow-indigo-600/20">
@@ -67,7 +67,7 @@ export default function ProfilePage() {
         </div>
         <button
           onClick={() => setIsEditing(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-card-border transition-all"
+          className="flex w-full md:w-auto justify-center cursor-pointer items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-card-border transition-all"
         >
           <Edit2 size={16} /> Edit Profile
         </button>

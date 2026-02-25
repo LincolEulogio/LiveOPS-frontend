@@ -64,7 +64,7 @@ export default function ProductionsListPage() {
   };
 
   return (
-    <div className="w-full space-y-10">
+    <div className="w-full space-y-10 p-4">
 
       {/* Tactical Page Header */}
       <div className="flex flex-col min-[1100px]:flex-row justify-between items-start min-[1100px]:items-center gap-8 bg-card-bg/60 backdrop-blur-3xl border border-card-border p-8 md:p-10 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] relative overflow-hidden group">
@@ -77,7 +77,7 @@ export default function ProductionsListPage() {
             <Zap size={32} className="text-white" fill="currentColor" />
           </div>
           <div className="text-center md:text-left">
-            <h1 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter leading-none mb-3">Productions Hub</h1>
+            <h1 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter leading-none mb-3 text-slate-900 dark:text-white">Productions Hub</h1>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
               <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 shadow-inner flex items-center gap-2">
                 <Activity size={10} className="animate-pulse" /> Global Control Surface

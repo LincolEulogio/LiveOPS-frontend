@@ -67,8 +67,8 @@ export default function AdminUsersPage() {
     }
 
     return (
-        <div className="max-w-6xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
+        <div className="max-w-6xl mx-auto space-y-6 p-6">
+            <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
                         <Users className="text-indigo-400" /> Global User Management
@@ -77,7 +77,7 @@ export default function AdminUsersPage() {
                 </div>
                 <button
                     onClick={openCreate}
-                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors shadow-lg shadow-indigo-500/20"
+                    className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-colors shadow-lg shadow-indigo-500/20"
                 >
                     <Plus size={16} /> Add User
                 </button>
@@ -239,91 +239,93 @@ export default function AdminUsersPage() {
             )}
 
             <div className="bg-card-bg border border-card-border rounded-xl overflow-hidden shadow-xl">
-                <table className="w-full text-left border-collapse">
-                    <thead className="bg-card-bg">
-                        <tr className="border-b border-card-border text-[10px] font-bold text-muted uppercase tracking-widest">
-                            <th className="py-4 px-6">User</th>
-                            <th className="py-4 px-6">Global Role</th>
-                            <th className="py-4 px-6">Created At</th>
-                            <th className="py-4 px-6 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-card-border">
-                        {users?.map(user => (
-                            <tr key={user.id} className="hover:bg-indigo-500/5 transition-colors">
-                                <td className="py-4 px-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-background border border-card-border flex items-center justify-center text-xs font-bold text-indigo-400/60">
-                                            {user.name?.[0]?.toUpperCase() || 'U'}
+                <div className="overflow-x-auto custom-scrollbar">
+                    <table className="w-full text-left border-collapse min-w-[600px]">
+                        <thead className="bg-card-bg">
+                            <tr className="border-b border-card-border text-[10px] font-bold text-muted uppercase tracking-widest">
+                                <th className="py-4 px-6">User</th>
+                                <th className="py-4 px-6">Global Role</th>
+                                <th className="py-4 px-6">Created At</th>
+                                <th className="py-4 px-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-card-border">
+                            {users?.map(user => (
+                                <tr key={user.id} className="hover:bg-indigo-500/5 transition-colors">
+                                    <td className="py-4 px-6">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-background border border-card-border flex items-center justify-center text-xs font-bold text-indigo-400/60">
+                                                {user.name?.[0]?.toUpperCase() || 'U'}
+                                            </div>
+                                            <div>
+                                                <button
+                                                    onClick={() => openView(user)}
+                                                    className="text-sm font-medium text-foreground hover:text-indigo-400 transition-colors text-left block whitespace-nowrap"
+                                                >
+                                                    {user.name}
+                                                </button>
+                                                <p className="text-[11px] text-muted font-mono tracking-tight whitespace-nowrap">{user.email}</p>
+                                            </div>
                                         </div>
-                                        <div>
+                                    </td>
+                                    <td className="py-4 px-6">
+                                        {user.globalRole ? (
+                                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-medium text-indigo-400 whitespace-nowrap">
+                                                <Shield size={10} /> {user.globalRole.name}
+                                            </span>
+                                        ) : (
+                                            <span className="text-[10px] text-muted italic whitespace-nowrap">No Role</span>
+                                        )}
+                                    </td>
+                                    <td className="py-4 px-6 text-sm text-muted font-mono text-[10px] whitespace-nowrap">
+                                        {new Date(user.createdAt).toLocaleDateString()}
+                                    </td>
+                                    <td className="py-4 px-6 text-right">
+                                        <div className="flex items-center justify-end gap-1">
                                             <button
                                                 onClick={() => openView(user)}
-                                                className="text-sm font-medium text-foreground hover:text-indigo-400 transition-colors text-left block"
+                                                className="p-2 text-muted hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-colors"
+                                                title="View Details"
                                             >
-                                                {user.name}
+                                                <Info size={16} />
                                             </button>
-                                            <p className="text-[11px] text-muted font-mono tracking-tight">{user.email}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="py-4 px-6">
-                                    {user.globalRole ? (
-                                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-medium text-indigo-400">
-                                            <Shield size={10} /> {user.globalRole.name}
-                                        </span>
-                                    ) : (
-                                        <span className="text-[10px] text-muted italic">No Role</span>
-                                    )}
-                                </td>
-                                <td className="py-4 px-6 text-sm text-muted font-mono text-[10px]">
-                                    {new Date(user.createdAt).toLocaleDateString()}
-                                </td>
-                                <td className="py-4 px-6 text-right">
-                                    <div className="flex items-center justify-end gap-1">
-                                        <button
-                                            onClick={() => openView(user)}
-                                            className="p-2 text-muted hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-colors"
-                                            title="View Details"
-                                        >
-                                            <Info size={16} />
-                                        </button>
-                                        <button
-                                            onClick={() => openEdit(user)}
-                                            className="p-2 text-muted hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-colors"
-                                            title="Edit User"
-                                        >
-                                            <Edit2 size={16} />
-                                        </button>
-                                        <button
-                                            onClick={async () => {
-                                                if (confirm(`Are you sure you want to delete ${user.name}?`)) {
-                                                    try {
-                                                        await deleteMutation.mutateAsync(user.id);
-                                                        toast.success('User deleted successfully');
-                                                    } catch (err: any) {
-                                                        toast.error(err.message || 'Failed to delete user');
+                                            <button
+                                                onClick={() => openEdit(user)}
+                                                className="p-2 text-muted hover:text-indigo-400 hover:bg-indigo-400/10 rounded-lg transition-colors"
+                                                title="Edit User"
+                                            >
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button
+                                                onClick={async () => {
+                                                    if (confirm(`Are you sure you want to delete ${user.name}?`)) {
+                                                        try {
+                                                            await deleteMutation.mutateAsync(user.id);
+                                                            toast.success('User deleted successfully');
+                                                        } catch (err: any) {
+                                                            toast.error(err.message || 'Failed to delete user');
+                                                        }
                                                     }
-                                                }
-                                            }}
-                                            className="p-2 text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-                                            title="Delete User"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        {users?.length === 0 && (
-                            <tr>
-                                <td colSpan={4} className="py-12 text-center text-muted text-sm">
-                                    No users found in the system.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                                                }}
+                                                className="p-2 text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                                                title="Delete User"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            {users?.length === 0 && (
+                                <tr>
+                                    <td colSpan={4} className="py-12 text-center text-muted text-sm">
+                                        No users found in the system.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

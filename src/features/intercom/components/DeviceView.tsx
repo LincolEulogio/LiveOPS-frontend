@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/shared/api/api.client';
 import { useAppStore } from '@/shared/store/app.store';
 import { TimelineBlock } from '../../timeline/types/timeline.types';
+import { cn } from '@/shared/utils/cn';
 
 export const DeviceView = () => {
     const { activeAlert, history } = useIntercomStore();
@@ -64,7 +65,7 @@ export const DeviceView = () => {
 
     if (!activeAlert) {
         return (
-            <div className="flex flex-col items-center justify-start min-h-[85vh] text-center px-4 sm:px-8 py-12 bg-background safe-area-inset-bottom">
+            <div className="flex flex-col items-center justify-start min-h-[85vh] text-center py-12 bg-background safe-area-inset-bottom">
                 {/* Top Status Bar - Floating Style */}
                 <div className="w-full flex items-center justify-between mb-12">
                     <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-card-bg/60 backdrop-blur-xl border border-card-border shadow-sm">
@@ -189,21 +190,29 @@ export const DeviceView = () => {
                     <div className="p-4 border-t border-card-border/50 bg-card-bg/80">
                         <form
                             onSubmit={handleSendCustomMessage}
-                            className="flex items-center gap-2 bg-background border-2 border-card-border rounded-[1.5rem] p-1.5 focus-within:border-indigo-500/50 transition-all shadow-inner"
+                            className="flex items-center bg-background border-2 border-card-border rounded-full p-1 focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/5 transition-all"
                         >
                             <input
                                 type="text"
                                 value={customMessage}
                                 onChange={(e) => setCustomMessage(e.target.value)}
                                 placeholder="Escribe a control..."
-                                className="flex-1 bg-transparent px-4 py-2 text-sm text-foreground focus:outline-none placeholder:text-muted font-black uppercase tracking-tight"
+                                className="flex-1 bg-transparent px-5 py-2.5 text-sm text-foreground focus:outline-none placeholder:text-muted font-black uppercase tracking-tight"
                             />
                             <button
                                 type="submit"
                                 disabled={!customMessage.trim()}
-                                className="bg-indigo-600 hover:bg-indigo-500 disabled:bg-card-border disabled:text-muted text-white p-2.5 rounded-2xl transition-all active:scale-90 shadow-lg shadow-indigo-600/30"
+                                className={cn(
+                                    "p-2.5 rounded-full transition-all active:scale-90 group/send",
+                                    customMessage.trim()
+                                        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 border border-indigo-500"
+                                        : "bg-white/5 text-muted border border-transparent"
+                                )}
                             >
-                                <Send size={16} />
+                                <Send size={18} className={cn(
+                                    "transition-transform",
+                                    customMessage.trim() && "group-hover/send:translate-x-0.5"
+                                )} />
                             </button>
                         </form>
                     </div>

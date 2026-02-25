@@ -179,52 +179,52 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
     const selectedLayer = config.layers.find(l => l.id === selectedLayerId);
 
     return (
-        <div className="flex h-[800px] w-full bg-background rounded-3xl overflow-hidden border border-card-border shadow-2xl mb-5">
+        <div className="flex flex-col md:flex-row h-auto md:h-[800px] w-full bg-background rounded-3xl overflow-hidden border border-card-border shadow-2xl mb-5">
             {/* Toolbar */}
-            <div className="w-16 bg-card-bg border-r border-card-border flex flex-col items-center py-6 gap-6">
+            <div className="w-full md:w-16 h-14 md:h-full bg-card-bg border-b md:border-b-0 md:border-r border-card-border flex flex-row md:flex-col items-center justify-center md:justify-start md:py-6 gap-2 sm:gap-6 px-4 md:px-0">
                 <button onClick={() => addLayer('text')} className="p-3 text-muted hover:text-foreground transition-colors" title="Add Text">
-                    <Type size={20} />
+                    <Type size={18} className="md:w-5 md:h-5" />
                 </button>
                 <button onClick={() => addLayer('image')} className="p-3 text-muted hover:text-foreground transition-colors" title="Add Image">
-                    <ImageIcon size={20} />
+                    <ImageIcon size={18} className="md:w-5 md:h-5" />
                 </button>
                 <button onClick={() => addLayer('shape')} className="p-3 text-muted hover:text-foreground transition-colors" title="Add Shape">
-                    <Box size={20} />
+                    <Box size={18} className="md:w-5 md:h-5" />
                 </button>
-                <div className="mt-auto flex flex-col gap-4">
-                    <button onClick={() => onSave(config)} className="p-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition-colors">
-                        <Save size={20} />
+                <div className="md:mt-auto flex flex-col gap-4">
+                    <button onClick={() => onSave(config)} className="p-2 sm:p-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-600/20 active:scale-95">
+                        <Save size={18} className="md:w-5 md:h-5" />
                     </button>
                 </div>
             </div>
 
             {/* Canvas Area */}
-            <div className="flex-1 bg-background flex flex-col relative overflow-hidden">
-                <div className="p-4 border-b border-card-border flex justify-between items-center bg-card-bg/50">
-                    <div className="flex items-center gap-4">
-                        <span className="text-xs font-bold text-muted uppercase tracking-widest">Viewport (1920x1080)</span>
-                        <div className="h-4 w-px bg-card-border" />
+            <div className="flex-1 bg-background flex flex-col relative overflow-hidden min-h-[400px] md:min-h-0">
+                <div className="p-3 sm:p-4 border-b border-card-border flex justify-between items-center bg-card-bg/50 overflow-x-auto no-scrollbar">
+                    <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+                        <span className="text-[10px] sm:text-xs font-black text-muted uppercase tracking-widest hidden sm:block">Viewport (1920x1080)</span>
+                        <div className="h-4 w-px bg-card-border hidden sm:block" />
                         <button
                             onClick={() => setPreviewMode(!previewMode)}
                             className={cn(
-                                "text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border transition-all",
-                                previewMode ? "bg-indigo-500 text-white border-indigo-400" : "bg-card-border/50 text-muted border-card-border hover:text-foreground"
+                                "text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border transition-all whitespace-nowrap",
+                                previewMode ? "bg-indigo-500 text-white border-indigo-400 shadow-lg shadow-indigo-500/20" : "bg-card-border/50 text-muted border-card-border hover:text-foreground"
                             )}
                         >
                             {previewMode ? 'Live Preview: ON' : 'Preview Bindings'}
                         </button>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <span className="text-[10px] text-muted font-bold">{Math.round(zoom * 100)}%</span>
+                    <div className="flex items-center gap-3 sm:gap-4 shrink-0 pr-4 sm:pr-0">
+                        <span className="text-[10px] text-muted font-black tracking-widest">{Math.round(zoom * 100)}%</span>
                         <input
                             type="range" min="0.1" max="1" step="0.1"
                             value={zoom} onChange={e => setZoom(parseFloat(e.target.value))}
-                            className="w-32 accent-indigo-500 cursor-pointer"
+                            className="w-20 sm:w-32 accent-indigo-500 cursor-pointer"
                         />
                     </div>
                 </div>
 
-                <div className="flex-1 flex items-center justify-center p-20 overflow-auto bg-[radial-gradient(#ffffff10_1px,transparent_1px)] [background-size:20px_20px]">
+                <div className="flex-1 flex items-center justify-center p-4 sm:p-10 md:p-20 overflow-auto bg-[radial-gradient(#ffffff10_1px,transparent_1px)] [background-size:20px_20px] no-scrollbar">
                     <div
                         className="bg-card-bg shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-hidden"
                         style={{
@@ -288,123 +288,152 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
             </div>
 
             {/* Side Panel (Layers & Properties) */}
-            <div className="w-80 bg-card-bg border-l border-card-border flex flex-col h-full">
+            <div className="w-full md:w-80 bg-card-bg border-t md:border-t-0 md:border-l border-card-border flex flex-col h-auto md:h-full">
                 {/* Layers Top */}
                 <div className="p-4 border-b border-card-border">
                     <h3 className="text-[10px] font-black text-muted uppercase tracking-[0.2em] flex items-center gap-2 mb-4">
                         <Layers size={14} /> Layers
                     </h3>
-                    <div className="space-y-1 max-h-64 overflow-y-auto custom-scrollbar">
+                    <div className="space-y-1 max-h-48 md:max-h-64 overflow-y-auto custom-scrollbar">
                         {config.layers.slice().reverse().map(l => (
                             <div
                                 key={l.id}
                                 onClick={() => setSelectedLayerId(l.id)}
                                 className={cn(
-                                    "flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all",
-                                    selectedLayerId === l.id ? "bg-indigo-500/20 text-indigo-300" : "text-muted hover:bg-card-border"
+                                    "flex items-center gap-3 p-2.5 rounded-xl cursor-pointer transition-all border group",
+                                    selectedLayerId === l.id
+                                        ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20"
+                                        : "text-muted hover:bg-white/5 border-transparent"
                                 )}
                             >
                                 {l.type === 'text' ? <Type size={14} /> : l.type === 'image' ? <ImageIcon size={14} /> : <Box size={14} />}
-                                <span className="text-xs font-bold truncate flex-1">{l.name}</span>
-                                <button onClick={() => deleteLayer(l.id)} className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400">
+                                <span className="text-[11px] font-black uppercase tracking-tight truncate flex-1">{l.name}</span>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); deleteLayer(l.id); }}
+                                    className={cn(
+                                        "p-1.5 rounded-lg transition-colors",
+                                        selectedLayerId === l.id ? "hover:bg-white/20 text-white/60" : "opacity-0 group-hover:opacity-100 hover:text-red-400"
+                                    )}
+                                >
                                     <Trash2 size={12} />
                                 </button>
                             </div>
                         ))}
+                        {config.layers.length === 0 && (
+                            <div className="py-8 flex flex-col items-center justify-center opacity-20">
+                                <Layers size={24} />
+                                <p className="text-[9px] font-black uppercase mt-2">No layers yet</p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Properties Bottom */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-5 md:p-6 bg-background/30">
                     {selectedLayer ? (
                         <div className="space-y-6">
-                            <h3 className="text-[10px] font-black text-foreground/80 uppercase tracking-[0.2em] flex items-center gap-2">
-                                <Settings size={14} /> Properties: {selectedLayer.name}
-                            </h3>
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-[10px] font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-2">
+                                    <Settings size={14} className="text-indigo-400" /> Layer Matrix
+                                </h3>
+                                <div className="px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20 text-[8px] font-black text-indigo-400 uppercase">
+                                    {selectedLayer.type}
+                                </div>
+                            </div>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label className="text-[9px] text-muted font-bold uppercase">X Pos</label>
-                                    <input type="number" value={selectedLayer.x} onChange={e => updateLayer(selectedLayer.id, { x: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-lg p-2 text-xs" />
+                            {/* ... rest of the properties stay mostly the same but with slightly better styling ... */}
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">X Position</label>
+                                    <input type="number" value={selectedLayer.x} onChange={e => updateLayer(selectedLayer.id, { x: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold focus:ring-1 focus:ring-indigo-500 outline-none" />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-[9px] text-muted font-bold uppercase">Y Pos</label>
-                                    <input type="number" value={selectedLayer.y} onChange={e => updateLayer(selectedLayer.id, { y: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-lg p-2 text-xs" />
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Y Position</label>
+                                    <input type="number" value={selectedLayer.y} onChange={e => updateLayer(selectedLayer.id, { y: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold focus:ring-1 focus:ring-indigo-500 outline-none" />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-[9px] text-muted font-bold uppercase">Width</label>
-                                    <input type="number" value={selectedLayer.width} onChange={e => updateLayer(selectedLayer.id, { width: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-lg p-2 text-xs" />
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Width</label>
+                                    <input type="number" value={selectedLayer.width} onChange={e => updateLayer(selectedLayer.id, { width: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold focus:ring-1 focus:ring-indigo-500 outline-none" />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-[9px] text-muted font-bold uppercase">Height</label>
-                                    <input type="number" value={selectedLayer.height} onChange={e => updateLayer(selectedLayer.id, { height: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-lg p-2 text-xs" />
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Height</label>
+                                    <input type="number" value={selectedLayer.height} onChange={e => updateLayer(selectedLayer.id, { height: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold focus:ring-1 focus:ring-indigo-500 outline-none" />
                                 </div>
                             </div>
 
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => updateLayer(selectedLayer.id, { zIndex: selectedLayer.zIndex + 1 })}
-                                    className="flex-1 p-2 bg-background border border-card-border rounded-lg text-xs flex items-center justify-center gap-2 hover:bg-card-border"
+                                    className="flex-1 p-2.5 bg-card-bg border border-card-border rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-card-border transition-colors"
                                 >
-                                    <ChevronUp size={12} /> Bring Forward
+                                    <ChevronUp size={12} /> Up
                                 </button>
                                 <button
                                     onClick={() => updateLayer(selectedLayer.id, { zIndex: Math.max(0, selectedLayer.zIndex - 1) })}
-                                    className="flex-1 p-2 bg-background border border-card-border rounded-lg text-xs flex items-center justify-center gap-2 hover:bg-card-border"
+                                    className="flex-1 p-2.5 bg-card-bg border border-card-border rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-card-border transition-colors"
                                 >
-                                    <ChevronDown size={12} /> Send Backward
+                                    <ChevronDown size={12} /> Down
                                 </button>
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[9px] text-muted font-bold uppercase">Content / Data Binding</label>
+                                <label className="text-[9px] text-muted font-black uppercase tracking-widest">Content Mapping</label>
                                 {selectedLayer.type === 'text' ? (
                                     <textarea
                                         value={selectedLayer.content}
                                         onChange={e => updateLayer(selectedLayer.id, { content: e.target.value })}
-                                        className="w-full bg-background border border-card-border rounded-lg p-2 text-xs h-20"
+                                        className="w-full bg-background border border-card-border rounded-xl p-3 text-xs font-bold h-24 focus:ring-1 focus:ring-indigo-500 outline-none"
                                     />
                                 ) : (
                                     <input
                                         type="text"
                                         value={selectedLayer.content}
                                         onChange={e => updateLayer(selectedLayer.id, { content: e.target.value })}
-                                        className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
+                                        className="w-full bg-background border border-card-border rounded-xl p-3 text-xs font-bold focus:ring-1 focus:ring-indigo-500 outline-none"
                                     />
                                 )}
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[9px] text-muted font-bold uppercase">Colors</label>
-                                <div className="flex gap-2">
-                                    <input type="color" value={selectedLayer.style.color} onChange={e => updateLayer(selectedLayer.id, { style: { ...selectedLayer.style, color: e.target.value } })} className="w-8 h-8 rounded overflow-hidden" />
-                                    <input type="color" value={selectedLayer.style.backgroundColor?.substring(0, 7) || '#000000'} onChange={e => updateLayer(selectedLayer.id, { style: { ...selectedLayer.style, backgroundColor: e.target.value + '88' } })} className="w-8 h-8 rounded overflow-hidden" />
+                            <div className="space-y-3">
+                                <label className="text-[9px] text-muted font-black uppercase tracking-widest">Aesthetics</label>
+                                <div className="flex items-center gap-4 p-3 bg-background/50 rounded-xl border border-card-border">
+                                    <div className="flex-1 space-y-1">
+                                        <p className="text-[8px] font-black text-muted uppercase">Foreground</p>
+                                        <input type="color" value={selectedLayer.style.color} onChange={e => updateLayer(selectedLayer.id, { style: { ...selectedLayer.style, color: e.target.value } })} className="w-full h-8 rounded-lg overflow-hidden bg-transparent cursor-pointer" />
+                                    </div>
+                                    <div className="flex-1 space-y-1">
+                                        <p className="text-[8px] font-black text-muted uppercase">Background</p>
+                                        <input type="color" value={selectedLayer.style.backgroundColor?.substring(0, 7) || '#000000'} onChange={e => updateLayer(selectedLayer.id, { style: { ...selectedLayer.style, backgroundColor: e.target.value + '88' } })} className="w-full h-8 rounded-lg overflow-hidden bg-transparent cursor-pointer" />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-4 pt-4 border-t border-card-border">
-                                <label className="text-[9px] text-indigo-400 font-black uppercase tracking-widest">Connect to Live Data</label>
+                            <div className="space-y-4 pt-6 border-t border-card-border">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                    <label className="text-[9px] text-indigo-400 font-black uppercase tracking-[0.2em]">Signal Coupling</label>
+                                </div>
                                 <div className="space-y-3">
-                                    <div className="space-y-1">
-                                        <label className="text-[9px] text-muted font-bold uppercase">Data Source</label>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] text-muted font-black uppercase tracking-widest">Source Module</label>
                                         <select
                                             value={selectedLayer.binding?.source || ''}
                                             onChange={e => updateLayer(selectedLayer.id, {
                                                 binding: e.target.value ? { source: e.target.value as any, field: '' } : undefined
                                             })}
-                                            className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
+                                            className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-1 focus:ring-indigo-500"
                                         >
-                                            <option value="">Static (No Binding)</option>
-                                            <option value="rundown">Rundown / Escaleta</option>
-                                            <option value="social">Social Media (Latest)</option>
-                                            <option value="telemetry">System Telemetry</option>
+                                            <option value="">STATIC_IDLE</option>
+                                            <option value="rundown">CORE_RUNDOWN</option>
+                                            <option value="social">SOCIAL_STREAM</option>
+                                            <option value="telemetry">SYS_TELEMETRY</option>
                                         </select>
                                     </div>
 
                                     {selectedLayer.binding && (
-                                        <>
-                                            <div className="space-y-1">
-                                                <label className="text-[9px] text-muted font-bold uppercase">Field</label>
+                                        <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[9px] text-muted font-black uppercase tracking-widest">Field ID</label>
                                                 <input
                                                     type="text"
                                                     placeholder="e.g. active_block_title"
@@ -412,48 +441,51 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                                     onChange={e => updateLayer(selectedLayer.id, {
                                                         binding: { ...selectedLayer.binding!, field: e.target.value }
                                                     })}
-                                                    className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
+                                                    className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-1 focus:ring-indigo-500"
                                                 />
                                             </div>
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <div className="space-y-1">
-                                                    <label className="text-[9px] text-muted font-bold uppercase">Prefix</label>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Prefix</label>
                                                     <input
                                                         type="text"
                                                         value={selectedLayer.binding.prefix || ''}
                                                         onChange={e => updateLayer(selectedLayer.id, {
                                                             binding: { ...selectedLayer.binding!, prefix: e.target.value }
                                                         })}
-                                                        className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
+                                                        className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-1 focus:ring-indigo-500"
                                                     />
                                                 </div>
-                                                <div className="space-y-1">
-                                                    <label className="text-[9px] text-muted font-bold uppercase">Suffix</label>
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Suffix</label>
                                                     <input
                                                         type="text"
                                                         value={selectedLayer.binding.suffix || ''}
                                                         onChange={e => updateLayer(selectedLayer.id, {
                                                             binding: { ...selectedLayer.binding!, suffix: e.target.value }
                                                         })}
-                                                        className="w-full bg-background border border-card-border rounded-lg p-2 text-xs"
+                                                        className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-1 focus:ring-indigo-500"
                                                     />
                                                 </div>
                                             </div>
-                                        </>
+                                        </div>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="pt-4 border-t border-card-border">
-                                <button onClick={() => deleteLayer(selectedLayer.id)} className="w-full p-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-widest">
-                                    Delete Layer
+                            <div className="pt-6 border-t border-card-border/50">
+                                <button
+                                    onClick={() => confirm('¿Eliminar esta capa?') && deleteLayer(selectedLayer.id)}
+                                    className="w-full p-4 bg-red-500/5 text-red-500 border border-red-500/10 rounded-2xl hover:bg-red-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-500/5"
+                                >
+                                    Deconstruct Layer
                                 </button>
                             </div>
                         </div>
                     ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-muted italic text-center p-10">
-                            <Plus size={32} className="mb-4 opacity-10" />
-                            <p className="text-xs">Select a layer to edit properties or add a new one from the left.</p>
+                        <div className="h-full min-h-[200px] flex flex-col items-center justify-center text-muted italic text-center p-10 opacity-40">
+                            <Plus size={32} strokeWidth={1} className="mb-4" />
+                            <p className="text-[10px] uppercase font-black tracking-widest leading-loose">Select a layer to initialize matrix controls</p>
                         </div>
                     )}
                 </div>

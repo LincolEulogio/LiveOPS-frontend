@@ -105,7 +105,7 @@ export const DashboardView = () => {
                             <Activity size={14} className="text-indigo-400" />
                             <span className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">Signal Source Operational</span>
                         </div>
-                        <h1 className="text-2xl md:text-3xl font-black text-foreground uppercase tracking-tighter leading-none truncate italic">
+                        <h1 className="text-xl md:text-3xl font-black text-foreground uppercase tracking-tighter leading-tight break-words italic">
                             {production?.name || 'INITIALIZING NODE...'}
                         </h1>
                     </div>
@@ -196,10 +196,10 @@ export const DashboardView = () => {
             </div>
 
             {/* Matrix Quick Actions */}
-            <div className="bg-card-bg/40 backdrop-blur-xl border border-card-border/60 rounded-[1.5rem] p-3 flex items-center gap-4 overflow-x-auto no-scrollbar shadow-inner relative group/actions">
-                <div className="flex items-center gap-3 px-4 py-1.5 border-r border-card-border shrink-0">
+            <div className="bg-card-bg/40 backdrop-blur-xl border border-card-border/60 rounded-[1.5rem] p-3 flex items-center gap-2 sm:gap-4 overflow-x-auto no-scrollbar shadow-inner relative group/actions min-w-0">
+                <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 border-r border-card-border shrink-0">
                     <Zap size={14} className="text-amber-400 animate-pulse" />
-                    <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em] whitespace-nowrap">Rapid Response Intercepts</span>
+                    <span className="text-[8px] sm:text-[9px] font-black text-muted uppercase tracking-[0.2em] sm:tracking-[0.3em] whitespace-nowrap">Rapid Response Intercepts</span>
                 </div>
                 <div className="flex items-center gap-3">
                     {templates.length > 0 ? templates.map(t => (

@@ -27,22 +27,22 @@ export const ProductionSelector = () => {
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
-                <button className="flex items-center gap-4 px-6 py-3.5 bg-background shadow-inner hover:bg-white/[0.02] border border-card-border/60 rounded-[1.25rem] transition-all group min-w-[240px] justify-between relative overflow-hidden active:scale-95">
+                <button className="flex items-center gap-2 sm:gap-4 px-4 sm:px-6 py-3.5 bg-background shadow-inner hover:bg-white/[0.02] border border-card-border/60 rounded-[1.25rem] transition-all group min-w-[200px] sm:min-w-[240px] flex-1 sm:flex-initial justify-between relative overflow-hidden active:scale-95">
                     {/* Hover Glow */}
                     <div className="absolute inset-x-0 bottom-0 h-0.5 bg-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                    <div className="flex items-center gap-4 relative z-10">
-                        <div className="w-10 h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 shadow-inner group-hover:bg-indigo-600/20 transition-all">
-                            <Server size={18} className="text-indigo-400" />
+                    <div className="flex items-center gap-3 sm:gap-4 relative z-10 flex-1 min-w-0">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 shadow-inner group-hover:bg-indigo-600/20 transition-all shrink-0">
+                            <Server size={16} className="text-indigo-400 sm:w-[18px] sm:h-[18px]" />
                         </div>
-                        <div className="text-left">
-                            <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em] leading-none mb-1.5 opacity-60">Production Node</p>
-                            <h3 className="text-sm font-black text-foreground uppercase tracking-tight truncate max-w-[120px] italic">
+                        <div className="text-left flex-1 min-w-0">
+                            <p className="text-[8px] sm:text-[9px] font-black text-muted uppercase tracking-[0.3em] leading-none mb-1 sm:mb-1.5 opacity-60 truncate">Production Node</p>
+                            <h3 className="text-xs sm:text-sm font-black text-foreground uppercase tracking-tight truncate italic">
                                 {activeProduction?.name || 'SELECT SECTOR...'}
                             </h3>
                         </div>
                     </div>
-                    <ChevronDown size={18} className="text-muted group-hover:text-indigo-400 transition-all transform group-data-[state=open]:rotate-180" />
+                    <ChevronDown size={18} className="text-muted group-hover:text-indigo-400 transition-all transform group-data-[state=open]:rotate-180 shrink-0" />
                 </button>
             </DropdownMenu.Trigger>
 

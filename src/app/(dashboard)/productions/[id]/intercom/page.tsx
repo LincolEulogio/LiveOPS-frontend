@@ -36,7 +36,7 @@ export default function IntercomPage() {
     if (!viewMode) return null;
 
     return (
-        <div className="-m-6 md:-m-8 bg-background text-foreground min-h-[calc(100vh-4rem)]">
+        <div className="bg-background text-foreground min-h-[calc(100vh-4rem)] ">
             <header className="relative top-0 h-16 bg-card-bg/40 border-b border-card-border z-50 px-6 md:px-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <Link
@@ -68,17 +68,17 @@ export default function IntercomPage() {
                 </div>
             </header>
 
-            <main className="p-6 md:p-8 max-w-[1800px] mx-auto">
+            <main className="p-4 md:p-6 max-w-[1800px] mx-auto">
                 {viewMode === 'dashboard' ? <DashboardView /> : <DeviceView />}
             </main>
 
             {/* Vibration Unlock Overlay (Required by browsers) */}
             {viewMode === 'device' && (
-                <div className="fixed bottom-6 left-6 right-6 lg:left-auto lg:w-96 p-4 bg-indigo-600 rounded-2xl shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                    <div className="bg-white/20 p-2 rounded-full">
+                <div className="fixed bottom-32 left-6 right-6 lg:left-auto lg:w-80 p-4 bg-indigo-600/90 backdrop-blur-xl border border-indigo-400/30 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-[60] flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                    <div className="bg-white/20 p-2.5 rounded-xl">
                         <Smartphone size={20} className="text-white animate-bounce" />
                     </div>
-                    <p className="text-xs font-bold text-white leading-tight">
+                    <p className="text-[11px] font-black text-white uppercase tracking-widest leading-tight">
                         Intercom active. Vibration is enabled for alerts.
                     </p>
                 </div>

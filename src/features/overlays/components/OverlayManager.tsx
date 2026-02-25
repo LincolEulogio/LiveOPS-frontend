@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { overlayService } from '../api/overlay.service';
-import { Layers, Plus, ExternalLink, Play, Square, Edit3, Trash2, X } from 'lucide-react';
+import { Layers, Plus, ExternalLink, Play, Square, Edit3, Trash2, X, ChevronLeft } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { OverlayEditor } from './OverlayEditor';
 import { OverlayTemplate } from '../types/overlay.types';
@@ -41,15 +41,17 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
 
     if (isEditing) {
         return (
-            <div className="space-y-6 animate-in fade-in zoom-in duration-300">
-                <div className="flex justify-between items-center">
+            <div className="space-y-6 animate-in fade-in zoom-in duration-300 p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <button
                         onClick={() => setIsEditing(false)}
-                        className="text-muted hover:text-foreground flex items-center gap-2 text-xs font-bold uppercase"
+                        className="text-muted hover:text-foreground flex items-center gap-2 text-[10px] font-black uppercase tracking-widest w-fit"
                     >
-                        ← Back to List
+                        <ChevronLeft size={16} /> Back to List
                     </button>
-                    <h2 className="text-xl font-bold text-foreground">Editing: {selectedTemplate?.name}</h2>
+                    <h2 className="text-xl sm:text-2xl font-black text-foreground uppercase tracking-tight truncate max-w-full sm:max-w-[60%] italic">
+                        Editing: <span className="text-indigo-400">{selectedTemplate?.name}</span>
+                    </h2>
                 </div>
                 <OverlayEditor
                     productionId={productionId}
@@ -68,7 +70,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
 
     return (
         <div className="space-y-8 p-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col gap-6 md:flex-row justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                         <Layers className="text-indigo-400" size={32} />
@@ -78,7 +80,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                 </div>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-2xl font-bold transition-all"
+                    className="flex w-full md:w-auto items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-2xl font-bold transition-all"
                 >
                     <Plus size={20} /> New Overlay
                 </button>
