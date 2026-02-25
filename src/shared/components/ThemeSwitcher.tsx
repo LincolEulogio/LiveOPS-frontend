@@ -32,7 +32,7 @@ export const ThemeSwitcher = () => {
                         theme === t.id ? cn(t.color, t.animation) : "group-hover:scale-110"
                     )} />
                     {theme === t.id && (
-                        <span className="text-[10px] font-black uppercase tracking-widest pr-1">
+                        <span className="text-[10px] font-black uppercase  pr-1">
                             {t.name}
                         </span>
                     )}

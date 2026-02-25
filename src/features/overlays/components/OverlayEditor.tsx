@@ -202,12 +202,12 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
             <div className="flex-1 bg-background flex flex-col relative overflow-hidden min-h-[400px] md:min-h-0">
                 <div className="p-3 sm:p-4 border-b border-card-border flex justify-between items-center bg-card-bg/50 overflow-x-auto no-scrollbar">
                     <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-                        <span className="text-[10px] sm:text-xs font-black text-muted uppercase tracking-widest hidden sm:block">Viewport (1920x1080)</span>
+                        <span className="text-[10px] sm:text-xs font-black text-muted uppercase  hidden sm:block">Viewport (1920x1080)</span>
                         <div className="h-4 w-px bg-card-border hidden sm:block" />
                         <button
                             onClick={() => setPreviewMode(!previewMode)}
                             className={cn(
-                                "text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border transition-all whitespace-nowrap",
+                                "text-[9px] sm:text-[10px] font-black uppercase  px-3 py-1.5 rounded-full border transition-all whitespace-nowrap",
                                 previewMode ? "bg-indigo-500 text-white border-indigo-400 shadow-lg shadow-indigo-500/20" : "bg-card-border/50 text-muted border-card-border hover:text-foreground"
                             )}
                         >
@@ -215,7 +215,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                         </button>
                     </div>
                     <div className="flex items-center gap-3 sm:gap-4 shrink-0 pr-4 sm:pr-0">
-                        <span className="text-[10px] text-muted font-black tracking-widest">{Math.round(zoom * 100)}%</span>
+                        <span className="text-[10px] text-muted font-black ">{Math.round(zoom * 100)}%</span>
                         <input
                             type="range" min="0.1" max="1" step="0.1"
                             value={zoom} onChange={e => setZoom(parseFloat(e.target.value))}
@@ -291,7 +291,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
             <div className="w-full md:w-80 bg-card-bg border-t md:border-t-0 md:border-l border-card-border flex flex-col h-auto md:h-full">
                 {/* Layers Top */}
                 <div className="p-4 border-b border-card-border">
-                    <h3 className="text-[10px] font-black text-muted uppercase tracking-[0.2em] flex items-center gap-2 mb-4">
+                    <h3 className="text-[10px] font-black text-muted uppercase  flex items-center gap-2 mb-4">
                         <Layers size={14} /> Layers
                     </h3>
                     <div className="space-y-1 max-h-48 md:max-h-64 overflow-y-auto custom-scrollbar">
@@ -307,7 +307,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                 )}
                             >
                                 {l.type === 'text' ? <Type size={14} /> : l.type === 'image' ? <ImageIcon size={14} /> : <Box size={14} />}
-                                <span className="text-[11px] font-black uppercase tracking-tight truncate flex-1">{l.name}</span>
+                                <span className="text-[11px] font-black uppercase  truncate flex-1">{l.name}</span>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); deleteLayer(l.id); }}
                                     className={cn(
@@ -333,7 +333,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                     {selectedLayer ? (
                         <div className="space-y-6">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-[10px] font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-2">
+                                <h3 className="text-[10px] font-black text-foreground uppercase  flex items-center gap-2">
                                     <Settings size={14} className="text-indigo-400" /> Layer Matrix
                                 </h3>
                                 <div className="px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20 text-[8px] font-black text-indigo-400 uppercase">
@@ -344,19 +344,19 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                             {/* ... rest of the properties stay mostly the same but with slightly better styling ... */}
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="space-y-1.5">
-                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">X Position</label>
+                                    <label className="text-[9px] text-muted font-black uppercase ">X Position</label>
                                     <input type="number" value={selectedLayer.x} onChange={e => updateLayer(selectedLayer.id, { x: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold focus:ring-1 focus:ring-indigo-500 outline-none" />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Y Position</label>
+                                    <label className="text-[9px] text-muted font-black uppercase ">Y Position</label>
                                     <input type="number" value={selectedLayer.y} onChange={e => updateLayer(selectedLayer.id, { y: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold focus:ring-1 focus:ring-indigo-500 outline-none" />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Width</label>
+                                    <label className="text-[9px] text-muted font-black uppercase ">Width</label>
                                     <input type="number" value={selectedLayer.width} onChange={e => updateLayer(selectedLayer.id, { width: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold focus:ring-1 focus:ring-indigo-500 outline-none" />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Height</label>
+                                    <label className="text-[9px] text-muted font-black uppercase ">Height</label>
                                     <input type="number" value={selectedLayer.height} onChange={e => updateLayer(selectedLayer.id, { height: parseInt(e.target.value) })} className="w-full bg-background border border-card-border rounded-xl p-2.5 text-xs font-bold focus:ring-1 focus:ring-indigo-500 outline-none" />
                                 </div>
                             </div>
@@ -364,20 +364,20 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => updateLayer(selectedLayer.id, { zIndex: selectedLayer.zIndex + 1 })}
-                                    className="flex-1 p-2.5 bg-card-bg border border-card-border rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-card-border transition-colors"
+                                    className="flex-1 p-2.5 bg-card-bg border border-card-border rounded-xl text-[9px] font-black uppercase  flex items-center justify-center gap-2 hover:bg-card-border transition-colors"
                                 >
                                     <ChevronUp size={12} /> Up
                                 </button>
                                 <button
                                     onClick={() => updateLayer(selectedLayer.id, { zIndex: Math.max(0, selectedLayer.zIndex - 1) })}
-                                    className="flex-1 p-2.5 bg-card-bg border border-card-border rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-card-border transition-colors"
+                                    className="flex-1 p-2.5 bg-card-bg border border-card-border rounded-xl text-[9px] font-black uppercase  flex items-center justify-center gap-2 hover:bg-card-border transition-colors"
                                 >
                                     <ChevronDown size={12} /> Down
                                 </button>
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[9px] text-muted font-black uppercase tracking-widest">Content Mapping</label>
+                                <label className="text-[9px] text-muted font-black uppercase ">Content Mapping</label>
                                 {selectedLayer.type === 'text' ? (
                                     <textarea
                                         value={selectedLayer.content}
@@ -395,7 +395,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-[9px] text-muted font-black uppercase tracking-widest">Aesthetics</label>
+                                <label className="text-[9px] text-muted font-black uppercase ">Aesthetics</label>
                                 <div className="flex items-center gap-4 p-3 bg-background/50 rounded-xl border border-card-border">
                                     <div className="flex-1 space-y-1">
                                         <p className="text-[8px] font-black text-muted uppercase">Foreground</p>
@@ -411,11 +411,11 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                             <div className="space-y-4 pt-6 border-t border-card-border">
                                 <div className="flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                                    <label className="text-[9px] text-indigo-400 font-black uppercase tracking-[0.2em]">Signal Coupling</label>
+                                    <label className="text-[9px] text-indigo-400 font-black uppercase ">Signal Coupling</label>
                                 </div>
                                 <div className="space-y-3">
                                     <div className="space-y-1.5">
-                                        <label className="text-[9px] text-muted font-black uppercase tracking-widest">Source Module</label>
+                                        <label className="text-[9px] text-muted font-black uppercase ">Source Module</label>
                                         <select
                                             value={selectedLayer.binding?.source || ''}
                                             onChange={e => updateLayer(selectedLayer.id, {
@@ -433,7 +433,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                     {selectedLayer.binding && (
                                         <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
                                             <div className="space-y-1.5">
-                                                <label className="text-[9px] text-muted font-black uppercase tracking-widest">Field ID</label>
+                                                <label className="text-[9px] text-muted font-black uppercase ">Field ID</label>
                                                 <input
                                                     type="text"
                                                     placeholder="e.g. active_block_title"
@@ -446,7 +446,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                             </div>
                                             <div className="grid grid-cols-2 gap-3">
                                                 <div className="space-y-1.5">
-                                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Prefix</label>
+                                                    <label className="text-[9px] text-muted font-black uppercase ">Prefix</label>
                                                     <input
                                                         type="text"
                                                         value={selectedLayer.binding.prefix || ''}
@@ -457,7 +457,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                                                     />
                                                 </div>
                                                 <div className="space-y-1.5">
-                                                    <label className="text-[9px] text-muted font-black uppercase tracking-widest">Suffix</label>
+                                                    <label className="text-[9px] text-muted font-black uppercase ">Suffix</label>
                                                     <input
                                                         type="text"
                                                         value={selectedLayer.binding.suffix || ''}
@@ -476,7 +476,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                             <div className="pt-6 border-t border-card-border/50">
                                 <button
                                     onClick={() => confirm('¿Eliminar esta capa?') && deleteLayer(selectedLayer.id)}
-                                    className="w-full p-4 bg-red-500/5 text-red-500 border border-red-500/10 rounded-2xl hover:bg-red-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-500/5"
+                                    className="w-full p-4 bg-red-500/5 text-red-500 border border-red-500/10 rounded-2xl hover:bg-red-500 hover:text-white transition-all text-[10px] font-black uppercase  shadow-lg shadow-red-500/5"
                                 >
                                     Deconstruct Layer
                                 </button>
@@ -485,7 +485,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
                     ) : (
                         <div className="h-full min-h-[200px] flex flex-col items-center justify-center text-muted italic text-center p-10 opacity-40">
                             <Plus size={32} strokeWidth={1} className="mb-4" />
-                            <p className="text-[10px] uppercase font-black tracking-widest leading-loose">Select a layer to initialize matrix controls</p>
+                            <p className="text-[10px] uppercase font-black  leading-loose">Select a layer to initialize matrix controls</p>
                         </div>
                     )}
                 </div>

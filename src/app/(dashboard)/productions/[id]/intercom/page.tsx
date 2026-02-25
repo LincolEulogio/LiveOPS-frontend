@@ -49,19 +49,19 @@ export default function IntercomPage() {
                     <div className="p-2 bg-indigo-600 rounded-lg">
                         <Info size={18} className="text-white" />
                     </div>
-                    <h1 className="font-black uppercase tracking-tighter text-lg md:flex hidden">Live Alert System</h1>
+                    <h1 className="font-black uppercase er text-lg md:flex hidden">Live Alert System</h1>
                 </div>
 
                 <div className="flex bg-card-bg p-1 rounded-xl border border-card-border">
                     <button
                         onClick={() => setViewMode('dashboard')}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${viewMode === 'dashboard' ? 'bg-background text-foreground shadow-lg border border-card-border' : 'text-muted hover:text-foreground'}`}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase  transition-all ${viewMode === 'dashboard' ? 'bg-background text-foreground shadow-lg border border-card-border' : 'text-muted hover:text-foreground'}`}
                     >
                         <AppWindow size={14} /> Dashboard
                     </button>
                     <button
                         onClick={() => setViewMode('device')}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${viewMode === 'device' ? 'bg-background text-foreground shadow-lg border border-card-border' : 'text-muted hover:text-foreground'}`}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase  transition-all ${viewMode === 'device' ? 'bg-background text-foreground shadow-lg border border-card-border' : 'text-muted hover:text-foreground'}`}
                     >
                         <Smartphone size={14} /> Mobile
                     </button>
@@ -78,7 +78,7 @@ export default function IntercomPage() {
                     <div className="bg-white/20 p-2.5 rounded-xl">
                         <Smartphone size={20} className="text-white animate-bounce" />
                     </div>
-                    <p className="text-[11px] font-black text-white uppercase tracking-widest leading-tight">
+                    <p className="text-[11px] font-black text-white uppercase  leading-tight">
                         Intercom active. Vibration is enabled for alerts.
                     </p>
                 </div>

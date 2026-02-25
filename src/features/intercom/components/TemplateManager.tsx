@@ -66,8 +66,8 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
             console.log(`[TemplateManager] Refetch complete, showing success UI`);
 
             MySwal.fire({
-                title: <p className="text-foreground font-black uppercase tracking-tighter">Éxito</p>,
-                html: <p className="text-muted text-xs font-bold uppercase tracking-widest">{editingTemplate ? 'Plantilla actualizada' : 'Plantilla creada correctamente'}</p>,
+                title: <p className="text-foreground font-black uppercase er">Éxito</p>,
+                html: <p className="text-muted text-xs font-bold uppercase ">{editingTemplate ? 'Plantilla actualizada' : 'Plantilla creada correctamente'}</p>,
                 icon: 'success',
                 background: 'var(--card-bg)',
                 color: 'var(--foreground)',
@@ -169,7 +169,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                         <div className="p-2 bg-indigo-500/10 rounded-xl">
                                             {view === 'form' ? <Zap size={20} className="text-indigo-400" /> : <List size={20} className="text-indigo-400" />}
                                         </div>
-                                        <h2 className="text-sm font-black text-foreground uppercase tracking-widest">
+                                        <h2 className="text-sm font-black text-foreground uppercase ">
                                             {view === 'list' ? 'Gestionar Plantillas' : editingTemplate ? 'Editar Plantilla' : 'Nueva Plantilla'}
                                         </h2>
                                     </div>
@@ -213,7 +213,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                             >
                                                 <form onSubmit={handleSave} className="space-y-6">
                                                     <div className="space-y-2">
-                                                        <label className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest">
+                                                        <label className="flex items-center gap-2 text-[10px] font-black text-muted uppercase ">
                                                             <Type size={12} />
                                                             Texto de la Alerta
                                                         </label>
@@ -228,7 +228,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                     </div>
 
                                                     <div className="space-y-4">
-                                                        <label className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest">
+                                                        <label className="flex items-center gap-2 text-[10px] font-black text-muted uppercase ">
                                                             <Palette size={12} />
                                                             Identificador Visual (Color)
                                                         </label>
@@ -250,7 +250,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                             <button
                                                                 type="button"
                                                                 onClick={() => setView('list')}
-                                                                className="flex-1 py-4 bg-card-bg hover:bg-card-border text-muted rounded-xl font-black text-xs uppercase tracking-widest transition-all border border-card-border flex items-center justify-center gap-2"
+                                                                className="flex-1 py-4 bg-card-bg hover:bg-card-border text-muted rounded-xl font-black text-xs uppercase  transition-all border border-card-border flex items-center justify-center gap-2"
                                                             >
                                                                 <ChevronLeft size={16} />
                                                                 Volver
@@ -259,7 +259,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                         <button
                                                             type="submit"
                                                             disabled={isMutating || !name.trim()}
-                                                            className="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:bg-card-border disabled:shadow-none"
+                                                            className="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-xs uppercase  transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:bg-card-border disabled:shadow-none"
                                                         >
                                                             {isMutating ? (
                                                                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -284,7 +284,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                 {templates.length === 0 ? (
                                                     <div className="py-20 text-center space-y-4">
                                                         <Zap size={40} className="text-card-border mx-auto" strokeWidth={1} />
-                                                        <p className="text-[10px] font-black text-muted uppercase tracking-widest italic">
+                                                        <p className="text-[10px] font-black text-muted uppercase  italic">
                                                             No hay plantillas configuradas
                                                         </p>
                                                         <button
@@ -308,8 +308,8 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                                                     <div className="w-3 h-3 rounded-full shadow-lg" style={{ backgroundColor: t.color }} />
                                                                 </div>
                                                                 <div>
-                                                                    <h4 className="text-[12px] font-black text-foreground uppercase tracking-tight">{t.name}</h4>
-                                                                    <p className="text-[8px] font-bold text-muted uppercase tracking-widest mt-0.5">ID: {t.id.substring(0, 8)}</p>
+                                                                    <h4 className="text-[12px] font-black text-foreground uppercase ">{t.name}</h4>
+                                                                    <p className="text-[8px] font-bold text-muted uppercase  mt-0.5">ID: {t.id.substring(0, 8)}</p>
                                                                 </div>
                                                             </div>
                                                             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

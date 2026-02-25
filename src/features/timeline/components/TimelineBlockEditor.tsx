@@ -76,7 +76,7 @@ export const TimelineBlockEditor = ({ isOpen, onClose, onSave, editingBlock }: P
                             <Settings2 size={24} />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold text-foreground tracking-tight">
+                            <h2 className="text-xl font-bold text-foreground ">
                                 {editingBlock ? 'Edit Segment' : 'New Show Segment'}
                             </h2>
                             <p className="text-xs text-muted">Configure block details and automations.</p>
@@ -90,7 +90,7 @@ export const TimelineBlockEditor = ({ isOpen, onClose, onSave, editingBlock }: P
                 <form onSubmit={handleSubmit(onSave)} className="p-6 space-y-6">
                     {/* Title */}
                     <div className="space-y-2">
-                        <label className="text-xs font-bold text-muted uppercase tracking-widest pl-1 flex items-center gap-2">
+                        <label className="text-xs font-bold text-muted uppercase  pl-1 flex items-center gap-2">
                             <Type size={12} />
                             Segment Title
                         </label>
@@ -104,7 +104,7 @@ export const TimelineBlockEditor = ({ isOpen, onClose, onSave, editingBlock }: P
 
                     {/* Description */}
                     <div className="space-y-2">
-                        <label className="text-xs font-bold text-muted uppercase tracking-widest pl-1 flex items-center gap-2">
+                        <label className="text-xs font-bold text-muted uppercase  pl-1 flex items-center gap-2">
                             <AlignLeft size={12} />
                             Short Description
                         </label>
@@ -118,7 +118,7 @@ export const TimelineBlockEditor = ({ isOpen, onClose, onSave, editingBlock }: P
                     <div className="grid grid-cols-2 gap-6">
                         {/* Duration */}
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-muted uppercase tracking-widest pl-1 flex items-center gap-2">
+                            <label className="text-xs font-bold text-muted uppercase  pl-1 flex items-center gap-2">
                                 <Clock size={12} />
                                 Duration (ms)
                             </label>
@@ -131,7 +131,7 @@ export const TimelineBlockEditor = ({ isOpen, onClose, onSave, editingBlock }: P
 
                         {/* Linked Scene */}
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-muted uppercase tracking-widest pl-1 flex items-center gap-2">
+                            <label className="text-xs font-bold text-muted uppercase  pl-1 flex items-center gap-2">
                                 <Monitor size={12} />
                                 Linked OBS Scene
                             </label>
@@ -145,7 +145,7 @@ export const TimelineBlockEditor = ({ isOpen, onClose, onSave, editingBlock }: P
 
                     {/* Notes */}
                     <div className="space-y-2">
-                        <label className="text-xs font-bold text-muted uppercase tracking-widest pl-1">Internal Production Notes</label>
+                        <label className="text-xs font-bold text-muted uppercase  pl-1">Internal Production Notes</label>
                         <textarea
                             {...register('notes')}
                             rows={3}
@@ -160,14 +160,14 @@ export const TimelineBlockEditor = ({ isOpen, onClose, onSave, editingBlock }: P
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-6 py-2.5 text-xs font-bold text-muted hover:text-foreground transition-all uppercase tracking-widest"
+                        className="px-6 py-2.5 text-xs font-bold text-muted hover:text-foreground transition-all uppercase "
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleSubmit(onSave)}
                         disabled={isSubmitting}
-                        className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold px-8 py-2.5 rounded-2xl transition-all shadow-xl shadow-indigo-600/20 uppercase text-xs tracking-widest flex items-center gap-2"
+                        className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold px-8 py-2.5 rounded-2xl transition-all shadow-xl shadow-indigo-600/20 uppercase text-xs  flex items-center gap-2"
                     >
                         {isSubmitting ? 'Saving...' : editingBlock ? 'Update Segment' : 'Add to Escaleta'}
                         {!isSubmitting && <ArrowRight size={14} />}

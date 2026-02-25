@@ -61,15 +61,15 @@ export const RundownTable = ({
             <table className="w-full text-left border-collapse min-w-[800px] lg:min-w-full">
                 <thead>
                     <tr className="bg-white/[0.02] border-b border-card-border/50">
-                        <th className="pl-8 pr-4 py-6 text-[10px] font-black text-muted uppercase tracking-[0.2em] w-16">#</th>
-                        <th className="px-4 py-6 text-[10px] font-black text-muted uppercase tracking-[0.2em]">Segment / Identity</th>
-                        <th className="px-4 py-6 text-[10px] font-black text-muted uppercase tracking-[0.2em]">Source Link</th>
-                        <th className="px-4 py-6 text-[10px] font-black text-muted uppercase tracking-[0.2em] text-center">Planned</th>
-                        <th className="px-4 py-6 text-[10px] font-black text-muted uppercase tracking-[0.2em] text-center">In Air</th>
+                        <th className="pl-8 pr-4 py-6 text-[10px] font-black text-muted uppercase  w-16">#</th>
+                        <th className="px-4 py-6 text-[10px] font-black text-muted uppercase ">Segment / Identity</th>
+                        <th className="px-4 py-6 text-[10px] font-black text-muted uppercase ">Source Link</th>
+                        <th className="px-4 py-6 text-[10px] font-black text-muted uppercase  text-center">Planned</th>
+                        <th className="px-4 py-6 text-[10px] font-black text-muted uppercase  text-center">In Air</th>
                         <th className="pl-4 pr-8 py-6 text-right">
                             <div className="inline-flex items-center gap-3 bg-black/20 px-4 py-1.5 rounded-full border border-white/5">
                                 <Activity size={10} className="text-indigo-400" />
-                                <span className="text-[9px] font-black text-muted uppercase tracking-widest">Est. Remainder:</span>
+                                <span className="text-[9px] font-black text-muted uppercase ">Est. Remainder:</span>
                                 <span className="text-xs font-mono font-black text-indigo-400">{formatDuration(totalRemainingMs)}</span>
                             </div>
                         </th>
@@ -118,13 +118,13 @@ export const RundownTable = ({
                                     <td className="px-4 py-6">
                                         <div className="flex flex-col gap-1 min-w-[200px]">
                                             <span className={cn(
-                                                "font-black text-sm uppercase tracking-tight",
+                                                "font-black text-sm uppercase ",
                                                 block.status === TimelineStatus.ACTIVE ? "text-indigo-400" : "text-foreground"
                                             )}>
                                                 {block.title}
                                             </span>
                                             {block.description && (
-                                                <span className="text-[10px] font-bold text-muted uppercase tracking-widest line-clamp-1 opacity-60 italic">{block.description}</span>
+                                                <span className="text-[10px] font-bold text-muted uppercase  line-clamp-1 opacity-60 italic">{block.description}</span>
                                             )}
                                         </div>
                                     </td>
@@ -137,7 +137,7 @@ export const RundownTable = ({
                                             )} />
                                             <div className="px-3 py-1 bg-white/[0.03] border border-white/5 rounded-lg">
                                                 <span className={cn(
-                                                    "text-[9px] font-black uppercase tracking-[0.1em]",
+                                                    "text-[9px] font-black uppercase ",
                                                     inProgram ? "text-red-400" : inPreview ? "text-emerald-400" : "text-muted"
                                                 )}>
                                                     {block.source || 'DYNAMIC LINK'}
@@ -147,7 +147,7 @@ export const RundownTable = ({
                                     </td>
 
                                     <td className="px-4 py-6 text-center">
-                                        <span className="text-[11px] font-black font-mono text-muted uppercase tracking-widest">
+                                        <span className="text-[11px] font-black font-mono text-muted uppercase ">
                                             {block.durationMs && block.durationMs > 0 ? formatDuration(block.durationMs) : 'MANUAL'}
                                         </span>
                                     </td>
@@ -183,7 +183,7 @@ export const RundownTable = ({
                                             {block.status === TimelineStatus.ACTIVE && canControl && (
                                                 <button
                                                     onClick={() => onComplete(block.id)}
-                                                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-all active:scale-95 shadow-xl shadow-emerald-600/20 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
+                                                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-all active:scale-95 shadow-xl shadow-emerald-600/20 flex items-center gap-2 text-[10px] font-black uppercase "
                                                     title="Secure Segment"
                                                 >
                                                     <CheckCircle2 size={14} />
@@ -234,8 +234,8 @@ export const RundownTable = ({
                         <div className="absolute inset-0 bg-indigo-500/5 blur-3xl rounded-full" />
                     </div>
                     <div className="text-center">
-                        <p className="text-xs font-black uppercase tracking-[0.4em] text-foreground/40">Empty Protocol Queue</p>
-                        <p className="text-[10px] font-bold uppercase tracking-widest mt-1">No segments initialized for this production</p>
+                        <p className="text-xs font-black uppercase  text-foreground/40">Empty Protocol Queue</p>
+                        <p className="text-[10px] font-bold uppercase  mt-1">No segments initialized for this production</p>
                     </div>
                 </div>
             )}

@@ -60,7 +60,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6">
         <div className="w-16 h-16 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin" />
-        <span className="text-[10px] font-black text-muted uppercase tracking-[0.4em] animate-pulse">Initializing System</span>
+        <span className="text-[10px] font-black text-muted uppercase  animate-pulse">Initializing System</span>
       </div>
     );
   }
@@ -90,7 +90,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                     <Zap size={18} className="text-white" fill="currentColor" />
                   </div>
-                  <span className="text-lg font-black text-foreground tracking-tighter uppercase italic">LiveOPS</span>
+                  <span className="text-lg font-black text-foreground er uppercase italic">LiveOPS</span>
                 </div>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -116,8 +116,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Zap size={22} className="text-white" fill="currentColor" />
             </div>
             <div>
-              <h1 className="text-xl font-black text-foreground tracking-tighter uppercase italic leading-none">LiveOPS</h1>
-              <p className="text-[8px] font-black text-indigo-400 uppercase tracking-[0.3em] mt-1 opacity-60">Control Surface</p>
+              <h1 className="text-xl font-black text-foreground er uppercase italic leading-none">LiveOPS</h1>
+              <p className="text-[8px] font-black text-indigo-400 uppercase  mt-1 opacity-60">Control Surface</p>
             </div>
           </Link>
         </div>
@@ -140,9 +140,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div className="hidden min-[769px]:flex flex-col">
                 <div className="flex items-center gap-3">
                   <Activity size={14} className="text-indigo-400" />
-                  <h2 className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">Operational Node</h2>
+                  <h2 className="text-[10px] font-black text-muted uppercase ">Operational Node</h2>
                 </div>
-                <h1 className="text-lg font-black text-foreground uppercase tracking-tight mt-0.5">
+                <h1 className="text-lg font-black text-foreground uppercase  mt-0.5">
                   {pathname === '/productions' ? 'Asset Management' :
                     pathname.includes('/intercom') ? 'Tactical Command' :
                       pathname.includes('/overlays') ? 'Visual Pipeline' :
@@ -155,7 +155,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="flex items-center gap-4 min-[769px]:gap-8">
               <div className="hidden lg:flex items-center gap-1.5 px-4 py-2 bg-white/5 border border-white/5 rounded-2xl group cursor-default">
                 <Command size={14} className="text-muted group-hover:text-indigo-400 transition-colors" />
-                <span className="text-[10px] font-black text-muted uppercase tracking-widest">K: Search Matrix</span>
+                <span className="text-[10px] font-black text-muted uppercase ">K: Search Matrix</span>
               </div>
 
               <div className="flex items-center gap-4">
@@ -164,7 +164,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <div className="h-6 w-[1px] bg-card-border/50 hidden min-[769px]:block" />
                 <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 transition-all hover:bg-emerald-500/10">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[10px] font-black text-emerald-500/80 uppercase tracking-[0.2em]">Signal Stable</span>
+                  <span className="text-[10px] font-black text-emerald-500/80 uppercase ">Signal Stable</span>
                 </div>
               </div>
             </div>
@@ -194,25 +194,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <footer className="mt-12 border-t border-card-border bg-white/[0.02] backdrop-blur-sm py-6 px-10 flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-500 group/footer">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-[2px] bg-indigo-500 group-hover/footer:w-16 transition-all duration-700" />
-                <p className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground/70 group-hover/footer:text-foreground transition-colors">
+                <p className="text-[11px] font-black uppercase  text-foreground/70 group-hover/footer:text-foreground transition-colors">
                   Movimiento Misionero Mundial
                 </p>
               </div>
 
               <div className="flex flex-col md:flex-row items-center gap-4">
                 <div className="flex items-center gap-3 bg-indigo-500/5 px-4 py-2 rounded-2xl border border-indigo-500/10">
-                  <span className="text-[9px] font-bold text-muted uppercase tracking-widest opacity-60">Lead Architect</span>
-                  <span className="text-[11px] font-black text-indigo-400 uppercase tracking-widest">Lincol E.H</span>
+                  <span className="text-[9px] font-bold text-muted uppercase  opacity-60">Lead Architect</span>
+                  <span className="text-[11px] font-black text-indigo-400 uppercase ">Lincol E.H</span>
                 </div>
 
                 <div className="h-6 w-[1px] bg-card-border hidden md:block" />
 
                 <div className="flex items-center gap-3">
-                  <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">
+                  <p className="text-[10px] font-black text-muted uppercase ">
                     © 2026
                   </p>
                   <div className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl">
-                    <span className="text-[10px] font-black text-foreground/50 uppercase tracking-[0.2em]">LiveOPS Core</span>
+                    <span className="text-[10px] font-black text-foreground/50 uppercase ">LiveOPS Core</span>
                   </div>
                 </div>
               </div>
@@ -235,7 +235,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
                 {/* Tactical Label Hint */}
                 <div className="absolute right-full mr-4 px-3 py-1.5 bg-card-bg/95 backdrop-blur-md border border-card-border rounded-xl opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0 pointer-events-none hidden sm:block">
-                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-foreground whitespace-nowrap">Retorno a Base</span>
+                  <span className="text-[9px] font-black uppercase  text-foreground whitespace-nowrap">Retorno a Base</span>
                 </div>
               </motion.button>
             )}
@@ -249,7 +249,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: any) => (
   <>
     <nav className="flex-1 overflow-y-auto py-8 px-5 space-y-2 custom-scrollbar">
-      <p className="px-4 text-[9px] font-black text-muted uppercase tracking-[0.3em] mb-4 opacity-40">Core Systems</p>
+      <p className="px-4 text-[9px] font-black text-muted uppercase  mb-4 opacity-40">Core Systems</p>
 
       <SidebarLink
         href="/productions"
@@ -268,7 +268,7 @@ const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: an
       {activeProductionId && (
         <>
           <div className="h-4" />
-          <p className="px-4 text-[9px] font-black text-muted uppercase tracking-[0.3em] mb-4 opacity-40">Active Engine</p>
+          <p className="px-4 text-[9px] font-black text-muted uppercase  mb-4 opacity-40">Active Engine</p>
           <SidebarLink
             href={`/productions/${activeProductionId}/overlays`}
             icon={Layers}
@@ -285,7 +285,7 @@ const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: an
       )}
 
       <div className="h-4" />
-      <p className="px-4 text-[9px] font-black text-muted uppercase tracking-[0.3em] mb-4 opacity-40">Identity</p>
+      <p className="px-4 text-[9px] font-black text-muted uppercase  mb-4 opacity-40">Identity</p>
       <SidebarLink
         href="/profile"
         icon={UserIcon}
@@ -295,7 +295,7 @@ const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: an
 
       <Guard requiredPermissions={['user:manage', 'role:manage']}>
         <div className="h-8" />
-        <p className="px-4 text-[9px] font-black text-indigo-400 uppercase tracking-[0.4em] mb-4 opacity-60">Administration</p>
+        <p className="px-4 text-[9px] font-black text-indigo-400 uppercase  mb-4 opacity-60">Administration</p>
 
         <Guard requiredPermissions={['user:manage']}>
           <SidebarLink
@@ -325,10 +325,10 @@ const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: an
           {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-black text-foreground truncate tracking-tighter uppercase leading-none mb-1">{user?.name || 'Operator'}</p>
+          <p className="text-xs font-black text-foreground truncate er uppercase leading-none mb-1">{user?.name || 'Operator'}</p>
           <div className="flex items-center gap-1.5 opacity-60">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <p className="text-[9px] font-bold text-muted truncate uppercase tracking-widest">{user?.globalRole?.name || 'Authorized'}</p>
+            <p className="text-[9px] font-bold text-muted truncate uppercase ">{user?.globalRole?.name || 'Authorized'}</p>
           </div>
         </div>
       </div>
@@ -339,7 +339,7 @@ const SidebarContent = ({ pathname, activeProductionId, user, handleLogout }: an
       >
         <div className="flex items-center gap-3">
           <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em]">Terminate Session</span>
+          <span className="text-[10px] font-black uppercase ">Terminate Session</span>
         </div>
         <div className="w-1.5 h-1.5 rounded-full bg-muted/20 group-hover:bg-white" />
       </button>
@@ -359,7 +359,7 @@ const SidebarLink = ({ href, icon: Icon, label, active }: any) => (
   >
     <div className="flex items-center gap-4 relative z-10">
       <Icon size={20} className={cn("transition-transform group-hover/link:scale-110", active ? "text-white" : "text-indigo-400")} />
-      <span className="text-[10px] font-black uppercase tracking-[0.2em]">{label}</span>
+      <span className="text-[10px] font-black uppercase ">{label}</span>
     </div>
     {active && (
       <div className="w-1.5 h-1.5 rounded-full bg-white relative z-10" />

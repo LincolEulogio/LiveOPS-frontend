@@ -116,8 +116,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
           <div className="bg-stone-900 border border-stone-800 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <Loader2 className="animate-spin text-indigo-500" size={20} />
             <div className="flex flex-col">
-              <span className="text-sm font-bold text-white tracking-tight">Sync Interrupted</span>
-              <span className="text-[10px] text-stone-500 font-medium uppercase tracking-widest">Reestablishing gateway...</span>
+              <span className="text-sm font-bold text-white ">Sync Interrupted</span>
+              <span className="text-[10px] text-stone-500 font-medium uppercase ">Reestablishing gateway...</span>
             </div>
           </div>
         </div>
@@ -127,8 +127,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
           <div className="bg-red-500/10 border border-red-500/20 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-4">
             <WifiOff className="text-red-500" size={20} />
             <div className="flex flex-col">
-              <span className="text-sm font-bold text-red-500 tracking-tight">Backend Offline</span>
-              <span className="text-[10px] text-red-400/60 font-medium uppercase tracking-widest">Manual refresh required</span>
+              <span className="text-sm font-bold text-red-500 ">Backend Offline</span>
+              <span className="text-[10px] text-red-400/60 font-medium uppercase ">Manual refresh required</span>
             </div>
           </div>
         </div>

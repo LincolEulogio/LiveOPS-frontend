@@ -46,7 +46,7 @@ export const PresenceBar = () => {
                 ))}
             </div>
             <div className="flex flex-col ml-1">
-                <span className="text-[9px] font-black text-muted uppercase tracking-tighter leading-none">Equipo</span>
+                <span className="text-[9px] font-black text-muted uppercase er leading-none">Equipo</span>
                 <span className="text-[10px] font-bold text-foreground leading-none mt-1">{members.length}</span>
             </div>
         </div>

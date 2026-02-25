@@ -165,18 +165,18 @@ export const PrompterView = ({ productionId }: Props) => {
                 <div className="sticky top-0 left-0 right-0 p-4 z-40 bg-background/80 backdrop-blur-md border-b border-card-border flex items-center justify-between">
                     <Link
                         href={`/productions/${productionId}`}
-                        className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-muted hover:text-indigo-400 transition-colors"
+                        className="flex items-center gap-2 text-xs font-black uppercase  text-muted hover:text-indigo-400 transition-colors"
                     >
                         <ArrowLeft size={14} /> Back to Dashboard
                     </Link>
                     <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">Prompter Mode</span>
+                        <span className="text-[10px] font-black text-muted uppercase ">Prompter Mode</span>
                     </div>
                 </div>
 
                 {/* Main Content */}
-                <div className="max-w-7xl mx-auto px-16 pt-[15vh] pb-[75vh] relative z-20 w-full font-sans font-bold tracking-wide">
+                <div className="max-w-7xl mx-auto px-16 pt-[15vh] pb-[75vh] relative z-20 w-full font-sans font-bold ">
                     <style dangerouslySetInnerHTML={{
                         __html: `
                         .prompter-content p { margin-bottom: 1em; opacity: 0.9; }

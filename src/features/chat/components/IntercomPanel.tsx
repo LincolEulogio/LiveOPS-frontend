@@ -66,14 +66,14 @@ export const IntercomPanel = ({ productionId }: Props) => {
                         <div className="absolute inset-0 bg-emerald-500/20 blur-md rounded-full pointer-events-none" />
                     </div>
                     <div>
-                        <h2 className="text-xs font-black text-foreground uppercase tracking-[0.2em] leading-none mb-1">Crew Intercom</h2>
-                        <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none">Security Channel 0-Alpha</p>
+                        <h2 className="text-xs font-black text-foreground uppercase  leading-none mb-1">Crew Intercom</h2>
+                        <p className="text-[9px] font-black text-muted uppercase  leading-none">Security Channel 0-Alpha</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
                     <TemplateManager productionId={productionId} />
                     <div className="bg-background/50 border border-card-border px-2.5 py-1 rounded-lg">
-                        <span className="text-[10px] font-black text-indigo-400 uppercase tracking-tighter">
+                        <span className="text-[10px] font-black text-indigo-400 uppercase er">
                             SYNC: {history.length}
                         </span>
                     </div>
@@ -93,7 +93,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                                 className="flex-shrink-0 flex items-center gap-2 px-4 py-2 bg-background hover:bg-card-bg border border-card-border rounded-[1rem] transition-all active:scale-95 group shadow-sm"
                             >
                                 <Zap size={12} className="text-amber-500 group-hover:scale-110 transition-transform" fill="currentColor" />
-                                <span className="text-[10px] font-black text-foreground uppercase tracking-widest">{t.name}</span>
+                                <span className="text-[10px] font-black text-foreground uppercase ">{t.name}</span>
                             </motion.button>
                         ))}
                     </AnimatePresence>
@@ -114,8 +114,8 @@ export const IntercomPanel = ({ productionId }: Props) => {
                             <div className="absolute inset-0 bg-indigo-500/5 blur-2xl rounded-full" />
                         </div>
                         <div className="text-center">
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/30">Communications Offline</p>
-                            <p className="text-[10px] font-bold uppercase tracking-widest mt-1">Ready for primary broadcast</p>
+                            <p className="text-[10px] font-black uppercase  text-foreground/30">Communications Offline</p>
+                            <p className="text-[10px] font-bold uppercase  mt-1">Ready for primary broadcast</p>
                         </div>
                     </div>
                 ) : (
@@ -141,7 +141,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                             onChange={(e) => setMessage(e.target.value)}
                             onKeyDown={handleKeyDown}
                             placeholder="Type tactical command..."
-                            className="w-full bg-background border border-card-border rounded-2xl pl-5 pr-14 py-4 text-sm text-foreground placeholder:text-muted/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[55px] max-h-[150px] font-bold uppercase tracking-tight shadow-inner"
+                            className="w-full bg-background border border-card-border rounded-2xl pl-5 pr-14 py-4 text-sm text-foreground placeholder:text-muted/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[55px] max-h-[150px] font-bold uppercase  shadow-inner"
                             rows={1}
                         />
                         <button
@@ -163,12 +163,12 @@ export const IntercomPanel = ({ productionId }: Props) => {
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-1.5 px-2 py-0.5 bg-red-500/10 border border-red-500/20 rounded-md">
                             <ShieldAlert size={10} className="text-red-500" />
-                            <span className="text-[8px] font-black text-red-500 uppercase tracking-widest">Broadcast All</span>
+                            <span className="text-[8px] font-black text-red-500 uppercase ">Broadcast All</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
                         <Smartphone size={10} className="text-muted/40" />
-                        <span className="text-[8px] text-muted/40 font-black uppercase tracking-widest">
+                        <span className="text-[8px] text-muted/40 font-black uppercase ">
                             {isSending ? 'Transmitting...' : 'Link Standby'}
                         </span>
                     </div>

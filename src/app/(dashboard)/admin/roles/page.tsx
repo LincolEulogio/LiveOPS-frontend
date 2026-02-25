@@ -74,7 +74,7 @@ export default function AdminRolesPage() {
                 </div>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-all"
+                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase  transition-all"
                 >
                     <Plus size={16} /> New Role
                 </button>
@@ -103,7 +103,7 @@ export default function AdminRolesPage() {
                         <p className="text-sm text-stone-400 mb-6 min-h-[40px] relative z-10">{role.description || 'No description provided.'}</p>
 
                         <div className="flex-1 relative z-10">
-                            <h3 className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <h3 className="text-xs font-bold text-stone-500 uppercase  mb-3 flex items-center gap-2">
                                 <Key size={12} /> Permissions
                             </h3>
                             <div className="space-y-1">
@@ -121,7 +121,7 @@ export default function AdminRolesPage() {
                                         >
                                             <div className="flex flex-col items-start">
                                                 <span className="font-bold">{permission.action}</span>
-                                                <span className="text-[8px] opacity-60 font-sans tracking-tight">{permission.description}</span>
+                                                <span className="text-[8px] opacity-60 font-sans ">{permission.description}</span>
                                             </div>
                                             {isAssigned ? <CheckSquare size={14} /> : <Square size={14} />}
                                         </button>
@@ -150,7 +150,7 @@ export default function AdminRolesPage() {
                         </h2>
                         <form onSubmit={handleCreateRole} className="space-y-5">
                             <div>
-                                <label className="block text-[10px] font-bold text-muted uppercase tracking-widest mb-1.5 pl-1">Role Name</label>
+                                <label className="block text-[10px] font-bold text-muted uppercase  mb-1.5 pl-1">Role Name</label>
                                 <input
                                     type="text"
                                     required
@@ -161,7 +161,7 @@ export default function AdminRolesPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] font-bold text-muted uppercase tracking-widest mb-1.5 pl-1">Description</label>
+                                <label className="block text-[10px] font-bold text-muted uppercase  mb-1.5 pl-1">Description</label>
                                 <textarea
                                     value={newRole.description}
                                     onChange={e => setNewRole(prev => ({ ...prev, description: e.target.value }))}
@@ -180,7 +180,7 @@ export default function AdminRolesPage() {
                                 <button
                                     type="submit"
                                     disabled={createRoleMutation.isPending}
-                                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50"
+                                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase  transition-all disabled:opacity-50"
                                 >
                                     {createRoleMutation.isPending ? 'Creating...' : 'Create Role'}
                                 </button>

@@ -76,10 +76,10 @@ export const MetricsCards = ({ metrics, isLoading }: Props) => {
                                 )}
                             </div>
                             <div>
-                                <h3 className="text-xs font-bold text-muted uppercase tracking-[0.1em] mb-1">
+                                <h3 className="text-xs font-bold text-muted uppercase  mb-1">
                                     {card.label}
                                 </h3>
-                                <div className="text-3xl font-bold text-foreground tracking-tighter">
+                                <div className="text-3xl font-bold text-foreground er">
                                     {typeof card.value === 'number' ? card.value.toLocaleString() : card.value}
                                 </div>
                                 <p className="text-[10px] text-muted mt-2 font-medium">

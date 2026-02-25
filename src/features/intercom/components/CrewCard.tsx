@@ -98,7 +98,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                         <Battery size={10} className="text-muted" />
                         <Wifi size={10} className="text-muted" />
                         <div className="w-[1px] h-2 bg-card-border mx-1" />
-                        <span className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">{member.isOnline ? 'Active Link' : 'Dark Node'}</span>
+                        <span className="text-[8px] font-black text-muted uppercase ">{member.isOnline ? 'Active Link' : 'Dark Node'}</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -127,11 +127,11 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                 </div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="text-[9px] font-black bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full border border-indigo-500/20 uppercase tracking-[0.2em]">
+                        <span className="text-[9px] font-black bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full border border-indigo-500/20 uppercase ">
                             {member.roleName}
                         </span>
                     </div>
-                    <h3 className="text-xl font-black text-foreground uppercase tracking-tighter truncate italic leading-none group-hover:text-indigo-400 transition-colors">
+                    <h3 className="text-xl font-black text-foreground uppercase er truncate italic leading-none group-hover:text-indigo-400 transition-colors">
                         {member.userName}
                     </h3>
                 </div>
@@ -140,8 +140,8 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
             {/* Dynamic Status Module */}
             <div className="mx-6 mb-6 p-6 bg-background/40 backdrop-blur-md rounded-[2rem] border border-card-border/60 shadow-inner flex flex-col justify-center relative overflow-hidden group/status">
                 <div className="flex items-center justify-between mb-4">
-                    <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">Operational Phase</p>
-                    <p className="text-[8px] font-black text-muted/40 uppercase tracking-widest">Live Feedback</p>
+                    <p className="text-[9px] font-black text-muted uppercase ">Operational Phase</p>
+                    <p className="text-[8px] font-black text-muted/40 uppercase ">Live Feedback</p>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -153,7 +153,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                                     'bg-indigo-500 shadow-indigo-500/40'
                         )} />
                         <span className={cn(
-                            "text-base font-black uppercase tracking-tight italic transition-colors",
+                            "text-base font-black uppercase  italic transition-colors",
                             currentStatus === 'AL AIRE' ? 'text-red-500' :
                                 currentStatus === 'IDLE' ? 'text-muted' :
                                     'text-foreground'
@@ -178,7 +178,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                                     )}
                                 >
                                     <Icon size={14} className={cn("shrink-0", display.color)} />
-                                    <span className={cn("text-[10px] font-black uppercase tracking-widest truncate max-w-[100px]", display.color)}>
+                                    <span className={cn("text-[10px] font-black uppercase  truncate max-w-[100px]", display.color)}>
                                         {display.text}
                                     </span>
                                 </motion.div>
@@ -212,7 +212,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                                 {getIconForTemplate(t.name, t.color || '#6366f1')}
                             </div>
                             <span className={cn(
-                                "text-[10px] font-black uppercase tracking-widest relative z-10 transition-colors",
+                                "text-[10px] font-black uppercase  relative z-10 transition-colors",
                                 isPending ? 'text-indigo-400' : 'text-muted/80 group-hover/btn:text-foreground'
                             )}>
                                 {t.name}
@@ -227,7 +227,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                 {templates.length === 0 && (
                     <div className="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 border-2 border-dashed border-card-border/60 rounded-[2rem] gap-4">
                         <Radio size={32} strokeWidth={1} className="text-muted" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Protocols Null</span>
+                        <span className="text-[10px] font-black uppercase  text-muted">Protocols Null</span>
                     </div>
                 )}
             </div>
@@ -238,7 +238,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                     <div className="px-6 py-4 bg-white/[0.04] border-b border-card-border/40 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <MessageSquare size={14} className="text-indigo-400" />
-                            <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Telemetry Chat</span>
+                            <span className="text-[10px] font-black text-muted uppercase ">Telemetry Chat</span>
                         </div>
                         <div className="flex gap-1">
                             <div className="w-1 h-1 rounded-full bg-indigo-500" />
@@ -259,14 +259,14 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                                             : 'bg-background/80 border-card-border text-foreground rounded-bl-none shadow-black/20'
                                     )}>
                                         <div className={cn(
-                                            "text-[8px] font-black uppercase tracking-widest mb-2 opacity-60",
+                                            "text-[8px] font-black uppercase  mb-2 opacity-60",
                                             isMine ? 'text-white' : 'text-indigo-400'
                                         )}>
                                             {isMine ? 'COMMS OPERATOR' : (msg.senderName || member.userName)}
                                         </div>
                                         {msg.message.replace('Mensaje:', '').trim()}
                                         <div className={cn(
-                                            "text-[7px] font-black mt-3 flex justify-end items-center gap-1 opacity-50 uppercase tracking-widest",
+                                            "text-[7px] font-black mt-3 flex justify-end items-center gap-1 opacity-50 uppercase ",
                                             isMine ? 'text-white' : 'text-muted'
                                         )}>
                                             <Clock size={8} /> {new Date(msg.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit' })}
@@ -302,7 +302,7 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                         value={chatMsg}
                         onChange={(e) => setChatMsg(e.target.value)}
                         placeholder={`SND MSG TO ${member.userName.split(' ')[0].toUpperCase()}...`}
-                        className="flex-1 bg-transparent px-6 py-4 text-[10px] font-black text-foreground uppercase placeholder:text-muted/40 focus:outline-none tracking-widest"
+                        className="flex-1 bg-transparent px-6 py-4 text-[10px] font-black text-foreground uppercase placeholder:text-muted/40 focus:outline-none "
                     />
                     <button
                         type="submit"

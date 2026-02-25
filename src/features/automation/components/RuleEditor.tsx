@@ -171,10 +171,10 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                             <Zap size={32} className="text-indigo-400" />
                         </div>
                         <div>
-                            <h2 className="text-2xl md:text-3xl font-black text-foreground uppercase tracking-tight leading-none mb-2">
+                            <h2 className="text-2xl md:text-3xl font-black text-foreground uppercase  leading-none mb-2">
                                 {editingRule ? 'Modify Interaction' : 'Initialize Logic'}
                             </h2>
-                            <div className="flex flex-wrap gap-2 items-center text-[10px] font-black uppercase tracking-[0.2em]">
+                            <div className="flex flex-wrap gap-2 items-center text-[10px] font-black uppercase ">
                                 <span className="text-indigo-400/90">Dynamic Gateway</span>
                                 <ArrowRight size={10} className="text-foreground/20" />
                                 <span className="text-foreground/40">Rule Configurator</span>
@@ -198,7 +198,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
 
                         <div className="absolute top-6 left-1/2 -translate-x-1/2">
                             <div className="px-4 py-1 bg-white/5 border border-white/5 rounded-full">
-                                <span className="text-[8px] font-black text-muted uppercase tracking-[0.3em]">Signal Flow Visualization</span>
+                                <span className="text-[8px] font-black text-muted uppercase ">Signal Flow Visualization</span>
                             </div>
                         </div>
 
@@ -231,8 +231,8 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                         <Icon size={24} />
                                                     </div>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-1">Entrance Point</p>
-                                                        <p className="text-md font-black text-foreground uppercase tracking-tight">{eTypeDef.label}</p>
+                                                        <p className="text-[10px] font-black text-muted uppercase  mb-1">Entrance Point</p>
+                                                        <p className="text-md font-black text-foreground uppercase ">{eTypeDef.label}</p>
                                                     </div>
                                                 </div>
                                                 <button type="button" onClick={(e) => { e.stopPropagation(); removeTrigger(index); }} className="p-2 text-muted hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all active:scale-75">
@@ -289,8 +289,8 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                             <Icon size={24} />
                                                         </div>
                                                         <div>
-                                                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-1 text-emerald-400">Execution Block</p>
-                                                            <p className="text-md font-black text-foreground uppercase tracking-tight">{aTypeDef.label}</p>
+                                                            <p className="text-[10px] font-black text-muted uppercase  mb-1 text-emerald-400">Execution Block</p>
+                                                            <p className="text-md font-black text-foreground uppercase ">{aTypeDef.label}</p>
                                                         </div>
                                                     </div>
                                                     <button type="button" onClick={(e) => { e.stopPropagation(); removeAction(index); if (activeNodeIndex === index) setActiveNodeIndex(null); }} className="p-2 text-muted hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all active:scale-75">
@@ -321,7 +321,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                 <div className="w-10 h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all">
                                     <Plus size={20} />
                                 </div>
-                                <span className="text-[11px] font-black text-muted group-hover:text-indigo-400 transition-colors uppercase tracking-[0.3em]">Append Instruction</span>
+                                <span className="text-[11px] font-black text-muted group-hover:text-indigo-400 transition-colors uppercase ">Append Instruction</span>
                             </motion.button>
                         </div>
                     </div>
@@ -333,20 +333,20 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         <div className="space-y-6">
                             <div className="flex items-center gap-3">
                                 <Activity size={16} className="text-indigo-400" />
-                                <h3 className="text-xs font-black text-foreground/50 uppercase tracking-[0.3em]">Initial Identity</h3>
+                                <h3 className="text-xs font-black text-foreground/50 uppercase ">Initial Identity</h3>
                             </div>
                             <div className="space-y-5 bg-white/5 p-6 rounded-3xl border border-white/5 shadow-inner">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-1">Rule Designation</label>
+                                    <label className="text-[10px] font-black text-muted uppercase  pl-1">Rule Designation</label>
                                     <input
                                         {...register('name')}
                                         placeholder="Identification handle..."
-                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all uppercase tracking-tight shadow-inner"
+                                        className="w-full bg-background/50 border border-card-border rounded-xl px-5 py-4 text-sm font-black text-foreground outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all uppercase  shadow-inner"
                                     />
-                                    {errors.name && <p className="text-[9px] text-red-400 font-black uppercase mt-1 tracking-widest px-1">{errors.name.message}</p>}
+                                    {errors.name && <p className="text-[9px] text-red-400 font-black uppercase mt-1  px-1">{errors.name.message}</p>}
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-1">Protocol Description</label>
+                                    <label className="text-[10px] font-black text-muted uppercase  pl-1">Protocol Description</label>
                                     <textarea
                                         {...register('description')}
                                         rows={2}
@@ -361,24 +361,24 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                         <div className="flex-1 flex flex-col gap-6">
                             <div className="flex items-center gap-3">
                                 <Settings2 size={16} className="text-amber-400" />
-                                <h3 className="text-xs font-black text-foreground/50 uppercase tracking-[0.3em]">Module Parameters</h3>
+                                <h3 className="text-xs font-black text-foreground/50 uppercase ">Module Parameters</h3>
                             </div>
 
                             <AnimatePresence mode="wait">
                                 {activeNodeIndex === null ? (
                                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex flex-col items-center justify-center text-center p-12 bg-white/5 border border-dashed border-white/10 rounded-3xl opacity-40">
                                         <Info size={40} className="text-muted mb-4 stroke-[1px]" />
-                                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] leading-relaxed">Awaiting node selection<br />for detailed configuration</p>
+                                        <p className="text-[10px] font-black text-muted uppercase  leading-relaxed">Awaiting node selection<br />for detailed configuration</p>
                                     </motion.div>
                                 ) : activeNodeIndex === -1 ? (
                                     <motion.div key="trigger-config" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                                         {triggerFields.map((field, index) => (
                                             <div key={field.id} className="space-y-6">
                                                 <div className="space-y-3">
-                                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest px-1">Trigger Signal Source</label>
+                                                    <label className="text-[10px] font-black text-muted uppercase  px-1">Trigger Signal Source</label>
                                                     <select
                                                         {...register(`triggers.${index}.eventType`)}
-                                                        className="w-full bg-background border border-card-border rounded-xl px-5 py-4 text-xs font-black text-foreground uppercase tracking-wider outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer"
+                                                        className="w-full bg-background border border-card-border rounded-xl px-5 py-4 text-xs font-black text-foreground uppercase  outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer"
                                                     >
                                                         {EVENT_TYPES.map(e => <option key={e.value} value={e.value} className="bg-card-bg">{e.label}</option>)}
                                                     </select>
@@ -387,12 +387,12 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                 <div className="p-6 bg-indigo-600/5 border border-white/5 rounded-3xl shadow-inner space-y-6">
                                                     <div className="flex items-center gap-2 mb-2">
                                                         <Activity size={14} className="text-indigo-400" />
-                                                        <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Operational Logic</span>
+                                                        <span className="text-[10px] font-black text-muted uppercase ">Operational Logic</span>
                                                     </div>
 
                                                     {watchedTriggers[index]?.eventType === 'timeline.before_end' && (
                                                         <div className="space-y-2">
-                                                            <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-1">Threshold Offset (Seconds)</label>
+                                                            <label className="text-[10px] font-black text-muted uppercase  pl-1">Threshold Offset (Seconds)</label>
                                                             <input
                                                                 type="number"
                                                                 {...register(`triggers.${index}.condition.secondsBefore`, { valueAsNumber: true })}
@@ -403,7 +403,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
 
                                                     {watchedTriggers[index]?.eventType === 'obs.scene.changed' && (
                                                         <div className="space-y-2">
-                                                            <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-1">Target Scene Identification</label>
+                                                            <label className="text-[10px] font-black text-muted uppercase  pl-1">Target Scene Identification</label>
                                                             <input
                                                                 placeholder="Leave blank for universal listen..."
                                                                 {...register(`triggers.${index}.condition.sceneName`)}
@@ -418,10 +418,10 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                 ) : (
                                     <motion.div key={`action-config-${activeNodeIndex}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                                         <div className="space-y-3">
-                                            <label className="text-[10px] font-black text-muted uppercase tracking-widest px-1">Instruction Type</label>
+                                            <label className="text-[10px] font-black text-muted uppercase  px-1">Instruction Type</label>
                                             <select
                                                 {...register(`actions.${activeNodeIndex}.actionType`)}
-                                                className="w-full bg-background border border-card-border rounded-xl px-5 py-4 text-xs font-black text-foreground uppercase tracking-wider outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer"
+                                                className="w-full bg-background border border-card-border rounded-xl px-5 py-4 text-xs font-black text-foreground uppercase  outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer"
                                             >
                                                 {ACTION_TYPES.map(a => <option key={a.value} value={a.value} className="bg-card-bg">{a.label}</option>)}
                                             </select>
@@ -430,13 +430,13 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                         <div className="p-6 bg-emerald-600/5 border border-white/5 rounded-3xl shadow-inner space-y-6">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Activity size={14} className="text-emerald-400" />
-                                                <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Payload Configuration</span>
+                                                <span className="text-[10px] font-black text-muted uppercase ">Payload Configuration</span>
                                             </div>
 
                                             {watchedActions[activeNodeIndex]?.actionType === 'intercom.send' && (
                                                 <div className="space-y-5">
                                                     <div className="space-y-2">
-                                                        <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-1">Transmission Template</label>
+                                                        <label className="text-[10px] font-black text-muted uppercase  pl-1">Transmission Template</label>
                                                         <select
                                                             {...register(`actions.${activeNodeIndex}.payload.templateId`)}
                                                             className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-[11px] font-bold text-foreground outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner appearance-none"
@@ -446,7 +446,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                         </select>
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-1">Downlink Recipient</label>
+                                                        <label className="text-[10px] font-black text-muted uppercase  pl-1">Downlink Recipient</label>
                                                         <select
                                                             {...register(`actions.${activeNodeIndex}.payload.targetRoleId`)}
                                                             className="w-full bg-background border border-card-border rounded-xl px-4 py-3 text-[11px] font-bold text-foreground outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner appearance-none"
@@ -456,7 +456,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                                                         </select>
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-1">Custom Message Stream</label>
+                                                        <label className="text-[10px] font-black text-muted uppercase  pl-1">Custom Message Stream</label>
                                                         <input
                                                             placeholder="Inject dynamic alert sequence..."
                                                             {...register(`actions.${activeNodeIndex}.payload.message`)}
@@ -468,7 +468,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
 
                                             {watchedActions[activeNodeIndex]?.actionType === 'obs.changeScene' && (
                                                 <div className="space-y-2">
-                                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-1">Destination Scene Identity</label>
+                                                    <label className="text-[10px] font-black text-muted uppercase  pl-1">Destination Scene Identity</label>
                                                     <input
                                                         placeholder="Exact scene nomenclature..."
                                                         {...register(`actions.${activeNodeIndex}.payload.sceneName`)}
@@ -479,7 +479,7 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
 
                                             {watchedActions[activeNodeIndex]?.actionType === 'vmix.changeInput' && (
                                                 <div className="space-y-2">
-                                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-1">Signal Port / Identification</label>
+                                                    <label className="text-[10px] font-black text-muted uppercase  pl-1">Signal Port / Identification</label>
                                                     <input
                                                         placeholder="Port Address / Name..."
                                                         {...register(`actions.${activeNodeIndex}.payload.input`)}
@@ -507,22 +507,22 @@ export const RuleEditor = ({ productionId, isOpen, onClose, onSave, editingRule 
                             <Play size={24} className="group-hover:scale-110 transition-transform" />
                         </button>
                         <div>
-                            <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-1">Instruction Set</p>
-                            <p className="text-xs font-black text-foreground uppercase tracking-tight">{actionFields.length} Logical Nodes Primed</p>
+                            <p className="text-[9px] font-black text-indigo-400 uppercase  mb-1">Instruction Set</p>
+                            <p className="text-xs font-black text-foreground uppercase ">{actionFields.length} Logical Nodes Primed</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-4 w-full sm:w-auto">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 sm:flex-none px-8 py-5 text-[10px] font-black text-muted hover:text-foreground transition-all uppercase tracking-[0.2em] rounded-2xl bg-white/5 hover:bg-white/10 active:scale-95"
+                            className="flex-1 sm:flex-none px-8 py-5 text-[10px] font-black text-muted hover:text-foreground transition-all uppercase  rounded-2xl bg-white/5 hover:bg-white/10 active:scale-95"
                         >
                             Abort
                         </button>
                         <button
                             onClick={handleSubmit(onSave)}
                             disabled={isSubmitting}
-                            className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-black px-10 py-5 rounded-2xl transition-all shadow-2xl shadow-indigo-600/30 uppercase text-[10px] tracking-[0.3em] flex items-center justify-center gap-4 active:scale-95 overflow-hidden group"
+                            className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-black px-10 py-5 rounded-2xl transition-all shadow-2xl shadow-indigo-600/30 uppercase text-[10px]  flex items-center justify-center gap-4 active:scale-95 overflow-hidden group"
                         >
                             {isSubmitting ? (
                                 <Activity size={18} className="animate-spin" />

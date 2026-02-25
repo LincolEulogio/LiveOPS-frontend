@@ -67,8 +67,8 @@ export const HardwareManager = ({ productionId }: Props) => {
                     <Loader2 size={48} className="animate-spin text-indigo-500 opacity-20" />
                     <Cpu size={24} className="absolute inset-0 m-auto text-indigo-400 animate-pulse" />
                 </div>
-                <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Synchronizing Registry</p>
-                <p className="text-[9px] font-bold text-muted/40 uppercase tracking-widest mt-2">Connecting to physical hardware bridge</p>
+                <p className="text-[10px] font-black text-muted uppercase ">Synchronizing Registry</p>
+                <p className="text-[9px] font-bold text-muted/40 uppercase  mt-2">Connecting to physical hardware bridge</p>
             </div>
         );
     }
@@ -88,20 +88,20 @@ export const HardwareManager = ({ productionId }: Props) => {
                                 <Keyboard size={24} className="text-indigo-400" />
                             </div>
                             <div>
-                                <h2 className="text-xs font-black text-foreground uppercase tracking-[0.2em] leading-none mb-1.5">Connected Nodes</h2>
-                                <span className="text-[9px] font-black text-muted uppercase tracking-widest flex items-center gap-2">
+                                <h2 className="text-xs font-black text-foreground uppercase  leading-none mb-1.5">Connected Nodes</h2>
+                                <span className="text-[9px] font-black text-muted uppercase  flex items-center gap-2">
                                     <Activity size={10} className="text-emerald-500" />
                                     Active Signal
                                 </span>
                             </div>
                         </div>
                         <div className="px-3 py-1 bg-white/5 border border-white/5 rounded-full">
-                            <span className="text-[9px] font-black text-muted uppercase tracking-widest">{devices.length} Devices</span>
+                            <span className="text-[9px] font-black text-muted uppercase ">{devices.length} Devices</span>
                         </div>
                     </div>
 
                     {error && (
-                        <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-widest p-4 rounded-2xl mb-6 shadow-lg shadow-red-500/5 animate-pulse">
+                        <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase  p-4 rounded-2xl mb-6 shadow-lg shadow-red-500/5 animate-pulse">
                             <span className="flex items-center gap-3"><X size={14} /> {error}</span>
                         </div>
                     )}
@@ -110,8 +110,8 @@ export const HardwareManager = ({ productionId }: Props) => {
                         {devices.length === 0 ? (
                             <div className="p-12 border-2 border-dashed border-card-border/60 rounded-3xl flex flex-col items-center justify-center text-center opacity-40 group-hover/devices:opacity-60 transition-opacity">
                                 <RadioReceiver size={40} className="text-muted mb-4 stroke-[1px]" />
-                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">No automated devices located</p>
-                                <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">Ready for manual HID initialization</p>
+                                <p className="text-[10px] font-black text-muted uppercase ">No automated devices located</p>
+                                <p className="text-[9px] font-bold text-muted uppercase  mt-1">Ready for manual HID initialization</p>
                             </div>
                         ) : (
                             devices.map(d => (
@@ -129,12 +129,12 @@ export const HardwareManager = ({ productionId }: Props) => {
                                             {d.type === 'hid' ? <Keyboard size={18} /> : <RadioReceiver size={18} />}
                                         </div>
                                         <div>
-                                            <span className="text-sm font-black text-foreground uppercase tracking-tight leading-none">{d.name}</span>
-                                            <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1.5 opacity-60">Signature: {d.type.toUpperCase()}</p>
+                                            <span className="text-sm font-black text-foreground uppercase  leading-none">{d.name}</span>
+                                            <p className="text-[9px] font-bold text-muted uppercase  mt-1.5 opacity-60">Signature: {d.type.toUpperCase()}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-[8px] font-black text-muted uppercase tracking-widest opacity-40">Healthy</span>
+                                        <span className="text-[8px] font-black text-muted uppercase  opacity-40">Healthy</span>
                                         <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
                                     </div>
                                 </motion.div>
@@ -144,12 +144,12 @@ export const HardwareManager = ({ productionId }: Props) => {
 
                     <button
                         onClick={requestHIDDevice}
-                        className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all flex justify-center items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] group"
+                        className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[10px] font-black uppercase  transition-all flex justify-center items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] group"
                     >
                         <Plus size={16} className="group-hover:rotate-90 transition-transform" />
                         Pair HID Interface
                     </button>
-                    <p className="text-[9px] font-bold text-muted/60 mt-4 text-center uppercase tracking-widest">
+                    <p className="text-[9px] font-bold text-muted/60 mt-4 text-center uppercase ">
                         MIDI units bridge automatically. Stream Decks require pairing.
                     </p>
                 </div>
@@ -164,15 +164,15 @@ export const HardwareManager = ({ productionId }: Props) => {
                                 <Zap size={24} className="text-amber-400" />
                             </div>
                             <div>
-                                <h2 className="text-xs font-black text-foreground uppercase tracking-[0.2em] leading-none mb-1.5">Logic Mappings</h2>
-                                <span className="text-[9px] font-black text-muted uppercase tracking-widest flex items-center gap-2">
+                                <h2 className="text-xs font-black text-foreground uppercase  leading-none mb-1.5">Logic Mappings</h2>
+                                <span className="text-[9px] font-black text-muted uppercase  flex items-center gap-2">
                                     <Settings size={10} className="text-amber-500" />
                                     Macro Persistence
                                 </span>
                             </div>
                         </div>
                         <div className="px-3 py-1 bg-white/5 border border-white/5 rounded-full">
-                            <span className="text-[9px] font-black text-muted uppercase tracking-widest">{mappings.length} Bound</span>
+                            <span className="text-[9px] font-black text-muted uppercase ">{mappings.length} Bound</span>
                         </div>
                     </div>
 
@@ -188,15 +188,15 @@ export const HardwareManager = ({ productionId }: Props) => {
                                     className="flex justify-between items-center p-4 bg-background/40 backdrop-blur-md rounded-2xl border border-card-border/60 shadow-inner group/map-item hover:border-amber-500/30 transition-all"
                                 >
                                     <div className="flex items-center gap-4 shrink-0">
-                                        <div className="px-3 py-1.5 bg-background border border-card-border rounded-lg text-[9px] font-black font-mono text-indigo-400 uppercase tracking-widest shadow-lg">
+                                        <div className="px-3 py-1.5 bg-background border border-card-border rounded-lg text-[9px] font-black font-mono text-indigo-400 uppercase  shadow-lg">
                                             {mapping.mapKey}
                                         </div>
                                         <ArrowRight size={14} className="text-muted/40 group-hover/map-item:translate-x-1 transition-transform" />
                                         <div className="flex flex-col min-w-0">
-                                            <span className="text-[11px] font-black text-foreground uppercase tracking-tight truncate max-w-[140px]">
+                                            <span className="text-[11px] font-black text-foreground uppercase  truncate max-w-[140px]">
                                                 {mapping.rule?.name || 'Undefined Protocol'}
                                             </span>
-                                            <p className="text-[8px] font-bold text-muted uppercase tracking-[0.2em] mt-1">Primary Macro</p>
+                                            <p className="text-[8px] font-bold text-muted uppercase  mt-1">Primary Macro</p>
                                         </div>
                                     </div>
                                     <button
@@ -212,8 +212,8 @@ export const HardwareManager = ({ productionId }: Props) => {
                         {mappings.length === 0 && (
                             <div className="p-12 border-2 border-dashed border-card-border/60 rounded-3xl flex flex-col items-center justify-center text-center opacity-40 group-hover/bridge:opacity-60 transition-opacity">
                                 <Zap size={40} className="text-muted mb-4 stroke-[1px]" />
-                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Matrix Unpopulated</p>
-                                <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">Bind physical input to logical macros</p>
+                                <p className="text-[10px] font-black text-muted uppercase ">Matrix Unpopulated</p>
+                                <p className="text-[9px] font-bold text-muted uppercase  mt-1">Bind physical input to logical macros</p>
                             </div>
                         )}
                     </div>
@@ -223,7 +223,7 @@ export const HardwareManager = ({ productionId }: Props) => {
                         {!isAssigning ? (
                             <button
                                 onClick={() => setIsAssigning(true)}
-                                className="w-full py-5 bg-background/50 hover:bg-white/5 border border-dashed border-card-border rounded-2xl text-[10px] font-black text-muted hover:text-indigo-400 hover:border-indigo-500/50 transition-all uppercase tracking-[0.3em] shadow-inner font-mono"
+                                className="w-full py-5 bg-background/50 hover:bg-white/5 border border-dashed border-card-border rounded-2xl text-[10px] font-black text-muted hover:text-indigo-400 hover:border-indigo-500/50 transition-all uppercase  shadow-inner font-mono"
                             >
                                 + Initialize New Binding
                             </button>
@@ -238,26 +238,26 @@ export const HardwareManager = ({ productionId }: Props) => {
                                                 <Keyboard size={24} className="text-indigo-400" />
                                             </div>
                                             <div>
-                                                <p className="text-[11px] font-black text-foreground uppercase tracking-[0.2em]">Passive Listening...</p>
-                                                <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-2 px-6">Press any physical button on your surface to capture the intercept key</p>
+                                                <p className="text-[11px] font-black text-foreground uppercase ">Passive Listening...</p>
+                                                <p className="text-[9px] font-bold text-muted uppercase  mt-2 px-6">Press any physical button on your surface to capture the intercept key</p>
                                             </div>
                                         </div>
                                     ) : (
                                         <div className="space-y-8 relative z-10">
                                             <div className="space-y-2">
-                                                <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-60">Intercept Identification:</p>
-                                                <div className="inline-block px-5 py-3 bg-indigo-600 border border-indigo-500 text-white font-mono text-xs font-black rounded-xl shadow-2xl shadow-indigo-600/40 uppercase tracking-[0.2em]">
+                                                <p className="text-[9px] font-black text-indigo-400 uppercase  opacity-60">Intercept Identification:</p>
+                                                <div className="inline-block px-5 py-3 bg-indigo-600 border border-indigo-500 text-white font-mono text-xs font-black rounded-xl shadow-2xl shadow-indigo-600/40 uppercase ">
                                                     {lastEvent.type} <span className="mx-2 opacity-50">::</span> {lastEvent.key}
                                                 </div>
                                             </div>
 
                                             <div className="text-left mt-8 pt-8 border-t border-white/5">
-                                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted mb-4 px-2">Select Target Macro Protocol:</p>
+                                                <p className="text-[10px] font-black uppercase  text-muted mb-4 px-2">Select Target Macro Protocol:</p>
                                                 <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-3">
                                                     {manualMacros.length === 0 ? (
                                                         <div className="p-6 bg-white/5 rounded-2xl border border-dashed border-white/10 text-center">
-                                                            <p className="text-[10px] font-black text-muted uppercase tracking-widest">No Manual Macros Primed</p>
-                                                            <p className="text-[8px] font-bold text-muted/40 uppercase tracking-widest mt-1">Create an automation with a manual trigger first</p>
+                                                            <p className="text-[10px] font-black text-muted uppercase ">No Manual Macros Primed</p>
+                                                            <p className="text-[8px] font-bold text-muted/40 uppercase  mt-1">Create an automation with a manual trigger first</p>
                                                         </div>
                                                     ) : (
                                                         manualMacros.map(m => (
@@ -268,8 +268,8 @@ export const HardwareManager = ({ productionId }: Props) => {
                                                             >
                                                                 <div className="flex items-center justify-between">
                                                                     <div className="flex flex-col">
-                                                                        <span className="text-[11px] font-black text-foreground uppercase tracking-tight group-hover/macro:text-indigo-400 transition-colors">{m.name}</span>
-                                                                        <p className="text-[8px] font-bold text-muted uppercase tracking-[0.1em] mt-1 italic">Authorized Logic ID: {m.id.slice(0, 6)}</p>
+                                                                        <span className="text-[11px] font-black text-foreground uppercase  group-hover/macro:text-indigo-400 transition-colors">{m.name}</span>
+                                                                        <p className="text-[8px] font-bold text-muted uppercase  mt-1 italic">Authorized Logic ID: {m.id.slice(0, 6)}</p>
                                                                     </div>
                                                                     <Plus size={14} className="text-muted group-hover/macro:text-indigo-400 opacity-0 group-hover/macro:opacity-100 transition-all group-hover/macro:scale-125" />
                                                                 </div>
@@ -283,7 +283,7 @@ export const HardwareManager = ({ productionId }: Props) => {
                                 </div>
                                 <button
                                     onClick={() => { setIsAssigning(false); clearLastEvent(); }}
-                                    className="w-full py-4 bg-white/5 hover:bg-red-500/10 border border-white/5 text-[10px] font-black text-muted hover:text-red-400 rounded-2xl transition-all uppercase tracking-[0.3em]"
+                                    className="w-full py-4 bg-white/5 hover:bg-red-500/10 border border-white/5 text-[10px] font-black text-muted hover:text-red-400 rounded-2xl transition-all uppercase "
                                 >
                                     Abort Operation
                                 </button>

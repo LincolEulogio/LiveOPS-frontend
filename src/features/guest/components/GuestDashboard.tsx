@@ -46,14 +46,14 @@ export const GuestDashboard = ({ productionId }: Props) => {
                     </div>
                     <div className="truncate">
                         <h1 className="text-sm sm:text-lg font-black text-foreground truncate">{production.name}</h1>
-                        <span className="text-[10px] text-muted uppercase tracking-widest font-black opacity-60">Green Room</span>
+                        <span className="text-[10px] text-muted uppercase  font-black opacity-60">Green Room</span>
                     </div>
                 </div>
 
                 {/* Visual Cue */}
                 <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                     <div className={cn(
-                        "px-3 sm:px-4 py-1.5 rounded-full border text-[9px] sm:text-xs font-black uppercase tracking-widest flex items-center gap-1.5 sm:gap-2 transition-all",
+                        "px-3 sm:px-4 py-1.5 rounded-full border text-[9px] sm:text-xs font-black uppercase  flex items-center gap-1.5 sm:gap-2 transition-all",
                         isLive
                             ? "bg-red-500/20 border-red-500 text-red-500 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.3)]"
                             : "bg-background border-card-border text-muted"
@@ -88,19 +88,19 @@ export const GuestDashboard = ({ productionId }: Props) => {
                                     <Radio size={56} className="text-red-500 mx-auto relative z-10" />
                                     <div className="absolute inset-0 bg-red-500 blur-2xl opacity-20 animate-pulse" />
                                 </div>
-                                <h2 className="text-4xl sm:text-6xl font-black text-foreground tracking-tighter uppercase leading-none italic mb-2">
+                                <h2 className="text-4xl sm:text-6xl font-black text-foreground er uppercase leading-none italic mb-2">
                                     LIVE <span className="text-red-500">NOW</span>
                                 </h2>
                                 <p className="text-base sm:text-xl text-muted font-medium mb-6">The broadcast is currently in progress.</p>
                                 <div className="inline-flex items-center gap-3 bg-red-500/10 border border-red-500/20 px-4 py-2.5 rounded-2xl">
                                     <AlertCircle size={16} className="text-red-400" />
-                                    <p className="text-[10px] sm:text-xs text-red-400 font-black uppercase tracking-widest">Await cues in the Director Comms</p>
+                                    <p className="text-[10px] sm:text-xs text-red-400 font-black uppercase ">Await cues in the Director Comms</p>
                                 </div>
                             </div>
                         ) : (
                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
                                 <Clock size={56} className="text-muted/30 mx-auto mb-4" />
-                                <h2 className="text-3xl sm:text-5xl font-black text-foreground tracking-tighter uppercase italic">STANDING <span className="text-indigo-500">BY</span></h2>
+                                <h2 className="text-3xl sm:text-5xl font-black text-foreground er uppercase italic">STANDING <span className="text-indigo-500">BY</span></h2>
                                 <p className="text-muted text-sm sm:text-base font-medium mt-2">Production has not started. Please remain ready.</p>
                             </div>
                         )}
@@ -108,14 +108,14 @@ export const GuestDashboard = ({ productionId }: Props) => {
                         <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
                             <Link
                                 href={`/productions/${productionId}/room`}
-                                className="w-full sm:w-auto px-6 py-4 bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/50 rounded-2xl text-white font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-3 active:scale-95 group"
+                                className="w-full sm:w-auto px-6 py-4 bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/50 rounded-2xl text-white font-black text-xs uppercase  transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-3 active:scale-95 group"
                             >
                                 <Radio size={18} className="group-hover:animate-pulse" /> Join Stream Source
                             </Link>
                             <Link
                                 href={`/productions/${productionId}/prompter`}
                                 target="_blank"
-                                className="w-full sm:w-auto px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-foreground font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-3 active:scale-95"
+                                className="w-full sm:w-auto px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-foreground font-black text-xs uppercase  transition-all shadow-lg flex items-center justify-center gap-3 active:scale-95"
                             >
                                 <Video size={18} /> Teleprompter
                             </Link>
@@ -129,7 +129,7 @@ export const GuestDashboard = ({ productionId }: Props) => {
                     isChatOpen ? "translate-x-0" : "translate-x-full"
                 )}>
                     <div className="p-4 sm:p-5 border-b border-card-border bg-card-bg/50 flex items-center justify-between">
-                        <h3 className="font-black text-foreground uppercase tracking-[0.2em] text-[10px] flex items-center gap-2">
+                        <h3 className="font-black text-foreground uppercase  text-[10px] flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Director Comms
                         </h3>
                         {/* Close button for mobile */}

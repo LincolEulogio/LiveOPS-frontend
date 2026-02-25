@@ -67,7 +67,7 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3 text-foreground">
                     <Cpu className="text-indigo-400" size={20} />
-                    <h2 className="text-lg font-semibold uppercase tracking-tight">Peripherals</h2>
+                    <h2 className="text-lg font-semibold uppercase ">Peripherals</h2>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className={cn(
@@ -86,7 +86,7 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
                             <Monitor size={16} className={isStreamDeckConnected ? "text-indigo-400" : "text-muted"} />
-                            <span className="text-xs font-bold text-foreground uppercase tracking-wider">Stream Deck</span>
+                            <span className="text-xs font-bold text-foreground uppercase ">Stream Deck</span>
                         </div>
                         {isStreamDeckConnected ? (
                             <button
@@ -126,7 +126,7 @@ export const PeripheralManager = ({ productionId }: PeripheralManagerProps) => {
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
                             <Music size={16} className={isMidiConnected ? "text-emerald-400" : "text-muted"} />
-                            <span className="text-xs font-bold text-foreground uppercase tracking-wider">MIDI Controller</span>
+                            <span className="text-xs font-bold text-foreground uppercase ">MIDI Controller</span>
                         </div>
                     </div>
 

@@ -24,7 +24,7 @@ export const TalentView = ({ productionId }: Props) => {
     if (isLoading) {
         return (
             <div className="h-screen w-screen bg-black flex items-center justify-center">
-                <div className="text-white text-4xl font-black animate-pulse uppercase tracking-widest">
+                <div className="text-white text-4xl font-black animate-pulse uppercase ">
                     Cargando Teleprompter...
                 </div>
             </div>
@@ -36,7 +36,7 @@ export const TalentView = ({ productionId }: Props) => {
             {/* Back Button */}
             <Link
                 href={`/productions/${productionId}`}
-                className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 px-4 py-2 bg-card-bg border border-card-border rounded-xl text-muted hover:text-foreground hover:bg-card-border transition-all font-bold uppercase tracking-widest text-xs z-50"
+                className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 px-4 py-2 bg-card-bg border border-card-border rounded-xl text-muted hover:text-foreground hover:bg-card-border transition-all font-bold uppercase  text-xs z-50"
             >
                 <ChevronLeft size={16} /> Volver
             </Link>
@@ -53,22 +53,22 @@ export const TalentView = ({ productionId }: Props) => {
                         {/* Header: Next Up Hint */}
                         <div className="flex items-center justify-between border-b-2 border-white/10 pb-6 mb-6">
                             <div className="flex items-center gap-4">
-                                <div className="px-4 py-1.5 bg-emerald-500 text-black font-black text-xl uppercase tracking-widest rounded-lg">
+                                <div className="px-4 py-1.5 bg-emerald-500 text-black font-black text-xl uppercase  rounded-lg">
                                     AL AIRE
                                 </div>
-                                <h2 className="text-2xl font-bold text-muted uppercase tracking-widest">
+                                <h2 className="text-2xl font-bold text-muted uppercase ">
                                     Bloque Actual
                                 </h2>
                             </div>
                             <div className="text-right">
-                                <p className="text-muted text-sm font-bold uppercase tracking-widest mb-1">Hora Local</p>
+                                <p className="text-muted text-sm font-bold uppercase  mb-1">Hora Local</p>
                                 <DigitalClock />
                             </div>
                         </div>
 
                         {/* Center: Massive Title & Timer */}
                         <div className="flex-1 flex flex-col items-center justify-center text-center py-10">
-                            <h1 className="text-7xl md:text-9xl lg:text-[12rem] font-black leading-tight tracking-tighter uppercase break-words w-full px-4">
+                            <h1 className="text-7xl md:text-9xl lg:text-[12rem] font-black leading-tight er uppercase break-words w-full px-4">
                                 {activeBlock.title}
                             </h1>
 
@@ -81,15 +81,15 @@ export const TalentView = ({ productionId }: Props) => {
                         {nextBlock && (
                             <div className="mt-12 bg-white/5 border-2 border-white/10 rounded-[3rem] p-10 flex items-center justify-between group">
                                 <div>
-                                    <p className="text-emerald-400 text-xl font-black uppercase tracking-[0.3em] mb-3 flex items-center gap-3">
+                                    <p className="text-emerald-400 text-xl font-black uppercase  mb-3 flex items-center gap-3">
                                         <ArrowRight size={24} /> SIGUIENTE
                                     </p>
-                                    <h3 className="text-5xl md:text-6xl font-black uppercase tracking-tight">
+                                    <h3 className="text-5xl md:text-6xl font-black uppercase ">
                                         {nextBlock.title}
                                     </h3>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-muted text-lg font-bold uppercase tracking-widest mb-1">Duración</p>
+                                    <p className="text-muted text-lg font-bold uppercase  mb-1">Duración</p>
                                     <p className="text-4xl font-black">{((nextBlock.durationMs ?? 0) / 60000).toFixed(0)} MIN</p>
                                 </div>
                             </div>
@@ -102,16 +102,16 @@ export const TalentView = ({ productionId }: Props) => {
                         className="flex-1 flex flex-col items-center justify-center text-center space-y-12"
                     >
                         <AlertTriangle className="text-amber-400 w-48 h-48 animate-pulse" />
-                        <h1 className="text-8xl font-black uppercase tracking-tighter">
+                        <h1 className="text-8xl font-black uppercase er">
                             Standby
                         </h1>
-                        <p className="text-4xl text-muted font-bold uppercase tracking-widest">
+                        <p className="text-4xl text-muted font-bold uppercase ">
                             Esperando inicio de producción
                         </p>
 
                         {nextBlock && (
                             <div className="bg-white/5 border-2 border-white/10 rounded-[3rem] p-12 w-full max-w-7xl">
-                                <p className="text-indigo-400 text-2xl font-black uppercase tracking-[0.3em] mb-4">PRIMER BLOQUE</p>
+                                <p className="text-indigo-400 text-2xl font-black uppercase  mb-4">PRIMER BLOQUE</p>
                                 <h2 className="text-6xl font-black uppercase">{nextBlock.title}</h2>
                             </div>
                         )}
@@ -129,7 +129,7 @@ const DigitalClock = () => {
         return () => clearInterval(t);
     }, []);
     return (
-        <span className="text-4xl font-black tracking-widest tabular-nums">
+        <span className="text-4xl font-black  tabular-nums">
             {time.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
         </span>
     );
@@ -168,7 +168,7 @@ const BigTimer = ({ startTime, durationMs }: { startTime: string | null; duratio
                 <span className="text-4xl animate-pulse">:</span>
                 <span className="text-7xl md:text-8xl">{seconds.toString().padStart(2, '0')}</span>
             </div>
-            <p className="text-[10px] uppercase tracking-[0.5em] text-center mt-2 opacity-50">
+            <p className="text-[10px] uppercase  text-center mt-2 opacity-50">
                 {isOver ? "TIEMPO EXTRA" : "RESTANTE"}
             </p>
         </div>

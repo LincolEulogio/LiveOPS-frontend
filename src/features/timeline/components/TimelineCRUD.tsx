@@ -245,14 +245,14 @@ export const TimelineCRUD = ({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-6 py-4 bg-background hover:bg-card-border text-foreground text-[10px] font-black uppercase tracking-widest rounded-2xl border border-card-border transition-all active:scale-95"
+                            className="flex-1 px-6 py-4 bg-background hover:bg-card-border text-foreground text-[10px] font-black uppercase  rounded-2xl border border-card-border transition-all active:scale-95"
                         >
                             Cancelar
                         </button>
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="flex-[2] bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest py-4 rounded-2xl transition-all shadow-xl shadow-indigo-600/30 active:scale-95 flex items-center justify-center gap-2"
+                            className="flex-[2] bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-[10px] font-black uppercase  py-4 rounded-2xl transition-all shadow-xl shadow-indigo-600/30 active:scale-95 flex items-center justify-center gap-2"
                         >
                             {isSubmitting ? (
                                 <>

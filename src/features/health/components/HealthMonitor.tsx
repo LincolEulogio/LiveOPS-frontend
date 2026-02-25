@@ -29,8 +29,8 @@ export const HealthMonitor = ({ productionId }: Props) => {
                 <div className="absolute inset-0 bg-indigo-500/5 opacity-50 blur-3xl rounded-full" />
                 <Activity className="text-indigo-400/30 animate-pulse relative z-10" size={48} />
                 <div className="relative z-10">
-                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mb-1">Scanning Signal...</p>
-                    <p className="text-[9px] font-bold text-muted/60 uppercase tracking-widest leading-loose">Waiting for telemetry downlink</p>
+                    <p className="text-[10px] font-black text-muted uppercase  mb-1">Scanning Signal...</p>
+                    <p className="text-[9px] font-bold text-muted/60 uppercase  leading-loose">Waiting for telemetry downlink</p>
                 </div>
             </div>
         );
@@ -51,15 +51,15 @@ export const HealthMonitor = ({ productionId }: Props) => {
                         <Activity size={20} />
                     </div>
                     <div>
-                        <h2 className="text-xs font-black text-foreground uppercase tracking-[0.2em] leading-none mb-1.5">Stream Integrity</h2>
+                        <h2 className="text-xs font-black text-foreground uppercase  leading-none mb-1.5">Stream Integrity</h2>
                         <div className="flex items-center gap-2">
                             <div className={cn("w-1.5 h-1.5 rounded-full", isHealthy ? "bg-emerald-500" : "bg-red-500 animate-ping")} />
-                            <span className="text-[9px] font-black text-muted uppercase tracking-widest">Real-time Telemetry</span>
+                            <span className="text-[9px] font-black text-muted uppercase ">Real-time Telemetry</span>
                         </div>
                     </div>
                 </div>
                 <div className={cn(
-                    "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all shadow-lg",
+                    "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase  border transition-all shadow-lg",
                     isHealthy
                         ? "bg-emerald-600/10 text-emerald-400 border-emerald-500/30"
                         : "bg-red-600 text-white border-red-500 shadow-red-600/20 animate-pulse"
@@ -74,11 +74,11 @@ export const HealthMonitor = ({ productionId }: Props) => {
                     <div className="flex items-center justify-between mb-3 relative z-10">
                         <div className="flex items-center gap-2">
                             <Cpu size={14} className="text-indigo-400" />
-                            <span className="text-[10px] font-black text-muted uppercase tracking-widest">Engine CPU Load</span>
+                            <span className="text-[10px] font-black text-muted uppercase ">Engine CPU Load</span>
                         </div>
                         <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/20 group-hover:bg-indigo-500 transition-colors" />
                     </div>
-                    <p className="text-3xl font-black text-foreground tracking-tighter relative z-10">
+                    <p className="text-3xl font-black text-foreground er relative z-10">
                         {lastStats?.cpuUsage !== undefined ? lastStats.cpuUsage.toFixed(1) : '--'}
                         <span className="text-sm font-bold text-muted ml-1">%</span>
                     </p>
@@ -90,11 +90,11 @@ export const HealthMonitor = ({ productionId }: Props) => {
                     <div className="flex items-center justify-between mb-3 relative z-10">
                         <div className="flex items-center gap-2">
                             <Zap size={14} className="text-amber-400" />
-                            <span className="text-[10px] font-black text-muted uppercase tracking-widest">Effective Cadence</span>
+                            <span className="text-[10px] font-black text-muted uppercase ">Effective Cadence</span>
                         </div>
                         <div className="w-1.5 h-1.5 rounded-full bg-amber-500/20 group-hover:bg-amber-500 transition-colors" />
                     </div>
-                    <p className="text-3xl font-black text-foreground tracking-tighter relative z-10">
+                    <p className="text-3xl font-black text-foreground er relative z-10">
                         {lastStats?.fps !== undefined ? lastStats.fps.toFixed(0) : '--'}
                         <span className="text-sm font-bold text-muted ml-1">FPS</span>
                     </p>
@@ -107,7 +107,7 @@ export const HealthMonitor = ({ productionId }: Props) => {
                 <div className="w-full h-full bg-black/20 rounded-[1.5rem] border border-white/5 p-4 shadow-inner relative">
                     <div className="absolute top-3 left-6 flex items-center gap-2 opacity-30">
                         <Activity size={10} className="text-indigo-400" />
-                        <span className="text-[8px] font-black uppercase tracking-widest">Historical Flux</span>
+                        <span className="text-[8px] font-black uppercase ">Historical Flux</span>
                     </div>
                     <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={history}>
@@ -152,8 +152,8 @@ export const HealthMonitor = ({ productionId }: Props) => {
                         <AlertCircle size={20} className="text-white" />
                     </div>
                     <div>
-                        <p className="text-[11px] font-black text-white uppercase tracking-[0.1em]">Packet Loss Detected</p>
-                        <p className="text-[9px] font-bold text-white/80 uppercase tracking-widest">{lastStats.skippedFrames} frames dropped in current cycle.</p>
+                        <p className="text-[11px] font-black text-white uppercase ">Packet Loss Detected</p>
+                        <p className="text-[9px] font-bold text-white/80 uppercase ">{lastStats.skippedFrames} frames dropped in current cycle.</p>
                     </div>
                 </div>
             )}
@@ -162,7 +162,7 @@ export const HealthMonitor = ({ productionId }: Props) => {
             <div className="p-4 bg-white/5 border-t border-card-border/30 flex justify-center">
                 <div className="flex items-center gap-2 opacity-40 group cursor-default">
                     <ShieldCheck size={12} className="text-indigo-400 group-hover:scale-110 transition-transform" />
-                    <span className="text-[8px] font-black uppercase tracking-[0.3em] group-hover:text-foreground transition-colors">Encrypted Uplink Certified</span>
+                    <span className="text-[8px] font-black uppercase  group-hover:text-foreground transition-colors">Encrypted Uplink Certified</span>
                 </div>
             </div>
         </div>

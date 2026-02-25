@@ -158,7 +158,7 @@ export default function EditProductionPage() {
                     <ArrowLeft size={16} />
                     Back to Production
                 </Link>
-                <h1 className="text-2xl font-bold text-foreground tracking-tight">Edit Production</h1>
+                <h1 className="text-2xl font-bold text-foreground ">Edit Production</h1>
                 <p className="text-muted text-sm mt-1">Update your live streaming configuration</p>
             </div>
 
@@ -219,7 +219,7 @@ export default function EditProductionPage() {
 
                     {/* Conditional Connection Config */}
                     <div className="p-4 bg-background border border-card-border rounded-lg space-y-4">
-                        <h3 className="text-xs font-bold text-muted uppercase tracking-widest">
+                        <h3 className="text-xs font-bold text-muted uppercase ">
                             {activeEngineType} Connection Settings
                         </h3>
 
@@ -355,7 +355,7 @@ export default function EditProductionPage() {
                                         <p className="text-sm font-bold text-foreground">
                                             {pu.user.name || pu.user.email}
                                         </p>
-                                        <p className="text-[10px] font-black text-muted uppercase tracking-widest mt-0.5">
+                                        <p className="text-[10px] font-black text-muted uppercase  mt-0.5">
                                             {pu.role.name} {pu.role.name === 'ADMIN' && ' (Propio)'}
                                         </p>
                                     </div>

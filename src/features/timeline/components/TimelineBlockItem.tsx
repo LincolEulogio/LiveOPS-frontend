@@ -49,7 +49,7 @@ export const TimelineBlockItem = ({
             <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">
+                        <span className="text-[10px] font-black text-muted uppercase ">
                             #{(block.order + 1).toString().padStart(2, '0')}
                         </span>
                         <h4 className="text-sm font-bold text-foreground truncate group-hover:text-indigo-400 transition-colors cursor-pointer" onClick={() => onEdit(block)}>
@@ -65,13 +65,13 @@ export const TimelineBlockItem = ({
                     <div className="flex items-center gap-3 mt-auto">
                         <div className="flex items-center gap-1.5 text-muted">
                             <Clock size={12} className="text-muted" />
-                            <span className="text-[10px] font-mono font-bold uppercase tracking-tighter">
+                            <span className="text-[10px] font-mono font-bold uppercase er">
                                 {formatDuration(block.durationMs)}
                             </span>
                         </div>
                         {block.linkedScene && (
                             <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-background border border-card-border">
-                                <span className="text-[9px] font-bold text-muted uppercase tracking-widest">
+                                <span className="text-[9px] font-bold text-muted uppercase ">
                                     Scene: {block.linkedScene}
                                 </span>
                             </div>

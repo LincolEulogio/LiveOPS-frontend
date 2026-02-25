@@ -53,7 +53,7 @@ export const TimelineView = () => {
         return (
             <div className="flex flex-col items-center justify-center h-full gap-4 text-muted">
                 <Loader2 className="animate-spin text-indigo-500" size={32} />
-                <p className="text-xs font-bold uppercase tracking-widest">Loading Escaleta...</p>
+                <p className="text-xs font-bold uppercase ">Loading Escaleta...</p>
             </div>
         );
     }
@@ -67,7 +67,7 @@ export const TimelineView = () => {
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                         <ListTree size={18} className="text-indigo-400" />
-                        <h2 className="text-sm font-black text-foreground uppercase tracking-widest">Escaleta</h2>
+                        <h2 className="text-sm font-black text-foreground uppercase ">Escaleta</h2>
                     </div>
                 </div>
                 <p className="text-[10px] text-muted font-medium leading-relaxed">
@@ -79,7 +79,7 @@ export const TimelineView = () => {
                     {activeBlock ? (
                         <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
                             <div className="flex items-center justify-between mb-1">
-                                <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">On Air Now</span>
+                                <span className="text-[10px] font-bold text-indigo-400 uppercase ">On Air Now</span>
                                 <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                             </div>
                             <h3 className="text-sm font-bold text-foreground truncate">{activeBlock.title}</h3>
@@ -88,7 +88,7 @@ export const TimelineView = () => {
                         <button
                             onClick={() => blocks.length > 0 && startBlock(blocks[0].id)}
                             disabled={blocks.length === 0 || isMutating}
-                            className="w-full flex items-center justify-center gap-2 py-3 bg-card-border hover:bg-card-bg text-foreground rounded-xl transition-all font-bold text-xs uppercase tracking-widest disabled:opacity-50"
+                            className="w-full flex items-center justify-center gap-2 py-3 bg-card-border hover:bg-card-bg text-foreground rounded-xl transition-all font-bold text-xs uppercase  disabled:opacity-50"
                         >
                             <PlayCircle size={16} />
                             Start Show
@@ -105,7 +105,7 @@ export const TimelineView = () => {
                             <ListTree size={24} />
                         </div>
                         <p className="text-sm font-bold text-muted mb-1">No blocks yet</p>
-                        <p className="text-[10px] text-muted uppercase font-bold tracking-tight">
+                        <p className="text-[10px] text-muted uppercase font-bold ">
                             Build your show rundown to stay organized.
                         </p>
                     </div>
@@ -130,7 +130,7 @@ export const TimelineView = () => {
                 <button
                     onClick={handleAddBlock}
                     disabled={isMutating}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all shadow-lg shadow-indigo-600/20 font-bold text-xs uppercase tracking-widest"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all shadow-lg shadow-indigo-600/20 font-bold text-xs uppercase "
                 >
                     <Plus size={16} />
                     Add Segment

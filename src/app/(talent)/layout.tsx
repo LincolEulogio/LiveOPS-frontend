@@ -22,7 +22,7 @@ export default function TalentLayout({ children }: { children: React.ReactNode }
     if (!isMounted || !isHydrated || !token) {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center">
-                <span className="text-stone-700 font-bold uppercase tracking-widest animate-pulse">
+                <span className="text-stone-700 font-bold uppercase  animate-pulse">
                     Authenticating...
                 </span>
             </div>

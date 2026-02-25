@@ -126,9 +126,9 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                         )} size={20} />
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold text-foreground tracking-tight leading-none mb-1">Salud del Sistema</h2>
+                        <h2 className="text-lg font-bold text-foreground  leading-none mb-1">Salud del Sistema</h2>
                         <div className="flex items-center gap-2">
-                            <p className="text-[10px] text-muted uppercase font-black tracking-widest">Telemetría en Vivo</p>
+                            <p className="text-[10px] text-muted uppercase font-black ">Telemetría en Vivo</p>
                             <div className="w-1 h-1 rounded-full bg-card-border" />
                             <span className="text-[9px] font-bold text-indigo-400/80 uppercase">{latest?.engineType || '---'}</span>
                         </div>
@@ -137,7 +137,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
 
                 <div className="flex items-center gap-2">
                     <div className={cn(
-                        "flex items-center gap-2 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-wider transition-all duration-500",
+                        "flex items-center gap-2 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase  transition-all duration-500",
                         !isConnected
                             ? "bg-amber-500/10 border-amber-500/20 text-amber-500"
                             : !isEngineConnected
@@ -192,7 +192,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                 {!isEngineConnected && (
                     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-background/40 backdrop-blur-[2px]">
                         <Activity className="text-muted/50 mb-2 animate-pulse" size={32} />
-                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Esperando Señal del Motor</p>
+                        <p className="text-[10px] font-black text-muted uppercase ">Esperando Señal del Motor</p>
                     </div>
                 )}
                 <ResponsiveContainer width="100%" height="100%">
@@ -215,7 +215,7 @@ export const HealthMonitor = ({ productionId }: HealthMonitorProps) => {
                 </ResponsiveContainer>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between text-[10px] font-black text-muted uppercase tracking-[0.15em] bg-background/40 px-4 py-3 rounded-xl border border-card-border/50 relative z-10">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between text-[10px] font-black text-muted uppercase  bg-background/40 px-4 py-3 rounded-xl border border-card-border/50 relative z-10">
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
                         <div className="w-2.5 h-0.5 bg-indigo-500 rounded-full" /> USO DE CPU
@@ -259,10 +259,10 @@ const MetricCard = ({ label, value, icon: Icon, color, status = 'normal', toolti
     return (
         <div className={cn("p-5 rounded-2xl border bg-background/40 flex flex-col gap-4 transition-all hover:border-indigo-500/50 group shadow-sm", statusMap[status])} title={tooltip}>
             <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black text-muted uppercase tracking-widest opacity-60">{label}</span>
+                <span className="text-[10px] font-black text-muted uppercase  opacity-60">{label}</span>
                 <div className={cn("p-2 rounded-xl", colorMap[color])}><Icon size={14} /></div>
             </div>
-            <span className={cn("text-3xl font-black tracking-tighter", value === 'N/A' || value === '---' ? "text-muted/50" : "text-foreground")}>{value}</span>
+            <span className={cn("text-3xl font-black er", value === 'N/A' || value === '---' ? "text-muted/50" : "text-foreground")}>{value}</span>
         </div>
     );
 };

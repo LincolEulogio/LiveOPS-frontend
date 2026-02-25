@@ -19,7 +19,7 @@ export const ProductionSelector = () => {
         return (
             <div className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/5 rounded-2xl animate-pulse">
                 <Loader2 size={14} className="animate-spin text-indigo-400" />
-                <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Matrix Sync...</span>
+                <span className="text-[10px] font-black text-muted uppercase ">Matrix Sync...</span>
             </div>
         );
     }
@@ -36,8 +36,8 @@ export const ProductionSelector = () => {
                             <Server size={16} className="text-indigo-400 sm:w-[18px] sm:h-[18px]" />
                         </div>
                         <div className="text-left flex-1 min-w-0">
-                            <p className="text-[8px] sm:text-[9px] font-black text-muted uppercase tracking-[0.3em] leading-none mb-1 sm:mb-1.5 opacity-60 truncate">Production Node</p>
-                            <h3 className="text-xs sm:text-sm font-black text-foreground uppercase tracking-tight truncate italic">
+                            <p className="text-[8px] sm:text-[9px] font-black text-muted uppercase  leading-none mb-1 sm:mb-1.5 opacity-60 truncate">Production Node</p>
+                            <h3 className="text-xs sm:text-sm font-black text-foreground uppercase  truncate italic">
                                 {activeProduction?.name || 'SELECT SECTOR...'}
                             </h3>
                         </div>
@@ -60,9 +60,9 @@ export const ProductionSelector = () => {
                     <div className="px-5 py-4 mb-2 flex items-center justify-between border-b border-card-border/40 relative z-10">
                         <div className="flex items-center gap-3">
                             <Shield size={14} className="text-indigo-400" />
-                            <p className="text-[10px] font-black text-foreground uppercase tracking-[0.3em]">Identity Matrix</p>
+                            <p className="text-[10px] font-black text-foreground uppercase ">Identity Matrix</p>
                         </div>
-                        <span className="text-[9px] font-bold text-muted uppercase tracking-widest">{productions.length} Nodes</span>
+                        <span className="text-[9px] font-bold text-muted uppercase ">{productions.length} Nodes</span>
                     </div>
 
                     <div className="space-y-1.5 relative z-10 max-h-[400px] overflow-y-auto no-scrollbar py-1">
@@ -85,13 +85,13 @@ export const ProductionSelector = () => {
                                     )} />
                                     <div className="flex flex-col">
                                         <span className={cn(
-                                            "text-xs font-black uppercase tracking-tight italic transition-colors",
+                                            "text-xs font-black uppercase  italic transition-colors",
                                             activeProductionId === prod.id ? "text-white" : "text-foreground"
                                         )}>
                                             {prod.name}
                                         </span>
                                         <span className={cn(
-                                            "text-[8px] font-bold uppercase tracking-widest mt-1 opacity-60",
+                                            "text-[8px] font-bold uppercase  mt-1 opacity-60",
                                             activeProductionId === prod.id ? "text-white/80" : "text-muted"
                                         )}>
                                             {prod.status} • {prod.engineType}
@@ -110,7 +110,7 @@ export const ProductionSelector = () => {
                         {productions.length === 0 && (
                             <div className="py-12 flex flex-col items-center justify-center opacity-40">
                                 <Zap size={32} strokeWidth={1} className="text-muted mb-4" />
-                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] px-10 text-center">No authorized nodes detected</p>
+                                <p className="text-[10px] font-black text-muted uppercase  px-10 text-center">No authorized nodes detected</p>
                             </div>
                         )}
                     </div>
@@ -118,7 +118,7 @@ export const ProductionSelector = () => {
                     <div className="mt-2 p-1 border-t border-card-border/40">
                         <div className="px-4 py-3 flex items-center justify-center gap-3">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            <span className="text-[8px] font-black text-muted/40 uppercase tracking-[0.4em]">Secure Session Active</span>
+                            <span className="text-[8px] font-black text-muted/40 uppercase ">Secure Session Active</span>
                         </div>
                     </div>
                 </DropdownMenu.Content>

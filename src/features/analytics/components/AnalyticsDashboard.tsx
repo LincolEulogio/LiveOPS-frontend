@@ -108,7 +108,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
             {report && (
                 <div className="bg-gradient-to-br from-indigo-900/40 to-stone-900 border border-indigo-500/30 rounded-2xl p-6 shadow-2xl">
                     <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-bold tracking-widest text-indigo-400 uppercase flex items-center gap-2">
+                        <h3 className="text-lg font-bold  text-indigo-400 uppercase flex items-center gap-2">
                             <CheckCircle size={20} />
                             Post-Show Report
                         </h3>
@@ -145,7 +145,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
 
                 {/* Bitrate Chart */}
                 <div className="col-span-2 bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
-                    <h3 className="text-sm font-bold text-muted uppercase tracking-widest flex items-center gap-2 mb-6">
+                    <h3 className="text-sm font-bold text-muted uppercase  flex items-center gap-2 mb-6">
                         <WifiHigh size={16} className="text-emerald-500" />
                         Network Bitrate (kbps)
                     </h3>
@@ -169,7 +169,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
 
                 {/* CPU Chart */}
                 <div className="bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
-                    <h3 className="text-sm font-bold text-muted uppercase tracking-widest flex items-center gap-2 mb-6">
+                    <h3 className="text-sm font-bold text-muted uppercase  flex items-center gap-2 mb-6">
                         <Cpu size={16} className="text-amber-500" />
                         Encoder CPU Usage (%)
                     </h3>
@@ -190,7 +190,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
 
                 {/* FPS & Drops Chart */}
                 <div className="bg-card-bg border border-card-border rounded-2xl p-6 shadow-lg">
-                    <h3 className="text-sm font-bold text-muted uppercase tracking-widest flex items-center gap-2 mb-6">
+                    <h3 className="text-sm font-bold text-muted uppercase  flex items-center gap-2 mb-6">
                         <AlertTriangle size={16} className="text-red-500" />
                         Dropped Frames
                     </h3>

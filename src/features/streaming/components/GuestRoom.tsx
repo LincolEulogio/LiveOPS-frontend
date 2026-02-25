@@ -42,7 +42,7 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
         return (
             <div className="flex-1 flex flex-col items-center justify-center bg-background gap-4">
                 <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                <p className="text-muted text-xs font-bold uppercase tracking-widest">Iniciando sesión segura...</p>
+                <p className="text-muted text-xs font-bold uppercase ">Iniciando sesión segura...</p>
             </div>
         );
     }
@@ -65,8 +65,8 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
                             <Radio size={20} className="text-emerald-400 animate-pulse" />
                         </div>
                         <div>
-                            <h1 className="text-lg font-bold tracking-tight">Live Guest Room</h1>
-                            <p className="text-[10px] text-muted uppercase tracking-widest font-black">
+                            <h1 className="text-lg font-bold ">Live Guest Room</h1>
+                            <p className="text-[10px] text-muted uppercase  font-black">
                                 Production ID: {productionId.split('-')[0]}...
                             </p>
                         </div>

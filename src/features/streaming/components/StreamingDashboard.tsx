@@ -45,7 +45,7 @@ export function StreamingDashboard({ productionId, engineType }: StreamingDashbo
                     <Loader2 className="animate-spin text-indigo-500" size={40} />
                     <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full" />
                 </div>
-                <p className="text-muted font-black uppercase tracking-widest text-[10px]">Establishing Secure Link...</p>
+                <p className="text-muted font-black uppercase  text-[10px]">Establishing Secure Link...</p>
             </div>
         );
     }
@@ -62,7 +62,7 @@ export function StreamingDashboard({ productionId, engineType }: StreamingDashbo
                             "w-2 h-2 rounded-full transition-all duration-500",
                             isSocketConnected ? "bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]" : "bg-red-500 animate-pulse"
                         )} />
-                        <span className="text-[9px] font-black text-muted uppercase tracking-widest">Gateway</span>
+                        <span className="text-[9px] font-black text-muted uppercase ">Gateway</span>
                     </div>
 
                     <div className="flex items-center gap-2.5 border-l border-card-border pl-4 sm:pl-6">
@@ -71,14 +71,14 @@ export function StreamingDashboard({ productionId, engineType }: StreamingDashbo
                         ) : (
                             <WifiOff size={14} className="text-red-500" />
                         )}
-                        <span className="text-[9px] font-black text-muted uppercase tracking-widest">
+                        <span className="text-[9px] font-black text-muted uppercase ">
                             {engineType} {isEngineConnected ? 'Live' : 'Sync Error'}
                         </span>
                     </div>
                 </div>
 
                 <div className="hidden xs:flex items-center gap-4 px-4 py-1.5 bg-background/50 rounded-xl border border-card-border">
-                    <div className="flex items-center gap-2 text-[9px] font-black text-muted uppercase tracking-widest">
+                    <div className="flex items-center gap-2 text-[9px] font-black text-muted uppercase ">
                         <Activity size={12} className="text-indigo-400" />
                         <span className="opacity-60">Last Pulse:</span>
                         <span className="text-foreground">{state?.lastUpdate ? new Date(state.lastUpdate).toLocaleTimeString() : '---'}</span>
@@ -91,7 +91,7 @@ export function StreamingDashboard({ productionId, engineType }: StreamingDashbo
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-20" />
 
                 <div className="p-1 px-8 bg-white/5 border-b border-card-border/50 flex items-center justify-between">
-                    <h2 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] py-4">Live Operational Surface</h2>
+                    <h2 className="text-[10px] font-black text-indigo-400 uppercase  py-4">Live Operational Surface</h2>
                     <div className="flex gap-1.5">
                         <div className="w-2 h-2 rounded-full bg-red-500/20" />
                         <div className="w-2 h-2 rounded-full bg-amber-500/20" />

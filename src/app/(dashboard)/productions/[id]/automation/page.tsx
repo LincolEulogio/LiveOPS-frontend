@@ -24,7 +24,7 @@ export default function AutomationPage() {
                     <ArrowLeft size={20} />
                 </Link>
                 <div>
-                    <h2 className="text-xs font-bold text-stone-500 uppercase tracking-widest">Production Control</h2>
+                    <h2 className="text-xs font-bold text-stone-500 uppercase ">Production Control</h2>
                     <div className="flex items-center gap-2">
                         <span className="text-sm font-medium text-stone-300">Dashboard</span>
                         <span className="text-stone-700">/</span>

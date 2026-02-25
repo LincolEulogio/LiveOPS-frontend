@@ -58,10 +58,10 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                         <Zap className="text-indigo-400" size={32} />
                     </div>
                     <div>
-                        <h1 className="text-2xl sm:text-4xl font-black text-foreground uppercase tracking-tighter leading-none mb-3">
+                        <h1 className="text-2xl sm:text-4xl font-black text-foreground uppercase er leading-none mb-3">
                             Automation Engine
                         </h1>
-                        <p className="text-muted text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] max-w-md leading-loose">
+                        <p className="text-muted text-[10px] sm:text-xs font-bold uppercase  max-w-md leading-loose">
                             Orchestrate complex sequences. Event-driven logic for high-performance production workflows.
                         </p>
                     </div>
@@ -69,7 +69,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
 
                 <button
                     onClick={handleCreate}
-                    className="relative z-10 flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-xl shadow-indigo-600/20 group active:scale-95"
+                    className="relative z-10 flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black uppercase  text-xs transition-all shadow-xl shadow-indigo-600/20 group active:scale-95"
                 >
                     <Plus size={18} className="group-hover:rotate-90 transition-transform duration-500" />
                     Initialize New Rule
@@ -83,14 +83,14 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                         <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
                             <Zap size={14} fill="currentColor" />
                         </div>
-                        <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap hidden sm:block">Tactical Macros</span>
+                        <span className="text-[10px] font-black text-muted uppercase  whitespace-nowrap hidden sm:block">Tactical Macros</span>
                     </div>
                     <div className="flex items-center gap-3">
                         {manualMacros.map(macro => (
                             <button
                                 key={macro.id}
                                 onClick={() => triggerRule(macro)}
-                                className="flex items-center gap-3 bg-background/50 hover:bg-card-bg text-foreground px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-card-border whitespace-nowrap active:scale-95 group/macro relative overflow-hidden"
+                                className="flex items-center gap-3 bg-background/50 hover:bg-card-bg text-foreground px-5 py-2.5 rounded-xl text-[10px] font-black uppercase  transition-all border border-card-border whitespace-nowrap active:scale-95 group/macro relative overflow-hidden"
                             >
                                 <Play size={10} className="text-indigo-400 group-hover/macro:scale-125 transition-transform" fill="currentColor" />
                                 {macro.name}
@@ -115,7 +115,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as any)}
                                 className={cn(
-                                    "flex-1 sm:flex-none flex items-center justify-center gap-3 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all relative overflow-hidden",
+                                    "flex-1 sm:flex-none flex items-center justify-center gap-3 px-6 py-3 rounded-2xl text-[11px] font-black uppercase  transition-all relative overflow-hidden",
                                     activeTab === tab.id
                                         ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/30"
                                         : "text-muted hover:text-foreground hover:bg-white/5",
@@ -172,8 +172,8 @@ export const AutomationDashboard = ({ productionId }: Props) => {
 
                         <div className="flex items-center justify-between mb-8 relative z-10">
                             <div className="space-y-1">
-                                <h2 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em]">Operational</h2>
-                                <p className="text-lg font-black text-foreground uppercase tracking-tight">System Logs</p>
+                                <h2 className="text-[10px] font-black text-indigo-400 uppercase ">Operational</h2>
+                                <p className="text-lg font-black text-foreground uppercase ">System Logs</p>
                             </div>
                             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
                         </div>
@@ -183,7 +183,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                         </div>
 
                         <div className="pt-6 border-t border-card-border/50 relative z-10">
-                            <button className="w-full flex items-center justify-center gap-3 p-4 bg-background/50 hover:bg-indigo-600 rounded-2xl text-[10px] font-black text-muted hover:text-white uppercase tracking-widest transition-all group active:scale-95 shadow-lg">
+                            <button className="w-full flex items-center justify-center gap-3 p-4 bg-background/50 hover:bg-indigo-600 rounded-2xl text-[10px] font-black text-muted hover:text-white uppercase  transition-all group active:scale-95 shadow-lg">
                                 Master Activity Grid <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>

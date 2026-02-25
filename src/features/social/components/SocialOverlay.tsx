@@ -111,7 +111,7 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
 
                             <div className="flex flex-col gap-1 pr-6">
                                 <div className="flex items-center gap-2">
-                                    <h3 className="text-xl font-black text-white tracking-tight uppercase">
+                                    <h3 className="text-xl font-black text-white  uppercase">
                                         {activeMessage.author}
                                     </h3>
                                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,1)]" />
@@ -137,7 +137,7 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                         <div className="relative p-8">
                             <div className="flex items-center gap-3 mb-6">
                                 <BarChart3 className="text-emerald-500" size={24} />
-                                <h3 className="text-2xl font-black text-white tracking-tight uppercase">{activePoll.question}</h3>
+                                <h3 className="text-2xl font-black text-white  uppercase">{activePoll.question}</h3>
                             </div>
 
                             <div className="space-y-4">
@@ -161,7 +161,7 @@ export const SocialOverlay = ({ productionId }: SocialOverlayProps) => {
                                 })}
                             </div>
 
-                            <div className="mt-8 flex justify-center text-xs font-black text-white/30 uppercase tracking-[0.3em]">
+                            <div className="mt-8 flex justify-center text-xs font-black text-white/30 uppercase ">
                                 {totalVotes} TOTAL VOTES RECEIVED
                             </div>
                         </div>

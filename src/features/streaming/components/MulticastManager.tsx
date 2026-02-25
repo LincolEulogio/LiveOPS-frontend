@@ -65,7 +65,7 @@ export const MulticastManager: React.FC<MulticastManagerProps> = ({ productionId
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Multicasting Destinos</h3>
+                <h3 className="text-sm font-bold uppercase  text-muted">Multicasting Destinos</h3>
                 <button
                     onClick={() => setIsAdding(true)}
                     className="p-1.5 bg-card-border hover:bg-muted/30 rounded-lg text-foreground transition-colors flex items-center gap-2 text-xs font-bold"
@@ -160,7 +160,7 @@ export const MulticastManager: React.FC<MulticastManagerProps> = ({ productionId
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => toggleEnabled(dest)}
-                                className={`px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${dest.isEnabled ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-card-border text-muted border border-card-border/50'}`}
+                                className={`px-3 py-1.5 rounded-lg text-[10px] font-black  uppercase transition-all ${dest.isEnabled ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-card-border text-muted border border-card-border/50'}`}
                             >
                                 {dest.isEnabled ? 'ENABLED' : 'DISABLED'}
                             </button>

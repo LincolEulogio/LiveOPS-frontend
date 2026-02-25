@@ -18,8 +18,8 @@ export const SocialHub = ({ productionId }: SocialHubProps) => {
                         <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-black text-foreground tracking-tight">AUDIENCE MODERATION</h1>
-                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Live Comment Feed & Control</p>
+                        <h1 className="text-xl font-black text-foreground ">AUDIENCE MODERATION</h1>
+                        <p className="text-[10px] font-bold text-muted uppercase ">Live Comment Feed & Control</p>
                     </div>
                 </div>
                 <SocialManager productionId={productionId} />
@@ -32,8 +32,8 @@ export const SocialHub = ({ productionId }: SocialHubProps) => {
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-black text-foreground tracking-tight">ENGAGEMENT TOOLS</h1>
-                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Real-time Polls & Results</p>
+                        <h1 className="text-xl font-black text-foreground ">ENGAGEMENT TOOLS</h1>
+                        <p className="text-[10px] font-bold text-muted uppercase ">Real-time Polls & Results</p>
                     </div>
                 </div>
                 <PollManager productionId={productionId} />

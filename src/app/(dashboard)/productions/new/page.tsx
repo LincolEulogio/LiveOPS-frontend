@@ -80,7 +80,7 @@ export default function NewProductionPage() {
           <ArrowLeft size={16} />
           Back to Productions
         </Link>
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">Create New Production</h1>
+        <h1 className="text-2xl font-bold text-foreground ">Create New Production</h1>
         <p className="text-muted text-sm mt-1">Setup a new live streaming environment</p>
       </div>
 
@@ -197,7 +197,7 @@ export default function NewProductionPage() {
                         <p className="text-sm font-medium text-foreground">{user.name || user.email} <span className="text-[10px] text-indigo-400 opacity-70">(You)</span></p>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <Shield size={10} className="text-indigo-400" />
-                          <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">ADMIN</span>
+                          <span className="text-[10px] font-bold text-indigo-400 uppercase ">ADMIN</span>
                         </div>
                       </div>
                     </div>
@@ -212,7 +212,7 @@ export default function NewProductionPage() {
                         <p className="text-sm font-medium text-foreground/80">{member.email}</p>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <Shield size={10} className="text-indigo-400" />
-                          <span className="text-[10px] font-bold text-muted uppercase tracking-widest">{member.roleName}</span>
+                          <span className="text-[10px] font-bold text-muted uppercase ">{member.roleName}</span>
                         </div>
                       </div>
                     </div>

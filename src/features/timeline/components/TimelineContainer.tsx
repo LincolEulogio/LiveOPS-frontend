@@ -201,10 +201,10 @@ export const TimelineContainer = ({ productionId }: Props) => {
                         <Layout className="text-indigo-400" size={24} />
                     </div>
                     <div>
-                        <h2 className="text-lg font-black text-foreground uppercase tracking-tight italic leading-none mb-1.5">
+                        <h2 className="text-lg font-black text-foreground uppercase  italic leading-none mb-1.5">
                             Operational Rundown
                         </h2>
-                        <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">Scalable Event Sequence</p>
+                        <p className="text-[9px] font-black text-muted uppercase ">Scalable Event Sequence</p>
                     </div>
                 </div>
 
@@ -216,7 +216,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
                                 onClick={handleSmartNext}
                                 disabled={!hasNext}
                                 className={cn(
-                                    "flex-1 lg:flex-none flex items-center justify-center gap-3 px-5 py-3 rounded-xl transition-all text-[10px] font-black uppercase tracking-widest shadow-xl",
+                                    "flex-1 lg:flex-none flex items-center justify-center gap-3 px-5 py-3 rounded-xl transition-all text-[10px] font-black uppercase  shadow-xl",
                                     hasNext
                                         ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30"
                                         : "bg-background/50 text-muted border border-card-border cursor-not-allowed"
@@ -228,7 +228,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
 
                             <button
                                 onClick={handleResetAll}
-                                className="flex items-center gap-2 bg-background/50 hover:bg-card-bg text-[9px] font-black text-muted hover:text-orange-400 px-3 py-3 rounded-xl border border-card-border transition-all uppercase tracking-widest"
+                                className="flex items-center gap-2 bg-background/50 hover:bg-card-bg text-[9px] font-black text-muted hover:text-orange-400 px-3 py-3 rounded-xl border border-card-border transition-all uppercase "
                                 title="Reset all"
                             >
                                 <RotateCcw size={14} />
@@ -239,7 +239,7 @@ export const TimelineContainer = ({ productionId }: Props) => {
                     {canEdit && (
                         <button
                             onClick={handleCreate}
-                            className="flex-1 lg:flex-none flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-foreground px-5 py-3 rounded-xl border border-card-border transition-all text-[10px] font-black uppercase tracking-widest"
+                            className="flex-1 lg:flex-none flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-foreground px-5 py-3 rounded-xl border border-card-border transition-all text-[10px] font-black uppercase "
                         >
                             <Plus size={16} />
                             Init Node

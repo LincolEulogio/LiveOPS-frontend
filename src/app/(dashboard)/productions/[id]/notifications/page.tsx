@@ -26,7 +26,7 @@ export default function NotificationsPage() {
                         <div className="p-2 bg-indigo-500/10 rounded-lg">
                             <Bell className="w-6 h-6 text-indigo-400" />
                         </div>
-                        <h1 className="text-2xl font-bold text-white tracking-tight">Notification Settings</h1>
+                        <h1 className="text-2xl font-bold text-white ">Notification Settings</h1>
                     </div>
                 </div>
             </div>

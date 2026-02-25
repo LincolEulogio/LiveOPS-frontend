@@ -69,7 +69,7 @@ export const ExportActions = ({ productionId }: Props) => {
                 <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400">
                     <Download size={18} />
                 </div>
-                <h2 className="text-sm font-bold text-foreground uppercase tracking-widest">Data Export</h2>
+                <h2 className="text-sm font-bold text-foreground uppercase ">Data Export</h2>
             </div>
 
             <p className="text-[10px] text-muted leading-relaxed">
@@ -84,7 +84,7 @@ export const ExportActions = ({ productionId }: Props) => {
                 >
                     <div className="flex items-center gap-3">
                         <FileSpreadsheet size={16} className="text-emerald-500 group-hover:scale-110 transition-transform" />
-                        <span className="text-xs font-bold text-muted uppercase tracking-wider">Spreadsheet (CSV)</span>
+                        <span className="text-xs font-bold text-muted uppercase ">Spreadsheet (CSV)</span>
                     </div>
                     {isExporting ? <Loader2 size={14} className="animate-spin text-muted" /> : <FileDown size={14} className="text-muted" />}
                 </button>
@@ -96,7 +96,7 @@ export const ExportActions = ({ productionId }: Props) => {
                 >
                     <div className="flex items-center gap-3">
                         <FileDown size={16} className="text-indigo-400 group-hover:scale-110 transition-transform" />
-                        <span className="text-xs font-bold text-muted uppercase tracking-wider">Raw Data (JSON)</span>
+                        <span className="text-xs font-bold text-muted uppercase ">Raw Data (JSON)</span>
                     </div>
                     {isExporting ? <Loader2 size={14} className="animate-spin text-muted" /> : <FileDown size={14} className="text-muted" />}
                 </button>

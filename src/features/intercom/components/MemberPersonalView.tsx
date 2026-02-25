@@ -59,7 +59,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
             <div className="px-6 py-4 border-b border-card-border bg-background/50 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">
+                    <span className="text-[10px] font-black uppercase  text-muted">
                         View: {members.find(m => m.userId === userId)?.userName || 'Personal Terminal'}
                     </span>
                 </div>
@@ -90,11 +90,11 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                                 <Activity size={32} className="text-indigo-400" />
                             </div>
 
-                            <p className="text-[12px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-4">
+                            <p className="text-[12px] font-black text-indigo-400 uppercase  mb-4">
                                 Nueva Instrucción
                             </p>
 
-                            <h1 className="text-4xl font-black uppercase tracking-tighter mb-8 break-words leading-none">
+                            <h1 className="text-4xl font-black uppercase er mb-8 break-words leading-none">
                                 {activeAlert.message}
                             </h1>
 
@@ -102,37 +102,37 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                             <div className="grid grid-cols-2 gap-3 w-full mb-6">
                                 <button
                                     onClick={() => handleRespond('OK')}
-                                    className="py-5 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-green-600/20 active:scale-95 transition-all"
+                                    className="py-5 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-black uppercase  text-sm shadow-lg shadow-green-600/20 active:scale-95 transition-all"
                                 >
                                     OK
                                 </button>
                                 <button
                                     onClick={() => handleRespond('COPIADO')}
-                                    className="py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-indigo-600/20 active:scale-95 transition-all"
+                                    className="py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase  text-sm shadow-lg shadow-indigo-600/20 active:scale-95 transition-all"
                                 >
                                     COPIADO
                                 </button>
                                 <button
                                     onClick={() => handleRespond('FALA')}
-                                    className="py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-red-600/20 active:scale-95 transition-all"
+                                    className="py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-black uppercase  text-sm shadow-lg shadow-red-600/20 active:scale-95 transition-all"
                                 >
                                     FALA
                                 </button>
                                 <button
                                     onClick={() => handleRespond('DUDA')}
-                                    className="py-5 bg-amber-500 hover:bg-amber-400 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-amber-500/20 active:scale-95 transition-all"
+                                    className="py-5 bg-amber-500 hover:bg-amber-400 text-white rounded-2xl font-black uppercase  text-sm shadow-lg shadow-amber-500/20 active:scale-95 transition-all"
                                 >
                                     DUDA
                                 </button>
                                 <button
                                     onClick={() => handleRespond('LISTO')}
-                                    className="py-4 bg-background hover:bg-card-border text-muted rounded-2xl font-black uppercase tracking-widest text-[10px] active:scale-95 transition-all border border-card-border"
+                                    className="py-4 bg-background hover:bg-card-border text-muted rounded-2xl font-black uppercase  text-[10px] active:scale-95 transition-all border border-card-border"
                                 >
                                     LISTO
                                 </button>
                                 <button
                                     onClick={() => handleRespond('CHECK')}
-                                    className="py-4 bg-background hover:bg-card-border text-muted rounded-2xl font-black uppercase tracking-widest text-[10px] active:scale-95 transition-all border border-card-border"
+                                    className="py-4 bg-background hover:bg-card-border text-muted rounded-2xl font-black uppercase  text-[10px] active:scale-95 transition-all border border-card-border"
                                 >
                                     CHECK
                                 </button>
@@ -178,15 +178,15 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                                     <div className="absolute inset-0 border-t-2 border-indigo-500/20 rounded-full animate-spin [animation-duration:3s]" />
                                 </div>
                                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-card-bg border border-card-border rounded-full">
-                                    <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Standby Mode</p>
+                                    <p className="text-[8px] font-black text-muted uppercase  whitespace-nowrap">Standby Mode</p>
                                 </div>
                             </div>
 
                             <div>
-                                <h1 className="text-2xl font-black uppercase tracking-[0.4em] mb-3 text-foreground/90">
+                                <h1 className="text-2xl font-black uppercase  mb-3 text-foreground/90">
                                     Ready for <span className="text-indigo-500">Alerts</span>
                                 </h1>
-                                <p className="text-[10px] font-bold text-muted uppercase tracking-[0.3em] leading-relaxed max-w-[200px] mx-auto">
+                                <p className="text-[10px] font-bold text-muted uppercase  leading-relaxed max-w-[200px] mx-auto">
                                     Esperando instrucciones críticas del operador en tiempo real
                                 </p>
                             </div>
@@ -210,7 +210,7 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
             {/* Bottom History Drawer */}
             <div className="bg-card-bg/80 backdrop-blur-xl border-t border-card-border p-6 rounded-t-[40px] max-h-[30vh] overflow-hidden flex flex-col">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted flex items-center gap-2">
+                    <h3 className="text-[10px] font-black uppercase  text-muted flex items-center gap-2">
                         <MessageSquare size={14} /> Historial Local
                     </h3>
                     <ChevronRight size={16} className="text-muted/50" />
@@ -220,13 +220,13 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                     {myHistory.map((item) => (
                         <div key={item.id} className="flex items-center justify-between py-2 border-b border-card-border/30">
                             <div>
-                                <p className="text-[11px] font-bold uppercase tracking-tight text-foreground/80">{item.message}</p>
+                                <p className="text-[11px] font-bold uppercase  text-foreground/80">{item.message}</p>
                                 <p className="text-[9px] text-muted font-bold uppercase mt-0.5">{new Date(item.timestamp).toLocaleTimeString()}</p>
                             </div>
                             {item.status === 'ACKNOWLEDGED' && (
                                 <div className="flex items-center gap-1.5 text-green-500/50">
                                     <CheckCircle2 size={12} />
-                                    <span className="text-[9px] font-black uppercase tracking-widest">SENT</span>
+                                    <span className="text-[9px] font-black uppercase ">SENT</span>
                                 </div>
                             )}
                         </div>

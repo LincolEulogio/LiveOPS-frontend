@@ -49,7 +49,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
 
                 {/* Inbox Column */}
                 <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-xl flex flex-col min-h-0">
-                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2 mb-4 shrink-0">
+                    <h2 className="text-sm font-bold text-foreground uppercase  flex items-center gap-2 mb-4 shrink-0">
                         <ShieldCheck size={16} className="text-emerald-400" />
                         Inbox / Moderation ({pendingMessages.length})
                     </h2>
@@ -74,7 +74,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
 
                 {/* Approved Queue */}
                 <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-xl flex flex-col min-h-0">
-                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2 mb-4 shrink-0">
+                    <h2 className="text-sm font-bold text-foreground uppercase  flex items-center gap-2 mb-4 shrink-0">
                         <CheckBadgeIcon className="text-blue-400" />
                         Approved Queue ({approvedMessages.length})
                     </h2>
@@ -99,7 +99,7 @@ export const SocialDashboard = ({ productionId }: Props) => {
 
                 {/* On-Air View */}
                 <div className="bg-card-bg border border-card-border rounded-3xl p-6 shadow-xl flex flex-col">
-                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2 mb-4 shrink-0">
+                    <h2 className="text-sm font-bold text-foreground uppercase  flex items-center gap-2 mb-4 shrink-0">
                         <Tv size={16} className="text-indigo-400" />
                         Currently On-Air
                     </h2>

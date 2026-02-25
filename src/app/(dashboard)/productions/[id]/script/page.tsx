@@ -26,9 +26,9 @@ export default function ScriptPreparationPage() {
                     <div>
                         <div className="flex items-center gap-2 mb-0.5">
                             <FileText size={16} className="text-indigo-400" />
-                            <h1 className="text-lg font-bold text-foreground tracking-tight">Preparación de Guion</h1>
+                            <h1 className="text-lg font-bold text-foreground ">Preparación de Guion</h1>
                         </div>
-                        <p className="text-[10px] text-muted uppercase tracking-widest font-bold font-mono">
+                        <p className="text-[10px] text-muted uppercase  font-bold font-mono">
                             Modo: Colaboración en Tiempo Real
                         </p>
                     </div>
@@ -42,7 +42,7 @@ export default function ScriptPreparationPage() {
                                 toast.success('¡Enlace de colaboración copiado!');
                             }
                         }}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-background border border-card-border rounded-lg text-[10px] font-bold text-muted uppercase tracking-widest hover:text-foreground hover:bg-card-bg transition-all"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-background border border-card-border rounded-lg text-[10px] font-bold text-muted uppercase  hover:text-foreground hover:bg-card-bg transition-all"
                     >
                         <Share2 size={12} />
                         Compartir
@@ -90,13 +90,13 @@ export default function ScriptPreparationPage() {
 
                 {/* Footer / Status */}
                 <div className="py-2 px-6 border-t border-card-border flex justify-between items-center bg-card-bg/40 backdrop-blur-sm">
-                    <div className="text-[9px] text-muted font-medium uppercase tracking-tighter">
+                    <div className="text-[9px] text-muted font-medium uppercase er">
                         Todos los cambios se guardan automáticamente
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1.5 grayscale opacity-50">
                             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
-                            <span className="text-[9px] text-muted font-mono tracking-tighter uppercase">Conectado</span>
+                            <span className="text-[9px] text-muted font-mono er uppercase">Conectado</span>
                         </div>
                     </div>
                 </div>

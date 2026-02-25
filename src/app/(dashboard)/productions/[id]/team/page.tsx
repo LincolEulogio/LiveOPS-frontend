@@ -82,7 +82,7 @@ export default function TeamManagementPage() {
                     <ArrowLeft size={16} />
                     Back to {production.name}
                 </Link>
-                <h1 className="text-3xl font-bold text-foreground tracking-tight">Team Management</h1>
+                <h1 className="text-3xl font-bold text-foreground ">Team Management</h1>
                 <p className="text-muted mt-2">Manage access and roles for this production environment</p>
             </div>
 
@@ -104,7 +104,7 @@ export default function TeamManagementPage() {
 
                         <form onSubmit={handleAssign} className="space-y-4">
                             <div>
-                                <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">User Email</label>
+                                <label className="block text-xs font-semibold text-muted uppercase  mb-1.5">User Email</label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-2.5 text-muted" size={16} />
                                     <select
@@ -163,7 +163,7 @@ export default function TeamManagementPage() {
                                     </div>
 
                                     <div className="flex items-center gap-4">
-                                        <span className="px-2.5 py-1 bg-background border border-card-border rounded-md text-[10px] font-bold uppercase tracking-widest text-indigo-400">
+                                        <span className="px-2.5 py-1 bg-background border border-card-border rounded-md text-[10px] font-bold uppercase  text-indigo-400">
                                             {prodUser.role.name}
                                         </span>
 

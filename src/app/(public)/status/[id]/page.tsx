@@ -44,7 +44,7 @@ export default function PublicStatusPage() {
         return (
             <div className="min-h-screen bg-background flex flex-col items-center justify-center p-8">
                 <Activity className="text-indigo-500 w-12 h-12 animate-pulse mb-4" />
-                <p className="text-muted font-bold uppercase tracking-widest text-xs">Conectando con LiveOPS...</p>
+                <p className="text-muted font-bold uppercase  text-xs">Conectando con LiveOPS...</p>
             </div>
         );
     }
@@ -82,16 +82,16 @@ export default function PublicStatusPage() {
                             <Zap className="text-white fill-white" size={20} />
                         </div>
                         <div>
-                            <h1 className="text-white font-black text-lg tracking-tight leading-none mb-1">{status.productionName}</h1>
+                            <h1 className="text-white font-black text-lg  leading-none mb-1">{status.productionName}</h1>
                             <div className="flex items-center gap-2">
                                 <div className={cn("w-2 h-2 rounded-full", isHealthy ? "bg-emerald-500 animate-pulse" : "bg-red-500")} />
-                                <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Estado en Vivo</span>
+                                <span className="text-[10px] font-bold text-muted uppercase ">Estado en Vivo</span>
                             </div>
                         </div>
                     </div>
                     <div className="hidden md:flex items-center gap-6">
                         <div className="flex flex-col items-end">
-                            <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Motor de Video</span>
+                            <span className="text-[10px] font-bold text-muted uppercase ">Motor de Video</span>
                             <span className="text-sm font-bold text-foreground uppercase">{status.engineType}</span>
                         </div>
                     </div>
@@ -116,39 +116,39 @@ export default function PublicStatusPage() {
                                             <Layout className="text-indigo-400" size={24} />
                                         </div>
                                         <div>
-                                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-1">Segmento Actual</p>
-                                            <h2 className="text-2xl font-black text-foreground tracking-tight">{status.activeSegment}</h2>
+                                            <p className="text-[10px] font-black text-muted uppercase  mb-1">Segmento Actual</p>
+                                            <h2 className="text-2xl font-black text-foreground ">{status.activeSegment}</h2>
                                         </div>
                                     </div>
                                     <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center gap-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                                        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Emitiendo</span>
+                                        <span className="text-[10px] font-black text-emerald-400 uppercase ">Emitiendo</span>
                                     </div>
                                 </div>
 
                                 {/* Telemetry Grid */}
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-6">
                                     <div className="space-y-1">
-                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest flex items-center gap-2">
+                                        <p className="text-[10px] font-bold text-muted uppercase  flex items-center gap-2">
                                             <Cpu size={12} className="text-indigo-400" /> Carga CPU
                                         </p>
-                                        <p className="text-3xl font-black text-foreground tracking-tighter">
+                                        <p className="text-3xl font-black text-foreground er">
                                             {Math.round(latestStats.cpuUsage || 0)}%
                                         </p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest flex items-center gap-2">
+                                        <p className="text-[10px] font-bold text-muted uppercase  flex items-center gap-2">
                                             <Zap size={12} className="text-emerald-400" /> Rendimiento
                                         </p>
-                                        <p className="text-3xl font-black text-foreground tracking-tighter">
+                                        <p className="text-3xl font-black text-foreground er">
                                             {Math.round(latestStats.fps || 0)} FPS
                                         </p>
                                     </div>
                                     <div className="hidden md:block space-y-1">
-                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest flex items-center gap-2">
+                                        <p className="text-[10px] font-bold text-muted uppercase  flex items-center gap-2">
                                             <BarChart3 size={12} className="text-amber-400" /> Drops
                                         </p>
-                                        <p className="text-3xl font-black text-foreground tracking-tighter">
+                                        <p className="text-3xl font-black text-foreground er">
                                             {latestStats.droppedFrames || 0}
                                         </p>
                                     </div>
@@ -189,7 +189,7 @@ export default function PublicStatusPage() {
                     {/* Side Info */}
                     <div className="space-y-6">
                         <div className="bg-card-bg border border-card-border p-8 rounded-[2rem] shadow-2xl">
-                            <h3 className="font-bold text-foreground mb-6 uppercase text-xs tracking-widest flex items-center gap-2">
+                            <h3 className="font-bold text-foreground mb-6 uppercase text-xs  flex items-center gap-2">
                                 <Clock className="text-indigo-400" size={16} /> Último Reporte
                             </h3>
                             <div className="space-y-4">
@@ -209,7 +209,7 @@ export default function PublicStatusPage() {
                         </div>
 
                         <div className="bg-indigo-600 p-8 rounded-[2rem] shadow-2xl shadow-indigo-500/10 text-white space-y-4">
-                            <h3 className="font-black text-xl tracking-tight italic">LiveOPS Professional</h3>
+                            <h3 className="font-black text-xl  italic">LiveOPS Professional</h3>
                             <p className="text-indigo-100 text-sm leading-relaxed">
                                 Esta es una página de estado segura y de solo lectura generada por LiveOPS para transparencia con el cliente.
                             </p>
@@ -223,7 +223,7 @@ export default function PublicStatusPage() {
 
             {/* Footer */}
             <footer className="max-w-7xl mx-auto p-12 text-center">
-                <p className="text-[10px] font-bold text-muted uppercase tracking-[0.3em]">
+                <p className="text-[10px] font-bold text-muted uppercase ">
                     Powered by LiveOPS Enterprise — &copy; {new Date().getFullYear()}
                 </p>
             </footer>

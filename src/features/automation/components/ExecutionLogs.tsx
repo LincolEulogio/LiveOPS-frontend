@@ -29,8 +29,8 @@ export const ExecutionLogs = ({ logs, isLoading }: Props) => {
                     <div className="absolute inset-0 bg-indigo-500/5 blur-2xl rounded-full" />
                 </div>
                 <div className="text-center">
-                    <p className="text-[11px] font-black uppercase tracking-[0.3em] text-foreground/30">Quiet Operational Surface</p>
-                    <p className="text-[9px] font-bold uppercase tracking-widest mt-1">No execution cycles detected in this session</p>
+                    <p className="text-[11px] font-black uppercase  text-foreground/30">Quiet Operational Surface</p>
+                    <p className="text-[9px] font-bold uppercase  mt-1">No execution cycles detected in this session</p>
                 </div>
             </div>
         );
@@ -67,7 +67,7 @@ export const ExecutionLogs = ({ logs, isLoading }: Props) => {
 
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-4 mb-1.5">
-                                <h4 className="text-[11px] font-black text-foreground/90 uppercase tracking-tight truncate flex items-center gap-2">
+                                <h4 className="text-[11px] font-black text-foreground/90 uppercase  truncate flex items-center gap-2">
                                     <div className="w-1 h-1 rounded-full bg-indigo-400" />
                                     {log.rule?.name || 'Automated Protocol'}
                                 </h4>

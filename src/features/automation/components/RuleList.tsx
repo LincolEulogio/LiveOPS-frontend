@@ -19,8 +19,8 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
                 <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-6">
                     <Zap size={32} strokeWidth={1.5} className="opacity-20" />
                 </div>
-                <h3 className="text-sm font-black text-muted-foreground uppercase tracking-[0.3em] mb-2">Engine Standby</h3>
-                <p className="text-[10px] font-bold text-muted uppercase tracking-widest text-center px-8">No automation rules configured for this production instance.</p>
+                <h3 className="text-sm font-black text-muted-foreground uppercase  mb-2">Engine Standby</h3>
+                <p className="text-[10px] font-bold text-muted uppercase  text-center px-8">No automation rules configured for this production instance.</p>
             </div>
         );
     }
@@ -49,10 +49,10 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
                         {/* Interactive Toggle & Header */}
                         <div className="flex items-start justify-between gap-6 mb-6 pl-2">
                             <div className="min-w-0">
-                                <h3 className="text-sm font-black text-foreground group-hover:text-indigo-400 transition-colors mb-1 truncate uppercase tracking-tight">
+                                <h3 className="text-sm font-black text-foreground group-hover:text-indigo-400 transition-colors mb-1 truncate uppercase ">
                                     {rule.name}
                                 </h3>
-                                <p className="text-[10px] font-bold text-muted uppercase tracking-widest line-clamp-1">{rule.description || 'System automation rule'}</p>
+                                <p className="text-[10px] font-bold text-muted uppercase  line-clamp-1">{rule.description || 'System automation rule'}</p>
                             </div>
                             <button
                                 onClick={() => onToggle(rule.id, !rule.isEnabled)}
@@ -69,7 +69,7 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
                         <div className="bg-background/40 backdrop-blur-md rounded-2xl p-4 border border-card-border/50 space-y-4 mb-6 relative overflow-hidden">
                             <div className="flex items-center gap-4 relative z-10">
                                 <div className="space-y-1 flex-1">
-                                    <span className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">Input Stimulus</span>
+                                    <span className="text-[8px] font-black text-muted uppercase ">Input Stimulus</span>
                                     <div className="flex items-center gap-2 px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-[10px] font-black text-amber-500 truncate shadow-inner">
                                         <Activity size={10} />
                                         {rule.triggers[0]?.eventType.replace('.', ' ').toUpperCase() || 'MANUAL'}
@@ -83,7 +83,7 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
                                 </div>
 
                                 <div className="space-y-1 flex-1">
-                                    <span className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">Sequence Output</span>
+                                    <span className="text-[8px] font-black text-muted uppercase ">Sequence Output</span>
                                     <div className="flex items-center gap-2 px-3 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-[10px] font-black text-indigo-400 truncate shadow-inner">
                                         <Zap size={10} />
                                         {rule.actions.length} ACTIONS
@@ -93,12 +93,12 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
 
                             <div className="flex flex-wrap gap-1.5">
                                 {rule.actions.slice(0, 3).map((action, idx) => (
-                                    <div key={idx} className="px-2 py-0.5 bg-white/5 border border-white/5 rounded-lg text-[8px] font-black text-muted uppercase tracking-widest">
+                                    <div key={idx} className="px-2 py-0.5 bg-white/5 border border-white/5 rounded-lg text-[8px] font-black text-muted uppercase ">
                                         {action.actionType.split('.').pop()}
                                     </div>
                                 ))}
                                 {rule.actions.length > 3 && (
-                                    <div className="px-2 py-0.5 bg-indigo-600/10 text-indigo-400 rounded-lg text-[8px] font-black uppercase tracking-widest">
+                                    <div className="px-2 py-0.5 bg-indigo-600/10 text-indigo-400 rounded-lg text-[8px] font-black uppercase ">
                                         +{rule.actions.length - 3}
                                     </div>
                                 )}
@@ -108,12 +108,12 @@ export const RuleList = ({ rules, onEdit, onDelete, onToggle }: Props) => {
                         {/* Footer Operational Controls */}
                         <div className="flex items-center justify-between mt-auto pt-4 border-t border-card-border/30 pl-2">
                             <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-1.5 text-[9px] font-black text-muted uppercase tracking-widest">
+                                <div className="flex items-center gap-1.5 text-[9px] font-black text-muted uppercase ">
                                     <Clock size={10} />
                                     {new Date(rule.updatedAt).toLocaleDateString()}
                                 </div>
                                 {rule.isEnabled && (
-                                    <div className="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 uppercase tracking-widest">
+                                    <div className="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 uppercase ">
                                         <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
                                         ARMED
                                     </div>

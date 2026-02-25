@@ -103,9 +103,9 @@ export const DashboardView = () => {
                     <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-3 mb-1">
                             <Activity size={14} className="text-indigo-400" />
-                            <span className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">Signal Source Operational</span>
+                            <span className="text-[10px] font-black text-muted uppercase ">Signal Source Operational</span>
                         </div>
-                        <h1 className="text-xl md:text-3xl font-black text-foreground uppercase tracking-tighter leading-tight break-words italic">
+                        <h1 className="text-xl md:text-3xl font-black text-foreground uppercase er leading-tight break-words italic">
                             {production?.name || 'INITIALIZING NODE...'}
                         </h1>
                     </div>
@@ -118,7 +118,7 @@ export const DashboardView = () => {
 
                     <button
                         onClick={() => window.open(`/productions/${activeProductionId}/talent`, '_blank')}
-                        className="flex-1 sm:flex-none px-6 py-3.5 bg-background/50 hover:bg-white/5 text-muted hover:text-foreground rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95 border border-card-border flex items-center justify-center gap-3 shadow-inner"
+                        className="flex-1 sm:flex-none px-6 py-3.5 bg-background/50 hover:bg-white/5 text-muted hover:text-foreground rounded-2xl font-black text-[10px] uppercase  transition-all active:scale-95 border border-card-border flex items-center justify-center gap-3 shadow-inner"
                     >
                         <ExternalLink size={16} />
                         Talent Link
@@ -126,7 +126,7 @@ export const DashboardView = () => {
 
                     <button
                         onClick={() => handleMassAlert('TODO READY')}
-                        className="flex-1 sm:flex-none px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all active:scale-95 shadow-2xl shadow-indigo-600/30"
+                        className="flex-1 sm:flex-none px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase  transition-all active:scale-95 shadow-2xl shadow-indigo-600/30"
                     >
                         READY
                     </button>
@@ -139,7 +139,7 @@ export const DashboardView = () => {
                                 console.error('Failed to trigger instant clip', e);
                             }
                         }}
-                        className="flex-1 sm:flex-none px-6 py-4 bg-amber-500 hover:bg-amber-400 text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all active:scale-95 shadow-2xl shadow-amber-500/20 flex items-center justify-center gap-3"
+                        className="flex-1 sm:flex-none px-6 py-4 bg-amber-500 hover:bg-amber-400 text-black rounded-2xl font-black text-[10px] uppercase  transition-all active:scale-95 shadow-2xl shadow-amber-500/20 flex items-center justify-center gap-3"
                     >
                         <Scissors size={18} />
                         CLIP
@@ -147,7 +147,7 @@ export const DashboardView = () => {
 
                     <button
                         onClick={() => handleMassAlert('AL AIRE')}
-                        className="flex-1 sm:flex-none px-8 py-4 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all active:scale-95 shadow-2xl shadow-red-600/30 flex items-center justify-center gap-3 group/live"
+                        className="flex-1 sm:flex-none px-8 py-4 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-black text-[10px] uppercase  transition-all active:scale-95 shadow-2xl shadow-red-600/30 flex items-center justify-center gap-3 group/live"
                     >
                         <div className="w-2 h-2 bg-white rounded-full animate-ping group-hover:scale-125 transition-transform" />
                         LIVE
@@ -168,7 +168,7 @@ export const DashboardView = () => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
                             className={cn(
-                                "flex-1 xl:flex-none flex items-center justify-center gap-3 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all relative overflow-hidden",
+                                "flex-1 xl:flex-none flex items-center justify-center gap-3 px-6 py-3 rounded-2xl text-[10px] font-black uppercase  transition-all relative overflow-hidden",
                                 activeTab === tab.id
                                     ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/30"
                                     : "text-muted hover:text-foreground hover:bg-white/5"
@@ -190,7 +190,7 @@ export const DashboardView = () => {
 
                     <div className="hidden md:flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/5 rounded-2xl group cursor-default">
                         <Search size={14} className="text-muted group-hover:text-indigo-400 transition-colors" />
-                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">Global Capture: Cmd+K</span>
+                        <span className="text-[10px] font-black text-muted uppercase ">Global Capture: Cmd+K</span>
                     </div>
                 </div>
             </div>
@@ -199,20 +199,20 @@ export const DashboardView = () => {
             <div className="bg-card-bg/40 backdrop-blur-xl border border-card-border/60 rounded-[1.5rem] p-3 flex items-center gap-2 sm:gap-4 overflow-x-auto no-scrollbar shadow-inner relative group/actions min-w-0">
                 <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 border-r border-card-border shrink-0">
                     <Zap size={14} className="text-amber-400 animate-pulse" />
-                    <span className="text-[8px] sm:text-[9px] font-black text-muted uppercase tracking-[0.2em] sm:tracking-[0.3em] whitespace-nowrap">Rapid Response Intercepts</span>
+                    <span className="text-[8px] sm:text-[9px] font-black text-muted uppercase  sm: whitespace-nowrap">Rapid Response Intercepts</span>
                 </div>
                 <div className="flex items-center gap-3">
                     {templates.length > 0 ? templates.map(t => (
                         <button
                             key={t.id}
                             onClick={() => handleMassAlert(t.name)}
-                            className="shrink-0 px-5 py-2.5 bg-background/50 hover:bg-card-bg border border-card-border hover:border-indigo-500/40 rounded-xl text-[9px] font-black text-foreground/60 hover:text-foreground uppercase tracking-widest transition-all whitespace-nowrap active:scale-95 shadow-sm group/btn relative overflow-hidden"
+                            className="shrink-0 px-5 py-2.5 bg-background/50 hover:bg-card-bg border border-card-border hover:border-indigo-500/40 rounded-xl text-[9px] font-black text-foreground/60 hover:text-foreground uppercase  transition-all whitespace-nowrap active:scale-95 shadow-sm group/btn relative overflow-hidden"
                         >
                             {t.name}
                             <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                         </button>
                     )) : (
-                        <span className="shrink-0 text-[9px] font-black text-muted/30 uppercase tracking-[0.4em] px-4 italic">No protocols defined</span>
+                        <span className="shrink-0 text-[9px] font-black text-muted/30 uppercase  px-4 italic">No protocols defined</span>
                     )}
                 </div>
             </div>
@@ -260,8 +260,8 @@ export const DashboardView = () => {
                                     <div className="col-span-full py-40 text-center bg-white/[0.02] border border-dashed border-card-border rounded-[3rem] flex flex-col items-center justify-center gap-6 opacity-40">
                                         <Users size={64} strokeWidth={1} className="text-muted" />
                                         <div>
-                                            <p className="text-xs font-black text-muted uppercase tracking-[0.4em] mb-2">Matrix Unpopulated</p>
-                                            <p className="text-[9px] font-bold text-muted uppercase tracking-widest">No operators are currently bound to this production segment</p>
+                                            <p className="text-xs font-black text-muted uppercase  mb-2">Matrix Unpopulated</p>
+                                            <p className="text-[9px] font-bold text-muted uppercase ">No operators are currently bound to this production segment</p>
                                         </div>
                                     </div>
                                 )}
@@ -315,7 +315,7 @@ export const DashboardView = () => {
                         <div className="p-6 border-b border-card-border/50 bg-white/[0.04] flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <Clock size={16} className="text-indigo-400" />
-                                <h2 className="text-[10px] font-black text-foreground uppercase tracking-[0.2em]">Operational Flux</h2>
+                                <h2 className="text-[10px] font-black text-foreground uppercase ">Operational Flux</h2>
                             </div>
                             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                         </div>
@@ -325,7 +325,7 @@ export const DashboardView = () => {
                                 {history.length === 0 ? (
                                     <div className="h-full flex flex-col items-center justify-center text-muted/30 text-center space-y-4">
                                         <History size={32} strokeWidth={1} />
-                                        <p className="text-[9px] font-black uppercase tracking-[0.3em] italic">No active telemetry</p>
+                                        <p className="text-[9px] font-black uppercase  italic">No active telemetry</p>
                                     </div>
                                 ) : (
                                     history.slice(0, 30).map((item, idx) => (
@@ -336,12 +336,12 @@ export const DashboardView = () => {
                                             className="bg-background/60 border border-card-border/60 p-4 rounded-2xl group/log relative overflow-hidden transition-all hover:border-indigo-500/20"
                                         >
                                             <div className="flex items-center justify-between mb-2">
-                                                <span className="text-[8px] font-black text-muted uppercase tracking-[0.2em] opacity-40">
+                                                <span className="text-[8px] font-black text-muted uppercase  opacity-40">
                                                     {new Date(item.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                                                 </span>
                                                 <div className="w-1 h-1 rounded-full bg-indigo-500/20 group-hover/log:bg-indigo-500 transition-colors" />
                                             </div>
-                                            <h4 className="text-[10px] font-bold text-foreground/90 uppercase tracking-tight leading-relaxed">{item.message}</h4>
+                                            <h4 className="text-[10px] font-bold text-foreground/90 uppercase  leading-relaxed">{item.message}</h4>
                                             <div
                                                 className="absolute left-0 top-0 bottom-0 w-1 opacity-40 shadow-[2px_0_10px_rgba(0,0,0,0.1)]"
                                                 style={{ backgroundColor: item.color }}
@@ -355,7 +355,7 @@ export const DashboardView = () => {
                         <div className="p-4 bg-white/5 border-t border-card-border/30 flex justify-center">
                             <div className="flex items-center gap-2 opacity-30">
                                 <ShieldCheck size={12} className="text-emerald-500" />
-                                <span className="text-[8px] font-black uppercase tracking-[0.3em]">Encrypted Log Stream</span>
+                                <span className="text-[8px] font-black uppercase ">Encrypted Log Stream</span>
                             </div>
                         </div>
                     </div>

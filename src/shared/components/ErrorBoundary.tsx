@@ -47,7 +47,7 @@ export class ErrorBoundary extends Component<Props, State> {
                         </div>
 
                         <div className="space-y-2">
-                            <h1 className="text-2xl font-bold text-white tracking-tight">System Interruption</h1>
+                            <h1 className="text-2xl font-bold text-white ">System Interruption</h1>
                             <p className="text-stone-400 text-sm leading-relaxed">
                                 The application encountered an unexpected error. Don't worry, your production state is safe on the server.
                             </p>
@@ -55,7 +55,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
                         {this.state.error && (
                             <div className="p-4 bg-stone-950 rounded-xl border border-stone-800 text-left">
-                                <p className="text-[10px] font-bold text-stone-600 uppercase tracking-widest mb-1">Error Signature</p>
+                                <p className="text-[10px] font-bold text-stone-600 uppercase  mb-1">Error Signature</p>
                                 <p className="text-xs font-mono text-red-400/80 break-all leading-tight">
                                     {this.state.error.message}
                                 </p>

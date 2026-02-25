@@ -153,8 +153,8 @@ export const ChatPanel = ({ productionId }: Props) => {
                             <MessageSquare size={18} className="text-indigo-400" />
                         </div>
                         <div>
-                            <h3 className="text-xs font-black text-foreground uppercase tracking-widest">Team Chat</h3>
-                            <p className="text-[9px] text-muted font-bold uppercase tracking-tighter flex items-center gap-1">
+                            <h3 className="text-xs font-black text-foreground uppercase ">Team Chat</h3>
+                            <p className="text-[9px] text-muted font-bold uppercase er flex items-center gap-1">
                                 <span className={cn("w-1.5 h-1.5 rounded-full", isConnected ? "bg-emerald-500" : "bg-red-500")} />
                                 {isConnected ? "En línea" : "Desconectado"}
                             </p>
@@ -170,7 +170,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                     {chatHistory.length === 0 && !isLoading && (
                         <div className="h-full flex flex-col items-center justify-center text-center opacity-30 select-none">
                             <Hash size={40} className="text-muted/50 mb-2" />
-                            <p className="text-[10px] font-black uppercase tracking-widest text-muted">Sin mensajes aún</p>
+                            <p className="text-[10px] font-black uppercase  text-muted">Sin mensajes aún</p>
                         </div>
                     )}
 
@@ -183,7 +183,7 @@ export const ChatPanel = ({ productionId }: Props) => {
                                 <div key={msg.id} className="flex justify-center py-1 animate-in fade-in zoom-in-95 duration-500">
                                     <div className="bg-card-bg/50 border border-card-border/50 rounded-full px-3 py-1 flex items-center gap-2">
                                         <Terminal size={10} className="text-muted" />
-                                        <span className="text-[10px] font-bold text-muted tracking-tight italic">
+                                        <span className="text-[10px] font-bold text-muted  italic">
                                             {msg.message}
                                         </span>
                                     </div>
@@ -290,8 +290,8 @@ export const ChatPanel = ({ productionId }: Props) => {
                         </button>
                     </div>
                     <div className="flex items-center justify-between mt-2 px-1">
-                        <p className="text-[8px] text-muted font-bold uppercase tracking-widest">Internal Comms Only</p>
-                        <p className="text-[8px] text-muted font-bold italic tracking-tighter">Enter to send</p>
+                        <p className="text-[8px] text-muted font-bold uppercase ">Internal Comms Only</p>
+                        <p className="text-[8px] text-muted font-bold italic er">Enter to send</p>
                     </div>
                 </div>
             </div>

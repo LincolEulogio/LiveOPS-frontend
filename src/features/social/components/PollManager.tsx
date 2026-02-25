@@ -54,7 +54,7 @@ export const PollManager = ({ productionId }: PollManagerProps) => {
             <div className="flex items-center justify-between px-5 py-4 border-b border-stone-800 bg-stone-900/50">
                 <div className="flex items-center gap-2">
                     <BarChart3 size={18} className="text-emerald-400" />
-                    <h2 className="text-sm font-bold text-white uppercase tracking-wider">Live Polls</h2>
+                    <h2 className="text-sm font-bold text-white uppercase ">Live Polls</h2>
                 </div>
                 {!isCreating && !activePoll && (
                     <button
@@ -155,7 +155,7 @@ export const PollManager = ({ productionId }: PollManagerProps) => {
                                 })}
                             </div>
                             <div className="mt-6 flex items-center justify-between">
-                                <span className="text-[10px] font-bold text-stone-600 uppercase tracking-widest">{totalVotes} Total Votes</span>
+                                <span className="text-[10px] font-bold text-stone-600 uppercase ">{totalVotes} Total Votes</span>
                                 <button
                                     onClick={handleClosePoll}
                                     className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 border border-red-500/20 rounded-lg text-[10px] font-bold text-red-400 hover:bg-red-500 hover:text-white transition-all"
@@ -170,7 +170,7 @@ export const PollManager = ({ productionId }: PollManagerProps) => {
                         <div className="p-4 bg-stone-800/50 rounded-full">
                             <BarChart3 size={24} className="text-stone-500" />
                         </div>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-stone-600">
+                        <p className="text-[10px] font-black uppercase  text-stone-600">
                             No Active Polls
                         </p>
                         <button

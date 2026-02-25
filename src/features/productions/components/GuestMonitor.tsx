@@ -23,7 +23,7 @@ export const GuestMonitor = ({ guests }: Props) => {
             <div className="p-4 border-b border-stone-800 flex items-center justify-between bg-stone-900/80 backdrop-blur-md">
                 <div className="flex items-center gap-2">
                     <Users size={18} className="text-indigo-400" />
-                    <h3 className="text-sm font-bold uppercase tracking-widest text-stone-200">Remote Guests</h3>
+                    <h3 className="text-sm font-bold uppercase  text-stone-200">Remote Guests</h3>
                 </div>
                 <div className="px-2 py-1 bg-emerald-500/10 rounded-md border border-emerald-500/20">
                     <span className="text-[10px] font-black text-emerald-500 uppercase">{guests.length} ACTIVE</span>
@@ -34,7 +34,7 @@ export const GuestMonitor = ({ guests }: Props) => {
                 {guests.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-stone-600 gap-4 opacity-50">
                         <Monitor size={48} />
-                        <p className="text-xs font-bold uppercase tracking-tighter">No remote guests connected</p>
+                        <p className="text-xs font-bold uppercase er">No remote guests connected</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 gap-4">
@@ -51,7 +51,7 @@ export const GuestMonitor = ({ guests }: Props) => {
                                 {/* Info Overlay */}
                                 <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-between">
                                     <div className="flex flex-col">
-                                        <span className="text-xs font-bold text-white uppercase tracking-tight">{guest.userName}</span>
+                                        <span className="text-xs font-bold text-white uppercase ">{guest.userName}</span>
                                         <div className="flex items-center gap-2 mt-1">
                                             <div className="flex gap-0.5">
                                                 <div className={cn("w-1.5 h-1.5 rounded-full", guest.isAudioEnabled !== false ? "bg-emerald-500" : "bg-red-500")} />

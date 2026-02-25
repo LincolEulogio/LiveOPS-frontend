@@ -153,7 +153,7 @@ export const CommandPalette = () => {
                                 Object.entries(groupedItems).map(([category, itemsInCategory]) => {
                                     const CategoryWrapper = (
                                         <div key={category} className="mb-4 last:mb-0">
-                                            <h3 className="px-3 py-2 text-[10px] font-bold text-stone-500 uppercase tracking-widest sticky top-0 bg-stone-900 z-10">
+                                            <h3 className="px-3 py-2 text-[10px] font-bold text-stone-500 uppercase  sticky top-0 bg-stone-900 z-10">
                                                 {category}
                                             </h3>
                                             <div className="space-y-0.5">

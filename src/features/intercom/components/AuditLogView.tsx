@@ -72,7 +72,7 @@ export const AuditLogView = ({ productionId }: Props) => {
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
 
             <div className="p-6 border-b border-card-border flex items-center justify-between bg-white/[0.02]">
-                <h3 className="text-xs font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-3">
+                <h3 className="text-xs font-black text-foreground uppercase  flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/20">
                         <Activity size={16} />
                     </div>
@@ -80,7 +80,7 @@ export const AuditLogView = ({ productionId }: Props) => {
                 </h3>
                 <button
                     onClick={fetchLogs}
-                    className="px-4 py-1.5 bg-background/50 hover:bg-card-border border border-card-border rounded-xl text-[10px] font-black text-muted hover:text-foreground uppercase tracking-widest transition-all active:scale-95"
+                    className="px-4 py-1.5 bg-background/50 hover:bg-card-border border border-card-border rounded-xl text-[10px] font-black text-muted hover:text-foreground uppercase  transition-all active:scale-95"
                 >
                     Refrescar Telemetría
                 </button>
@@ -90,10 +90,10 @@ export const AuditLogView = ({ productionId }: Props) => {
                 <table className="w-full text-left">
                     <thead className="bg-background/40 border-b border-card-border">
                         <tr>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-[0.3em]">Temporal</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-[0.3em]">Criterio</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-[0.3em]">Vector de Datos / Registro</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-[0.3em]">Identidad</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase ">Temporal</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase ">Criterio</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase ">Vector de Datos / Registro</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase ">Identidad</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-card-border/30">
@@ -102,20 +102,20 @@ export const AuditLogView = ({ productionId }: Props) => {
                                 <td colSpan={4} className="px-6 py-20 text-center">
                                     <div className="flex flex-col items-center gap-4">
                                         <div className="w-10 h-10 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                                        <span className="text-[10px] font-black text-muted uppercase tracking-widest animate-pulse">Sincronizando Archivos...</span>
+                                        <span className="text-[10px] font-black text-muted uppercase  animate-pulse">Sincronizando Archivos...</span>
                                     </div>
                                 </td>
                             </tr>
                         ) : logs.length === 0 ? (
                             <tr>
                                 <td colSpan={4} className="px-6 py-20 text-center">
-                                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] italic">No se han detectado fluctuaciones en el sistema aún.</p>
+                                    <p className="text-[10px] font-black text-muted uppercase  italic">No se han detectado fluctuaciones en el sistema aún.</p>
                                 </td>
                             </tr>
                         ) : (
                             logs.map((log) => (
                                 <tr key={log.id} className="hover:bg-white/[0.03] transition-colors group relative">
-                                    <td className="px-6 py-4 whitespace-nowrap text-[11px] font-bold text-indigo-400/80 tabular-nums tracking-wider uppercase">
+                                    <td className="px-6 py-4 whitespace-nowrap text-[11px] font-bold text-indigo-400/80 tabular-nums  uppercase">
                                         {format(new Date(log.createdAt), 'HH:mm:ss', { locale: es })}
                                     </td>
                                     <td className="px-6 py-4">
@@ -123,20 +123,20 @@ export const AuditLogView = ({ productionId }: Props) => {
                                             <div className="w-6 h-6 rounded-lg bg-background/50 flex items-center justify-center border border-card-border group-hover:bg-white/5 transition-colors">
                                                 {getIcon(log.eventType)}
                                             </div>
-                                            <span className="text-[10px] font-extrabold text-foreground/70 uppercase tracking-widest truncate max-w-[140px]">
+                                            <span className="text-[10px] font-extrabold text-foreground/70 uppercase  truncate max-w-[140px]">
                                                 {log.eventType.replace(/_/g, ' ')}
                                             </span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <p className="text-[11px] font-black text-foreground uppercase tracking-tight leading-relaxed max-w-xl group-hover:text-indigo-400 transition-colors">
+                                        <p className="text-[11px] font-black text-foreground uppercase  leading-relaxed max-w-xl group-hover:text-indigo-400 transition-colors">
                                             {formatDetails(log.details)}
                                         </p>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center gap-2.5 px-3 py-1.5 bg-background/30 rounded-lg border border-transparent group-hover:border-card-border transition-all">
                                             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/40" />
-                                            <span className="text-[10px] font-black text-muted uppercase tracking-widest italic group-hover:text-foreground">
+                                            <span className="text-[10px] font-black text-muted uppercase  italic group-hover:text-foreground">
                                                 {log.user?.name || 'Sistema Core'}
                                             </span>
                                         </div>

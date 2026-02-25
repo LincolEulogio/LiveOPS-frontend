@@ -25,13 +25,13 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                     <AlertCircle className="text-red-400" size={40} />
                 </div>
                 <div className="space-y-2">
-                    <h3 className="text-xl font-black text-foreground uppercase tracking-tighter">Engine Offline</h3>
-                    <p className="text-muted font-medium text-xs max-w-xs mb-6 uppercase tracking-wider leading-relaxed">
+                    <h3 className="text-xl font-black text-foreground uppercase er">Engine Offline</h3>
+                    <p className="text-muted font-medium text-xs max-w-xs mb-6 uppercase  leading-relaxed">
                         Verify your vMix Web Controller API settings and ensure vMix is running on the target machine.
                     </p>
                     <Link
                         href={`/productions/${productionId}/edit`}
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-red-400 hover:bg-red-500 hover:text-white transition-all active:scale-95"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase  text-red-400 hover:bg-red-500 hover:text-white transition-all active:scale-95"
                     >
                         Repair Link
                     </Link>
@@ -46,7 +46,7 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
             active ? `${colorClass} shadow-lg` : "bg-card-bg/40 border-card-border/50 text-muted opacity-60"
         )}>
             <div className={cn("w-1.5 h-1.5 rounded-full", active ? "animate-pulse bg-current" : "bg-muted")} />
-            <span className="text-[10px] font-black uppercase tracking-widest">{label}</span>
+            <span className="text-[10px] font-black uppercase ">{label}</span>
         </div>
     );
 
@@ -66,10 +66,10 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <Monitor size={60} />
                     </div>
-                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-3">Program Bus</p>
+                    <p className="text-[10px] font-black text-muted uppercase  mb-3">Program Bus</p>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-4xl font-black text-emerald-500 tracking-tighter">{state?.activeInput || '--'}</span>
-                        <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Active Input</span>
+                        <span className="text-4xl font-black text-emerald-500 er">{state?.activeInput || '--'}</span>
+                        <span className="text-[10px] font-bold text-muted uppercase ">Active Input</span>
                     </div>
                     <div className="mt-4 h-1 w-full bg-emerald-500/20 rounded-full overflow-hidden">
                         <motion.div
@@ -85,10 +85,10 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <Monitor size={60} />
                     </div>
-                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-3">Preview Bus</p>
+                    <p className="text-[10px] font-black text-muted uppercase  mb-3">Preview Bus</p>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-4xl font-black text-orange-400 tracking-tighter">{state?.previewInput || '--'}</span>
-                        <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Standby Input</span>
+                        <span className="text-4xl font-black text-orange-400 er">{state?.previewInput || '--'}</span>
+                        <span className="text-[10px] font-bold text-muted uppercase ">Standby Input</span>
                     </div>
                     <div className="mt-4 h-1 w-full bg-orange-400/20 rounded-full" />
                 </div>
@@ -101,7 +101,7 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                         <div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
                             <Zap size={16} />
                         </div>
-                        <span className="text-xs font-black text-foreground uppercase tracking-[0.2em]">Transition Surface</span>
+                        <span className="text-xs font-black text-foreground uppercase ">Transition Surface</span>
                     </div>
                     <div className="flex gap-4">
                         <button
@@ -110,7 +110,7 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                             className="flex-1 bg-red-600 hover:bg-red-500 text-white rounded-[2rem] p-8 flex flex-col items-center gap-3 transition-all active:scale-95 shadow-xl shadow-red-600/20 border border-red-500/50"
                         >
                             <Zap size={32} fill="currentColor" />
-                            <span className="text-xs font-black uppercase tracking-widest">Instant Cut</span>
+                            <span className="text-xs font-black uppercase ">Instant Cut</span>
                         </button>
 
                         <button
@@ -119,14 +119,14 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                             className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[2rem] p-8 flex flex-col items-center gap-3 transition-all active:scale-95 shadow-xl shadow-indigo-600/20 border border-indigo-500/50"
                         >
                             <Repeat size={32} />
-                            <span className="text-xs font-black uppercase tracking-widest">Auto Fade</span>
+                            <span className="text-xs font-black uppercase ">Auto Fade</span>
                         </button>
                     </div>
 
                     <div className="bg-card-bg/40 backdrop-blur-md border border-card-border/50 rounded-2xl p-5 space-y-3">
                         <div className="flex justify-between items-center">
-                            <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Fade Interval</label>
-                            <span className="px-3 py-1 bg-indigo-500/10 rounded-lg text-xs font-black text-indigo-400 tracking-tighter">{fadeDuration}ms</span>
+                            <label className="text-[10px] font-black text-muted uppercase ">Fade Interval</label>
+                            <span className="px-3 py-1 bg-indigo-500/10 rounded-lg text-xs font-black text-indigo-400 er">{fadeDuration}ms</span>
                         </div>
                         <input
                             type="range"
@@ -147,9 +147,9 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
                             <div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
                                 <Grid size={16} />
                             </div>
-                            <span className="text-xs font-black text-foreground uppercase tracking-[0.2em]">Input Navigator</span>
+                            <span className="text-xs font-black text-foreground uppercase ">Input Navigator</span>
                         </div>
-                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">16 Active Nodes</span>
+                        <span className="text-[10px] font-black text-muted uppercase ">16 Active Nodes</span>
                     </div>
 
                     <div className="grid grid-cols-4 xs:grid-cols-5 md:grid-cols-4 xl:grid-cols-8 gap-2.5">

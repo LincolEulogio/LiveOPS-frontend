@@ -24,7 +24,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
             className
         )}>
             {message.status === 'ON_AIR' && (
-                <div className="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-white text-[9px] font-bold uppercase tracking-widest rounded-bl-lg">
+                <div className="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-white text-[9px] font-bold uppercase  rounded-bl-lg">
                     On Air
                 </div>
             )}
@@ -42,7 +42,7 @@ export const SocialMessageCard = ({ message, onApprove, onReject, onSendToAir, c
                     <div className="flex items-center gap-2 mb-1">
                         <span className="font-bold text-sm text-foreground truncate">{message.author}</span>
                         <span className={cn(
-                            "text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded",
+                            "text-[10px] font-bold uppercase  px-1.5 py-0.5 rounded",
                             isTwitch ? "bg-purple-500/20 text-purple-400" : "bg-red-500/20 text-red-400"
                         )}>
                             {message.platform}

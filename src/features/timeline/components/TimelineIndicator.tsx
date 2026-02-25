@@ -22,7 +22,7 @@ export const TimelineIndicator = () => {
             <div className="h-px flex-1 bg-indigo-500/30"></div>
             <div className="flex items-center gap-2 bg-indigo-600 px-3 py-1 rounded-full shadow-lg shadow-indigo-600/20 border border-indigo-400/30">
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                <span className="text-white text-xs font-mono font-bold tracking-wider">
+                <span className="text-white text-xs font-mono font-bold ">
                     {timeString}
                 </span>
             </div>

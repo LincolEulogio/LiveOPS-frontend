@@ -54,13 +54,13 @@ export default function ProductionDetailPage() {
         <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-6">
           <AlertCircle size={48} className="opacity-80" />
         </div>
-        <h2 className="text-2xl font-black uppercase tracking-tighter mb-2">Production Not Found</h2>
+        <h2 className="text-2xl font-black uppercase er mb-2">Production Not Found</h2>
         <p className="mb-8 font-medium opacity-60">
           The production you are looking for does not exist or you lack sufficient access permissions.
         </p>
         <Link
           href="/productions"
-          className="px-8 py-3 bg-red-500 text-white font-black uppercase tracking-widest rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95"
+          className="px-8 py-3 bg-red-500 text-white font-black uppercase  rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95"
         >
           Return to Console
         </Link>
@@ -72,7 +72,7 @@ export default function ProductionDetailPage() {
     <button
       onClick={() => setActiveTab(tabId)}
       className={cn(
-        "flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all relative overflow-hidden",
+        "flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase  transition-all relative overflow-hidden",
         activeTab === tabId
           ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/30"
           : "text-muted hover:text-foreground hover:bg-card-bg"
@@ -104,15 +104,15 @@ export default function ProductionDetailPage() {
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="text-sm md:text-md lg:text-lg font-black text-foreground uppercase tracking-tighter leading-tight mb-2 break-words">
+              <h1 className="text-sm md:text-md lg:text-lg font-black text-foreground uppercase er leading-tight mb-2 break-words">
                 {production.name}
               </h1>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-1 bg-background border border-card-border rounded-lg text-[10px] font-black uppercase tracking-widest text-muted">
+                <span className="px-2.5 py-1 bg-background border border-card-border rounded-lg text-[10px] font-black uppercase  text-muted">
                   {production.engineType}
                 </span>
                 <div className="w-1 h-1 rounded-full bg-muted/40" />
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg text-[10px] font-black uppercase tracking-widest">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg text-[10px] font-black uppercase ">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   {production.status}
                 </div>
@@ -124,7 +124,7 @@ export default function ProductionDetailPage() {
             <Link
               href={`/productions/${id}/talent`}
               target="_blank"
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-background border border-card-border text-foreground rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-card-border transition-all shadow-lg active:scale-95"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-background border border-card-border text-foreground rounded-2xl font-black text-[10px] uppercase  hover:bg-card-border transition-all shadow-lg active:scale-95"
             >
               <ExternalLink size={14} className="text-indigo-400" />
               Talent View
@@ -155,7 +155,7 @@ export default function ProductionDetailPage() {
           {/* Section: Streaming Dashboard (Primary) */}
           <section className={cn(activeTab !== 'streaming' && activeTab !== 'overview' && 'hidden lg:block')}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-3">
+              <h2 className="text-sm font-black text-foreground uppercase  flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20">
                   <Zap size={16} className="text-indigo-400" />
                 </div>
@@ -168,7 +168,7 @@ export default function ProductionDetailPage() {
           {/* Section: Guion Vivo */}
           <section className={cn(activeTab !== 'script' && activeTab !== 'overview' && 'hidden lg:block')}>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <h2 className="text-sm font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-3">
+              <h2 className="text-sm font-black text-foreground uppercase  flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20">
                   <FileText size={16} className="text-indigo-400" />
                 </div>
@@ -177,13 +177,13 @@ export default function ProductionDetailPage() {
               <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 no-scrollbar">
                 <Link
                   href={`/productions/${id}/prompter`}
-                  className="flex items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-xl text-[10px] font-black text-foreground uppercase tracking-widest hover:bg-card-border transition-all shadow-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-xl text-[10px] font-black text-foreground uppercase  hover:bg-card-border transition-all shadow-sm"
                 >
                   <Monitor size={14} className="text-emerald-400" /> Teleprompter
                 </Link>
                 <Link
                   href={`/productions/${id}/team`}
-                  className="flex items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-xl text-[10px] font-black text-foreground uppercase tracking-widest hover:bg-card-border transition-all shadow-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-background border border-card-border rounded-xl text-[10px] font-black text-foreground uppercase  hover:bg-card-border transition-all shadow-sm"
                 >
                   <Users size={14} className="text-indigo-400" /> Team Editor
                 </Link>
@@ -197,7 +197,7 @@ export default function ProductionDetailPage() {
           {/* Section: Social Feed */}
           <section className={cn(activeTab !== 'social' && activeTab !== 'overview' && 'hidden lg:block')}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-3">
+              <h2 className="text-sm font-black text-foreground uppercase  flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-pink-500/10 flex items-center justify-center border border-pink-500/20">
                   <Share2 size={16} className="text-pink-500" />
                 </div>
@@ -239,10 +239,10 @@ export default function ProductionDetailPage() {
               </div>
               <div className="flex items-center justify-between mb-8">
                 <div className="space-y-1">
-                  <h2 className="text-xs font-black text-muted uppercase tracking-[0.2em]">Live Team</h2>
-                  <p className="text-lg font-black text-foreground uppercase tracking-tight">Active Crew</p>
+                  <h2 className="text-xs font-black text-muted uppercase ">Live Team</h2>
+                  <p className="text-lg font-black text-foreground uppercase ">Active Crew</p>
                 </div>
-                <div className="px-3 py-1 bg-indigo-600/10 border border-indigo-500/20 rounded-xl text-[10px] font-black text-indigo-400 uppercase tracking-widest">
+                <div className="px-3 py-1 bg-indigo-600/10 border border-indigo-500/20 rounded-xl text-[10px] font-black text-indigo-400 uppercase ">
                   {production.users?.length || 0} Members
                 </div>
               </div>
@@ -254,14 +254,14 @@ export default function ProductionDetailPage() {
                       {u.user.name?.[0]?.toUpperCase() || 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-black text-foreground uppercase tracking-tight truncate">{u.user.name || u.user.email}</p>
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">{u.role.name}</p>
+                      <p className="text-sm font-black text-foreground uppercase  truncate">{u.user.name || u.user.email}</p>
+                      <p className="text-[10px] text-muted-foreground uppercase  font-bold">{u.role.name}</p>
                     </div>
                   </div>
                 ))}
                 {(!production.users || production.users.length === 0) && (
                   <div className="py-6 text-center border-2 border-dashed border-card-border rounded-2xl">
-                    <p className="text-xs text-muted font-bold uppercase tracking-widest">No team assigned</p>
+                    <p className="text-xs text-muted font-bold uppercase ">No team assigned</p>
                   </div>
                 )}
               </div>
@@ -269,7 +269,7 @@ export default function ProductionDetailPage() {
               <Guard requiredPermissions={['production:manage']}>
                 <Link
                   href={`/productions/${id}/team`}
-                  className="flex items-center justify-center w-full px-4 py-4 bg-background border border-card-border text-foreground text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all hover:bg-indigo-600 hover:text-white hover:border-indigo-500/50 shadow-lg active:scale-95"
+                  className="flex items-center justify-center w-full px-4 py-4 bg-background border border-card-border text-foreground text-[10px] font-black uppercase  rounded-2xl transition-all hover:bg-indigo-600 hover:text-white hover:border-indigo-500/50 shadow-lg active:scale-95"
                 >
                   Manage Crew Access
                 </Link>
@@ -281,16 +281,16 @@ export default function ProductionDetailPage() {
               <Link href={`/productions/${id}/automation`} className="group">
                 <div className="bg-card-bg/60 backdrop-blur-md border border-card-border rounded-[1.5rem] p-5 h-full transition-all hover:bg-card-bg hover:border-indigo-500/30 shadow-xl active:scale-95">
                   <Zap className="text-indigo-400 mb-4 group-hover:animate-pulse" size={20} />
-                  <h3 className="text-xs font-black text-foreground uppercase tracking-widest mb-1">Automation</h3>
-                  <p className="text-[10px] text-muted-foreground font-bold leading-relaxed uppercase tracking-tight">Rules & Macros</p>
+                  <h3 className="text-xs font-black text-foreground uppercase  mb-1">Automation</h3>
+                  <p className="text-[10px] text-muted-foreground font-bold leading-relaxed uppercase ">Rules & Macros</p>
                 </div>
               </Link>
 
               <Link href={`/productions/${id}/analytics`} className="group">
                 <div className="bg-card-bg/60 backdrop-blur-md border border-card-border rounded-[1.5rem] p-5 h-full transition-all hover:bg-card-bg hover:border-pink-500/30 shadow-xl active:scale-95">
                   <BarChart3 className="text-pink-400 mb-4" size={20} />
-                  <h3 className="text-xs font-black text-foreground uppercase tracking-widest mb-1">Analytics</h3>
-                  <p className="text-[10px] text-muted-foreground font-bold leading-relaxed uppercase tracking-tight">Post-Show Stats</p>
+                  <h3 className="text-xs font-black text-foreground uppercase  mb-1">Analytics</h3>
+                  <p className="text-[10px] text-muted-foreground font-bold leading-relaxed uppercase ">Post-Show Stats</p>
                 </div>
               </Link>
             </div>

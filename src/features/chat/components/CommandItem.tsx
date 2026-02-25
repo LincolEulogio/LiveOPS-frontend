@@ -72,13 +72,13 @@ export const CommandItem = ({ command, onAck }: Props) => {
                     </div>
                     <div className={isFromMe ? "text-right" : "text-left"}>
                         <p className={cn(
-                            "text-[10px] font-black uppercase tracking-tight truncate leading-none mb-1",
+                            "text-[10px] font-black uppercase  truncate leading-none mb-1",
                             isFromMe ? "text-indigo-400" : "text-foreground"
                         )}>
                             {isFromMe ? 'Current Operator' : command.sender?.name || 'External Link'}
                         </p>
                         {command.targetRole && (
-                            <div className="flex items-center gap-1 text-[8px] font-black text-muted/60 uppercase tracking-widest leading-none">
+                            <div className="flex items-center gap-1 text-[8px] font-black text-muted/60 uppercase  leading-none">
                                 <ShieldCheck size={10} className="text-indigo-500/50" />
                                 {command.targetRole.name}
                             </div>
@@ -108,7 +108,7 @@ export const CommandItem = ({ command, onAck }: Props) => {
 
                 {command.requiresAck && (
                     <div className={cn(
-                        "flex items-center gap-2 px-3 py-1 rounded-full border text-[9px] font-black tracking-[0.1em] uppercase transition-all shadow-lg",
+                        "flex items-center gap-2 px-3 py-1 rounded-full border text-[9px] font-black  uppercase transition-all shadow-lg",
                         totalAcks > 0
                             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-emerald-500/5"
                             : "bg-amber-500/10 border-amber-500/30 text-amber-500 shadow-amber-500/5"
@@ -127,9 +127,9 @@ export const CommandItem = ({ command, onAck }: Props) => {
                             <Reply size={12} className="text-muted/40 rotate-180 shrink-0" />
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-0.5">
-                                    <span className="text-[10px] font-black text-foreground/80 uppercase tracking-tight truncate">{resp.responder?.name}</span>
+                                    <span className="text-[10px] font-black text-foreground/80 uppercase  truncate">{resp.responder?.name}</span>
                                     <span className={cn(
-                                        "text-[8px] font-black px-1.5 py-0.5 rounded-md leading-none uppercase tracking-[0.05em]",
+                                        "text-[8px] font-black px-1.5 py-0.5 rounded-md leading-none uppercase ",
                                         resp.response === 'ROGER' ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500"
                                     )}>
                                         {resp.response}
@@ -151,13 +151,13 @@ export const CommandItem = ({ command, onAck }: Props) => {
                 <div className="mt-2 flex gap-2">
                     <button
                         onClick={() => onAck(command.id, 'ROGER')}
-                        className="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-black rounded-xl transition-all uppercase tracking-widest shadow-xl shadow-emerald-600/20 active:scale-95 border border-emerald-500/50"
+                        className="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-black rounded-xl transition-all uppercase  shadow-xl shadow-emerald-600/20 active:scale-95 border border-emerald-500/50"
                     >
                         Confirm Roger
                     </button>
                     <button
                         onClick={() => onAck(command.id, 'UNABLE')}
-                        className="flex-1 py-3 px-4 bg-red-600/10 hover:bg-red-600/20 border border-red-500/20 text-red-400 text-[10px] font-black rounded-xl transition-all uppercase tracking-widest active:scale-95"
+                        className="flex-1 py-3 px-4 bg-red-600/10 hover:bg-red-600/20 border border-red-500/20 text-red-400 text-[10px] font-black rounded-xl transition-all uppercase  active:scale-95"
                     >
                         Unable
                     </button>

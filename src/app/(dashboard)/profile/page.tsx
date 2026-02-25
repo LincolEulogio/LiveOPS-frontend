@@ -48,17 +48,17 @@ export default function ProfilePage() {
             {user.name?.charAt(0) || user.email.charAt(0).toUpperCase()}
           </div>
           <div className="text-center md:text-left">
-            <h1 className="text-3xl font-bold text-foreground tracking-tight">{user.name || 'User'}</h1>
+            <h1 className="text-3xl font-bold text-foreground ">{user.name || 'User'}</h1>
             <p className="text-muted font-medium">{user.email}</p>
             {user.globalRole && (
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
                   <Shield size={14} className="text-indigo-400" />
-                  <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest">
+                  <span className="text-xs font-bold text-indigo-400 uppercase ">
                     System {user.globalRole.name}
                   </span>
                 </div>
-                <span className="text-[10px] text-muted font-bold uppercase tracking-widest px-3 py-1 bg-background border border-card-border rounded-full">
+                <span className="text-[10px] text-muted font-bold uppercase  px-3 py-1 bg-background border border-card-border rounded-full">
                   Member since {new Date(user.createdAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
                 </span>
               </div>
@@ -86,7 +86,7 @@ export default function ProfilePage() {
             </h2>
             <form onSubmit={handleUpdateProfile} className="space-y-5">
               <div>
-                <label className="block text-[10px] font-bold text-muted uppercase tracking-widest mb-1.5 pl-1">Full Name</label>
+                <label className="block text-[10px] font-bold text-muted uppercase  mb-1.5 pl-1">Full Name</label>
                 <input
                   type="text"
                   required
@@ -97,7 +97,7 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-muted uppercase tracking-widest mb-1.5 pl-1">New Password (optional)</label>
+                <label className="block text-[10px] font-bold text-muted uppercase  mb-1.5 pl-1">New Password (optional)</label>
                 <input
                   type="password"
                   minLength={6}
@@ -119,7 +119,7 @@ export default function ProfilePage() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold uppercase tracking-widest transition-colors disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-indigo-500/20"
+                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold uppercase  transition-colors disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-indigo-500/20"
                 >
                   {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                   Save Changes
@@ -165,13 +165,13 @@ export default function ProfilePage() {
                       <Layout size={18} className="text-muted group-hover:text-indigo-400 transition-colors" />
                       <h3 className="font-semibold text-foreground">{prod.name}</h3>
                     </div>
-                    <span className="px-2 py-0.5 bg-background border border-card-border rounded text-[10px] font-bold text-muted uppercase tracking-wider">
+                    <span className="px-2 py-0.5 bg-background border border-card-border rounded text-[10px] font-bold text-muted uppercase ">
                       {myRole?.name || 'VIEWER'}
                     </span>
                   </div>
 
                   <div className="space-y-3">
-                    <h4 className="text-[10px] font-bold text-muted uppercase tracking-widest flex items-center gap-2">
+                    <h4 className="text-[10px] font-bold text-muted uppercase  flex items-center gap-2">
                       <Key size={10} /> Active Permissions
                     </h4>
                     <div className="flex flex-wrap gap-1.5">

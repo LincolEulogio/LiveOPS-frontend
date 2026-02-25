@@ -79,7 +79,7 @@ export const DeviceView = () => {
                                 <WifiOff size={14} className="text-red-500" />
                             )}
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-[0.15em] text-foreground/80">
+                        <span className="text-[10px] font-black uppercase  text-foreground/80">
                             {isConnected ? 'SISTEMA CONECTADO' : 'SIN CONEXIÓN'}
                         </span>
                     </div>
@@ -98,8 +98,8 @@ export const DeviceView = () => {
                     className="w-full max-w-sm mb-10 text-left"
                 >
                     <div className="mb-6">
-                        <p className="text-[10px] text-muted uppercase font-black tracking-widest leading-none mb-1">Tu Identidad en Set</p>
-                        <p className="text-lg font-black text-foreground uppercase tracking-tight">{activeRole}</p>
+                        <p className="text-[10px] text-muted uppercase font-black  leading-none mb-1">Tu Identidad en Set</p>
+                        <p className="text-lg font-black text-foreground uppercase ">{activeRole}</p>
                     </div>
 
                     <div className="relative group">
@@ -109,23 +109,23 @@ export const DeviceView = () => {
                                 <>
                                     <div className="flex items-center gap-2 mb-3">
                                         <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                                        <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em]">Saliendo Al Aire</span>
+                                        <span className="text-[10px] font-black text-red-500 uppercase ">Saliendo Al Aire</span>
                                     </div>
-                                    <h4 className="text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tighter leading-none mb-2">
+                                    <h4 className="text-2xl sm:text-3xl font-black text-foreground uppercase er leading-none mb-2">
                                         {activeBlock.title}
                                     </h4>
-                                    <p className="text-xs font-bold text-muted uppercase tracking-widest opacity-60">Bloque Actual de Producción</p>
+                                    <p className="text-xs font-bold text-muted uppercase  opacity-60">Bloque Actual de Producción</p>
                                 </>
                             ) : (
                                 <>
                                     <div className="flex items-center gap-2 mb-3">
                                         <div className="w-2 h-2 rounded-full bg-muted/30" />
-                                        <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">En Espera</span>
+                                        <span className="text-[10px] font-black text-muted uppercase ">En Espera</span>
                                     </div>
-                                    <h4 className="text-2xl font-black text-foreground/40 uppercase tracking-tighter leading-none mb-2">
+                                    <h4 className="text-2xl font-black text-foreground/40 uppercase er leading-none mb-2">
                                         Rundown Idle
                                     </h4>
-                                    <p className="text-xs font-bold text-muted uppercase tracking-widest opacity-40 italic underline decoration-indigo-500/30 underline-offset-4">Esperando instrucción de control</p>
+                                    <p className="text-xs font-bold text-muted uppercase  opacity-40 italic underline decoration-indigo-500/30 underline-offset-4">Esperando instrucción de control</p>
                                 </>
                             )}
                         </div>
@@ -135,7 +135,7 @@ export const DeviceView = () => {
                 {/* WhatsApp Style Chat Panel */}
                 <div className="w-full max-w-sm bg-card-bg/40 backdrop-blur-xl border border-card-border/60 rounded-[2.5rem] flex flex-col h-[380px] shadow-2xl overflow-hidden">
                     <div className="p-4 border-b border-card-border/50 bg-card-bg/50 flex justify-between items-center">
-                        <h4 className="text-[11px] uppercase font-black tracking-[0.2em] text-indigo-400 flex items-center gap-2">
+                        <h4 className="text-[11px] uppercase font-black  text-indigo-400 flex items-center gap-2">
                             <MessageCircle size={14} /> Canal de Comandos
                         </h4>
                     </div>
@@ -161,10 +161,10 @@ export const DeviceView = () => {
                                                     }
                                                 `}
                                             >
-                                                <div className={`text-[10px] font-black uppercase tracking-widest ${isMine ? 'text-indigo-200' : 'text-indigo-500'} mb-1`}>
+                                                <div className={`text-[10px] font-black uppercase  ${isMine ? 'text-indigo-200' : 'text-indigo-500'} mb-1`}>
                                                     {isMine ? 'Tú' : (msg.senderName || 'Control Room')}
                                                 </div>
-                                                <div className="break-words mb-1 text-sm font-bold tracking-tight">
+                                                <div className="break-words mb-1 text-sm font-bold ">
                                                     {msg.message.replace('Mensaje:', '').trim()}
                                                 </div>
                                                 <div className={`text-[9px] font-black flex justify-end items-center gap-1 ${isMine ? 'text-indigo-200/60' : 'text-muted'}`}>
@@ -181,7 +181,7 @@ export const DeviceView = () => {
                                 <div className="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center mb-4">
                                     <MessageCircle size={24} className="text-indigo-400" />
                                 </div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-muted">No hay mensajes recientes</p>
+                                <p className="text-[10px] font-black uppercase  text-muted">No hay mensajes recientes</p>
                             </div>
                         )}
                     </div>
@@ -197,7 +197,7 @@ export const DeviceView = () => {
                                 value={customMessage}
                                 onChange={(e) => setCustomMessage(e.target.value)}
                                 placeholder="Escribe a control..."
-                                className="flex-1 bg-transparent px-5 py-2.5 text-sm text-foreground focus:outline-none placeholder:text-muted font-black uppercase tracking-tight"
+                                className="flex-1 bg-transparent px-5 py-2.5 text-sm text-foreground focus:outline-none placeholder:text-muted font-black uppercase "
                             />
                             <button
                                 type="submit"
@@ -235,20 +235,20 @@ export const DeviceView = () => {
                                 <Bell size={18} className="text-amber-400 group-active:text-inherit" />
                             </div>
                             <div className="text-left">
-                                <p className="text-xs font-bold text-foreground tracking-tight">Activar Notificaciones Push</p>
-                                <p className="text-[9px] text-muted font-black uppercase tracking-widest">Alertas en pantalla bloqueada</p>
+                                <p className="text-xs font-bold text-foreground ">Activar Notificaciones Push</p>
+                                <p className="text-[9px] text-muted font-black uppercase ">Alertas en pantalla bloqueada</p>
                             </div>
                         </div>
                         <ChevronRight size={16} className="text-muted" />
                     </button>
 
-                    <p className="text-muted text-[10px] uppercase font-bold tracking-widest max-w-[200px] leading-loose text-center opacity-60">
+                    <p className="text-muted text-[10px] uppercase font-bold  max-w-[200px] leading-loose text-center opacity-60">
                         Mantén la pantalla encendida. El dispositivo vibrará al recibir alertas.
                     </p>
 
                     <div className="flex items-center gap-2 opacity-40">
                         <div className="w-1.5 h-1.5 rounded-full bg-foreground animate-pulse" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em]">Screen Always On</span>
+                        <span className="text-[10px] font-black uppercase ">Screen Always On</span>
                     </div>
                 </div>
             </div>
@@ -276,12 +276,12 @@ export const DeviceView = () => {
 
                 <div className="w-full flex justify-between items-start z-10">
                     <div className="bg-background/20 backdrop-blur-md px-4 py-2 rounded-2xl border border-foreground/10">
-                        <p className="text-[9px] text-muted uppercase font-black tracking-widest leading-none mb-1">Coordinación</p>
-                        <p className="text-xs font-black text-foreground uppercase tracking-tight">{activeAlert.senderName}</p>
+                        <p className="text-[9px] text-muted uppercase font-black  leading-none mb-1">Coordinación</p>
+                        <p className="text-xs font-black text-foreground uppercase ">{activeAlert.senderName}</p>
                     </div>
                     <div className="bg-background/20 backdrop-blur-md px-4 py-2 rounded-2xl border border-foreground/10 text-right">
-                        <p className="text-[9px] text-muted uppercase font-black tracking-widest leading-none mb-1">Tu Rol</p>
-                        <p className="text-xs font-black text-foreground uppercase tracking-tight">{activeRole}</p>
+                        <p className="text-[9px] text-muted uppercase font-black  leading-none mb-1">Tu Rol</p>
+                        <p className="text-xs font-black text-foreground uppercase ">{activeRole}</p>
                     </div>
                 </div>
 
@@ -291,7 +291,7 @@ export const DeviceView = () => {
                         animate={{ scale: 1, y: 0 }}
                         transition={{ type: "spring", damping: 12 }}
                     >
-                        <h1 className="text-6xl sm:text-7xl md:text-9xl font-black uppercase tracking-tighter leading-[0.85] drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)]">
+                        <h1 className="text-6xl sm:text-7xl md:text-9xl font-black uppercase er leading-[0.85] drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)]">
                             {activeAlert.message}
                         </h1>
                     </motion.div>
@@ -300,7 +300,7 @@ export const DeviceView = () => {
                 <div className="w-full max-w-sm grid grid-cols-2 gap-3 z-10">
                     <button
                         onClick={() => acknowledgeAlert(activeAlert.id, 'Confirmado')}
-                        className="col-span-2 flex items-center justify-center gap-3 bg-white text-black py-6 rounded-[2.5rem] font-black uppercase tracking-[0.2em] active:scale-95 transition-all shadow-2xl text-lg"
+                        className="col-span-2 flex items-center justify-center gap-3 bg-white text-black py-6 rounded-[2.5rem] font-black uppercase  active:scale-95 transition-all shadow-2xl text-lg"
                     >
                         <CheckCircle size={28} />
                         CONFIRMADO
@@ -308,28 +308,28 @@ export const DeviceView = () => {
 
                     <button
                         onClick={() => acknowledgeAlert(activeAlert.id, 'Problema')}
-                        className="flex flex-col items-center justify-center gap-1 bg-black/20 backdrop-blur-md border border-white/20 text-white py-5 rounded-[2rem] font-bold uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+                        className="flex flex-col items-center justify-center gap-1 bg-black/20 backdrop-blur-md border border-white/20 text-white py-5 rounded-[2rem] font-bold uppercase  active:scale-95 transition-all text-[10px]"
                     >
                         PROBLEMA
                     </button>
 
                     <button
                         onClick={() => acknowledgeAlert(activeAlert.id, 'No me ponches')}
-                        className="flex flex-col items-center justify-center gap-1 bg-red-600/40 backdrop-blur-md text-white border border-red-500/30 py-5 rounded-[2rem] font-bold uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+                        className="flex flex-col items-center justify-center gap-1 bg-red-600/40 backdrop-blur-md text-white border border-red-500/30 py-5 rounded-[2rem] font-bold uppercase  active:scale-95 transition-all text-[10px]"
                     >
                         PONCHE NO
                     </button>
 
                     <button
                         onClick={() => acknowledgeAlert(activeAlert.id, 'Check')}
-                        className="flex flex-col items-center justify-center gap-1 bg-black/20 backdrop-blur-md border border-white/20 text-white py-4 rounded-[1.5rem] font-bold uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+                        className="flex flex-col items-center justify-center gap-1 bg-black/20 backdrop-blur-md border border-white/20 text-white py-4 rounded-[1.5rem] font-bold uppercase  active:scale-95 transition-all text-[10px]"
                     >
                         CHECK
                     </button>
 
                     <button
                         onClick={() => acknowledgeAlert(activeAlert.id, 'Listo')}
-                        className="flex flex-col items-center justify-center gap-1 bg-green-600/40 backdrop-blur-md text-white border border-green-500/30 py-4 rounded-[1.5rem] font-bold uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+                        className="flex flex-col items-center justify-center gap-1 bg-green-600/40 backdrop-blur-md text-white border border-green-500/30 py-4 rounded-[1.5rem] font-bold uppercase  active:scale-95 transition-all text-[10px]"
                     >
                         LISTO
                     </button>

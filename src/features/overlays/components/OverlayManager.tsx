@@ -45,11 +45,11 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <button
                         onClick={() => setIsEditing(false)}
-                        className="text-muted hover:text-foreground flex items-center gap-2 text-[10px] font-black uppercase tracking-widest w-fit"
+                        className="text-muted hover:text-foreground flex items-center gap-2 text-[10px] font-black uppercase  w-fit"
                     >
                         <ChevronLeft size={16} /> Back to List
                     </button>
-                    <h2 className="text-xl sm:text-2xl font-black text-foreground uppercase tracking-tight truncate max-w-full sm:max-w-[60%] italic">
+                    <h2 className="text-xl sm:text-2xl font-black text-foreground uppercase  truncate max-w-full sm:max-w-[60%] italic">
                         Editing: <span className="text-indigo-400">{selectedTemplate?.name}</span>
                     </h2>
                 </div>
@@ -96,7 +96,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                         )}
                     >
                         {template.isActive && (
-                            <div className="absolute top-0 right-0 bg-indigo-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-widest animate-pulse">
+                            <div className="absolute top-0 right-0 bg-indigo-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase  animate-pulse">
                                 Live on OBS
                             </div>
                         )}
@@ -127,7 +127,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                             <a
                                 href={`/overlay/${template.id}`}
                                 target="_blank"
-                                className="text-[10px] text-muted hover:text-indigo-400 flex items-center gap-1 font-bold uppercase tracking-widest"
+                                className="text-[10px] text-muted hover:text-indigo-400 flex items-center gap-1 font-bold uppercase "
                             >
                                 <ExternalLink size={10} /> Browser Source URL
                             </a>
@@ -144,7 +144,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                 {templates.length === 0 && !isLoading && (
                     <div className="col-span-full py-20 bg-card-bg/50 border-2 border-dashed border-card-border rounded-3xl flex flex-col items-center justify-center text-muted">
                         <Layers size={48} className="mb-4 opacity-10" />
-                        <p className="text-sm font-bold uppercase tracking-widest">No overlays found</p>
+                        <p className="text-sm font-bold uppercase ">No overlays found</p>
                     </div>
                 )}
             </div>
@@ -173,7 +173,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                             }
                         }} className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">Overlay Name</label>
+                                <label className="block text-xs font-bold text-muted uppercase  mb-1">Overlay Name</label>
                                 <input
                                     type="text"
                                     required

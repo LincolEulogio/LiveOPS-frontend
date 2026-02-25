@@ -96,8 +96,8 @@ export const ScriptEditor = ({ productionId }: Props) => {
                         <div className="absolute inset-0 bg-indigo-500/10 blur-xl rounded-full" />
                     </div>
                     <div className="text-center">
-                        <p className="text-sm font-black text-foreground uppercase tracking-[0.2em] mb-1">Live Scripting</p>
-                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest animate-pulse">Syncing with Cloud Doc...</p>
+                        <p className="text-sm font-black text-foreground uppercase  mb-1">Live Scripting</p>
+                        <p className="text-[10px] font-bold text-muted uppercase  animate-pulse">Syncing with Cloud Doc...</p>
                     </div>
                 </div>
             </div>
@@ -181,7 +181,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
                                 </div>
                             ))}
                         </div>
-                        <span className="text-[9px] font-black text-muted uppercase tracking-[0.2em]">Editing Live</span>
+                        <span className="text-[9px] font-black text-muted uppercase ">Editing Live</span>
                     </div>
 
                     <div className="flex items-center gap-1.5 px-3 py-1.5 bg-background/50 border border-card-border rounded-xl">
@@ -214,13 +214,13 @@ export const ScriptEditor = ({ productionId }: Props) => {
             <div className="p-3 bg-white/5 border-t border-card-border/50 flex items-center justify-between px-6">
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                    <span className="text-[9px] text-muted font-black uppercase tracking-[0.2em]">
+                    <span className="text-[9px] text-muted font-black uppercase ">
                         Live Sync: {isSyncing ? 'Pushing Changes...' : 'Synchronized'}
                     </span>
                 </div>
                 <div className="flex items-center gap-2">
                     <Cloud size={12} className="text-muted" />
-                    <span className="text-[9px] text-muted/60 font-black uppercase tracking-widest">
+                    <span className="text-[9px] text-muted/60 font-black uppercase ">
                         v1.4.2-STABLE
                     </span>
                 </div>

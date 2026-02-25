@@ -26,7 +26,7 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                     <div className="p-2 bg-indigo-500/10 rounded-xl text-indigo-400">
                         <Terminal size={18} />
                     </div>
-                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest">Event Feed</h2>
+                    <h2 className="text-sm font-bold text-foreground uppercase ">Event Feed</h2>
                 </div>
 
                 <div className="flex flex-1 items-center gap-3 w-full sm:w-auto">
@@ -41,7 +41,7 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                     </div>
 
                     <select
-                        className="bg-background border border-card-border rounded-xl px-3 py-2 text-[10px] font-bold text-muted uppercase tracking-widest focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
+                        className="bg-background border border-card-border rounded-xl px-3 py-2 text-[10px] font-bold text-muted uppercase  focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
                         onChange={(e) => {
                             const val = e.target.value;
                             if (val === 'system') {
@@ -64,7 +64,7 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
             <div className="flex-1 overflow-auto custom-scrollbar">
                 <table className="w-full border-collapse">
                     <thead className="sticky top-0 bg-card-bg border-b border-card-border z-10">
-                        <tr className="text-[10px] font-bold text-muted uppercase tracking-widest">
+                        <tr className="text-[10px] font-bold text-muted uppercase ">
                             <th className="text-left py-3 px-6">Timestamp</th>
                             <th className="text-left py-3 px-6">Event Type</th>
                             <th className="text-left py-3 px-6">Source Payload</th>
@@ -84,7 +84,7 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                                 <td colSpan={3} className="py-20 text-center text-muted">
                                     <div className="flex flex-col items-center gap-3">
                                         <History size={48} strokeWidth={1} className="opacity-10" />
-                                        <p className="text-[10px] uppercase font-bold tracking-widest">No matching logs found</p>
+                                        <p className="text-[10px] uppercase font-bold ">No matching logs found</p>
                                     </div>
                                 </td>
                             </tr>
@@ -104,7 +104,7 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                                     </td>
                                     <td className="py-4 px-6">
                                         <span className={cn(
-                                            "text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider",
+                                            "text-[10px] font-bold px-2 py-0.5 rounded border uppercase ",
                                             log.eventType.includes('obs') ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-400" :
                                                 log.eventType.includes('vmix') ? "bg-amber-500/10 border-amber-500/20 text-amber-400" :
                                                     log.eventType.includes('production.user') || log.eventType.includes('device') ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
@@ -130,11 +130,11 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
 
             {/* Footer */}
             <div className="p-3 border-t border-card-border bg-card-bg/50 flex justify-between items-center text-[10px] font-bold text-muted">
-                <span className="uppercase tracking-widest pl-3 flex items-center gap-2">
+                <span className="uppercase  pl-3 flex items-center gap-2">
                     <Filter size={12} />
                     Showing {filteredLogs.length} of {logs.length} events
                 </span>
-                <span className="uppercase tracking-tighter pr-3">
+                <span className="uppercase er pr-3">
                     Real-time sync enabled
                 </span>
             </div>

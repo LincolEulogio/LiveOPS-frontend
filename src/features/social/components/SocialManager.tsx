@@ -58,8 +58,8 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                         <Share2 size={18} className="text-indigo-400" />
                     </div>
                     <div>
-                        <h2 className="text-xs font-black text-foreground uppercase tracking-[0.2em] leading-none mb-1">Social Inbox</h2>
-                        <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none">Unified Moderation</p>
+                        <h2 className="text-xs font-black text-foreground uppercase  leading-none mb-1">Social Inbox</h2>
+                        <p className="text-[9px] font-black text-muted uppercase  leading-none">Unified Moderation</p>
                     </div>
                 </div>
 
@@ -77,7 +77,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                         <select
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
-                            className="bg-background border border-card-border rounded-xl pl-9 pr-4 py-2 text-[10px] font-black text-foreground uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none min-w-[120px] transition-all cursor-pointer"
+                            className="bg-background border border-card-border rounded-xl pl-9 pr-4 py-2 text-[10px] font-black text-foreground uppercase  focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none min-w-[120px] transition-all cursor-pointer"
                         >
                             <option value="">Full Stream</option>
                             <option value="PENDING">Queued</option>
@@ -91,7 +91,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
             {/* Tactical Live Air Indicator */}
             <div className="px-6 py-4 bg-red-600/5 border-b border-card-border/30 flex items-center justify-between relative group ">
                 <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em]">Alpha Output:</span>
+                    <span className="text-[10px] font-black text-muted-foreground uppercase ">Alpha Output:</span>
                     <div className="flex items-center gap-2">
                         {onAirMessage ? (
                             <motion.div
@@ -99,13 +99,13 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                                 animate={{ opacity: 1, x: 0 }}
                                 className="flex items-center gap-3"
                             >
-                                <span className="text-xs font-black text-red-500 uppercase tracking-tighter truncate max-w-[200px]">
+                                <span className="text-xs font-black text-red-500 uppercase er truncate max-w-[200px]">
                                     Sending: {onAirMessage.author}
                                 </span>
                                 <div className="w-2 h-2 rounded-full bg-red-600 animate-ping shadow-[0_0_12px_rgba(220,38,38,0.8)]" />
                             </motion.div>
                         ) : (
-                            <span className="text-[10px] font-black text-muted/40 uppercase tracking-widest flex items-center gap-2">
+                            <span className="text-[10px] font-black text-muted/40 uppercase  flex items-center gap-2">
                                 <Activity size={12} className="opacity-20" /> Device Staged
                             </span>
                         )}
@@ -115,7 +115,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                 {onAirMessage && (
                     <button
                         onClick={clearActive}
-                        className="px-4 py-1 bg-red-600 hover:bg-red-500 text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-all active:scale-95 shadow-lg shadow-red-600/20 cursor-pointer text-xs"
+                        className="px-4 py-1 bg-red-600 hover:bg-red-500 text-white text-[10px] font-black uppercase  rounded-lg transition-all active:scale-95 shadow-lg shadow-red-600/20 cursor-pointer text-xs"
                     >
                         Kill Feed
                     </button>
@@ -167,8 +167,8 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
 
                                 <div className="flex-1 min-w-0 flex flex-col py-1">
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-[11px] font-black text-foreground uppercase tracking-tight truncate pr-4">{msg.author}</span>
-                                        <span className="text-[9px] font-bold text-muted uppercase tracking-widest">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                        <span className="text-[11px] font-black text-foreground uppercase  truncate pr-4">{msg.author}</span>
+                                        <span className="text-[9px] font-bold text-muted uppercase ">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                     </div>
                                     <p className="text-[11px] sm:text-xs text-foreground/80 leading-snug font-medium italic">
                                         "{msg.content}"
@@ -222,8 +222,8 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                             <div className="absolute inset-0 bg-indigo-500/10 blur-2xl rounded-full" />
                         </div>
                         <div className="space-y-1">
-                            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-foreground">Waiting for Fan Interaction</p>
-                            <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Connect your live streams to start polling</p>
+                            <p className="text-[11px] font-black uppercase  text-foreground">Waiting for Fan Interaction</p>
+                            <p className="text-[10px] font-bold text-muted uppercase ">Connect your live streams to start polling</p>
                         </div>
                     </div>
                 )}

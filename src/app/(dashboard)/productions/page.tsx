@@ -77,12 +77,12 @@ export default function ProductionsListPage() {
             <Zap size={32} className="text-white" fill="currentColor" />
           </div>
           <div className="text-center md:text-left">
-            <h1 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter leading-none mb-3 text-slate-900 dark:text-white">Productions Hub</h1>
+            <h1 className="text-3xl lg:text-4xl font-black uppercase er leading-none mb-3 text-slate-900 dark:text-white">Productions Hub</h1>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-              <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 flex items-center gap-2">
+              <span className="text-[10px] font-black text-indigo-400 uppercase  bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 flex items-center gap-2">
                 <Activity size={10} className="animate-pulse" /> Global Control Surface
               </span>
-              <span className="text-[10px] font-black text-muted uppercase tracking-[0.3em] flex items-center gap-2 opacity-60">
+              <span className="text-[10px] font-black text-muted uppercase  flex items-center gap-2 opacity-60">
                 Multi-Tenant Infrastructure Enabled
               </span>
             </div>
@@ -93,7 +93,7 @@ export default function ProductionsListPage() {
           <Guard requiredPermissions={['production:create']}>
             <Link
               href="/productions/new"
-              className="flex items-center justify-center gap-4 bg-white text-indigo-600 hover:bg-indigo-50 px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] transition-all hover:scale-[1.03] active:scale-95 group"
+              className="flex items-center justify-center gap-4 bg-white text-indigo-600 hover:bg-indigo-50 px-10 py-5 rounded-2xl text-[11px] font-black uppercase  transition-all hover:scale-[1.03] active:scale-95 group"
             >
               <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
               Initialize Node
@@ -114,14 +114,14 @@ export default function ProductionsListPage() {
               setPage(1);
               setSearchTerm(e.target.value);
             }}
-            className="w-full bg-background/50 border border-card-border/60 rounded-2xl py-4.5 pl-14 pr-6 text-sm font-bold text-foreground placeholder:text-muted/60 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all uppercase tracking-tight"
+            className="w-full bg-background/50 border border-card-border/60 rounded-2xl py-4.5 pl-14 pr-6 text-sm font-bold text-foreground placeholder:text-muted/60 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all uppercase "
           />
         </div>
 
         <div className="flex flex-wrap items-center gap-2 p-1.5 bg-background/40 rounded-2xl border border-card-border/60">
           <div className="px-4 py-2 flex items-center gap-3 border-r border-card-border/50 mr-2">
             <Filter size={14} className="text-muted" />
-            <span className="text-[9px] font-black text-muted uppercase tracking-[0.2em]">Filter:</span>
+            <span className="text-[9px] font-black text-muted uppercase ">Filter:</span>
           </div>
           {['', 'SETUP', 'ACTIVE', 'ARCHIVED'].map((status) => (
             <button
@@ -131,7 +131,7 @@ export default function ProductionsListPage() {
                 setStatusFilter(status);
               }}
               className={cn(
-                "px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl transition-all whitespace-nowrap border relative overflow-hidden group",
+                "px-6 py-2.5 text-[10px] font-black uppercase  rounded-xl transition-all whitespace-nowrap border relative overflow-hidden group",
                 statusFilter === status
                   ? 'bg-indigo-600 border-indigo-500 text-white'
                   : 'bg-transparent border-transparent text-muted hover:text-foreground hover:bg-white/5'
@@ -161,7 +161,7 @@ export default function ProductionsListPage() {
             <AlertCircle size={32} />
           </div>
           <div className="text-center">
-            <h3 className="text-xl font-black uppercase tracking-widest mb-2">Downlink Failed</h3>
+            <h3 className="text-xl font-black uppercase  mb-2">Downlink Failed</h3>
             <p className="text-xs font-bold opacity-60">Failed to establish secure connection with production registry.</p>
           </div>
         </div>
@@ -178,8 +178,8 @@ export default function ProductionsListPage() {
                       <Plus size={48} className="text-indigo-400 relative z-10" strokeWidth={1} />
                     </div>
                     <div className="space-y-4 max-w-md">
-                      <h3 className="text-2xl font-black text-foreground uppercase tracking-tighter">No Productions Initialized</h3>
-                      <p className="text-[11px] font-bold text-muted uppercase tracking-[0.2em] leading-loose px-6 opacity-60">
+                      <h3 className="text-2xl font-black text-foreground uppercase er">No Productions Initialized</h3>
+                      <p className="text-[11px] font-bold text-muted uppercase  leading-loose px-6 opacity-60">
                         {statusFilter
                           ? `The specified sector filter "${statusFilter.toLowerCase()}" returned no active nodes in current registry.`
                           : "Your multi-tenant workspace is currently unpopulated. Secure a new production node to begin operations."}
@@ -188,7 +188,7 @@ export default function ProductionsListPage() {
                     {!statusFilter && (
                       <Link
                         href="/productions/new"
-                        className="flex items-center gap-4 bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:scale-[1.05] active:scale-95"
+                        className="flex items-center gap-4 bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-5 rounded-2xl text-[10px] font-black uppercase  transition-all hover:scale-[1.05] active:scale-95"
                       >
                         <Zap size={16} fill="currentColor" />
                         Initialize Sequence
@@ -206,7 +206,7 @@ export default function ProductionsListPage() {
                   {/* Dynamic Corner Badge */}
                   <div className="absolute top-0 right-0 p-4">
                     <span className={cn(
-                      "px-3 py-1.5 text-[9px] font-black rounded-xl border uppercase tracking-[0.1em] transition-all",
+                      "px-3 py-1.5 text-[9px] font-black rounded-xl border uppercase  transition-all",
                       getStatusStyle(production.status)
                     )}>
                       {production.status}
@@ -218,10 +218,10 @@ export default function ProductionsListPage() {
                       {getEngineIcon(production.engineType)}
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-foreground uppercase tracking-tighter group-hover:text-indigo-400 transition-colors leading-none mb-2">
+                      <h3 className="text-xl font-black text-foreground uppercase er group-hover:text-indigo-400 transition-colors leading-none mb-2">
                         {production.name}
                       </h3>
-                      <p className="text-[11px] font-bold text-muted uppercase tracking-widest line-clamp-2 leading-relaxed opacity-60">
+                      <p className="text-[11px] font-bold text-muted uppercase  line-clamp-2 leading-relaxed opacity-60">
                         {production.description || 'System node initialized with default operational parameters.'}
                       </p>
                     </div>
@@ -230,9 +230,9 @@ export default function ProductionsListPage() {
                   <div className="flex items-center justify-between pt-6 border-t border-card-border/40 mt-auto">
                     <div className="flex -space-x-3">
                       {[1, 2, 3].map(i => (
-                        <div key={i} className="w-8 h-8 rounded-full bg-background border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-muted uppercase tracking-tighter">U</div>
+                        <div key={i} className="w-8 h-8 rounded-full bg-background border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-muted uppercase er">U</div>
                       ))}
-                      <div className="w-8 h-8 rounded-full bg-indigo-600 border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-white uppercase tracking-tighter">+5</div>
+                      <div className="w-8 h-8 rounded-full bg-indigo-600 border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-white uppercase er">+5</div>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -265,13 +265,13 @@ export default function ProductionsListPage() {
               <button
                 disabled={page === 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="w-full sm:w-auto px-8 py-3 bg-background border border-card-border rounded-xl text-[10px] font-black text-muted hover:text-indigo-400 hover:border-indigo-500/50 transition-all uppercase tracking-[0.2em] disabled:opacity-20 active:scale-95"
+                className="w-full sm:w-auto px-8 py-3 bg-background border border-card-border rounded-xl text-[10px] font-black text-muted hover:text-indigo-400 hover:border-indigo-500/50 transition-all uppercase  disabled:opacity-20 active:scale-95"
               >
                 Previous Sector
               </button>
               <div className="flex items-center gap-4">
                 <div className="h-px w-8 bg-card-border/50" />
-                <span className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">
+                <span className="text-[10px] font-black text-muted uppercase ">
                   Registry Frame <span className="text-foreground">{data.meta.page}</span> / <span className="text-foreground">{data.meta.lastPage}</span>
                 </span>
                 <div className="h-px w-8 bg-card-border/50" />
@@ -279,7 +279,7 @@ export default function ProductionsListPage() {
               <button
                 disabled={page === data.meta.lastPage}
                 onClick={() => setPage((p) => p + 1)}
-                className="w-full sm:w-auto px-8 py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-indigo-500 transition-all disabled:opacity-20 active:scale-95"
+                className="w-full sm:w-auto px-8 py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase  hover:bg-indigo-500 transition-all disabled:opacity-20 active:scale-95"
               >
                 Next Sector
               </button>

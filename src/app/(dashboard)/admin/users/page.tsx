@@ -98,7 +98,7 @@ export default function AdminUsersPage() {
                         </h2>
                         <form onSubmit={handleSave} className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">Name</label>
+                                <label className="block text-xs font-bold text-muted uppercase  mb-1">Name</label>
                                 <input
                                     type="text"
                                     required
@@ -109,7 +109,7 @@ export default function AdminUsersPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">Email</label>
+                                <label className="block text-xs font-bold text-muted uppercase  mb-1">Email</label>
                                 <input
                                     type="email"
                                     required
@@ -121,7 +121,7 @@ export default function AdminUsersPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">
+                                <label className="block text-xs font-bold text-muted uppercase  mb-1">
                                     {modalMode === 'create' ? 'Password' : 'New Password (optional)'}
                                 </label>
                                 <input
@@ -135,7 +135,7 @@ export default function AdminUsersPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-1">System Role</label>
+                                <label className="block text-xs font-bold text-muted uppercase  mb-1">System Role</label>
                                 <select
                                     value={form.globalRoleId}
                                     onChange={(e) => setForm(f => ({ ...f, globalRoleId: e.target.value }))}
@@ -199,7 +199,7 @@ export default function AdminUsersPage() {
                                         <Mail size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Email Address</p>
+                                        <p className="text-[10px] font-bold text-muted uppercase ">Email Address</p>
                                         <p className="text-sm text-foreground">{selectedUser.email}</p>
                                     </div>
                                 </div>
@@ -209,7 +209,7 @@ export default function AdminUsersPage() {
                                         <Calendar size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Member Since</p>
+                                        <p className="text-[10px] font-bold text-muted uppercase ">Member Since</p>
                                         <p className="text-sm text-foreground">{new Date(selectedUser.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })}</p>
                                     </div>
                                 </div>
@@ -219,7 +219,7 @@ export default function AdminUsersPage() {
                                         <Fingerprint size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest">System Identifier</p>
+                                        <p className="text-[10px] font-bold text-muted uppercase ">System Identifier</p>
                                         <p className="text-xs text-muted font-mono">{selectedUser.id}</p>
                                     </div>
                                 </div>
@@ -242,7 +242,7 @@ export default function AdminUsersPage() {
                 <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left border-collapse min-w-[600px]">
                         <thead className="bg-card-bg">
-                            <tr className="border-b border-card-border text-[10px] font-bold text-muted uppercase tracking-widest">
+                            <tr className="border-b border-card-border text-[10px] font-bold text-muted uppercase ">
                                 <th className="py-4 px-6">User</th>
                                 <th className="py-4 px-6">Global Role</th>
                                 <th className="py-4 px-6">Created At</th>
@@ -264,7 +264,7 @@ export default function AdminUsersPage() {
                                                 >
                                                     {user.name}
                                                 </button>
-                                                <p className="text-[11px] text-muted font-mono tracking-tight whitespace-nowrap">{user.email}</p>
+                                                <p className="text-[11px] text-muted font-mono  whitespace-nowrap">{user.email}</p>
                                             </div>
                                         </div>
                                     </td>

@@ -21,13 +21,13 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                     <AlertCircle className="text-red-400" size={40} />
                 </div>
                 <div className="space-y-2">
-                    <h3 className="text-xl font-black text-foreground uppercase tracking-tighter">Connection Offline</h3>
-                    <p className="text-muted font-medium text-xs max-w-xs mb-6 uppercase tracking-wider leading-relaxed">
+                    <h3 className="text-xl font-black text-foreground uppercase er">Connection Offline</h3>
+                    <p className="text-muted font-medium text-xs max-w-xs mb-6 uppercase  leading-relaxed">
                         Verify your OBS WebSocket credentials and ensure the application is running.
                     </p>
                     <Link
                         href={`/productions/${productionId}/edit`}
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-red-400 hover:bg-red-500 hover:text-white transition-all active:scale-95"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase  text-red-400 hover:bg-red-500 hover:text-white transition-all active:scale-95"
                     >
                         Repair Connection
                     </Link>
@@ -45,9 +45,9 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                         <div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
                             <Layers size={16} />
                         </div>
-                        <span className="text-xs font-black text-foreground uppercase tracking-[0.2em]">Scene Matrix</span>
+                        <span className="text-xs font-black text-foreground uppercase ">Scene Matrix</span>
                     </div>
-                    <span className="text-[10px] font-black text-muted uppercase tracking-widest">{state?.scenes?.length || 0} Scenes</span>
+                    <span className="text-[10px] font-black text-muted uppercase ">{state?.scenes?.length || 0} Scenes</span>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
@@ -68,7 +68,7 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                                     "w-1.5 h-6 rounded-full transition-all",
                                     state.currentScene === scene ? "bg-white" : "bg-card-border group-hover:bg-indigo-500/50"
                                 )} />
-                                <span className="text-xs font-black uppercase tracking-tight">{scene}</span>
+                                <span className="text-xs font-black uppercase ">{scene}</span>
                             </div>
 
                             {state.currentScene === scene ? (
@@ -81,7 +81,7 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                     {!state?.scenes?.length && (
                         <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-card-border rounded-3xl opacity-40">
                             <Layout size={32} className="mb-4" />
-                            <p className="text-[10px] font-black uppercase tracking-widest">No scenes detected</p>
+                            <p className="text-[10px] font-black uppercase ">No scenes detected</p>
                         </div>
                     )}
                 </div>
@@ -94,7 +94,7 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                         <div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
                             <Video size={16} />
                         </div>
-                        <span className="text-xs font-black text-foreground uppercase tracking-[0.2em]">Transport Control</span>
+                        <span className="text-xs font-black text-foreground uppercase ">Transport Control</span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
@@ -114,7 +114,7 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                             )}>
                                 {state?.isStreaming ? <Square size={24} /> : <Play size={24} className="ml-1" />}
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                            <span className="text-[10px] font-black uppercase ">
                                 {state?.isStreaming ? 'Stop Broadcast' : 'Start Broadcast'}
                             </span>
                         </button>
@@ -135,7 +135,7 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                             )}>
                                 {state?.isRecording ? <Square size={24} /> : <Play size={24} className="ml-1" />}
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                            <span className="text-[10px] font-black uppercase ">
                                 {state?.isRecording ? 'Stop Recording' : 'Start Recording'}
                             </span>
                         </button>
@@ -145,20 +145,20 @@ export function ObsControls({ productionId, state, sendCommand, isPending, isDis
                 {/* Performance Stats Container */}
                 <div className="mt-auto bg-background/50 border border-card-border rounded-2xl p-6 grid grid-cols-2 gap-6 group">
                     <div className="space-y-2 border-r border-card-border pr-6 transition-all group-hover:border-indigo-500/20">
-                        <div className="text-[9px] font-black text-muted uppercase tracking-widest flex items-center gap-2">
+                        <div className="text-[9px] font-black text-muted uppercase  flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/60" /> Frequency
                         </div>
                         <div className="flex items-baseline gap-1">
-                            <p className="text-3xl font-black text-foreground tracking-tighter">{state?.fps || '--'}</p>
+                            <p className="text-3xl font-black text-foreground er">{state?.fps || '--'}</p>
                             <span className="text-[10px] font-bold text-muted uppercase">FPS</span>
                         </div>
                     </div>
                     <div className="space-y-2 pl-2">
-                        <div className="text-[9px] font-black text-muted uppercase tracking-widest flex items-center gap-2">
+                        <div className="text-[9px] font-black text-muted uppercase  flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/60" /> CPU Load
                         </div>
                         <div className="flex items-baseline gap-1">
-                            <p className="text-3xl font-black text-foreground tracking-tighter">{state?.cpuUsage?.toFixed(1) || '--'}</p>
+                            <p className="text-3xl font-black text-foreground er">{state?.cpuUsage?.toFixed(1) || '--'}</p>
                             <span className="text-[10px] font-bold text-muted uppercase">%</span>
                         </div>
                     </div>
