@@ -1,11 +1,16 @@
 'use client';
 
 import { useChat } from '../hooks/useChat';
-import { MessageSquare, Send, User, Clock, Hash, ChevronRight, ChevronLeft, Terminal, Info } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/shared/utils/cn';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useSocket } from '@/shared/socket/socket.provider';
+
+// New Sub-components
+import { ChatHeader } from './chat-panel/ChatHeader';
+import { ChatMessageList } from './chat-panel/ChatMessageList';
+import { ChatInput } from './chat-panel/ChatInput';
 
 interface Props {
     productionId: string;
@@ -24,6 +29,7 @@ export const ChatPanel = ({ productionId }: Props) => {
         setTyping,
         members
     } = useChat(productionId);
+
     const currentUser = useAuthStore((state) => state.user);
     const [message, setMessage] = useState('');
     const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +52,6 @@ export const ChatPanel = ({ productionId }: Props) => {
         if (!socket || !isConnected) return;
 
         // --- Suggestions Logic ---
-        const lastChar = val[val.length - 1];
         const lastWord = val.split(' ').pop() || '';
 
         if (lastWord.startsWith('@')) {
@@ -112,9 +117,6 @@ export const ChatPanel = ({ productionId }: Props) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             if (message === '/clear') {
-                // Special local command
-                // Note: We'd need to update useChat to allow clearing locally
-                // For now just empty state if we had it, but history comes from queryClient
                 setMessage('');
                 return;
             }
@@ -146,154 +148,25 @@ export const ChatPanel = ({ productionId }: Props) => {
             </button>
 
             <div className="flex-1 bg-background/90 backdrop-blur-2xl border-l border-card-border flex flex-col ">
-                {/* Header */}
-                <div className="p-4 border-b border-card-border/50 bg-card-bg/30 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-indigo-500/10 rounded-xl">
-                            <MessageSquare size={18} className="text-indigo-400" />
-                        </div>
-                        <div>
-                            <h3 className="text-xs font-black text-foreground uppercase ">Team Chat</h3>
-                            <p className="text-[9px] text-muted font-bold uppercase er flex items-center gap-1">
-                                <span className={cn("w-1.5 h-1.5 rounded-full", isConnected ? "bg-emerald-500" : "bg-red-500")} />
-                                {isConnected ? "En línea" : "Desconectado"}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                <ChatHeader isConnected={isConnected} />
 
-                {/* Messages Container */}
-                <div
-                    ref={scrollRef}
-                    className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-card-border"
-                >
-                    {chatHistory.length === 0 && !isLoading && (
-                        <div className="h-full flex flex-col items-center justify-center text-center opacity-30 select-none">
-                            <Hash size={40} className="text-muted/50 mb-2" />
-                            <p className="text-[10px] font-black uppercase  text-muted">Sin mensajes aún</p>
-                        </div>
-                    )}
+                <ChatMessageList
+                    chatHistory={chatHistory}
+                    isLoading={isLoading}
+                    currentUser={currentUser}
+                    scrollRef={scrollRef}
+                />
 
-                    {chatHistory.map((msg, i) => {
-                        const isSystem = !msg.userId;
-                        const isMe = msg.userId === currentUser?.id;
-
-                        if (isSystem) {
-                            return (
-                                <div key={msg.id} className="flex justify-center py-1 animate-in fade-in zoom-in-95 duration-500">
-                                    <div className="bg-card-bg/50 border border-card-border/50 rounded-full px-3 py-1 flex items-center gap-2">
-                                        <Terminal size={10} className="text-muted" />
-                                        <span className="text-[10px] font-bold text-muted  italic">
-                                            {msg.message}
-                                        </span>
-                                    </div>
-                                </div>
-                            );
-                        }
-
-                        return (
-                            <div
-                                key={msg.id}
-                                className={cn(
-                                    "flex flex-col max-w-[85%] group animate-in fade-in slide-in-from-right-2 duration-300",
-                                    isMe ? "ml-auto items-end" : "items-start"
-                                )}
-                            >
-                                <div className="flex items-center gap-2 mb-1 px-1">
-                                    {!isMe && <span className="text-[10px] font-black text-muted uppercase">{msg.user?.name}</span>}
-                                    <span className="text-[8px] text-muted font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                                        {new Date(msg.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
-                                </div>
-                                <div className={cn(
-                                    "px-3 py-2 rounded-2xl text-sm leading-snug break-words ",
-                                    isMe
-                                        ? "bg-indigo-600 text-white rounded-tr-none"
-                                        : "bg-card-bg text-foreground border border-card-border rounded-tl-none"
-                                )}>
-                                    {msg.message.split(' ').map((word, idx) => {
-                                        if (word.startsWith('@') && word.length > 1) {
-                                            const name = word.slice(1);
-                                            const isMeMentioned = name === currentUser?.name;
-                                            return (
-                                                <span key={idx} className={cn(
-                                                    "font-black px-1 rounded",
-                                                    isMeMentioned ? "bg-yellow-400 text-black " : "text-indigo-300"
-                                                )}>
-                                                    {word}{' '}
-                                                </span>
-                                            );
-                                        }
-                                        return word + ' ';
-                                    })}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                {/* Input Area */}
-                <div className="p-4 bg-card-bg/40 border-t border-card-border/50 relative">
-                    {/* Typing Indicator */}
-                    {Object.keys(typingUsers).length > 0 && (
-                        <div className="absolute top-[-24px] left-4 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                            <div className="flex gap-1">
-                                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce" />
-                            </div>
-                            <span className="text-[9px] font-bold text-muted italic">
-                                {Object.values(typingUsers).join(', ')} {Object.keys(typingUsers).length === 1 ? 'está escribiendo...' : 'están escribiendo...'}
-                            </span>
-                        </div>
-                    )}
-
-                    {/* Suggestions Popup */}
-                    {suggestions && (
-                        <div className="absolute bottom-full left-4 w-[calc(100%-32px)] bg-card-bg border border-card-border rounded-xl overflow-hidden  mb-2 animate-in slide-in-from-bottom-2 duration-200 z-50">
-                            {suggestions.map((s, i) => (
-                                <button
-                                    key={s.id}
-                                    onClick={() => applySuggestion(s)}
-                                    className={cn(
-                                        "w-full px-4 py-2 flex items-center gap-3 text-left transition-colors",
-                                        i === selectedIndex ? "bg-indigo-600 text-white" : "text-muted hover:bg-card-border"
-                                    )}
-                                >
-                                    {s.type === 'user' ? <User size={14} /> : <Terminal size={14} />}
-                                    <span className="text-xs font-bold">{s.name}</span>
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-                    <div className="relative">
-                        <textarea
-                            value={message}
-                            onChange={handleMessageChange}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Escribe un mensaje..."
-                            className="w-full bg-background border border-card-border rounded-2xl px-4 py-3 pr-12 text-xs text-foreground placeholder:text-muted focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[45px] max-h-[150px]"
-                            rows={1}
-                        />
-                        <button
-                            onClick={handleSend}
-                            disabled={!message.trim()}
-                            className={cn(
-                                "absolute right-2 bottom-2 p-2 rounded-xl transition-all",
-                                message.trim()
-                                    ? "bg-indigo-600 text-white   hover:scale-105 active:scale-95"
-                                    : "text-muted/50 cursor-not-allowed"
-                            )}
-                        >
-                            <Send size={16} />
-                        </button>
-                    </div>
-                    <div className="flex items-center justify-between mt-2 px-1">
-                        <p className="text-[8px] text-muted font-bold uppercase ">Internal Comms Only</p>
-                        <p className="text-[8px] text-muted font-bold italic er">Enter to send</p>
-                    </div>
-                </div>
+                <ChatInput
+                    message={message}
+                    handleMessageChange={handleMessageChange}
+                    handleKeyDown={handleKeyDown}
+                    handleSend={handleSend}
+                    typingUsers={typingUsers}
+                    suggestions={suggestions}
+                    selectedIndex={selectedIndex}
+                    applySuggestion={applySuggestion}
+                />
             </div>
         </div>
     );
