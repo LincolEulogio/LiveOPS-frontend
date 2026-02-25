@@ -161,7 +161,7 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                                className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-card-bg/60 backdrop-blur-2xl border border-card-border shadow-[0_40px_100px_rgba(0,0,0,1)] z-[2001] flex flex-col rounded-[24px] overflow-hidden max-h-[85vh]"
+                                className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-md bg-card-bg/60 backdrop-blur-2xl border border-card-border shadow-[0_40px_100px_rgba(0,0,0,1)] z-[2001] flex flex-col rounded-[24px] overflow-hidden max-h-[85vh]"
                             >
                                 {/* Header */}
                                 <div className="p-6 border-b border-card-border flex items-center justify-between bg-card-bg shadow-sm relative z-10">
