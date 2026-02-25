@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { cn } from '@/shared/utils/cn';
 import { useIntercom } from '@/features/intercom/hooks/useIntercom';
 import { useIntercomStore } from '@/features/intercom/store/intercom.store';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,8 +14,11 @@ import {
     Wifi,
     Battery,
     ChevronRight,
-    MessageSquare
+    MessageSquare,
+    Sparkles,
+    Tv
 } from 'lucide-react';
+import { useTally } from '@/features/streaming/hooks/useTally';
 
 import { useAppStore } from '@/shared/store/app.store';
 
@@ -28,6 +32,19 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
     const { activeAlert, history } = useIntercomStore();
     const { setActiveProductionId } = useAppStore();
     const [lastResponse, setLastResponse] = useState<string | null>(null);
+    const { tally } = useTally(productionId);
+    const [associatedSource, setAssociatedSource] = useState<string | null>(null);
+
+    // Get current member info to find associated source
+    const me = members.find(m => m.userId === userId);
+    const myRole = me?.roleName;
+
+    // Try to auto-detect source by role name (e.g. "Cam 1")
+    useEffect(() => {
+        if (myRole && myRole.toLowerCase().includes('cam')) {
+            setAssociatedSource(myRole);
+        }
+    }, [myRole]);
 
     // Sync production context for socket
     useEffect(() => {
@@ -53,12 +70,24 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
         }
     };
 
+    const isProgram = associatedSource && tally?.program === associatedSource;
+    const isPreview = associatedSource && tally?.preview === associatedSource;
+
     return (
-        <div className="min-h-screen bg-background text-foreground flex flex-col font-sans select-none">
+        <div className={cn(
+            "min-h-screen text-foreground flex flex-col font-sans select-none transition-colors duration-500",
+            isProgram ? "bg-red-600" : isPreview ? "bg-emerald-600" : "bg-background"
+        )}>
             {/* Top Status Bar (Mobile focused) */}
-            <div className="px-6 py-4 border-b border-card-border bg-background/50 flex items-center justify-between">
+            <div className={cn(
+                "px-6 py-4 border-b flex items-center justify-between",
+                (isProgram || isPreview) ? "bg-black/20 border-white/10" : "bg-background/50 border-card-border"
+            )}>
                 <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                    <div className={cn(
+                        "w-2 h-2 rounded-full animate-pulse",
+                        isProgram ? "bg-white shadow-[0_0_10px_white]" : isPreview ? "bg-white" : "bg-green-500"
+                    )} />
                     <span className="text-[10px] font-black uppercase  text-muted">
                         View: {members.find(m => m.userId === userId)?.userName || 'Personal Terminal'}
                     </span>
@@ -191,15 +220,49 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                                 </p>
                             </div>
 
-                            {/* Signal Indicator Decor */}
                             <div className="flex gap-1">
                                 {[1, 2, 3, 4, 5].map(i => (
-                                    <div key={i} className={`w-1 h-3 rounded-full ${i <= 4 ? 'bg-indigo-500/40' : 'bg-card-border'}`} />
+                                    <div key={i} className={cn("w-1 h-3 rounded-full", (isProgram || isPreview) ? "bg-white/40" : "bg-indigo-500/40")} />
                                 ))}
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
+
+                {/* Tally Indicator for non-camera users or just extra info */}
+                {!isProgram && !isPreview && associatedSource && (
+                    <div className="absolute top-20 text-[10px] font-black uppercase text-muted tracking-widest">
+                        Tally: {associatedSource} (Standby)
+                    </div>
+                )}
+
+                {isProgram && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="absolute top-10 flex items-center gap-2 bg-white text-red-600 px-4 py-1 rounded-full font-black text-xs uppercase tracking-tighter"
+                    >
+                        <Tv size={14} /> ON AIR
+                    </motion.div>
+                )}
+
+                {/* Source Selector (In case auto-detection fails) */}
+                {!associatedSource && (
+                    <div className="absolute bottom-40 flex flex-col items-center gap-2">
+                        <p className="text-[10px] font-black text-muted uppercase">Seleccionar cámara para Tally</p>
+                        <div className="flex gap-2">
+                            {['Cam 1', 'Cam 2', 'Cam 3'].map(src => (
+                                <button
+                                    key={src}
+                                    onClick={() => setAssociatedSource(src)}
+                                    className="px-3 py-1 bg-card-bg border border-card-border rounded-lg text-[10px] font-black uppercase hover:border-indigo-500 transition-all"
+                                >
+                                    {src}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Background Decor */}
                 <div className="absolute inset-0 pointer-events-none opacity-20">

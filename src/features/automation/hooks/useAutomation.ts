@@ -53,14 +53,13 @@ export const useAutomation = (productionId: string) => {
         },
     });
 
-    const triggerRule = (rule: Rule) => {
-        if (!socket) return;
-        socket.emit('manual.trigger', {
-            productionId,
-            ruleId: rule.id,
-            ruleName: rule.name,
-        });
-    };
+    const triggerRuleMutation = useMutation({
+        mutationFn: (ruleId: string) => automationService.triggerRule(productionId, ruleId),
+    });
+
+    const triggerInstantClipMutation = useMutation({
+        mutationFn: () => automationService.triggerInstantClip(productionId),
+    });
 
     return {
         rules,
@@ -70,7 +69,8 @@ export const useAutomation = (productionId: string) => {
         updateRule: updateMutation.mutateAsync,
         toggleRule: toggleMutation.mutateAsync,
         deleteRule: deleteMutation.mutateAsync,
-        triggerRule,
-        isMutating: createMutation.isPending || updateMutation.isPending || toggleMutation.isPending || deleteMutation.isPending,
+        triggerRule: triggerRuleMutation.mutateAsync,
+        triggerInstantClip: triggerInstantClipMutation.mutateAsync,
+        isMutating: createMutation.isPending || updateMutation.isPending || toggleMutation.isPending || deleteMutation.isPending || triggerRuleMutation.isPending,
     };
 };

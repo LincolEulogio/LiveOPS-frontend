@@ -19,6 +19,7 @@ import { HealthMonitor } from '@/features/streaming/components/HealthMonitor';
 import { MediaSidebar } from '@/features/media/components/MediaSidebar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
+import { IntegrationsPanel } from '@/features/productions/components/IntegrationsPanel';
 
 export default function ProductionDetailPage() {
   const params = useParams();
@@ -231,6 +232,9 @@ export default function ProductionDetailPage() {
 
             {/* Hardware/Peripherals */}
             <PeripheralManager productionId={id} />
+
+            {/* Integrations & API Access */}
+            <IntegrationsPanel productionId={id} />
 
             {/* Team Snapshot Card */}
             <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6  relative overflow-hidden">

@@ -14,10 +14,13 @@ import {
     Layout,
     Camera,
     Repeat,
-    Zap
+    Zap,
+    Scissors,
+    Bookmark
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { StreamingCommand, ObsState, VmixState } from '@/features/streaming/types/streaming.types';
+import { useAutomation } from '@/features/automation/hooks/useAutomation';
 
 interface OperationalSurfaceProps {
     productionId: string;
@@ -38,6 +41,9 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
 }) => {
     const [imgErrors, setImgErrors] = React.useState<Record<string, boolean>>({});
     const [tick, setTick] = React.useState(0);
+    const [viewMode, setViewMode] = React.useState<'dual' | 'mosaic'>('dual');
+
+    const { rules, triggerRule, triggerInstantClip } = useAutomation(productionId);
 
     React.useEffect(() => {
         const interval = setInterval(() => setTick(t => t + 1), 2000); // refresh every 2s
@@ -75,71 +81,149 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
         ? 'Preview Scene'
         : (state?.inputs?.find((i: any) => i.number === state?.previewInput)?.title || `Input ${state?.previewInput || 2}`);
 
-    const vmixBaseUrl = engineType === 'VMIX' ? state?.url?.replace(/\/api$/, '') : '';
-    const previewUrl = vmixBaseUrl ? `${vmixBaseUrl}/preview.jpg?t=${tick}` : '';
-    const programUrl = vmixBaseUrl ? `${vmixBaseUrl}/program.jpg?t=${tick}` : '';
+    const vmixBaseUrl = engineType === 'VMIX' ? state?.url?.replace(/\/api$/, '') : null;
+    const previewUrl = vmixBaseUrl ? `${vmixBaseUrl}/preview.jpg?t=${tick}` : null;
+    const programUrl = vmixBaseUrl ? `${vmixBaseUrl}/program.jpg?t=${tick}` : null;
 
     return (
         <div className="flex flex-col gap-8">
-            {/* 1. Multiview Simulation Layer */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[250px] sm:h-[350px]">
-                {/* Preview Monitor */}
-                <div className="relative group rounded-3xl overflow-hidden border-2 border-emerald-500/40 bg-card-bg/40 backdrop-blur-md">
-                    <div className="absolute top-4 left-6 z-10 flex items-center gap-2">
-                        <div className="px-3 py-1 bg-emerald-500 text-white text-[9px] font-black uppercase rounded-lg">Preview</div>
-                        <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentPreview}</span>
-                    </div>
-
-                    <div className="w-full h-full flex items-center justify-center bg-black">
-                        {(previewUrl && !imgErrors['preview']) ? (
-                            <img
-                                src={previewUrl}
-                                alt="Preview"
-                                className="w-full h-full object-cover"
-                                onError={() => setImgErrors(prev => ({ ...prev, preview: true }))}
-                            />
-                        ) : (
-                            <Camera size={48} className="text-muted/20" />
+            {/* Header with Mode Toggle */}
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => setViewMode('dual')}
+                        className={cn(
+                            "px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all",
+                            viewMode === 'dual' ? "bg-indigo-500 text-white" : "bg-card-bg text-muted border border-card-border"
                         )}
+                    >
+                        Standard View
+                    </button>
+                    <button
+                        onClick={() => setViewMode('mosaic')}
+                        className={cn(
+                            "px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all",
+                            viewMode === 'mosaic' ? "bg-indigo-500 text-white font-bold animate-pulse" : "bg-card-bg text-muted border border-card-border"
+                        )}
+                    >
+                        Integrated Multiview
+                    </button>
+                </div>
+            </div>
+
+            {/* 1. Multiview Simulation Layer */}
+            {viewMode === 'dual' ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[250px] sm:h-[350px]">
+                    {/* Preview Monitor */}
+                    <div className="relative group rounded-3xl overflow-hidden border-2 border-emerald-500/40 bg-card-bg/40 backdrop-blur-md">
+                        <div className="absolute top-4 left-6 z-10 flex items-center gap-2">
+                            <div className="px-3 py-1 bg-emerald-500 text-white text-[9px] font-black uppercase rounded-lg">Preview</div>
+                            <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentPreview}</span>
+                        </div>
+
+                        <div className="w-full h-full flex items-center justify-center bg-black">
+                            {(previewUrl && !imgErrors['preview']) ? (
+                                <img
+                                    src={previewUrl}
+                                    alt="Preview"
+                                    className="w-full h-full object-cover"
+                                    onError={() => setImgErrors(prev => ({ ...prev, preview: true }))}
+                                />
+                            ) : (
+                                <Camera size={48} className="text-muted/20" />
+                            )}
+                        </div>
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+                        <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between pointer-events-none text-white">
+                            <div className="flex items-center gap-2 text-[9px] font-bold text-emerald-400 uppercase">
+                                <Activity size={10} /> Standby Ready
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-                    <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between pointer-events-none text-white">
-                        <div className="flex items-center gap-2 text-[9px] font-bold text-emerald-400 uppercase">
-                            <Activity size={10} /> Standby Ready
+                    {/* Program Monitor */}
+                    <div className="relative group rounded-3xl overflow-hidden border-2 border-red-500/40 bg-card-bg/40 backdrop-blur-md">
+                        <div className="absolute top-4 left-6 z-10 flex items-center gap-2">
+                            <div className="px-3 py-1 bg-red-600 text-white text-[9px] font-black uppercase rounded-lg animate-pulse">Program</div>
+                            <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentProgram}</span>
+                        </div>
+
+                        <div className="w-full h-full flex items-center justify-center bg-black">
+                            {(programUrl && !imgErrors['program']) ? (
+                                <img
+                                    src={programUrl}
+                                    alt="Program"
+                                    className="w-full h-full object-cover"
+                                    onError={() => setImgErrors(prev => ({ ...prev, program: true }))}
+                                />
+                            ) : (
+                                <Monitor size={48} className="text-muted/20" />
+                            )}
+                        </div>
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+                        <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between text-white pointer-events-none">
+                            <div className="flex items-center gap-2 text-[9px] font-bold text-red-400 uppercase">
+                                <Activity size={10} /> Live Output
+                            </div>
+                            <div className="text-[10px] font-black tracking-widest">{new Date().toLocaleTimeString([], { hour12: false })}</div>
                         </div>
                     </div>
                 </div>
-
-                {/* Program Monitor */}
-                <div className="relative group rounded-3xl overflow-hidden border-2 border-red-500/40 bg-card-bg/40 backdrop-blur-md">
-                    <div className="absolute top-4 left-6 z-10 flex items-center gap-2">
-                        <div className="px-3 py-1 bg-red-600 text-white text-[9px] font-black uppercase rounded-lg animate-pulse">Program</div>
-                        <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentProgram}</span>
-                    </div>
-
-                    <div className="w-full h-full flex items-center justify-center bg-black">
-                        {(programUrl && !imgErrors['program']) ? (
-                            <img
-                                src={programUrl}
-                                alt="Program"
-                                className="w-full h-full object-cover"
-                                onError={() => setImgErrors(prev => ({ ...prev, program: true }))}
-                            />
+            ) : (
+                /* Mosaic Multiview Mode */
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 min-h-[400px]">
+                    {/* Big Program at the start or end */}
+                    <div className="col-span-2 row-span-2 relative rounded-2xl overflow-hidden border-2 border-red-500 shadow-xl shadow-red-500/10 bg-black flex items-center justify-center">
+                        {programUrl ? (
+                            <img src={programUrl} className="w-full h-full object-cover" alt="Program" />
                         ) : (
                             <Monitor size={48} className="text-muted/20" />
                         )}
+                        <div className="absolute top-2 left-2 px-2 py-0.5 bg-red-600 text-[8px] font-black rounded uppercase">Program</div>
                     </div>
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
-                    <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between text-white pointer-events-none">
-                        <div className="flex items-center gap-2 text-[9px] font-bold text-red-400 uppercase">
-                            <Activity size={10} /> Live Output
+                    {/* All other inputs as smaller thumbnails */}
+                    {(engineType === 'VMIX' ? (state?.inputs || []) : []).map((input: any) => (
+                        <div
+                            key={input.key}
+                            onClick={() => sendCommand({ type: 'VMIX_SELECT_INPUT', payload: { input: input.number } })}
+                            className={cn(
+                                "relative rounded-xl overflow-hidden border cursor-pointer transition-all hover:scale-105 group active:scale-95",
+                                state?.activeInput === input.number ? "border-red-500 ring-2 ring-red-500/20" :
+                                    state?.previewInput === input.number ? "border-emerald-500 ring-2 ring-emerald-500/20" : "border-card-border"
+                            )}
+                        >
+                            {vmixBaseUrl ? (
+                                <img
+                                    src={`${vmixBaseUrl}/thumbnails/${input.key}.jpg?t=${tick}`}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/320x180?text=No+Signal')}
+                                    alt={input.title}
+                                />
+                            ) : (
+                                <div className="w-full h-full bg-card-bg flex items-center justify-center">
+                                    <Camera size={20} className="text-muted/20" />
+                                </div>
+                            )}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <Play size={20} className="text-white fill-current" />
+                            </div>
+                            <div className="absolute bottom-1 left-2 text-[8px] font-black uppercase text-white truncate max-w-full drop-shadow-md">
+                                {input.number}: {input.title}
+                            </div>
                         </div>
-                        <div className="text-[10px] font-black tracking-widest">{new Date().toLocaleTimeString([], { hour12: false })}</div>
-                    </div>
+                    ))}
+
+                    {/* Placeholder for OBS in Mosaic Mode (since we don't have all thumbs easily yet) */}
+                    {engineType === 'OBS' && Array.from({ length: 5 }).map((_, i) => (
+                        <div key={i} className="aspect-video bg-card-bg border border-card-border rounded-xl flex items-center justify-center text-muted/20">
+                            <Camera size={32} />
+                        </div>
+                    ))}
                 </div>
-            </div>
+            )}
 
             {/* 2. Control Matrix & Audio Layer */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -186,7 +270,7 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                                 const inputTitle = input?.title || `Input ${inputNum}`;
                                 const isActive = state?.activeInput === inputNum;
                                 const isPreview = state?.previewInput === inputNum;
-                                const thumbUrl = vmixBaseUrl && input?.key ? `${vmixBaseUrl}/thumbnails/${input.key}.jpg?t=${tick}` : '';
+                                const thumbUrl = vmixBaseUrl && input?.key ? `${vmixBaseUrl}/thumbnails/${input.key}.jpg?t=${tick}` : null;
 
                                 return (
                                     <button
@@ -321,6 +405,38 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Quick Macros & Highlights SECTION */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-3 border-b border-card-border/40 pb-4">
+                            <div className="p-2 bg-amber-500/10 rounded-lg text-amber-400">
+                                <Zap size={16} />
+                            </div>
+                            <span className="text-xs font-black text-foreground uppercase tracking-widest">Macros & Highlights</span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                onClick={() => triggerInstantClip()}
+                                className="col-span-2 group relative py-6 bg-emerald-600/10 border border-emerald-500/30 hover:bg-emerald-600 hover:text-white rounded-2xl transition-all active:scale-95 flex flex-col items-center justify-center gap-2 overflow-hidden"
+                            >
+                                <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500/50" />
+                                <Bookmark size={24} className="group-hover:animate-bounce" />
+                                <span className="text-xs font-black uppercase tracking-widest">Mark Highlight (HIT)</span>
+                            </button>
+
+                            {rules.filter(r => r.triggers.some((t: any) => t.eventType === 'manual.trigger')).map(rule => (
+                                <button
+                                    key={rule.id}
+                                    onClick={() => triggerRule(rule.id)}
+                                    className="py-4 bg-card-bg border border-card-border rounded-xl text-[10px] font-black uppercase hover:border-indigo-500 hover:bg-indigo-500/5 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <Zap size={12} className="text-amber-400" />
+                                    {rule.name}
+                                </button>
+                            ))}
                         </div>
                     </div>
                 </div>

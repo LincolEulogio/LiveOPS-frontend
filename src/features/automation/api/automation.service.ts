@@ -19,4 +19,10 @@ export const automationService = {
 
     getExecutionLogs: (productionId: string): Promise<RuleExecutionLog[]> =>
         apiClient.get(`/productions/${productionId}/automation/logs`),
+
+    triggerRule: (productionId: string, ruleId: string): Promise<{ success: boolean }> =>
+        apiClient.post(`/productions/${productionId}/automation/rules/${ruleId}/trigger`),
+
+    triggerInstantClip: (productionId: string): Promise<{ success: boolean }> =>
+        apiClient.post(`/productions/${productionId}/automation/instant-clip`),
 };

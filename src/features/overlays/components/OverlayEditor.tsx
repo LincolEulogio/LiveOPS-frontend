@@ -163,6 +163,60 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
         setSelectedLayerId(newLayer.id);
     };
 
+    const addTemplate = (templateName: string) => {
+        let newLayers: OverlayLayer[] = [];
+        const baseId = crypto.randomUUID();
+
+        if (templateName === 'lower-third') {
+            newLayers = [
+                {
+                    id: `${baseId}-bg`,
+                    type: 'shape',
+                    name: 'LTR Background',
+                    x: 100,
+                    y: 800,
+                    width: 800,
+                    height: 120,
+                    opacity: 0.9,
+                    zIndex: config.layers.length,
+                    content: 'linear-gradient(90deg, #6366f1 0%, #a855f7 100%)',
+                    style: { borderRadius: 20 }
+                },
+                {
+                    id: `${baseId}-text`,
+                    type: 'text',
+                    name: 'LTR Name',
+                    x: 140,
+                    y: 825,
+                    width: 700,
+                    height: 60,
+                    opacity: 1,
+                    zIndex: config.layers.length + 1,
+                    content: '{{guest_name}}',
+                    style: { fontSize: 44, color: '#ffffff', fontWeight: '900', textAlign: 'left' }
+                }
+            ];
+        } else if (templateName === 'bug') {
+            newLayers = [
+                {
+                    id: `${baseId}-bug`,
+                    type: 'shape',
+                    name: 'Bug Logo',
+                    x: 1750,
+                    y: 50,
+                    width: 120,
+                    height: 120,
+                    opacity: 0.8,
+                    zIndex: config.layers.length,
+                    content: '#ffffff22',
+                    style: { borderRadius: 60, border: '2px solid #ffffff44' }
+                }
+            ];
+        }
+
+        setConfig(prev => ({ ...prev, layers: [...prev.layers, ...newLayers] }));
+    };
+
     const updateLayer = (id: string, updates: Partial<OverlayLayer>) => {
         setConfig(prev => ({
             ...prev,
@@ -182,6 +236,7 @@ export const OverlayEditor = ({ productionId, initialData, onSave }: Props) => {
         <div className="flex flex-col md:flex-row h-auto md:h-[800px] w-full bg-background rounded-3xl overflow-hidden border border-card-border mb-5">
             <OverlayToolbar
                 onAddLayer={addLayer}
+                onAddTemplate={addTemplate}
                 onSave={() => onSave(config)}
             />
 
