@@ -248,15 +248,15 @@ export const ScriptEditor = ({ productionId }: Props) => {
                 <AnimatePresence>
                     {aiSuggestion && (
                         <motion.div
-                            initial={{ x: 400, opacity: 0 }}
+                            initial={{ x: 500, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: 400, opacity: 0 }}
-                            className="absolute right-6 top-24 bottom-24 w-80 bg-card-bg/95 backdrop-blur-3xl border border-indigo-500/30 rounded-3xl p-6 shadow-2xl z-50 flex flex-col"
+                            exit={{ x: 500, opacity: 0 }}
+                            className="absolute right-8 top-12 bottom-12 w-[480px] bg-card-bg/98 backdrop-blur-3xl border border-indigo-500/40 rounded-[2.5rem] p-10 shadow-[0_0_50px_rgba(0,0,0,0.5)] z-50 flex flex-col"
                         >
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center gap-2">
-                                    <Sparkles size={16} className="text-indigo-400" />
-                                    <span className="text-xs font-black text-foreground uppercase tracking-widest">Livia AI Suggestions</span>
+                                    <Sparkles size={18} className="text-indigo-400" />
+                                    <span className="text-sm font-black text-foreground uppercase tracking-widest">Livia AI Suggestions</span>
                                 </div>
                                 <button
                                     onClick={() => setAiSuggestion(null)}
@@ -269,7 +269,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
                             <div className="flex-1 overflow-y-auto no-scrollbar space-y-4">
                                 <div className="prose prose-sm prose-invert text-muted">
                                     {aiSuggestion.split('\n').map((line, i) => (
-                                        <p key={i} className="mb-2 leading-relaxed text-[11px] font-medium">{line}</p>
+                                        <p key={i} className="mb-3 leading-relaxed text-[13px] font-medium text-foreground/80">{line}</p>
                                     ))}
                                 </div>
                             </div>
@@ -280,7 +280,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
                                         editor?.chain().focus().insertContent(`\n\n> AI SUGGESTION:\n${aiSuggestion}`).run();
                                         setAiSuggestion(null);
                                     }}
-                                    className="w-full py-3 bg-indigo-600 text-white text-[10px] font-black uppercase rounded-xl hover:bg-indigo-500 transition-all active:scale-95"
+                                    className="w-full py-5 bg-indigo-600 text-white text-[12px] font-black uppercase rounded-2xl hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 transition-all active:scale-95"
                                 >
                                     Insert in Script
                                 </button>
