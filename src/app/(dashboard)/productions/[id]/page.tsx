@@ -216,6 +216,86 @@ export default function ProductionDetailPage() {
             <TimelineContainer productionId={id} />
             <HealthMonitor productionId={id} />
           </div>
+
+          {/* Tactical Utilities Row - 3 Columns (Crew, Analytics, Automation) */}
+          <div className={cn("grid grid-cols-1 lg:grid-cols-3 gap-8", activeTab !== 'overview' && 'hidden lg:grid')}>
+            {/* 1. Active Crew */}
+            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6  relative overflow-hidden flex flex-col h-full">
+              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                <Users size={80} />
+              </div>
+              <div className="flex items-center justify-between mb-8">
+                <div className="space-y-1">
+                  <h2 className="text-xs font-black text-muted uppercase tracking-tighter">Live Team</h2>
+                  <p className="text-lg font-black text-foreground uppercase ">Active Crew</p>
+                </div>
+                <div className="px-3 py-1 bg-indigo-600/10 border border-indigo-500/20 rounded-xl text-[10px] font-black text-indigo-400 uppercase ">
+                  {production.users?.length || 0} Members
+                </div>
+              </div>
+
+              <div className="space-y-4 mb-8 flex-1">
+                {production.users?.slice(0, 4).map((u: any) => (
+                  <div key={u.userId} className="flex items-center gap-3 p-2 hover:bg-white/5 rounded-2xl transition-colors cursor-default border border-transparent hover:border-white/5">
+                    <div className="w-10 h-10 rounded-xl bg-background border border-card-border flex items-center justify-center text-xs font-black text-indigo-400 ">
+                      {u.user.name?.[0]?.toUpperCase() || 'U'}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-black text-foreground uppercase  truncate">{u.user.name || u.user.email}</p>
+                      <p className="text-[10px] text-muted-foreground uppercase  font-bold">{u.role.name}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Guard requiredPermissions={['production:manage']}>
+                <Link
+                  href={`/productions/${id}/team`}
+                  className="flex items-center justify-center w-full px-4 py-4 bg-background border border-card-border text-foreground text-[10px] font-black uppercase  rounded-2xl transition-all hover:bg-indigo-600 hover:text-white hover:border-indigo-500/50  active:scale-95"
+                >
+                  Manage Crew Access
+                </Link>
+              </Guard>
+            </div>
+
+            {/* 2. Analytics */}
+            <Link href={`/productions/${id}/analytics`} className="group relative block h-full">
+              <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-8 h-full transition-all hover:bg-background/80 hover:border-pink-500/40 relative overflow-hidden active:scale-[0.98] flex flex-col justify-center">
+                <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none group-hover:scale-110 group-hover:opacity-10 transition-all duration-500">
+                  <BarChart3 size={120} className="text-pink-500" />
+                </div>
+                <div className="w-16 h-16 rounded-[1.5rem] bg-pink-500/10 flex items-center justify-center border border-pink-500/20 mb-8 group-hover:bg-pink-600 group-hover:text-white transition-colors duration-300">
+                  <BarChart3 size={28} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-foreground uppercase tracking-widest mb-2">Analytics</h3>
+                  <p className="text-xs text-muted font-bold leading-relaxed uppercase group-hover:text-muted-foreground transition-colors">Insights, Viewership & Performance Metrics</p>
+                </div>
+                <div className="mt-8 flex items-center gap-2 text-[10px] font-black text-pink-400 uppercase opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                  Review Data Protocol <ChevronRight size={14} />
+                </div>
+              </div>
+            </Link>
+
+            {/* 3. Automation */}
+            <Link href={`/productions/${id}/automation`} className="group relative block h-full">
+              <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-8 h-full transition-all hover:bg-background/80 hover:border-indigo-500/40 relative overflow-hidden active:scale-[0.98] flex flex-col justify-center">
+                <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none group-hover:scale-110 group-hover:opacity-10 transition-all duration-500">
+                  <Zap size={120} className="text-indigo-500" />
+                </div>
+                <div className="w-16 h-16 rounded-[1.5rem] bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                  <Zap size={28} className="group-hover:animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-foreground uppercase tracking-widest mb-2">Automation</h3>
+                  <p className="text-xs text-muted font-bold leading-relaxed uppercase group-hover:text-muted-foreground transition-colors">Logic Rules, Cloud Hooks & Macro Triggers</p>
+                </div>
+                <div className="mt-8 flex items-center gap-2 text-[10px] font-black text-indigo-400 uppercase opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                  Configure Logic Engine <ChevronRight size={14} />
+                </div>
+              </div>
+            </Link>
+          </div>
         </div>
 
         {/* Sidebar: Utils & Team - Sticky for Desktop (Bento Intelligence Column) */}
@@ -262,96 +342,14 @@ export default function ProductionDetailPage() {
             {/* Integrations & API Access */}
             <IntegrationsPanel productionId={id} />
 
-            {/* Team Snapshot Card */}
-            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6  relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                <Users size={80} />
-              </div>
-              <div className="flex items-center justify-between mb-8">
-                <div className="space-y-1">
-                  <h2 className="text-xs font-black text-muted uppercase ">Live Team</h2>
-                  <p className="text-lg font-black text-foreground uppercase ">Active Crew</p>
-                </div>
-                <div className="px-3 py-1 bg-indigo-600/10 border border-indigo-500/20 rounded-xl text-[10px] font-black text-indigo-400 uppercase ">
-                  {production.users?.length || 0} Members
-                </div>
-              </div>
-
-              <div className="space-y-4 mb-8">
-                {production.users?.slice(0, 4).map((u: any) => (
-                  <div key={u.userId} className="flex items-center gap-3 p-2 hover:bg-white/5 rounded-2xl transition-colors cursor-default border border-transparent hover:border-white/5">
-                    <div className="w-10 h-10 rounded-xl bg-background border border-card-border flex items-center justify-center text-xs font-black text-indigo-400 ">
-                      {u.user.name?.[0]?.toUpperCase() || 'U'}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-black text-foreground uppercase  truncate">{u.user.name || u.user.email}</p>
-                      <p className="text-[10px] text-muted-foreground uppercase  font-bold">{u.role.name}</p>
-                    </div>
-                  </div>
-                ))}
-                {(!production.users || production.users.length === 0) && (
-                  <div className="py-6 text-center border-2 border-dashed border-card-border rounded-2xl">
-                    <p className="text-xs text-muted font-bold uppercase ">No team assigned</p>
-                  </div>
-                )}
-              </div>
-
-              <Guard requiredPermissions={['production:manage']}>
-                <Link
-                  href={`/productions/${id}/team`}
-                  className="flex items-center justify-center w-full px-4 py-4 bg-background border border-card-border text-foreground text-[10px] font-black uppercase  rounded-2xl transition-all hover:bg-indigo-600 hover:text-white hover:border-indigo-500/50  active:scale-95"
-                >
-                  Manage Crew Access
-                </Link>
-              </Guard>
-            </div>
-
-            {/* Quick Links / Utility Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-6">
-              <Link href={`/productions/${id}/automation`} className="group relative block">
-                <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6 h-full transition-all hover:bg-background/80 hover:border-indigo-500/40 relative overflow-hidden active:scale-[0.98]">
-                  <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none group-hover:scale-110 group-hover:opacity-10 transition-all duration-500">
-                    <Zap size={100} className="text-indigo-500" />
-                  </div>
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
-                    <Zap size={22} className="group-hover:animate-pulse" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-black text-foreground uppercase tracking-widest mb-1.5">Automation</h3>
-                    <p className="text-[10px] text-muted font-bold leading-relaxed uppercase group-hover:text-muted-foreground transition-colors">Rules, Triggers & Macros</p>
-                  </div>
-                  <div className="mt-6 flex items-center gap-2 text-[9px] font-black text-indigo-400 uppercase opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                    Configure Node <ChevronRight size={12} />
-                  </div>
-                </div>
-              </Link>
-
-              <Link href={`/productions/${id}/analytics`} className="group relative block">
-                <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6 h-full transition-all hover:bg-background/80 hover:border-pink-500/40 relative overflow-hidden active:scale-[0.98]">
-                  <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none group-hover:scale-110 group-hover:opacity-10 transition-all duration-500">
-                    <BarChart3 size={100} className="text-pink-500" />
-                  </div>
-                  <div className="w-12 h-12 rounded-2xl bg-pink-500/10 flex items-center justify-center border border-pink-500/20 mb-6 group-hover:bg-pink-600 group-hover:text-white transition-colors duration-300">
-                    <BarChart3 size={22} />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-black text-foreground uppercase tracking-widest mb-1.5">Analytics</h3>
-                    <p className="text-[10px] text-muted font-bold leading-relaxed uppercase group-hover:text-muted-foreground transition-colors">Insights & Performance</p>
-                  </div>
-                  <div className="mt-6 flex items-center gap-2 text-[9px] font-black text-pink-400 uppercase opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                    Review Stats <ChevronRight size={12} />
-                  </div>
-                </div>
-              </Link>
-            </div>
           </div>
         </div>
-      </div>
 
-      {/* Persistent Bottom Chat for Quick Comms */}
-      <div className="hidden sm:block">
-        <ChatPanel productionId={id} />
+        {/* Persistent Bottom Chat for Quick Comms */}
+        <div className="hidden sm:block">
+          <ChatPanel productionId={id} />
+        </div>
       </div>
-    </div >
+    </div>
   );
 }
