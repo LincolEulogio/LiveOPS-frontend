@@ -17,7 +17,7 @@ import {
     Bold, Italic, Underline as UnderlineIcon, List, ListOrdered,
     Type, Save, Cloud, CloudOff, AlertCircle,
     Heading1, Heading2, Heading3, Heading4, Heading5, Heading6,
-    Zap, Hash, AlignLeft, Sparkles, MessageSquare, Bot, X
+    Zap, Hash, AlignLeft, Sparkles, MessageSquare, Bot, X, User
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { aiService } from '@/features/ai/api/ai.service';
@@ -37,26 +37,44 @@ export const ScriptEditor = ({ productionId }: Props) => {
     const { doc, awareness, isLoaded, syncScroll, isSyncing, lastSyncTime } = useScript(productionId);
     const user = useAuthStore((state) => state.user);
     const [, setTick] = React.useState(0);
-    const [aiSuggestion, setAiSuggestion] = React.useState<string | null>(null);
+    const [isAiChatOpen, setIsAiChatOpen] = React.useState(false);
+    const [aiMessages, setAiMessages] = React.useState<any[]>([]);
+    const [aiInput, setAiInput] = React.useState('');
     const [isAiLoading, setIsAiLoading] = React.useState(false);
+    const aiBottomRef = React.useRef<HTMLDivElement>(null);
 
-    const handleAiSuggest = async () => {
-        if (!editor) return;
+    React.useEffect(() => {
+        aiBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [aiMessages]);
 
-        const { from, to } = editor.state.selection;
-        const text = editor.state.doc.textBetween(from, to, ' ') || editor.getText();
+    const handleSendAi = async () => {
+        if (!editor || !aiInput.trim() || isAiLoading) return;
 
+        const userMsg = aiInput.trim();
+        setAiInput('');
+        const newMsgs = [...aiMessages, { role: 'user', content: userMsg }];
+        setAiMessages(newMsgs);
         setIsAiLoading(true);
+
         try {
-            const { suggestion } = await aiService.suggestScriptContent('Segmento del Guion', text);
-            setAiSuggestion(suggestion);
+            const { from, to } = editor.state.selection;
+            const text = editor.state.doc.textBetween(from, to, ' ') || editor.getText();
+
+            const systemContext = `ESTAS ASISTIENDO AL GUIONISTA EN VIVO. 
+            Contenido actual del guion: "${text}"
+            
+            Ayúdalo a redactar, sugerir ideas o corregir errores. Responde el chat natural y cuando ofrezcas reescrituras hazlas listas para copiar.`;
+
+            const res = await aiService.chat(newMsgs, systemContext);
+            setAiMessages(prev => [...prev, { role: 'assistant', content: res.reply }]);
         } catch (error) {
-            console.error('AI Suggestion failed:', error);
-            setAiSuggestion("SYSTEM ALERT: Failed to reach creative intelligence nodes. Please check your network or Gemini API key.");
+            console.error('AI Chat failed:', error);
+            setAiMessages(prev => [...prev, { role: 'assistant', content: "ALERT: Failed to reach creative intelligence nodes." }]);
         } finally {
             setIsAiLoading(false);
         }
     };
+
 
     const editor = useEditor({
         immediatelyRender: false,
@@ -195,11 +213,15 @@ export const ScriptEditor = ({ productionId }: Props) => {
                     />
                     <div className="w-px h-6 bg-card-border/50 mx-2 shrink-0" />
                     <button
-                        onClick={handleAiSuggest}
-                        disabled={isAiLoading}
+                        onClick={() => {
+                            if (!isAiChatOpen && aiMessages.length === 0) {
+                                setAiMessages([{ role: 'assistant', content: '¡Hola! Soy tu asistente de guion de LIVIA. ¿En qué te ayudo con la redacción hoy?' }]);
+                            }
+                            setIsAiChatOpen(v => !v);
+                        }}
                         className={cn(
                             "flex items-center gap-2 px-4 py-2 bg-indigo-600/10 text-indigo-400 rounded-xl hover:bg-indigo-600 hover:text-white transition-all text-[10px] font-black uppercase active:scale-95",
-                            isAiLoading && "opacity-50 pointer-events-none"
+                            isAiChatOpen && "bg-indigo-600 text-white"
                         )}
                     >
                         {isAiLoading ? <Bot size={14} className="animate-bounce" /> : <Sparkles size={14} />}
@@ -244,52 +266,85 @@ export const ScriptEditor = ({ productionId }: Props) => {
                     />
                 </div>
 
-                {/* AI Suggestion Overlay */}
+                {/* AI Suggestion Overlay Chat */}
                 <AnimatePresence>
-                    {aiSuggestion && (
+                    {isAiChatOpen && (
                         <motion.div
                             initial={{ x: 500, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             exit={{ x: 500, opacity: 0 }}
-                            className="absolute right-8 top-12 bottom-12 w-[480px] bg-card-bg/98 backdrop-blur-3xl border border-indigo-500/40 rounded-[2.5rem] p-10 shadow-[0_0_50px_rgba(0,0,0,0.5)] z-50 flex flex-col"
+                            className="absolute right-4 top-4 bottom-4 w-[420px] bg-card-bg/98 backdrop-blur-3xl border border-indigo-500/40 rounded-[2rem] p-6 shadow-[0_0_50px_rgba(0,0,0,0.5)] z-50 flex flex-col"
                         >
-                            <div className="flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-2">
-                                    <Sparkles size={18} className="text-indigo-400" />
-                                    <span className="text-sm font-black text-foreground uppercase tracking-widest">Livia AI Suggestions</span>
+                            <div className="flex items-center justify-between mb-4 border-b border-card-border/50 pb-4">
+                                <div className="flex items-center gap-2 text-indigo-400">
+                                    <Sparkles size={16} />
+                                    <span className="text-xs font-black text-foreground uppercase tracking-widest">Livia Script Assistant</span>
                                 </div>
                                 <button
-                                    onClick={() => setAiSuggestion(null)}
-                                    className="p-2 hover:bg-white/10 rounded-lg text-muted"
+                                    onClick={() => setIsAiChatOpen(false)}
+                                    className="p-1.5 hover:bg-white/10 rounded-lg text-muted"
                                 >
                                     <X size={14} />
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto no-scrollbar space-y-4">
-                                <div className="prose prose-sm prose-invert text-muted">
-                                    {aiSuggestion.split('\n').map((line, i) => (
-                                        <p key={i} className="mb-3 leading-relaxed text-[13px] font-medium text-foreground/80">{line}</p>
-                                    ))}
-                                </div>
+                            <div className="flex-1 overflow-y-auto custom-scrollbar-premium pr-2 flex flex-col gap-4">
+                                {aiMessages.map((m, i) => (
+                                    <div key={i} className={`flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                                        <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                                            {m.role === 'assistant' ? <Bot size={10} /> : <User size={10} />}
+                                        </div>
+                                        <div className={`px-4 py-3 rounded-2xl text-[16px] leading-relaxed max-w-[85%] ${m.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-sm' : 'bg-background/40 border border-card-border text-foreground/90 rounded-tl-sm'}`}>
+                                            {m.content.split('\n').map((line: any, idx: number) => (
+                                                <p key={idx} className={`${line.startsWith('**') ? 'font-black text-indigo-300 mt-2 mb-1' : 'mb-1 last:mb-0'}`}>
+                                                    {line.replace(/\*\*/g, '')}
+                                                </p>
+                                            ))}
+                                            {m.role === 'assistant' && i === aiMessages.length - 1 && (
+                                                <button
+                                                    onClick={() => editor?.chain().focus().insertContent(m.content).run()}
+                                                    className="mt-3 px-3 py-1.5 bg-indigo-600/20 text-indigo-300 text-[9px] font-black uppercase rounded-lg hover:bg-indigo-600 hover:text-white transition-all flex items-center gap-1 w-fit"
+                                                >
+                                                    <Zap size={10} /> Insertar en Editor
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                                {isAiLoading && (
+                                    <div className="flex gap-3">
+                                        <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center bg-indigo-500/10 text-indigo-400">
+                                            <Bot size={10} />
+                                        </div>
+                                        <div className="px-4 py-2 rounded-2xl rounded-tl-sm bg-background/40 border border-card-border text-indigo-400 flex items-center gap-2">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" style={{ animationDelay: '0s' }} />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" style={{ animationDelay: '0.2s' }} />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" style={{ animationDelay: '0.4s' }} />
+                                        </div>
+                                    </div>
+                                )}
+                                <div ref={aiBottomRef} />
                             </div>
 
-                            <div className="mt-6 pt-6 border-t border-card-border/50">
-                                <button
-                                    onClick={() => {
-                                        const htmlContent = `
-                                            <div class="ai-suggestion-block">
-                                                <p class="ai-header">🤖 LIVIA INTELLIGENCE SUGGESTION</p>
-                                                <div class="ai-content">${aiSuggestion.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br/>')}</div>
-                                            </div>
-                                            <p></p>
-                                        `;
-                                        editor?.chain().focus().insertContent(htmlContent).run();
-                                        setAiSuggestion(null);
+                            <div className="mt-4 shrink-0 relative">
+                                <input
+                                    value={aiInput}
+                                    onChange={(e) => setAiInput(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            e.preventDefault();
+                                            handleSendAi();
+                                        }
                                     }}
-                                    className="w-full py-5 bg-indigo-600 text-white text-[12px] font-black uppercase rounded-2xl hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 transition-all active:scale-95"
+                                    placeholder="Pregúntale a tu editor..."
+                                    className="w-full bg-background/50 border border-card-border focus:border-indigo-500/40 rounded-xl pl-4 pr-10 py-3 text-[16px] text-foreground placeholder:text-muted focus:outline-none transition-all"
+                                />
+                                <button
+                                    onClick={handleSendAi}
+                                    disabled={!aiInput.trim() || isAiLoading}
+                                    className="absolute right-1.5 top-1.5 bottom-1.5 aspect-square flex items-center justify-center bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-[10px] transition-all"
                                 >
-                                    Insert in Script
+                                    <MessageSquare size={12} />
                                 </button>
                             </div>
                         </motion.div>

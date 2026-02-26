@@ -6,4 +6,7 @@ export const aiService = {
 
     generateBriefing: (data: { social: string; telemetry: string; script: string }): Promise<{ briefing: string }> =>
         apiClient.post('/ai/generate-briefing', data),
+
+    chat: (history: { role: 'user' | 'assistant'; content: string }[], context: string): Promise<{ reply: string }> =>
+        apiClient.post('/ai/chat', { history, context }),
 };
