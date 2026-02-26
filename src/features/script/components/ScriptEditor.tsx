@@ -277,7 +277,14 @@ export const ScriptEditor = ({ productionId }: Props) => {
                             <div className="mt-6 pt-6 border-t border-card-border/50">
                                 <button
                                     onClick={() => {
-                                        editor?.chain().focus().insertContent(`\n\n> AI SUGGESTION:\n${aiSuggestion}`).run();
+                                        const htmlContent = `
+                                            <div class="ai-suggestion-block">
+                                                <p class="ai-header">🤖 LIVIA INTELLIGENCE SUGGESTION</p>
+                                                <div class="ai-content">${aiSuggestion.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br/>')}</div>
+                                            </div>
+                                            <p></p>
+                                        `;
+                                        editor?.chain().focus().insertContent(htmlContent).run();
                                         setAiSuggestion(null);
                                     }}
                                     className="w-full py-5 bg-indigo-600 text-white text-[12px] font-black uppercase rounded-2xl hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 transition-all active:scale-95"
@@ -366,6 +373,38 @@ export const ScriptEditor = ({ productionId }: Props) => {
                 }
                 .custom-scrollbar-premium:hover::-webkit-scrollbar-thumb {
                     background: rgba(99,102,241,0.2);
+                }
+
+                /* AI Suggestion Insertion Styles */
+                .ai-suggestion-block {
+                    background: rgba(99, 102, 241, 0.05);
+                    border-left: 4px solid #6366f1;
+                    padding: 1.5rem 2rem;
+                    margin: 2rem 0;
+                    border-radius: 0 1.5rem 1.5rem 0;
+                    cursor: default;
+                }
+                .ai-header {
+                    font-family: sans-serif !important;
+                    font-size: 11px !important;
+                    font-weight: 900 !important;
+                    color: #6366f1 !important;
+                    letter-spacing: 0.1em;
+                    margin-bottom: 1rem !important;
+                }
+                .ai-content {
+                    font-family: sans-serif !important;
+                    font-size: 16px !important;
+                    line-height: 1.6 !important;
+                    color: rgba(255, 255, 255, 0.8) !important;
+                    font-weight: 400 !important;
+                }
+                .ai-content p {
+                    margin-bottom: 0.75rem !important;
+                }
+                .ai-content strong {
+                    color: #fff !important;
+                    font-weight: 700 !important;
                 }
             `}</style>
         </div>
