@@ -95,7 +95,7 @@ export default function ProductionDetailPage() {
     <div className="mx-auto max-w-[1800px] space-y-6 sm:space-y-8 pb-6 mt-2 sm:mt-6 px-4 sm:px-0">
       {/* Header - Glass Container */}
       <div className="relative group">
-        <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-[2.5rem] blur opacity-10" />
+        <div className="absolute -inset-1 rounded-[2.5rem] blur opacity-10" />
         <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center bg-card-bg/80 backdrop-blur-2xl border border-card-border p-6 sm:p-8 rounded-[2rem]  gap-6 overflow-hidden">
           <div className="flex items-center gap-5 min-w-0">
             <div className="w-16 h-16 rounded-[1.5rem] bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 shrink-0">

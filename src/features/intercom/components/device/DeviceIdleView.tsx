@@ -65,7 +65,7 @@ export const DeviceIdleView: React.FC<DeviceIdleViewProps> = ({
                 </div>
 
                 <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-[2.5rem] blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
+                    <div className="absolute -inset-1 rounded-[2.5rem] blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
                     <div className="relative bg-card-bg border border-card-border p-6 sm:p-8 rounded-[2rem]  overflow-hidden min-h-[160px] flex flex-col justify-center">
                         {activeBlock ? (
                             <>

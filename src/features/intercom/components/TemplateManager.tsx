@@ -144,10 +144,10 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                     setView('form');
                     setIsManagerOpen(true);
                 }}
-                className="p-2.5 bg-card-bg hover:bg-card-border/50 border border-card-border rounded-xl text-muted hover:text-foreground transition-all  group"
-                title="Nueva Plantilla"
+                className="flex items-center gap-3 px-5 py-3.5 bg-background/40 hover:bg-indigo-500/10 border border-card-border hover:border-indigo-500/30 rounded-2xl text-muted hover:text-indigo-400 transition-all group active:scale-95"
             >
-                <Settings size={18} className="group-hover:rotate-90 transition-transform duration-500" />
+                <Settings size={16} className="group-hover:rotate-90 transition-transform duration-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Alertas</span>
             </button>
 
             <Portal>

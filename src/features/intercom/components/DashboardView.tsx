@@ -73,7 +73,7 @@ export const DashboardView = () => {
     };
 
     return (
-        <div className="space-y-8 max-w-[1800px] mx-auto pb-20 mt-2 sm:mt-4">
+        <div className="space-y-4 max-w-[1800px] mx-auto pb-20 mt-2 sm:mt-4">
 
             <DashboardHeader
                 production={production}
@@ -86,23 +86,25 @@ export const DashboardView = () => {
                 setActiveTab={setActiveTab}
             />
 
-            <DashboardQuickActions
-                templates={templates}
-                onMassAlert={handleMassAlert}
-            />
-
             {/* Bento Grid Architecture */}
             <div className="grid grid-cols-1 min-[1280px]:grid-cols-12 gap-8 items-start">
 
                 {/* Protocol Area (Main Deck) */}
-                <div className="min-[1280px]:col-span-8 min-[1440px]:col-span-9 space-y-8 min-h-[600px]">
+                <div className="min-[1280px]:col-span-8 min-[1440px]:col-span-9 space-y-6 min-h-[400px]">
+                    {activeTab === 'intercom' && (
+                        <DashboardQuickActions
+                            templates={templates}
+                            onMassAlert={handleMassAlert}
+                        />
+                    )}
+
                     <AnimatePresence mode="wait">
                         {activeTab === 'intercom' ? (
                             <motion.div
                                 key="intercom"
-                                initial={{ opacity: 0, scale: 0.98, y: 20 }}
+                                initial={{ opacity: 0, scale: 0.98, y: 10 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.98, y: -20 }}
+                                exit={{ opacity: 0, scale: 0.98, y: -10 }}
                                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                                 className="grid grid-cols-1 sm:grid-cols-2 min-[1600px]:grid-cols-3 gap-6 xl:gap-8"
                             >
