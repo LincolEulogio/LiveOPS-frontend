@@ -12,7 +12,7 @@ import {
 import {
     LiveKitRoom, RoomAudioRenderer,
     useParticipants, useConnectionState, useTracks, VideoTrack,
-    useLocalParticipant, useChat, isTrackReference,
+    useLocalParticipant, useChat, isTrackReference, useRoomContext
 } from '@livekit/components-react';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-react';
 import { ConnectionState, Track } from 'livekit-client';
@@ -30,27 +30,38 @@ const lkBase = `
 const REACTIONS = ['👏', '❤️', '😂', '🔥', '👍', '🎉'];
 
 /* ─── FloatingReaction ──────────────────────────────────────────────────── */
-function FloatingReaction({ emoji, id }: { emoji: string; id: number }) {
+function FloatingReaction({ emoji, id, senderName }: { emoji: string; id: number; senderName?: string }) {
+    const startPos = 10 + (id % 80); // Randomish horizontal start between 10% and 90%
+    const animType = id % 3; // Randomish curve type
     return (
         <div
             key={id}
-            className="fixed bottom-24 pointer-events-none text-4xl animate-bounce z-50"
-            style={{ left: `${20 + (id % 8) * 10}%`, animationDuration: '1s', animationIterationCount: 3 }}
+            className="fixed pointer-events-none z-[9999] flex flex-col items-center"
+            style={{
+                left: `${startPos}%`,
+                bottom: '100px', // Start right above the control bar
+                animation: `floatUp-${animType} 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards`
+            }}
         >
-            {emoji}
+            <style>{`
+                @keyframes floatUp-0 { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 10% { transform: translateY(-20px) scale(1.2); opacity: 1; } 100% { transform: translateY(-60vh) translateX(-40px) scale(1); opacity: 0; } }
+                @keyframes floatUp-1 { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 10% { transform: translateY(-20px) scale(1.2); opacity: 1; } 100% { transform: translateY(-60vh) translateX(40px) scale(1); opacity: 0; } }
+                @keyframes floatUp-2 { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 10% { transform: translateY(-20px) scale(1.2); opacity: 1; } 100% { transform: translateY(-60vh) scale(1); opacity: 0; } }
+            `}</style>
+            <div className="text-[40px] drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">{emoji}</div>
+            {senderName && <span className="text-[10px] font-black tracking-wider text-white bg-black/70 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full mt-2 shadow-2xl">{senderName}</span>}
         </div>
     );
 }
 
 /* ─── ChatPanel ─────────────────────────────────────────────────────────── */
-function ChatPanel({ onClose }: { onClose: () => void }) {
-    const { chatMessages, send, isSending } = useChat();
+function ChatPanel({ onClose, messages, onSend }: { onClose: () => void; messages: any[]; onSend: (text: string) => void }) {
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
-    useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatMessages]);
-    const handleSend = async () => {
-        if (!input.trim() || isSending) return;
-        await send(input.trim()); setInput('');
+    useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+    const handleSend = () => {
+        if (!input.trim()) return;
+        onSend(input.trim()); setInput('');
     };
     return (
         <div className="flex flex-col w-[300px] shrink-0 bg-[#0b0c18] border-l border-violet-500/10">
@@ -62,12 +73,12 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
                 </button>
             </div>
             <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2 min-h-0">
-                {chatMessages.length === 0 && (
+                {messages.length === 0 && (
                     <div className="flex-1 flex items-center justify-center">
                         <p className="text-white/15 text-xs text-center leading-relaxed">El chat está vacío.<br />Di hola 👋</p>
                     </div>
                 )}
-                {chatMessages.map((msg: any) => {
+                {messages.map((msg: any) => {
                     const isOwn = msg.from?.isLocal ?? false;
                     return (
                         <div key={msg.id ?? msg.timestamp} className={`flex flex-col max-w-[85%] gap-0.5 ${isOwn ? 'self-end items-end' : 'self-start items-start'}`}>
@@ -88,7 +99,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
                     onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
                     placeholder="Escribe un mensaje..."
                     className="flex-1 bg-white/5 border border-violet-500/15 rounded-[20px] px-4 py-2.5 text-[13px] text-white/85 placeholder:text-white/20 focus:outline-none focus:border-violet-500/40 focus:bg-violet-500/6 transition-colors" />
-                <button onClick={handleSend} disabled={isSending || !input.trim()}
+                <button onClick={handleSend} disabled={!input.trim()}
                     className="w-10 h-10 min-w-[40px] rounded-full bg-gradient-to-br from-violet-700 to-violet-500 flex items-center justify-center shadow-lg shadow-violet-500/25 disabled:opacity-40 transition-opacity">
                     <Send size={14} className="text-white" />
                 </button>
@@ -117,9 +128,14 @@ function VideoTile({ trackRef, onClick, isPinned, isHandRaised }: {
                     </div>
                 </div>
             }
+            {/* Top right hand raise indicator */}
+            {isHandRaised && (
+                <div className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.5)] animate-bounce">
+                    <span className="text-lg">✋</span>
+                </div>
+            )}
             {/* Bottom bar */}
-            <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/70 to-transparent flex items-center gap-1.5">
-                {isHandRaised && <span className="text-sm">✋</span>}
+            <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/70 to-transparent flex items-center gap-1.5 z-10">
                 <span className="text-white text-[11px] font-bold truncate">{p.name || p.identity}</span>
                 {p.isSpeaking && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />}
             </div>
@@ -183,27 +199,51 @@ function GridLayout({ tracks, pinnedId, raisedHands, onPin }: {
     );
 }
 
-/* ─── InviteButton ────────────────────────────────────────────────────────  */
-function InviteButton({ roomId }: { roomId: string }) {
+/* ─── InviteModal ─────────────────────────────────────────────────────────  */
+function InviteModal({ roomId, onClose }: { roomId: string; onClose: () => void }) {
     const [copied, setCopied] = useState(false);
     const link = typeof window !== 'undefined' ? `${window.location.origin}/call/${roomId}` : '';
     const copy = () => {
         navigator.clipboard.writeText(link);
         setCopied(true);
-        toast.success('Link copiado al portapapeles');
+        toast.success('Link copiado al portapapeles', { position: 'bottom-center' });
         setTimeout(() => setCopied(false), 2500);
     };
     return (
-        <button onClick={copy}
-            className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider bg-white/5 border border-white/8 text-white/50 hover:bg-violet-500/12 hover:border-violet-500/30 hover:text-violet-200/90 transition-colors">
-            {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
-            <span>{copied ? 'Copiado!' : 'Invitar'}</span>
-        </button>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+            <div className="max-w-md w-full bg-[#0d0e1c] border border-violet-500/15 rounded-3xl p-6 shadow-2xl relative">
+                <button onClick={onClose} className="absolute top-4 right-4 p-1.5 rounded-lg bg-white/5 border border-white/8 text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-colors">
+                    <X size={14} />
+                </button>
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/25 flex items-center justify-center">
+                        <Users size={16} className="text-violet-400" />
+                    </div>
+                    <div>
+                        <h2 className="text-sm font-black text-white uppercase tracking-widest">Invitar a otros</h2>
+                        <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Cualquiera con este enlace puede unirse</p>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2 p-1.5 bg-black/50 border border-violet-500/20 rounded-xl mb-4">
+                    <div className="flex-1 overflow-hidden px-3 text-[11px] text-white/60 font-mono truncate select-all">{link}</div>
+                    <button onClick={copy} className="flex items-center gap-1.5 px-4 py-2 bg-violet-600 hover:bg-violet-500 rounded-lg text-white text-[10px] font-black uppercase tracking-wider transition-colors shrink-0">
+                        {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                        {copied ? 'Copiado' : 'Copiar'}
+                    </button>
+                </div>
+
+                <p className="text-[10px] text-white/30 text-center uppercase tracking-widest border-t border-white/5 pt-4 mt-2">
+                    Asegúrate de compartirlo solo con personas autorizadas.
+                </p>
+            </div>
+        </div>
     );
 }
 
 /* ─── VideoCallInner ──────────────────────────────────────────────────────- */
 const VideoCallInner = ({ roomId, userName, onLeave }: { roomId: string; userName: string; onLeave: () => void }) => {
+    const room = useRoomContext();
     const participants = useParticipants();
     const connectionState = useConnectionState();
     const isConnected = connectionState === ConnectionState.Connected;
@@ -212,13 +252,91 @@ const VideoCallInner = ({ roomId, userName, onLeave }: { roomId: string; userNam
     const [pinnedId, setPinnedId] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'spotlight' | 'grid'>('spotlight');
     const [chatOpen, setChatOpen] = useState(false);
+    const [inviteOpen, setInviteOpen] = useState(false);
     const [handRaised, setHandRaised] = useState(false);
     const [raisedHands, setRaisedHands] = useState<Set<string>>(new Set());
     const [showReactions, setShowReactions] = useState(false);
-    const [activeReactions, setActiveReactions] = useState<{ emoji: string; id: number }[]>([]);
+    const [activeReactions, setActiveReactions] = useState<{ emoji: string; id: number; senderName?: string }[]>([]);
+
+    const chatKey = `chat_hist_${roomId}`;
+    const [chatMessages, setChatMessages] = useState<any[]>(() => {
+        if (typeof window !== 'undefined') {
+            try { const saved = localStorage.getItem(chatKey); if (saved) return JSON.parse(saved); } catch { }
+        }
+        return [];
+    });
+    useEffect(() => { localStorage.setItem(chatKey, JSON.stringify(chatMessages)); }, [chatMessages, chatKey]);
+
+    const [unreadCount, setUnreadCount] = useState(0);
+    const isChatOpenRef = useRef(chatOpen);
+    useEffect(() => {
+        isChatOpenRef.current = chatOpen;
+        if (chatOpen) setUnreadCount(0);
+    }, [chatOpen]);
+
+    const [fastRaisedHands, setFastRaisedHands] = useState<Record<string, boolean>>({});
 
     const cameraTracks = useTracks([{ source: Track.Source.Camera, withPlaceholder: true }], { onlySubscribed: false });
     const screenTracks = useTracks([{ source: Track.Source.ScreenShare, withPlaceholder: false }], { onlySubscribed: false });
+
+    // Computed Raised Hands (Metadata fallback + Instant DataChannel + Local)
+    const finalRaisedHands = useMemo(() => {
+        const result = new Set<string>();
+        if (handRaised && localParticipant?.identity) result.add(localParticipant.identity);
+        participants.forEach(p => {
+            if (p.isLocal) return;
+            if (fastRaisedHands[p.identity] !== undefined) {
+                if (fastRaisedHands[p.identity]) result.add(p.identity);
+            } else {
+                try {
+                    const meta = JSON.parse(p.metadata || '{}');
+                    if (meta.handRaised) result.add(p.identity);
+                } catch { }
+            }
+        });
+        return result;
+    }, [participants, handRaised, fastRaisedHands, localParticipant]);
+
+    // Handle DataChannel messages (Reactions, Instant Hands, Chat)
+    useEffect(() => {
+        const handleData = (payload: Uint8Array, participant?: any) => {
+            try {
+                const str = new TextDecoder().decode(payload);
+                const data = JSON.parse(str);
+                if (data.type === 'reaction') {
+                    setActiveReactions(prev => [...prev, { emoji: data.emoji, id: data.id, senderName: data.senderName }]);
+                    setTimeout(() => setActiveReactions(prev => prev.filter(r => r.id !== data.id)), 3500);
+                } else if (data.type === 'hand') {
+                    setFastRaisedHands(prev => ({ ...prev, [data.identity]: data.state }));
+                } else if (data.type === 'chat') {
+                    setChatMessages(prev => [...prev, { id: data.id, message: data.text, timestamp: data.timestamp, from: { name: data.senderName, isLocal: false } }]);
+                    if (!isChatOpenRef.current) {
+                        setUnreadCount(prev => prev + 1);
+                        toast('💬 ' + data.senderName, { description: data.text, position: 'top-right' });
+                        try {
+                            const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+                            if (ctx.state === 'running') {
+                                const osc = ctx.createOscillator();
+                                const gain = ctx.createGain();
+                                osc.type = 'sine';
+                                osc.frequency.setValueAtTime(800, ctx.currentTime);
+                                osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.05);
+                                gain.gain.setValueAtTime(0, ctx.currentTime);
+                                gain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.02);
+                                gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.1);
+                                osc.connect(gain);
+                                gain.connect(ctx.destination);
+                                osc.start();
+                                osc.stop(ctx.currentTime + 0.1);
+                            }
+                        } catch { }
+                    }
+                }
+            } catch { }
+        };
+        room.on('dataReceived', handleData);
+        return () => { room.off('dataReceived', handleData); };
+    }, [room]);
 
     // Sync hand raise via metadata — only when fully connected
     useEffect(() => {
@@ -226,25 +344,31 @@ const VideoCallInner = ({ roomId, userName, onLeave }: { roomId: string; userNam
         localParticipant.setMetadata(JSON.stringify({ handRaised })).catch(() => {
             // silently ignore if room is disconnecting
         });
-    }, [handRaised, isConnected]);
+    }, [handRaised, isConnected, localParticipant]);
 
-    // Read others' hand raise from metadata
-    useEffect(() => {
-        const raised = new Set<string>();
-        participants.forEach(p => {
-            try {
-                const meta = JSON.parse(p.metadata || '{}');
-                if (meta.handRaised) raised.add(p.identity);
-            } catch { }
-        });
-        setRaisedHands(raised);
-    }, [participants]);
+
 
     const sendReaction = (emoji: string) => {
         const id = Date.now();
-        setActiveReactions(prev => [...prev, { emoji, id }]);
+        const senderName = localParticipant.name || localParticipant.identity || '';
+        try {
+            const str = JSON.stringify({ type: 'reaction', emoji, id, senderName });
+            localParticipant.publishData(new TextEncoder().encode(str), { reliable: true });
+        } catch { }
+        setActiveReactions(prev => [...prev, { emoji, id, senderName }]);
         setTimeout(() => setActiveReactions(prev => prev.filter(r => r.id !== id)), 3500);
         setShowReactions(false);
+    };
+
+    const handleSendChat = (text: string) => {
+        const timestamp = Date.now();
+        const id = timestamp + Math.random();
+        const msg = { id, message: text, timestamp, from: { name: userName, isLocal: true } };
+        setChatMessages(prev => [...prev, msg]);
+        try {
+            const str = JSON.stringify({ type: 'chat', id, text, senderName: userName, timestamp });
+            localParticipant.publishData(new TextEncoder().encode(str), { reliable: true });
+        } catch { }
     };
 
     const activeSpeakerId = useMemo(() => {
@@ -266,7 +390,7 @@ const VideoCallInner = ({ roomId, userName, onLeave }: { roomId: string; userNam
     return (
         <div className="flex flex-col h-full bg-[#08090f]">
             {/* Floating reactions */}
-            {activeReactions.map(r => <FloatingReaction key={r.id} emoji={r.emoji} id={r.id} />)}
+            {activeReactions.map(r => <FloatingReaction key={r.id} emoji={r.emoji} id={r.id} senderName={r.senderName} />)}
 
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-2.5 border-b border-violet-500/10 bg-[#08090f]/90 backdrop-blur-xl shrink-0">
@@ -293,10 +417,10 @@ const VideoCallInner = ({ roomId, userName, onLeave }: { roomId: string; userNam
                         <Users size={9} className="text-white/30" />
                         <span className="text-[9px] text-white/40 font-bold">{participants.length}</span>
                     </div>
-                    {raisedHands.size > 0 && (
+                    {finalRaisedHands.size > 0 && (
                         <div className="flex items-center gap-1 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full">
                             <span className="text-[10px]">✋</span>
-                            <span className="text-[9px] font-black text-amber-400">{raisedHands.size}</span>
+                            <span className="text-[9px] font-black text-amber-400">{finalRaisedHands.size}</span>
                         </div>
                     )}
                 </div>
@@ -311,22 +435,22 @@ const VideoCallInner = ({ roomId, userName, onLeave }: { roomId: string; userNam
                     </div>
                     <div className="relative z-10 h-full">
                         {viewMode === 'grid'
-                            ? <GridLayout tracks={[...cameraTracks, ...screenTracks]} pinnedId={pinnedId} raisedHands={raisedHands} onPin={setPinnedId} />
-                            : <SpotlightLayout featured={featuredTrack} strip={stripTracks} pinnedId={pinnedId} raisedHands={raisedHands} onPin={setPinnedId} />
+                            ? <GridLayout tracks={[...cameraTracks, ...screenTracks]} pinnedId={pinnedId} raisedHands={finalRaisedHands} onPin={setPinnedId} />
+                            : <SpotlightLayout featured={featuredTrack} strip={stripTracks} pinnedId={pinnedId} raisedHands={finalRaisedHands} onPin={setPinnedId} />
                         }
                     </div>
                 </div>
-                {chatOpen && <ChatPanel onClose={() => setChatOpen(false)} />}
+                {chatOpen && <ChatPanel onClose={() => setChatOpen(false)} messages={chatMessages} onSend={handleSendChat} />}
             </div>
 
             {/* Control bar */}
-            <div className="flex items-center justify-center flex-wrap gap-2 px-6 py-3 bg-[#04050a] border-t border-violet-500/10 shrink-0 relative">
+            <div className="flex items-center justify-center flex-wrap gap-2 px-6 py-3 bg-[#04050a] border-t border-violet-500/10 shrink-0 relative z-[999]">
                 {/* Reactions picker */}
                 {showReactions && (
-                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 flex gap-2 bg-[#0e0f1e] border border-violet-500/15 rounded-2xl px-3 py-2 shadow-xl">
+                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 flex gap-2 bg-[#0e0f1e] border border-violet-500/15 rounded-2xl px-3 py-2 shadow-[0_0_30px_rgba(0,0,0,0.8)] z-[99999]">
                         {REACTIONS.map(e => (
                             <button key={e} onClick={() => sendReaction(e)}
-                                className="text-xl hover:scale-125 transition-transform">{e}</button>
+                                className="text-2xl hover:scale-125 transition-transform">{e}</button>
                         ))}
                     </div>
                 )}
@@ -346,14 +470,27 @@ const VideoCallInner = ({ roomId, userName, onLeave }: { roomId: string; userNam
                 </button>
 
                 {/* Screen share */}
-                <button onClick={() => localParticipant.setScreenShareEnabled(!isScreenShareEnabled)}
+                <button onClick={async () => {
+                    try {
+                        await localParticipant.setScreenShareEnabled(!isScreenShareEnabled, { audio: true });
+                    } catch (err: any) {
+                        toast.error(err.message || 'Error al compartir pantalla');
+                    }
+                }}
                     className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors ${isScreenShareEnabled ? 'bg-red-500/85 border border-red-400/50 text-white' : 'bg-white/5 border border-white/8 text-white/50 hover:bg-violet-500/12 hover:border-violet-500/30 hover:text-violet-200/90'}`}>
                     {isScreenShareEnabled ? <MonitorOff size={13} /> : <Monitor size={13} />}
                     <span>{isScreenShareEnabled ? 'Stop Share' : 'Compartir'}</span>
                 </button>
 
                 {/* Hand raise */}
-                <button onClick={() => setHandRaised(v => !v)}
+                <button onClick={() => {
+                    const next = !handRaised;
+                    setHandRaised(next);
+                    try {
+                        const str = JSON.stringify({ type: 'hand', state: next, identity: localParticipant.identity });
+                        localParticipant.publishData(new TextEncoder().encode(str), { reliable: true });
+                    } catch { }
+                }}
                     className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors ${handRaised ? 'bg-amber-500/90 border border-amber-400/50 text-white' : 'bg-white/5 border border-white/8 text-white/50 hover:bg-amber-500/12 hover:border-amber-500/30 hover:text-amber-200/90'}`}>
                     <Hand size={13} />
                     <span>{handRaised ? 'Bajar' : 'Levantar'}</span>
@@ -375,13 +512,22 @@ const VideoCallInner = ({ roomId, userName, onLeave }: { roomId: string; userNam
 
                 {/* Chat */}
                 <button onClick={() => setChatOpen(v => !v)}
-                    className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors ${chatOpen ? 'bg-violet-600/90 border border-violet-500/50 text-white' : 'bg-white/5 border border-white/8 text-white/50 hover:bg-violet-500/12 hover:border-violet-500/30 hover:text-violet-200/90'}`}>
+                    className={`relative flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors ${chatOpen ? 'bg-violet-600/90 border border-violet-500/50 text-white' : 'bg-white/5 border border-white/8 text-white/50 hover:bg-violet-500/12 hover:border-violet-500/30 hover:text-violet-200/90'}`}>
                     <MessageCircle size={13} />
                     <span>Chat</span>
+                    {unreadCount > 0 && !chatOpen && (
+                        <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold shadow-[0_0_10px_rgba(16,185,129,0.6)] animate-bounce">
+                            {unreadCount > 9 ? '9+' : unreadCount}
+                        </span>
+                    )}
                 </button>
 
                 {/* Invite */}
-                <InviteButton roomId={roomId} />
+                <button onClick={() => setInviteOpen(true)}
+                    className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider bg-white/5 border border-white/8 text-white/50 hover:bg-violet-500/12 hover:border-violet-500/30 hover:text-violet-200/90 transition-colors">
+                    <Copy size={13} />
+                    <span>Invitar</span>
+                </button>
 
                 {/* Leave */}
                 <button onClick={onLeave}
@@ -392,6 +538,7 @@ const VideoCallInner = ({ roomId, userName, onLeave }: { roomId: string; userNam
             </div>
 
             <RoomAudioRenderer />
+            {inviteOpen && <InviteModal roomId={roomId} onClose={() => setInviteOpen(false)} />}
         </div>
     );
 };
@@ -407,9 +554,14 @@ export const VideoCallRoom = ({ roomId }: { roomId: string }) => {
     const fetchedRef = useRef(false);
 
     // Derived constants (not hooks — safe to compute early)
-    const TOKEN_KEY = `vc_token_${roomId ?? ''}`;
-    const URL_KEY = `vc_url_${roomId ?? ''}`;
-    const clearCache = () => { sessionStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(URL_KEY); };
+    // Derived constants (not hooks — safe to compute early). Force new cache key config
+    const TOKEN_KEY = `lk_auth_${roomId ?? ''}`;
+    const URL_KEY = `lk_url_${roomId ?? ''}`;
+    const clearCache = () => {
+        sessionStorage.removeItem(TOKEN_KEY);
+        sessionStorage.removeItem(URL_KEY);
+        // Nota: No se elimina el almacenamiento local del chat aquí. Se mantendrá accesible hasta que la sala se marque como finalizada u obsoleta.
+    };
 
     // Redirect if unauthenticated (via effect, not during render)
     useEffect(() => {
@@ -486,7 +638,7 @@ export const VideoCallRoom = ({ roomId }: { roomId: string }) => {
             <style>{lkBase}</style>
             <div className="fixed inset-0 overflow-hidden">
                 <LiveKitRoom video={false} audio={false} token={token} serverUrl={lkUrl} connect
-                    onDisconnected={handleLeave} onError={handleError}
+                    onError={handleError}
                     style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                     <VideoCallInner roomId={roomId} userName={user?.name || 'Participant'} onLeave={handleLeave} />
                 </LiveKitRoom>
