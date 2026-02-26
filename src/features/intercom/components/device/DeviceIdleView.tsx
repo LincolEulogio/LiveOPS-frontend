@@ -1,9 +1,8 @@
 import React from 'react';
-import { Wifi, WifiOff, Shield, MessageCircle, Send, Bell, ChevronRight, CheckCircle } from 'lucide-react';
+import { Wifi, WifiOff, Shield, MessageCircle, Send, Bell, ChevronRight, CheckCircle, Volume2, Headset, Mic } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { useWebRTC } from '@/features/intercom/hooks/useWebRTC';
-import { Mic } from 'lucide-react';
 
 interface DeviceIdleViewProps {
     productionId: string;
@@ -30,17 +29,36 @@ export const DeviceIdleView: React.FC<DeviceIdleViewProps> = ({
     onSubscribePush,
     productionId
 }) => {
-    const { startTalking, stopTalking, isTalking, audioLevel } = useWebRTC({
+    const { startTalking, stopTalking, isTalking, audioLevel, talkingUsers, talkingInfo } = useWebRTC({
         productionId,
         userId: user?.id || 'guest',
         isHost: false,
     });
 
+    const isHostTalking = talkingUsers.has('admin') || Array.from(talkingUsers).some(id => id.includes('admin') || id.toLowerCase().includes('director'));
+    const isPrivateComms = isHostTalking && talkingInfo?.targetUserId === user?.id;
+
     // Calculate a pulse scale based on audio volume (0 to ~1)
     const activeScale = 1 + (audioLevel / 255) * 0.5;
 
     return (
-        <div className="flex flex-col items-center justify-start min-h-[85vh] text-center py-12 bg-background safe-area-inset-bottom">
+        <div className="flex flex-col items-center justify-start min-h-[85vh] text-center py-12 bg-background safe-area-inset-bottom relative overflow-hidden">
+            {/* Listening State Overlay (Subtle Gradient Glow) */}
+            <AnimatePresence>
+                {isHostTalking && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className={cn(
+                            "absolute inset-0 pointer-events-none z-0 opacity-20",
+                            isPrivateComms
+                                ? "bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.3)_0%,transparent_70%)]"
+                                : "bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.2)_0%,transparent_70%)]"
+                        )}
+                    />
+                )}
+            </AnimatePresence>
             {/* Top Status Bar - Floating Style */}
             <div className="w-full flex items-center justify-between mb-12">
                 <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-card-bg/60 backdrop-blur-xl border border-card-border ">
@@ -193,8 +211,55 @@ export const DeviceIdleView: React.FC<DeviceIdleViewProps> = ({
                 </div>
             </div>
 
+            {/* Listening State Label & Icon */}
+            <AnimatePresence>
+                {isHostTalking && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="mb-4 flex flex-col items-center gap-1 z-10"
+                    >
+                        <div className={cn(
+                            "flex items-center gap-2 px-6 py-2 rounded-full border border-card-border backdrop-blur-md animate-pulse",
+                            isPrivateComms ? "bg-amber-500/10 border-amber-500/30" : "bg-red-500/10 border-red-500/30"
+                        )}>
+                            <div className="relative">
+                                {isPrivateComms ? (
+                                    <Volume2 size={16} className="text-amber-500" />
+                                ) : (
+                                    <Headset size={16} className="text-red-500" />
+                                )}
+                                <div className={cn(
+                                    "absolute -inset-1 rounded-full animate-ping opacity-40",
+                                    isPrivateComms ? "bg-amber-500" : "bg-red-500"
+                                )} />
+                            </div>
+                            <span className={cn(
+                                "text-[10px] font-black uppercase tracking-[0.2em] italic",
+                                isPrivateComms ? "text-amber-500" : "text-red-500"
+                            )}>
+                                {isPrivateComms ? 'ESCUCHANDO DIRECTOR' : 'COMUNICACIÓN ACTIVA'}
+                            </span>
+                        </div>
+                        <div className="flex gap-1">
+                            {[1, 2, 3].map(i => (
+                                <div
+                                    key={i}
+                                    className={cn(
+                                        "w-0.5 h-3 rounded-full animate-[bounce_0.6s_infinite]",
+                                        isPrivateComms ? "bg-amber-500/40" : "bg-red-500/40"
+                                    )}
+                                    style={{ animationDelay: `${i * 0.1}s` }}
+                                />
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Huge PTT Walkie-Talkie Button */}
-            <div className="mt-8 relative w-full flex justify-center py-4">
+            <div className="mt-2 relative w-full flex justify-center py-4 z-10">
                 <button
                     onPointerDown={(e) => { e.preventDefault(); startTalking(); }}
                     onPointerUp={(e) => { e.preventDefault(); stopTalking(); }}

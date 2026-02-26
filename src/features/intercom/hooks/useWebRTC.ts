@@ -22,6 +22,7 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
     const animationRef = useRef<number | undefined>(undefined);
     const remoteAudios = useRef<Map<string, HTMLAudioElement>>(new Map());
     const signalingMap = useRef<Map<string, boolean>>(new Map()); // Mutex per target user
+    const pendingCandidates = useRef<Map<string, RTCIceCandidateInit[]>>(new Map());
     const [talkingInfo, setTalkingInfo] = useState<{ senderUserId: string, targetUserId: string | null } | null>(null);
 
     // For Host to play incoming audio streams
@@ -238,6 +239,17 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
 
                     await pc.setRemoteDescription(new RTCSessionDescription(data.signal.sdp));
 
+                    // PROCESS QUEUED CANDIDATES
+                    const queued = pendingCandidates.current.get(data.senderUserId) || [];
+                    for (const candidate of queued) {
+                        try {
+                            await pc.addIceCandidate(new RTCIceCandidate(candidate));
+                        } catch (e) {
+                            console.error("Delayed ICE update failed", e);
+                        }
+                    }
+                    pendingCandidates.current.set(data.senderUserId, []);
+
                     if (isOffer) {
                         if (pc.signalingState !== 'have-remote-offer') {
                             signalingMap.current.set(data.senderUserId, false);
@@ -259,14 +271,21 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
                     signalingMap.current.set(data.senderUserId, false);
                 }
             } else if (data.signal.ice) {
-                // Ensure pc is initialized for ICE candidates
                 if (!pc) {
                     pc = createPeerConnection(data.senderUserId, stream);
                 }
-                try {
-                    await pc.addIceCandidate(new RTCIceCandidate(data.signal.ice));
-                } catch (e) {
-                    console.error("Error adding received ice candidate", e);
+
+                if (pc.remoteDescription) {
+                    try {
+                        await pc.addIceCandidate(new RTCIceCandidate(data.signal.ice));
+                    } catch (e) {
+                        console.error("Error adding received ice candidate", e);
+                    }
+                } else {
+                    // QUEUE CANDIDATE
+                    const queued = pendingCandidates.current.get(data.senderUserId) || [];
+                    queued.push(data.signal.ice);
+                    pendingCandidates.current.set(data.senderUserId, queued);
                 }
             }
         };
