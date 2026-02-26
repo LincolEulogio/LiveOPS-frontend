@@ -15,9 +15,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ pathname, onOp
     const router = useRouter();
 
     const startNewCall = () => {
-        const roomId = crypto.randomUUID().split('-')[0];
-        router.push(`/call/${roomId}`);
+        if (pathname === '/video-calls') {
+            window.dispatchEvent(new CustomEvent('open-new-call-modal'));
+        } else {
+            router.push(`/video-calls?new=1`);
+        }
     };
+
     const getPageTitle = () => {
         if (pathname === '/productions') return 'Asset Management';
         if (pathname.includes('/intercom')) return 'Tactical Command';
@@ -58,7 +62,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ pathname, onOp
                     <div className="flex items-center gap-4">
                         <button
                             onClick={startNewCall}
-                            title="Iniciar videollamada"
+                            title="Nueva videollamada"
                             className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-violet-500/8 border border-violet-500/20 rounded-xl text-violet-300/80 hover:bg-violet-500/15 hover:border-violet-500/35 hover:text-violet-200 transition-colors text-[10px] font-black uppercase tracking-wider"
                         >
                             <Video size={13} />

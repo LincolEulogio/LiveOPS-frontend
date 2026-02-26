@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
     Video, Plus, Play, Calendar, Clock, Trash2, Edit2, Copy, Check,
     Users, ExternalLink, X, Save, AlertCircle, Search,
@@ -230,7 +230,22 @@ export default function VideoCallsPage() {
         }
     };
 
+    const searchParams = useSearchParams();
+
     useEffect(() => { loadCalls(); }, []);
+
+    useEffect(() => {
+        const handleOpenNewCall = () => setModal({ open: true, call: null });
+        window.addEventListener('open-new-call-modal', handleOpenNewCall);
+
+        if (searchParams.get('new') === '1') {
+            setModal({ open: true, call: null });
+            // Cleanup url to prevent reopening on reload
+            router.replace('/video-calls');
+        }
+
+        return () => window.removeEventListener('open-new-call-modal', handleOpenNewCall);
+    }, [searchParams, router]);
 
     const handleDelete = async (id: string) => {
         if (!confirm('¿Eliminar esta videollamada?')) return;
@@ -307,8 +322,8 @@ export default function VideoCallsPage() {
                             key={stat.label}
                             onClick={() => setFilter(stat.filter as any)}
                             className={`border rounded-2xl p-4 flex items-center gap-3 text-left transition-all hover:scale-[1.02] ${filter === stat.filter
-                                    ? 'bg-white/10 border-white/20'
-                                    : 'bg-[#0d0e1c] border-violet-500/10 hover:border-violet-500/30'
+                                ? 'bg-white/10 border-white/20'
+                                : 'bg-[#0d0e1c] border-violet-500/10 hover:border-violet-500/30'
                                 }`}
                         >
                             <span className="text-2xl">{stat.icon}</span>
