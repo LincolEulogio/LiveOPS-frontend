@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Menu, Activity, Command } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Menu, Activity, Command, Video } from 'lucide-react';
 import { ThemeSwitcher } from '@/shared/components/ThemeSwitcher';
 import { PresenceBar } from '@/shared/components/PresenceBar';
 
@@ -11,6 +12,12 @@ interface DashboardHeaderProps {
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ pathname, onOpenMobileMenu }) => {
+    const router = useRouter();
+
+    const startNewCall = () => {
+        const roomId = crypto.randomUUID().split('-')[0];
+        router.push(`/call/${roomId}`);
+    };
     const getPageTitle = () => {
         if (pathname === '/productions') return 'Asset Management';
         if (pathname.includes('/intercom')) return 'Tactical Command';
@@ -49,6 +56,14 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ pathname, onOp
                     </div>
 
                     <div className="flex items-center gap-4">
+                        <button
+                            onClick={startNewCall}
+                            title="Iniciar videollamada"
+                            className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-violet-500/8 border border-violet-500/20 rounded-xl text-violet-300/80 hover:bg-violet-500/15 hover:border-violet-500/35 hover:text-violet-200 transition-colors text-[10px] font-black uppercase tracking-wider"
+                        >
+                            <Video size={13} />
+                            <span>Nueva Llamada</span>
+                        </button>
                         <ThemeSwitcher />
                         <PresenceBar />
                         <div className="h-6 w-[1px] bg-card-border/50 hidden lg:block" />
