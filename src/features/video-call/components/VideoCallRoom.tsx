@@ -426,7 +426,7 @@ export const VideoCallRoom = ({ roomId }: { roomId: string }) => {
         fetchedRef.current = true;
         (async () => {
             try {
-                const data: any = await apiClient.post(`/video-call/rooms/${roomId}/join`, {
+                const data: any = await apiClient.post(`/video-call/rooms/by-room/${roomId}/join`, {
                     name: user.name || 'Participant',
                     isHost: false,
                 });

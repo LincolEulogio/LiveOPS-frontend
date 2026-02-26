@@ -31,7 +31,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
-    const socketUrl = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:4000';
+    const socketUrl = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3000';
 
     const socketInstance = io(socketUrl, {
       path: '/socket.io/',

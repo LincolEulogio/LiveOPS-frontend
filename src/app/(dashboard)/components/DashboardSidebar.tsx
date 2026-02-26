@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Zap, X, LogOut, User as UserIcon, Server, Users, Shield, Layers, List, FolderOpen, Globe, Activity, Command, History, Settings } from 'lucide-react';
+import { Zap, X, LogOut, User as UserIcon, Server, Users, Shield, Layers, List, FolderOpen, Globe, Activity, Command, History, Settings, Video } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { Guard } from '@/shared/components/Guard';
@@ -77,6 +77,13 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
                     icon={FolderOpen}
                     label="Media Library"
                     active={pathname.includes('/media')}
+                />
+
+                <SidebarLink
+                    href="/video-calls"
+                    icon={Video}
+                    label="Video Calls"
+                    active={pathname === '/video-calls'}
                 />
 
                 <SidebarLink
