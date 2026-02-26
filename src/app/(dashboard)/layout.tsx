@@ -126,7 +126,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
           </div>
 
-          <div className="max-w-[1800px] mx-auto p-6 lg:p-12 relative min-h-full flex flex-col">
+          <div className="max-w-[1800px] mx-auto lg:p-12 relative min-h-full flex flex-col">
             <div className="flex-1">
               {children}
             </div>
