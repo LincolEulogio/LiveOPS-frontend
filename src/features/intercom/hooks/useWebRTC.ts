@@ -5,11 +5,11 @@ import { toast } from 'sonner';
 interface WebRTCProps {
     productionId: string;
     userId: string;
-    targetUserId?: string;
+    roleName?: string;
     isHost?: boolean;
 }
 
-export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps) => {
+export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: WebRTCProps) => {
     const { socket, isConnected } = useSocket();
     const [isTalking, setIsTalking] = useState(false);
     const [audioLevel, setAudioLevel] = useState(0);
@@ -23,9 +23,13 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
     const animationRef = useRef<number | undefined>(undefined);
     const remoteAudios = useRef<Map<string, HTMLAudioElement>>(new Map());
     const audioContainer = useRef<HTMLDivElement | null>(null);
-    const signalingMap = useRef<Map<string, boolean>>(new Map());
-    const pendingCandidates = useRef<Map<string, RTCIceCandidateInit[]>>(new Map());
-    const [talkingInfo, setTalkingInfo] = useState<{ senderUserId: string, targetUserId: string | null } | null>(null);
+
+    // Perfect Negotiation State
+    const makingOffer = useRef<Map<string, boolean>>(new Map());
+    const ignoreOffer = useRef<Map<string, boolean>>(new Map());
+    const isSettingRemoteAnswerPending = useRef<Map<string, boolean>>(new Map());
+
+    const [talkingInfo, setTalkingInfo] = useState<{ senderUserId: string, targetUserId: string | null, senderRoleName?: string } | null>(null);
 
     // Initialize hidden audio container
     useEffect(() => {
@@ -53,8 +57,6 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
             audio = document.createElement('audio');
             audio.id = `audio-${remoteUserId}`;
             audio.autoplay = true;
-            // Note: playsInline is for video, but for some browsers it may be needed if they treat audio similarly
-            // We use (audio as any) to bypass TS check if we really wanted it, but let's stick to standard for audio
             remoteAudios.current.set(remoteUserId, audio);
             if (audioContainer.current) {
                 audioContainer.current.appendChild(audio);
@@ -87,7 +89,6 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
                 });
                 localStream.current = stream;
 
-                // VU Meter Setup
                 const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
                 if (AudioCtx) {
                     audioContext.current = new AudioCtx();
@@ -144,6 +145,23 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
             pc.addTrack(track, stream);
         });
 
+        // Negotiation Needed Event - Best practice
+        pc.onnegotiationneeded = async () => {
+            try {
+                makingOffer.current.set(targetUserId, true);
+                await pc.setLocalDescription(); // Automatic offer creation in modern browsers
+                socket?.emit('webrtc.signal', {
+                    productionId,
+                    targetUserId,
+                    signal: { sdp: pc.localDescription }
+                });
+            } catch (err) {
+                console.error(`[WebRTC] Negotiation error with ${targetUserId}:`, err);
+            } finally {
+                makingOffer.current.set(targetUserId, false);
+            }
+        };
+
         pc.ontrack = (event) => {
             handleRemoteStream(event.streams[0], targetUserId);
         };
@@ -158,40 +176,24 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
             }
         };
 
+        pc.oniceconnectionstatechange = () => {
+            if (pc.iceConnectionState === 'failed') {
+                pc.restartIce();
+            }
+        };
+
         peerConnections.current.set(targetUserId, pc);
         return pc;
     }, [productionId, socket, handleRemoteStream]);
 
     const initiateCall = useCallback(async (targetUserId: string) => {
-        const existing = peerConnections.current.get(targetUserId);
-        if (existing && existing.signalingState !== 'closed') {
-            if (existing.signalingState === 'stable' && (existing.iceConnectionState === 'connected' || existing.iceConnectionState === 'completed')) {
-                return;
-            }
-        }
-
+        // Just trigger stream setup; createPeerConnection handles the rest via onnegotiationneeded
         const stream = await setupLocalAudio();
         if (!stream) return;
+        createPeerConnection(targetUserId, stream);
+    }, [createPeerConnection, setupLocalAudio]);
 
-        const pc = createPeerConnection(targetUserId, stream);
-
-        try {
-            const offer = await pc.createOffer();
-            if (pc.signalingState !== 'stable') return;
-
-            await pc.setLocalDescription(offer);
-
-            socket?.emit('webrtc.signal', {
-                productionId,
-                targetUserId,
-                signal: { sdp: pc.localDescription }
-            });
-        } catch (error) {
-            console.error("Error initiating call:", error);
-        }
-    }, [createPeerConnection, productionId, setupLocalAudio, socket]);
-
-    const startTalking = useCallback((targetUserId?: string) => {
+    const startTalking = useCallback((targetId?: string) => {
         setIsTalking(true);
         if (localStream.current) {
             localStream.current.getAudioTracks().forEach(track => { track.enabled = true; });
@@ -200,12 +202,13 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
             socket.emit('webrtc.talking', {
                 productionId,
                 isTalking: true,
-                targetUserId: targetUserId || null
+                targetUserId: targetId || null,
+                senderRoleName: roleName
             });
         }
-    }, [socket, productionId]);
+    }, [socket, productionId, roleName]);
 
-    const stopTalking = useCallback((targetUserId?: string) => {
+    const stopTalking = useCallback((targetId?: string) => {
         setIsTalking(false);
         if (localStream.current) {
             localStream.current.getAudioTracks().forEach(track => { track.enabled = false; });
@@ -214,95 +217,91 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
             socket.emit('webrtc.talking', {
                 productionId,
                 isTalking: false,
-                targetUserId: targetUserId || null
+                targetUserId: targetId || null,
+                senderRoleName: roleName
             });
         }
-    }, [socket, productionId]);
+    }, [socket, productionId, roleName]);
 
     useEffect(() => {
         if (!socket || !isConnected) return;
 
-        const handleSignal = async (data: { senderUserId: string, signal: any }) => {
-            const stream = await setupLocalAudio();
-            if (!stream) return;
-
-            let pc = peerConnections.current.get(data.senderUserId);
-
-            if (data.signal.sdp) {
-                if (signalingMap.current.get(data.senderUserId)) return;
-                signalingMap.current.set(data.senderUserId, true);
-
-                try {
-                    if (!pc || pc.signalingState === 'closed') {
-                        pc = createPeerConnection(data.senderUserId, stream);
+        const handlePresence = (data: { members: any[] }) => {
+            // Warm Start: Pre-establish everyone's connection
+            data.members.forEach(member => {
+                if (member.userId !== userId) {
+                    // Host initiates to all, guests only initiate to Host to minimize complexity
+                    const isHostMember = member.roleName.toLowerCase().includes('director') ||
+                        member.roleName.toLowerCase().includes('admin');
+                    if (isHost || isHostMember) {
+                        initiateCall(member.userId);
                     }
+                }
+            });
+        };
 
+        socket.on('presence.update', handlePresence);
+        socket.emit('presence.request');
+
+        const handleSignal = async (data: { senderUserId: string, signal: any }) => {
+            try {
+                const stream = await setupLocalAudio();
+                if (!stream) return;
+
+                let pc = peerConnections.current.get(data.senderUserId);
+                if (!pc) {
+                    pc = createPeerConnection(data.senderUserId, stream);
+                }
+
+                if (data.signal.sdp) {
                     const isOffer = data.signal.sdp.type === 'offer';
-                    const isAnswer = data.signal.sdp.type === 'answer';
-                    const collision = isOffer && (pc.signalingState !== 'stable' || pc.iceConnectionState === 'connected');
+                    const isStable = pc.signalingState === 'stable' || (isSettingRemoteAnswerPending.current.get(data.senderUserId) ?? false);
+                    const collision = isOffer && (!isStable || (makingOffer.current.get(data.senderUserId) ?? false));
 
-                    if (collision && isHost) {
-                        signalingMap.current.set(data.senderUserId, false);
+                    // Polite/Impolite logic: Host is impolite, guests are polite
+                    ignoreOffer.current.set(data.senderUserId, !isHost && collision);
+                    if (ignoreOffer.current.get(data.senderUserId)) {
+                        console.warn(`[WebRTC] Ignoring offer collision with ${data.senderUserId}`);
                         return;
                     }
 
-                    if (isAnswer && pc.signalingState !== 'have-local-offer') {
-                        signalingMap.current.set(data.senderUserId, false);
+                    isSettingRemoteAnswerPending.current.set(data.senderUserId, !isOffer);
+
+                    // Fix: Check signaling state for Answers to avoid InvalidStateError if already stable
+                    if (!isOffer && pc.signalingState === 'stable') {
+                        console.warn(`[WebRTC] Received an answer while in stable state for ${data.senderUserId}, skipping.`);
+                        isSettingRemoteAnswerPending.current.set(data.senderUserId, false);
                         return;
                     }
 
                     await pc.setRemoteDescription(new RTCSessionDescription(data.signal.sdp));
-
-                    const queued = pendingCandidates.current.get(data.senderUserId) || [];
-                    for (const candidate of queued) {
-                        try {
-                            await pc.addIceCandidate(new RTCIceCandidate(candidate));
-                        } catch (e) {
-                            // Suppress candidate error if connection already established
-                        }
-                    }
-                    pendingCandidates.current.set(data.senderUserId, []);
+                    isSettingRemoteAnswerPending.current.set(data.senderUserId, false);
 
                     if (isOffer) {
-                        if (pc.signalingState !== 'have-remote-offer') {
-                            signalingMap.current.set(data.senderUserId, false);
-                            return;
-                        }
-                        const answer = await pc.createAnswer();
-                        await pc.setLocalDescription(answer);
+                        await pc.setLocalDescription(); // Modern answer
                         socket.emit('webrtc.signal', {
                             productionId,
                             targetUserId: data.senderUserId,
                             signal: { sdp: pc.localDescription }
                         });
                     }
-                } catch (error) {
-                    console.error("WebRTC SDP logic error:", error);
-                } finally {
-                    signalingMap.current.set(data.senderUserId, false);
-                }
-            } else if (data.signal.ice) {
-                if (!pc) {
-                    pc = createPeerConnection(data.senderUserId, stream);
-                }
-
-                if (pc.remoteDescription) {
+                } else if (data.signal.ice) {
                     try {
                         await pc.addIceCandidate(new RTCIceCandidate(data.signal.ice));
-                    } catch (e) {
-                        // Suppress
+                    } catch (err) {
+                        if (!ignoreOffer.current.get(data.senderUserId)) {
+                            console.error(`[WebRTC] ICE error for ${data.senderUserId}`, err);
+                        }
                     }
-                } else {
-                    const queued = pendingCandidates.current.get(data.senderUserId) || [];
-                    queued.push(data.signal.ice);
-                    pendingCandidates.current.set(data.senderUserId, queued);
                 }
+            } catch (err) {
+                console.error("[WebRTC] Signal handling failed:", err);
             }
         };
 
         socket.on('webrtc.signal_received', handleSignal);
 
-        const handleTalking = (data: { senderUserId: string, isTalking: boolean, targetUserId?: string | null }) => {
+        const handleTalking = (data: { senderUserId: string, isTalking: boolean, targetUserId?: string | null, senderRoleName?: string }) => {
             setTalkingUsers(prev => {
                 const next = new Set(prev);
                 if (data.isTalking) next.add(data.senderUserId);
@@ -311,7 +310,11 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
             });
 
             if (data.isTalking) {
-                setTalkingInfo({ senderUserId: data.senderUserId, targetUserId: data.targetUserId || null });
+                setTalkingInfo({
+                    senderUserId: data.senderUserId,
+                    targetUserId: data.targetUserId || null,
+                    senderRoleName: data.senderRoleName
+                });
             } else {
                 setTalkingInfo(null);
             }
@@ -321,8 +324,9 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
         return () => {
             socket.off('webrtc.signal_received', handleSignal);
             socket.off('webrtc.talking', handleTalking);
+            socket.off('presence.update', handlePresence);
         };
-    }, [socket, isConnected, createPeerConnection, productionId, setupLocalAudio, isHost]);
+    }, [socket, isConnected, createPeerConnection, productionId, setupLocalAudio, isHost, initiateCall, userId]);
 
     useEffect(() => {
         return () => {
