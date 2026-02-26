@@ -43,7 +43,7 @@ export default function MediaPage() {
 
             <div className="grid grid-cols-1 gap-8 min-h-[700px]">
                 <div className="bg-[#050508]/40 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] overflow-hidden">
-                    <MediaSidebar />
+                    <MediaSidebar productionId={id} />
                 </div>
             </div>
         </div>
