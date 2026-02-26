@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { toast } from 'sonner';
+import { ICE_CONFIG } from '@/shared/lib/ice-config';
 
 interface WebRTCProps {
     productionId: string;
@@ -58,14 +59,7 @@ export const useVideoCallWebRTC = ({ productionId, userId, userName, isHost = fa
         const existing = peerConnections.current.get(targetUserId);
         if (existing && existing.signalingState !== 'closed') return existing;
 
-        const configuration: RTCConfiguration = {
-            iceServers: [
-                { urls: 'stun:stun.l.google.com:19302' },
-                { urls: 'stun:stun1.l.google.com:19302' },
-            ]
-        };
-
-        const pc = new RTCPeerConnection(configuration);
+        const pc = new RTCPeerConnection(ICE_CONFIG);
 
         // Add tracks from local stream
         stream.getTracks().forEach(track => {

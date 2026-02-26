@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiClient as api } from '@/shared/api/api.client';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Activity, Cpu, HardDrive, WifiHigh, CheckCircle, AlertTriangle, FileText, Download, ArrowLeft, Bot, Sparkles } from 'lucide-react';
+import {
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
+    ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Legend,
+} from 'recharts';
+import { Activity, Cpu, WifiHigh, CheckCircle, AlertTriangle, FileText, ArrowLeft, Bot, Sparkles, Users, Zap, TrendingUp } from 'lucide-react';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { useProduction } from '@/features/productions/hooks/useProductions';
 import Link from 'next/link';
@@ -60,6 +63,46 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
         onSuccess: () => refetchReport(),
     });
 
+    const { data: auditLogs } = useQuery({
+        queryKey: ['analytics', productionId, 'audit'],
+        queryFn: () => api.get<{ eventType: string; createdAt: string; user?: { name?: string } }[]>(
+            `/productions/${productionId}/logs`
+        ).catch(() => []),
+        enabled: !!productionId,
+        refetchInterval: isLive ? 15000 : false,
+    });
+
+    // Derive event stats from audit logs
+    const eventStats = useMemo(() => {
+        if (!auditLogs?.length) return { byType: [], byHour: [], totalEvents: 0, uniqueActors: 0, peakHour: '—' };
+
+        // Count by type (Pie chart)
+        const typeMap: Record<string, number> = {};
+        auditLogs.forEach(l => { typeMap[l.eventType] = (typeMap[l.eventType] || 0) + 1; });
+        const byType = Object.entries(typeMap)
+            .map(([name, value]) => ({ name: name.replace(/_/g, ' '), value }))
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 7);
+
+        // Count by hour (Bar chart)
+        const hourMap: Record<string, number> = {};
+        auditLogs.forEach(l => {
+            const h = new Date(l.createdAt).getHours();
+            const label = `${h.toString().padStart(2, '0')}:00`;
+            hourMap[label] = (hourMap[label] || 0) + 1;
+        });
+        const byHour = Object.entries(hourMap)
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map(([hour, events]) => ({ hour, events }));
+
+        const peakEntry = byHour.reduce((a, b) => (a.events > b.events ? a : b), { hour: '—', events: 0 });
+        const actors = new Set(auditLogs.map(l => l.user?.name ?? 'sistema'));
+
+        return { byType, byHour, totalEvents: auditLogs.length, uniqueActors: actors.size, peakHour: peakEntry.hour };
+    }, [auditLogs]);
+
+    const PIE_COLORS = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#f43f5e', '#64748b'];
+
     if (!production) return null;
 
     const formatTime = (ts: string) => new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -90,20 +133,105 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                             <Activity className="text-indigo-500" />
                             Health & Analytics
                         </h2>
-                        <p className="text-sm text-muted">System telemetry and post-show metrics</p>
+                        <p className="text-sm text-muted">System telemetry, event activity & post-show metrics</p>
                     </div>
                 </div>
-                {isArchived && !report && (
-                    <button
-                        onClick={() => generateReportMutation.mutate()}
-                        disabled={generateReportMutation.isPending}
-                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center gap-2 font-bold"
-                    >
-                        <FileText size={18} />
-                        {generateReportMutation.isPending ? 'Generating...' : 'Generate Show Report'}
-                    </button>
-                )}
+                <div className="flex items-center gap-3">
+                    {isLive && (
+                        <span className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl text-[10px] font-black uppercase">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live
+                        </span>
+                    )}
+                    {isArchived && !report && (
+                        <button
+                            onClick={() => generateReportMutation.mutate()}
+                            disabled={generateReportMutation.isPending}
+                            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl flex items-center gap-2 font-bold text-sm"
+                        >
+                            <FileText size={16} />
+                            {generateReportMutation.isPending ? 'Generando...' : 'Generar Reporte'}
+                        </button>
+                    )}
+                </div>
             </div>
+
+            {/* Event Activity KPI Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                    { icon: Zap, label: 'Total Eventos', value: eventStats.totalEvents, color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
+                    { icon: Users, label: 'Operadores Activos', value: eventStats.uniqueActors, color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+                    { icon: TrendingUp, label: 'Hora Pico', value: eventStats.peakHour, color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
+                    { icon: Activity, label: 'Tipos de Evento', value: eventStats.byType.length, color: 'text-violet-400', bg: 'bg-violet-500/10 border-violet-500/20' },
+                ].map(({ icon: Icon, label, value, color, bg }) => (
+                    <div key={label} className={`bg-card-bg border ${bg} rounded-2xl p-4 flex items-center gap-4`}>
+                        <div className={`w-10 h-10 rounded-xl ${bg} border flex items-center justify-center`}>
+                            <Icon size={18} className={color} />
+                        </div>
+                        <div>
+                            <p className="text-[9px] font-black text-muted uppercase tracking-wider mb-0.5">{label}</p>
+                            <p className={`text-xl font-black ${color}`}>{value}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Event Activity Charts */}
+            {eventStats.byHour.length > 0 && (
+                <div className="grid grid-cols-3 gap-6">
+                    {/* Events By Hour */}
+                    <div className="col-span-2 bg-card-bg border border-card-border rounded-2xl p-6">
+                        <h3 className="text-sm font-black text-muted uppercase flex items-center gap-2 mb-6">
+                            <Activity size={16} className="text-indigo-400" />
+                            Actividad por Hora
+                        </h3>
+                        <div className="h-52">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={eventStats.byHour} barSize={16}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#1e1e2e" vertical={false} />
+                                    <XAxis dataKey="hour" stroke="#44445a" fontSize={9} />
+                                    <YAxis stroke="#44445a" fontSize={9} />
+                                    <Tooltip
+                                        contentStyle={{ backgroundColor: '#0d0d1a', borderColor: '#2a2a3d', color: '#fff', borderRadius: 12 }}
+                                        itemStyle={{ color: '#818cf8' }}
+                                    />
+                                    <Bar dataKey="events" fill="#6366f1" radius={[6, 6, 0, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                    {/* Events By Type Pie */}
+                    <div className="bg-card-bg border border-card-border rounded-2xl p-6">
+                        <h3 className="text-sm font-black text-muted uppercase flex items-center gap-2 mb-4">
+                            <Zap size={16} className="text-violet-400" />
+                            Por Tipo
+                        </h3>
+                        <div className="h-52">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={eventStats.byType}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={40}
+                                        outerRadius={70}
+                                        paddingAngle={3}
+                                        dataKey="value"
+                                    >
+                                        {eventStats.byType.map((_, i) => (
+                                            <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip
+                                        contentStyle={{ backgroundColor: '#0d0d1a', borderColor: '#2a2a3d', color: '#fff', borderRadius: 12, fontSize: 11 }}
+                                    />
+                                    <Legend iconSize={8} wrapperStyle={{ fontSize: 9, textTransform: 'uppercase' }} />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Post-Show Report Highlight */}
             {report && (

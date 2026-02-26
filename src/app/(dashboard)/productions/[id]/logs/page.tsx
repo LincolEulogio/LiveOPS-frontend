@@ -3,10 +3,11 @@
 import { useParams } from 'next/navigation';
 import { LogFeed } from '@/features/analytics/components/LogFeed';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
-import { ArrowLeft, History, FileSearch } from 'lucide-react';
+import { ArrowLeft, History, FileSearch, Download } from 'lucide-react';
 import Link from 'next/link';
-
 import { useAnalytics } from '@/features/analytics/hooks/useAnalytics';
+import { exportAuditLogPDF } from '@/shared/lib/export-audit-pdf';
+import { toast } from 'sonner';
 
 export default function LogsPage() {
     const params = useParams();
@@ -38,7 +39,7 @@ export default function LogsPage() {
                     </div>
                 </div>
 
-                <div className="hidden md:flex items-center gap-4">
+                <div className="hidden md:flex items-center gap-3">
                     <div className="relative group/search">
                         <FileSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within/search:text-indigo-400 transition-colors" size={16} />
                         <input
@@ -47,6 +48,17 @@ export default function LogsPage() {
                             className="bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-xs font-bold text-white placeholder:text-muted/50 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/50 transition-all uppercase w-[240px]"
                         />
                     </div>
+                    <button
+                        onClick={() => {
+                            if (!logs?.length) { toast.error('No hay logs para exportar'); return; }
+                            exportAuditLogPDF(logs as any, 'Producción');
+                            toast.success('PDF generado');
+                        }}
+                        className="flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase transition-all active:scale-95 shadow-lg shadow-indigo-600/20"
+                    >
+                        <Download size={14} />
+                        Export PDF
+                    </button>
                 </div>
             </div>
 

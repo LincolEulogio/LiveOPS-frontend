@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useSocket } from '@/shared/socket/socket.provider';
 import { toast } from 'sonner';
+import { ICE_CONFIG } from '@/shared/lib/ice-config';
 
 interface WebRTCProps {
     productionId: string;
@@ -155,14 +156,7 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
             return existing;
         }
 
-        const configuration: RTCConfiguration = {
-            iceServers: [
-                { urls: 'stun:stun.l.google.com:19302' },
-                { urls: 'stun:stun1.l.google.com:19302' },
-            ]
-        };
-
-        const pc = new RTCPeerConnection(configuration);
+        const pc = new RTCPeerConnection(ICE_CONFIG);
 
         stream.getTracks().forEach(track => {
             pc.addTrack(track, stream);
