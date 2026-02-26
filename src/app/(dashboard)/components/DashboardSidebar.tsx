@@ -4,6 +4,7 @@ import React from 'react';
 import { Zap, X, LogOut, User as UserIcon, Server, Users, Shield, Layers, List, FolderOpen, Globe, Activity, Command, History, Settings, Video } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
+import { showConfirm } from '@/shared/utils/swal';
 import { Guard } from '@/shared/components/Guard';
 import NextLink from 'next/link';
 
@@ -27,7 +28,7 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
     const sidebarContent = (
         <div className="flex flex-col h-full overflow-hidden">
             {/* Logo/Header - Fixed */}
-            <div className="h-20 flex items-center justify-between px-8 border-b border-card-border/50 bg-white/[0.02] shrink-0">
+            <div className="h-20 flex items-center justify-between px-8 border-b border-card-border/50 bg-white/2 shrink-0">
                 <NextLink href="/productions" className="flex items-center gap-3 group/logo">
                     <div className="w-10 h-10 bg-indigo-600 group-hover:bg-indigo-500 rounded-xl flex items-center justify-center transition-all group-hover:scale-110">
                         <Zap size={22} className="text-white" fill="currentColor" />
@@ -172,7 +173,7 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
             </nav>
 
             {/* Profile/Logout - Fixed */}
-            <div className="p-6 bg-white/[0.03] border-t border-card-border/50 shrink-0">
+            <div className="p-6 bg-white/3 border-t border-card-border/50 shrink-0">
                 <div className="p-4 bg-background/60 backdrop-blur-md rounded-2xl border border-card-border/60 flex items-center gap-4 mb-4 relative overflow-hidden group/user">
                     <div className="absolute inset-x-0 bottom-0 h-1 bg-indigo-600/20" />
                     <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-lg font-black text-white shrink-0 group-hover/user:scale-110 transition-all">
@@ -188,7 +189,16 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
                 </div>
 
                 <button
-                    onClick={handleLogout}
+                    onClick={async () => {
+                        const result = await showConfirm(
+                            '¿Cerrar sesión?',
+                            'Tu sesión será terminada. Deberás volver a iniciar sesión para acceder al sistema.',
+                            'Sí, salir'
+                        );
+                        if (result.isConfirmed) {
+                            await handleLogout();
+                        }
+                    }}
                     className="w-full flex items-center justify-between px-5 py-4 text-muted hover:text-white hover:bg-red-600 rounded-2xl transition-all duration-300 group mb-2"
                 >
                     <div className="flex items-center gap-3">
@@ -206,8 +216,8 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
     }
 
     return (
-        <aside className="w-[280px] border-r border-card-border bg-card-bg/40 backdrop-blur-2xl flex flex-col hidden lg:flex shrink-0 relative overflow-hidden group/sidebar h-screen">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+        <aside className="w-[280px] border-r border-card-border bg-card-bg/40 backdrop-blur-2xl flex-col shrink-0 relative overflow-hidden group/sidebar h-screen hidden lg:flex">
+            <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-indigo-500/40 to-transparent" />
             {sidebarContent}
         </aside>
     );
