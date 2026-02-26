@@ -198,7 +198,7 @@ export const DeviceIdleView: React.FC<DeviceIdleViewProps> = ({
                 <button
                     onPointerDown={(e) => { e.preventDefault(); startTalking(); }}
                     onPointerUp={(e) => { e.preventDefault(); stopTalking(); }}
-                    onPointerLeave={stopTalking}
+                    onPointerLeave={() => stopTalking()}
                     onContextMenu={(e) => e.preventDefault()}
                     style={{ transform: `scale(${isTalking ? activeScale : 1})` }}
                     className={cn(

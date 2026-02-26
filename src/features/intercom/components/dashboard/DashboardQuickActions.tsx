@@ -32,7 +32,7 @@ export const DashboardQuickActions: React.FC<DashboardQuickActionsProps> = ({
             <button
                 onPointerDown={(e) => { e.preventDefault(); startTalking(); }}
                 onPointerUp={(e) => { e.preventDefault(); stopTalking(); }}
-                onPointerLeave={stopTalking}
+                onPointerLeave={() => stopTalking()}
                 onContextMenu={(e) => e.preventDefault()}
                 className={cn(
                     "flex items-center gap-2 px-6 py-2 border rounded-[0.9rem] text-[10px] uppercase font-black transition-all select-none touch-none shrink-0",

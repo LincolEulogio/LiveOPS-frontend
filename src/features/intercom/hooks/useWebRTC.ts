@@ -22,6 +22,7 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
     const animationRef = useRef<number | undefined>(undefined);
     const remoteAudios = useRef<Map<string, HTMLAudioElement>>(new Map());
     const signalingMap = useRef<Map<string, boolean>>(new Map()); // Mutex per target user
+    const [talkingInfo, setTalkingInfo] = useState<{ senderUserId: string, targetUserId: string | null } | null>(null);
 
     // For Host to play incoming audio streams
     // For Guests to play incoming Host stream
@@ -160,7 +161,7 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
     }, [createPeerConnection, productionId, setupLocalAudio, socket]);
 
     // Push To Talk Logic
-    const startTalking = useCallback(() => {
+    const startTalking = useCallback((targetUserId?: string) => {
         setIsTalking(true);
         if (localStream.current) {
             localStream.current.getAudioTracks().forEach(track => {
@@ -168,11 +169,16 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
             });
         }
         if (socket) {
-            socket.emit('webrtc.talking', { productionId, isTalking: true });
+            // targetUserId: null means broadcast to everyone in the production room
+            socket.emit('webrtc.talking', {
+                productionId,
+                isTalking: true,
+                targetUserId: targetUserId || null
+            });
         }
     }, [socket, productionId]);
 
-    const stopTalking = useCallback(() => {
+    const stopTalking = useCallback((targetUserId?: string) => {
         setIsTalking(false);
         setAudioLevel(0);
         if (localStream.current) {
@@ -181,7 +187,11 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
             });
         }
         if (socket) {
-            socket.emit('webrtc.talking', { productionId, isTalking: false });
+            socket.emit('webrtc.talking', {
+                productionId,
+                isTalking: false,
+                targetUserId: targetUserId || null
+            });
         }
     }, [socket, productionId]);
 
@@ -263,25 +273,27 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
 
         socket.on('webrtc.signal_received', handleSignal);
 
-        return () => {
-            socket.off('webrtc.signal_received', handleSignal);
-        };
-    }, [socket, isConnected, createPeerConnection, productionId, setupLocalAudio]);
-
-    // Handle talkers visual indication
-    useEffect(() => {
-        if (!socket) return;
-        const handleTalking = (data: { senderUserId: string, isTalking: boolean }) => {
+        const handleTalking = (data: { senderUserId: string, isTalking: boolean, targetUserId?: string | null }) => {
             setTalkingUsers(prev => {
                 const next = new Set(prev);
                 if (data.isTalking) next.add(data.senderUserId);
                 else next.delete(data.senderUserId);
                 return next;
             });
+
+            if (data.isTalking) {
+                setTalkingInfo({ senderUserId: data.senderUserId, targetUserId: data.targetUserId || null });
+            } else {
+                setTalkingInfo(null);
+            }
         };
         socket.on('webrtc.talking', handleTalking);
-        return () => { socket.off('webrtc.talking', handleTalking); };
-    }, [socket]);
+
+        return () => {
+            socket.off('webrtc.signal_received', handleSignal);
+            socket.off('webrtc.talking', handleTalking);
+        };
+    }, [socket, isConnected, createPeerConnection, productionId, setupLocalAudio]);
 
     // Cleanup
     useEffect(() => {
@@ -303,5 +315,6 @@ export const useWebRTC = ({ productionId, userId, isHost = false }: WebRTCProps)
         initiateCall, // Used by host to connect to all users
         setupLocalAudio,
         talkingUsers,
+        talkingInfo,
     };
 };

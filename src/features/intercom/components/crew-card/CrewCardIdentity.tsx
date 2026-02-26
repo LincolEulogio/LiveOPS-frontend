@@ -38,7 +38,7 @@ export const CrewCardIdentity: React.FC<CrewCardIdentityProps> = ({
                         {roleName}
                     </span>
                 </div>
-                <h3 className="text-xl font-black text-foreground uppercase er truncate italic leading-none group-hover:text-indigo-400 transition-colors">
+                <h3 className="text-xl font-black text-foreground uppercase truncate italic leading-none group-hover:text-indigo-400 transition-colors">
                     {userName}
                 </h3>
             </div>

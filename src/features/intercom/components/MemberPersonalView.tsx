@@ -17,7 +17,9 @@ import {
     MessageSquare,
     Headset,
     Mic,
-    Tv
+    Tv,
+    Volume2,
+    VolumeX
 } from 'lucide-react';
 import { useTally } from '@/features/streaming/hooks/useTally';
 import { useWebRTC } from '@/features/intercom/hooks/useWebRTC';
@@ -40,13 +42,14 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
     const me = members.find(m => m.userId === userId);
     const myRole = me?.roleName;
 
-    const { talkingUsers } = useWebRTC({
+    const { talkingUsers, talkingInfo } = useWebRTC({
         productionId,
         userId,
         isHost: false
     });
 
     const isHostTalking = talkingUsers.has('admin') || Array.from(talkingUsers).some(id => id.includes('admin') || id.toLowerCase().includes('director'));
+    const isPrivateComms = isHostTalking && talkingInfo?.targetUserId === userId;
 
     // Try to auto-detect source by role name (e.g. "Cam 1")
     useEffect(() => {
@@ -99,9 +102,14 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                 </div>
                 <div className="flex items-center gap-3 opacity-40">
                     {isHostTalking && (
-                        <div className="flex items-center gap-2 px-2 py-1 bg-red-500/20 border border-red-500/40 rounded-full animate-pulse mr-2">
-                            <Headset size={12} className="text-red-500" />
-                            <span className="text-[8px] font-black text-red-500 uppercase">Incoming</span>
+                        <div className={cn(
+                            "flex items-center gap-2 px-2 py-1 border rounded-full animate-pulse mr-2",
+                            isPrivateComms ? "bg-amber-500/20 border-amber-500/40" : "bg-red-500/20 border-red-500/40"
+                        )}>
+                            {isPrivateComms ? <Volume2 size={12} className="text-amber-500" /> : <Headset size={12} className="text-red-500" />}
+                            <span className={cn("text-[8px] font-black uppercase", isPrivateComms ? "text-amber-500" : "text-red-500")}>
+                                {isPrivateComms ? 'Private' : 'Incoming'}
+                            </span>
                         </div>
                     )}
                     <Wifi size={14} />
@@ -207,11 +215,18 @@ export const MemberPersonalView = ({ userId, productionId }: MemberPersonalViewP
                                 <div className="absolute inset-x-1/2 inset-y-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-red-500/20 rounded-full animate-ping duration-1000" />
                                 <div className="absolute inset-x-1/2 inset-y-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-red-500/30 rounded-full animate-ping duration-700" />
 
-                                <div className="relative bg-red-600 shadow-[0_0_50px_rgba(220,38,38,0.5)] border-4 border-white p-8 rounded-[3rem] flex flex-col items-center gap-4">
-                                    <Headset size={48} className="text-white animate-bounce" />
+                                <div className={cn(
+                                    "relative shadow-[0_0_50px_rgba(220,38,38,0.5)] border-4 border-white p-8 rounded-[3rem] flex flex-col items-center gap-4 transition-colors",
+                                    isPrivateComms ? "bg-amber-600 shadow-amber-500/50" : "bg-red-600"
+                                )}>
+                                    {isPrivateComms ? <Volume2 size={48} className="text-white animate-bounce" /> : <Headset size={48} className="text-white animate-bounce" />}
                                     <div className="text-center">
-                                        <h2 className="text-white font-black text-xl uppercase italic leading-none mb-2">Comms Active</h2>
-                                        <p className="text-white/80 font-bold text-[10px] uppercase">Control is speaking</p>
+                                        <h2 className="text-white font-black text-xl uppercase italic leading-none mb-2">
+                                            {isPrivateComms ? 'Private Talk' : 'Comms Active'}
+                                        </h2>
+                                        <p className="text-white/80 font-bold text-[10px] uppercase">
+                                            {isPrivateComms ? 'Director is talking to you' : 'Control is speaking'}
+                                        </p>
                                     </div>
                                     <div className="flex gap-1 items-center h-4">
                                         <div className="w-1.5 bg-white/40 rounded-full h-8 animate-[bounce_0.6s_infinite]" />

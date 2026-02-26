@@ -36,7 +36,7 @@ export const DashboardView = () => {
     const { history } = useIntercomStore();
     const [activeTab, setActiveTab] = useState<'intercom' | 'automation' | 'multicast' | 'logs' | 'templates'>('intercom');
 
-    const { startTalking, stopTalking, isTalking, initiateCall, talkingUsers } = useWebRTC({
+    const { startTalking, stopTalking, isTalking, initiateCall, talkingUsers, talkingInfo } = useWebRTC({
         productionId: activeProductionId,
         userId: user?.id || 'admin',
         isHost: true,
@@ -93,7 +93,7 @@ export const DashboardView = () => {
                 } : undefined
             };
         });
-    }, [production, onlineMembers]);
+    }, [production, onlineMembers, talkingUsers, talkingInfo]);
 
     const handleMassAlert = (message: string) => {
         sendCommand({
@@ -147,9 +147,9 @@ export const DashboardView = () => {
                                         productionId={activeProductionId || ''}
                                         member={member}
                                         templates={templates}
-                                        onTalkStart={startTalking}
-                                        onTalkStop={stopTalking}
-                                        isTalkingLocal={isTalking}
+                                        onTalkStart={() => startTalking(member.userId)}
+                                        onTalkStop={() => stopTalking(member.userId)}
+                                        isTalkingLocal={isTalking && talkingInfo?.targetUserId === member.userId}
                                         onSendCommand={(t) => {
                                             if (t.isChat) {
                                                 sendDirectMessage({

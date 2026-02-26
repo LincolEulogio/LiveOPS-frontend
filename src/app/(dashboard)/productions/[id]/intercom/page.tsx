@@ -49,7 +49,7 @@ export default function IntercomPage() {
                     <div className="p-2 bg-indigo-600 rounded-lg">
                         <Info size={18} className="text-white" />
                     </div>
-                    <h1 className="font-black uppercase er text-lg md:flex hidden">Live Alert System</h1>
+                    <h1 className="font-black uppercase text-lg md:flex hidden">Live Alert System</h1>
                 </div>
 
                 <div className="flex bg-card-bg p-1 rounded-xl border border-card-border">
