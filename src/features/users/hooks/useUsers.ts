@@ -101,6 +101,18 @@ export function useCreateRole() {
     });
 }
 
+export function useUpdateRole() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ id, data }: { id: string; data: { name?: string; description?: string } }) => {
+            return await apiClient.patch(`/users/roles/${id}`, data);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['roles'] });
+        }
+    });
+}
+
 export function useDeleteRole() {
     const queryClient = useQueryClient();
     return useMutation({
