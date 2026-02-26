@@ -100,18 +100,17 @@ export const RundownTable = ({
                                         inPreview && "bg-emerald-600/[0.05]"
                                     )}
                                 >
-                                    {/* Action Indicators */}
-                                    {inProgram && (
-                                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-600  z-10" />
-                                    )}
-                                    {inPreview && (
-                                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-600 z-10" />
-                                    )}
-                                    {block.status === TimelineStatus.ACTIVE && !inProgram && (
-                                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-600 z-10" />
-                                    )}
-
-                                    <td className="pl-8 pr-4 py-6 text-[11px] font-black font-mono text-muted/50">
+                                    <td className="pl-8 pr-4 py-6 text-[11px] font-black font-mono text-muted/50 relative">
+                                        {/* Action Indicators - Moved inside TD to fix HTML structure */}
+                                        {inProgram && (
+                                            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-600 z-10" />
+                                        )}
+                                        {inPreview && (
+                                            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-600 z-10" />
+                                        )}
+                                        {block.status === TimelineStatus.ACTIVE && !inProgram && (
+                                            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-600 z-10" />
+                                        )}
                                         {(index + 1).toString().padStart(2, '0')}
                                     </td>
 

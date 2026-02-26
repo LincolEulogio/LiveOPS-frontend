@@ -18,6 +18,9 @@ export const useTimeline = (productionId?: string) => {
     useEffect(() => {
         if (!socket || !productionId) return;
 
+        // Join room to receive updates
+        socket.emit('production.join', { productionId });
+
         const handleTimelineUpdate = (payload: { productionId: string }) => {
             if (payload.productionId === productionId) {
                 queryClient.invalidateQueries({ queryKey: ['timeline', productionId] });
