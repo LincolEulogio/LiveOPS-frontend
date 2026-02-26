@@ -191,7 +191,7 @@ export default function ProductionDetailPage() {
                 </Link>
               </div>
             </div>
-            <div className="h-[400px] sm:h-[650px] bg-card-bg/30 border border-card-border/50 rounded-[2rem] overflow-hidden ">
+            <div className="h-[400px] sm:h-[650px] bg-card-bg/30 rounded-[2rem] overflow-hidden ">
               <ScriptEditor productionId={id} />
             </div>
           </section>
@@ -206,7 +206,7 @@ export default function ProductionDetailPage() {
                 Social Media Manager
               </h2>
             </div>
-            <div className="h-[450px] bg-card-bg/30 border border-card-border/50 rounded-[2rem] overflow-hidden ">
+            <div className="h-[450px] bg-card-bg/30 rounded-[2rem] overflow-hidden ">
               <SocialManager productionId={id} />
             </div>
           </section>

@@ -53,7 +53,7 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
     return (
         <div className="flex flex-col h-full bg-card-bg/60 rounded-[2.5rem] overflow-hidden relative">
             {/* Header Area */}
-            <div className="flex flex-col md:flex-row gap-5 items-center justify-between px-6 py-5 border-b border-card-border/50 bg-white/5">
+            <div className="flex flex-col md:flex-row gap-5 items-center justify-between px-6 py-5 bg-white/5">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20">
                         <Share2 size={18} className="text-indigo-400" />

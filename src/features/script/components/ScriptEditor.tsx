@@ -112,7 +112,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
 
     if (!isLoaded) {
         return (
-            <div className="flex-1 flex items-center justify-center bg-card-bg/50 rounded-3xl border border-card-border/50 backdrop-blur-xl">
+            <div className="flex-1 flex items-center justify-center bg-card-bg/50 rounded-3xl backdrop-blur-xl">
                 <div className="flex flex-col items-center gap-6">
                     <div className="relative">
                         <div className="w-16 h-16 border-[6px] border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin" />
