@@ -6,6 +6,7 @@ import { useProduction, useAssignUser, useRemoveUser } from '@/features/producti
 import { useUsers, useRoles } from '@/features/users/hooks/useUsers';
 import { ArrowLeft, Loader2, UserPlus, UserMinus, Shield, User, Mail, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { showConfirm, showAlert } from '@/shared/utils/swal';
 
 export default function TeamManagementPage() {
     const params = useParams();
@@ -39,13 +40,21 @@ export default function TeamManagementPage() {
     };
 
     const handleRemove = async (userId: string) => {
-        if (!confirm('Are you sure you want to remove this user from the production?')) return;
+        const result = await showConfirm(
+            'Remove member?',
+            'This user will lose access to this production.',
+            'Yes, remove'
+        );
+        if (!result.isConfirmed) return;
 
         try {
             setError(null);
             await removeMutation.mutateAsync({ id, userId });
+            showAlert('Removed', 'Member removed from production.', 'success');
         } catch (err: any) {
-            setError(err.response?.data?.message || err.message || 'Failed to remove user');
+            const msg = err.response?.data?.message || err.message || 'Failed to remove user';
+            setError(msg);
+            showAlert('Error', msg, 'error');
         }
     };
 

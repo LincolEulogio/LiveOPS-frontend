@@ -5,6 +5,7 @@ import { useUsers, useCreateUser, useDeleteUser, useUpdateUser, useRoles } from 
 import { Users, Plus, Trash2, Shield, Loader2, Edit2, Info, X, Save, Mail, Calendar, Fingerprint, Activity, AtSign, KeyRound, Search } from 'lucide-react';
 import { User } from '@/features/users/types/user.types';
 import { toast } from 'sonner';
+import { showConfirm, showAlert } from '@/shared/utils/swal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { UsersSkeleton } from '@/shared/components/SkeletonLoaders';
@@ -97,7 +98,7 @@ export default function AdminUsersPage() {
                     onClick={openCreate}
                     className="group relative px-6 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 flex items-center gap-3 overflow-hidden"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                     <Plus size={16} /> Create User
                 </button>
             </div>
@@ -118,9 +119,9 @@ export default function AdminUsersPage() {
                                 <th className="py-6 px-8 text-right">Operational Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-black/[0.02] dark:divide-white/[0.02]">
+                        <tbody className="divide-y divide-black/2 dark:divide-white/2">
                             {users?.map(user => (
-                                <tr key={user.id} className="group hover:bg-indigo-500/[0.03] transition-all">
+                                <tr key={user.id} className="group hover:bg-indigo-500/3 transition-all">
                                     <td className="py-6 px-8">
                                         <div className="flex items-center gap-4">
                                             <div className="relative">
@@ -173,12 +174,17 @@ export default function AdminUsersPage() {
                                             </button>
                                             <button
                                                 onClick={async () => {
-                                                    if (confirm(`Authorize permanent purge of personnel "${user.name}"?`)) {
+                                                    const result = await showConfirm(
+                                                        `Purge "${user.name}"?`,
+                                                        'This will permanently remove the personnel record from the system.',
+                                                        'Yes, purge'
+                                                    );
+                                                    if (result.isConfirmed) {
                                                         try {
                                                             await deleteMutation.mutateAsync(user.id);
-                                                            toast.success('Personnel record purged successfully');
+                                                            showAlert('Purged', 'Personnel record removed successfully.', 'success');
                                                         } catch (err: any) {
-                                                            toast.error('Purge aborted: System protection active');
+                                                            showAlert('Aborted', 'Purge failed: System protection active.', 'error');
                                                         }
                                                     }
                                                 }}
@@ -199,7 +205,7 @@ export default function AdminUsersPage() {
             {/* Modals System */}
             <AnimatePresence>
                 {modalMode && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -215,13 +221,13 @@ export default function AdminUsersPage() {
                                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                                 className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl"
                             >
-                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+                                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
                                 <button onClick={closeModals} className="absolute top-6 right-6 p-2 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all">
                                     <X size={20} />
                                 </button>
 
                                 <div className="flex flex-col items-center mb-10">
-                                    <div className="w-24 h-24 rounded-[2rem] bg-indigo-600/10 border border-indigo-500/40 flex items-center justify-center text-3xl font-black text-indigo-500 mb-4 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
+                                    <div className="w-24 h-24 rounded-4xl bg-indigo-600/10 border border-indigo-500/40 flex items-center justify-center text-3xl font-black text-indigo-500 mb-4 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
                                         {selectedUser.name?.[0]?.toUpperCase() || 'U'}
                                     </div>
                                     <h2 className="text-2xl font-black text-foreground dark:text-white uppercase italic tracking-tight">{selectedUser.name}</h2>
@@ -231,7 +237,7 @@ export default function AdminUsersPage() {
                                 </div>
 
                                 <div className="space-y-4">
-                                    <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
+                                    <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
                                         <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
                                             <Mail size={20} />
                                         </div>
@@ -241,7 +247,7 @@ export default function AdminUsersPage() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
+                                    <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
                                         <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
                                             <Calendar size={20} />
                                         </div>
@@ -251,7 +257,7 @@ export default function AdminUsersPage() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
+                                    <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
                                         <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
                                             <Fingerprint size={20} />
                                         </div>
@@ -271,7 +277,7 @@ export default function AdminUsersPage() {
                                     </button>
                                     <button
                                         onClick={() => openEdit(selectedUser)}
-                                        className="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 transition-all active:scale-95"
+                                        className="flex-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 transition-all active:scale-95"
                                     >
                                         <Edit2 size={14} /> Update Record
                                     </button>
@@ -284,7 +290,7 @@ export default function AdminUsersPage() {
                                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                                 className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl"
                             >
-                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+                                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
                                 <button onClick={closeModals} className="absolute top-6 right-6 p-2 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all">
                                     <X size={20} />
                                 </button>
@@ -359,7 +365,7 @@ export default function AdminUsersPage() {
                                         <button
                                             type="submit"
                                             disabled={createMutation.isPending || updateMutation.isPending}
-                                            className="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 disabled:opacity-50 flex items-center justify-center gap-3"
+                                            className="flex-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 disabled:opacity-50 flex items-center justify-center gap-3"
                                         >
                                             {(createMutation.isPending || updateMutation.isPending) ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                                             {modalMode === 'create' ? 'Commit Authorization' : 'Save Calibrations'}

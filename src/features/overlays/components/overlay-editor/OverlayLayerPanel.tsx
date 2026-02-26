@@ -3,6 +3,7 @@
 import React from 'react';
 import { Layers, Type, Image as ImageIcon, Box, Trash2, Settings, ChevronUp, ChevronDown, Plus } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { showConfirm } from '@/shared/utils/swal';
 import { OverlayLayer, OverlayConfig } from '@/features/overlays/types/overlay.types';
 
 interface OverlayLayerPanelProps {
@@ -209,7 +210,14 @@ export const OverlayLayerPanel: React.FC<OverlayLayerPanelProps> = ({
 
                         <div className="pt-6 border-t border-card-border/50">
                             <button
-                                onClick={() => confirm('¿Eliminar esta capa?') && onDeleteLayer(selectedLayer.id)}
+                                onClick={async () => {
+                                    const result = await showConfirm(
+                                        '¿Eliminar esta capa?',
+                                        `La capa "${selectedLayer.name}" será eliminada permanentemente.`,
+                                        'Sí, eliminar'
+                                    );
+                                    if (result.isConfirmed) onDeleteLayer(selectedLayer.id);
+                                }}
                                 className="w-full p-4 bg-red-500/5 text-red-500 border border-red-500/10 rounded-2xl hover:bg-red-500 hover:text-white transition-all text-[10px] font-black uppercase   "
                             >
                                 Deconstruct Layer

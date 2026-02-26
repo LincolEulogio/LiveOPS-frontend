@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import { useIntercomStore } from '@/features/intercom/store/intercom.store';
 import { useIntercom } from '@/features/intercom/hooks/useIntercom';
 import { usePushNotifications } from '@/shared/hooks/usePushNotifications';
@@ -66,9 +67,21 @@ export const DeviceView = () => {
     const handleSubscribePush = async () => {
         const result = await subscribeToPush();
         if (result.success) {
-            alert('¡Notificaciones activadas!');
+            Swal.fire({
+                icon: 'success',
+                title: '¡Listo!',
+                text: '¡Notificaciones activadas!',
+                timer: 2500,
+                timerProgressBar: true,
+                showConfirmButton: false,
+            });
         } else {
-            alert(`Error al activar notificaciones: ${result.error}`);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `Error al activar notificaciones: ${result.error}`,
+                confirmButtonText: 'Entendido',
+            });
         }
     };
 

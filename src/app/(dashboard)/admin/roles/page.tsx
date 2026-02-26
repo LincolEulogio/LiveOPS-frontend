@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRoles, usePermissions, useUpdateRolePermissions, useCreateRole, useDeleteRole, useUpdateRole } from '@/features/users/hooks/useUsers';
 import { Shield, Loader2, Key, CheckCircle2, Square, Plus, Trash2, X, Edit2, Activity, Lock, Search } from 'lucide-react';
 import { toast } from 'sonner';
+import { showConfirm, showAlert } from '@/shared/utils/swal';
 import { Role } from '@/features/users/types/user.types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
@@ -65,12 +66,17 @@ export default function AdminRolesPage() {
     };
 
     const handleDeleteRole = async (id: string, name: string) => {
-        if (!confirm(`Permanently deauthorize role "${name}"?`)) return;
+        const result = await showConfirm(
+            `Deauthorize "${name}"?`,
+            'This will permanently remove this security node from the system.',
+            'Yes, deauthorize'
+        );
+        if (!result.isConfirmed) return;
         try {
             await deleteRoleMutation.mutateAsync(id);
-            toast.success('Role purged from system');
+            showAlert('Deauthorized', 'Security node purged from system.', 'success');
         } catch (err) {
-            toast.error('Deauthorization failed');
+            showAlert('Failed', 'Deauthorization failed. Try again.', 'error');
         }
     };
 
@@ -120,7 +126,7 @@ export default function AdminRolesPage() {
                     }}
                     className="group relative px-6 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 flex items-center gap-3 overflow-hidden"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                     <Plus size={16} /> New Role
                 </button>
             </div>
@@ -136,7 +142,7 @@ export default function AdminRolesPage() {
                     >
                         {/* Objective 3: Scanning Effect */}
                         <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-500/[0.03] to-transparent h-[20%] w-full -translate-y-full group-hover:animate-scan" />
+                            <div className="absolute inset-0 bg-linear-to-b from-transparent via-indigo-500/3 to-transparent h-[20%] w-full -translate-y-full group-hover:animate-scan" />
                         </div>
 
                         <div className="flex justify-between items-start mb-6">
@@ -154,16 +160,7 @@ export default function AdminRolesPage() {
                                 </button>
                                 {(!['ADMIN', 'SUPERADMIN'].includes(role.name)) && (
                                     <button
-                                        onClick={async () => {
-                                            if (confirm(`Authorize permanent purge of role "${role.name}"?`)) {
-                                                try {
-                                                    await deleteRoleMutation.mutateAsync(role.id);
-                                                    toast.success('Security node purged successfully');
-                                                } catch (err) {
-                                                    toast.error('Purge aborted: System protection active');
-                                                }
-                                            }
-                                        }}
+                                        onClick={() => handleDeleteRole(role.id, role.name)}
                                         className="p-2.5 bg-gray-50 dark:bg-white/5 hover:bg-red-50 dark:hover:bg-red-600/20 border border-black/5 dark:border-white/10 rounded-xl text-muted-foreground dark:text-white transition-all active:scale-95"
                                         title="Immediate Deauthorization"
                                     >
@@ -173,7 +170,7 @@ export default function AdminRolesPage() {
                             </div>
                         </div>
 
-                        <p className="text-xs text-muted-foreground/80 dark:text-muted/70 mb-8 italic line-clamp-2 min-h-[2.5rem] leading-relaxed tracking-wide">
+                        <p className="text-xs text-muted-foreground/80 dark:text-muted/70 mb-8 italic line-clamp-2 min-h-10 leading-relaxed tracking-wide">
                             {role.description || 'System access node calibrated for specialized operations.'}
                         </p>
 
@@ -198,12 +195,12 @@ export default function AdminRolesPage() {
                                                 "w-full px-5 py-4 rounded-2xl border flex items-center justify-between transition-all active:scale-[0.98] group/item",
                                                 isAssigned
                                                     ? "bg-indigo-600 dark:bg-indigo-600/20 border-indigo-500 shadow-lg shadow-indigo-600/20 text-white dark:text-indigo-400"
-                                                    : "bg-gray-50 dark:bg-white/[0.02] border-black/5 dark:border-white/5 text-muted-foreground dark:text-white/30 hover:border-indigo-500/30 hover:bg-white dark:hover:bg-white/5"
+                                                    : "bg-gray-50 dark:bg-white/2 border-black/5 dark:border-white/5 text-muted-foreground dark:text-white/30 hover:border-indigo-500/30 hover:bg-white dark:hover:bg-white/5"
                                             )}
                                         >
                                             <div className="text-left">
                                                 <div className={cn(
-                                                    "text-[11px] font-black uppercase tracking-[0.1em] mb-0.5 transition-colors",
+                                                    "text-[11px] font-black uppercase tracking-widest mb-0.5 transition-colors",
                                                     isAssigned ? "text-white dark:text-indigo-300" : "text-foreground dark:text-white/60 group-hover/item:text-indigo-500"
                                                 )}>
                                                     {perm.name}
@@ -235,7 +232,7 @@ export default function AdminRolesPage() {
             {/* Modals */}
             <AnimatePresence>
                 {(isCreateModalOpen || isEditModalOpen) && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -249,7 +246,7 @@ export default function AdminRolesPage() {
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl"
                         >
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+                            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
                             <button
                                 onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }}
                                 className="absolute top-6 right-6 p-2 text-muted-foreground dark:text-muted hover:text-indigo-600 dark:hover:text-white hover:bg-indigo-50 dark:hover:bg-white/10 rounded-xl transition-all"
@@ -297,7 +294,7 @@ export default function AdminRolesPage() {
                                     <button
                                         type="submit"
                                         disabled={createRoleMutation.isPending || updateRoleMutation.isPending}
-                                        className="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 disabled:opacity-50"
+                                        className="flex-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 disabled:opacity-50"
                                     >
                                         {isEditModalOpen ? 'Commit Parameters' : 'Authorize Protocol'}
                                     </button>

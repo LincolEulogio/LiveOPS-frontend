@@ -7,6 +7,7 @@ import {
     Users, ExternalLink, X, Save, AlertCircle, Search,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { showConfirm, showAlert } from '@/shared/utils/swal';
 import { apiClient } from '@/shared/api/api.client';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 
@@ -116,7 +117,7 @@ function CallModal({ call, onClose, onSave }: {
                     <div>
                         <label className="block text-[9px] font-black text-white/40 uppercase tracking-wider mb-1.5">Fecha y hora programada</label>
                         <input type="datetime-local" value={scheduledAt} onChange={e => setScheduledAt(e.target.value)}
-                            className="w-full bg-white/5 border border-violet-500/15 rounded-xl px-4 py-2.5 text-[13px] text-white/85 focus:outline-none focus:border-violet-500/40 transition-colors [color-scheme:dark]" />
+                            className="w-full bg-white/5 border border-violet-500/15 rounded-xl px-4 py-2.5 text-[13px] text-white/85 focus:outline-none focus:border-violet-500/40 transition-colors scheme-dark" />
                     </div>
                 </div>
 
@@ -125,7 +126,7 @@ function CallModal({ call, onClose, onSave }: {
                         Cancelar
                     </button>
                     <button onClick={handleSave} disabled={saving}
-                        className="flex-1 py-2.5 bg-gradient-to-r from-violet-700 to-violet-500 rounded-xl text-white text-[10px] font-black uppercase tracking-widest disabled:opacity-50 transition-opacity flex items-center justify-center gap-2">
+                        className="flex-1 py-2.5 bg-linear-to-r from-violet-700 to-violet-500 rounded-xl text-white text-[10px] font-black uppercase tracking-widest disabled:opacity-50 transition-opacity flex items-center justify-center gap-2">
                         <Save size={12} />{saving ? 'Guardando...' : 'Guardar'}
                     </button>
                 </div>
@@ -248,13 +249,18 @@ export default function VideoCallsPage() {
     }, [searchParams, router]);
 
     const handleDelete = async (id: string) => {
-        if (!confirm('¿Eliminar esta videollamada?')) return;
+        const result = await showConfirm(
+            '¿Eliminar videollamada?',
+            'Esta acción eliminará la sala permanentemente.',
+            'Sí, eliminar'
+        );
+        if (!result.isConfirmed) return;
         try {
             await apiClient.delete(`/video-call/rooms/${id}`);
-            toast.success('Videollamada eliminada');
+            showAlert('Eliminada', 'La videollamada fue eliminada correctamente.', 'success');
             loadCalls();
         } catch (e: any) {
-            toast.error(e.message || 'Error al eliminar');
+            showAlert('Error', e.message || 'Error al eliminar', 'error');
         }
     };
 
@@ -304,7 +310,7 @@ export default function VideoCallsPage() {
                         </div>
                     </div>
                     <button onClick={() => setModal({ open: true, call: null })}
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-700 to-violet-500 rounded-xl text-white text-[10px] font-black uppercase tracking-wider shadow-lg shadow-violet-500/20 hover:shadow-violet-500/35 transition-shadow">
+                        className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-violet-700 to-violet-500 rounded-xl text-white text-[10px] font-black uppercase tracking-wider shadow-lg shadow-violet-500/20 hover:shadow-violet-500/35 transition-shadow">
                         <Plus size={13} />Nueva Videollamada
                     </button>
                 </div>

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { overlayService } from '@/features/overlays/api/overlay.service';
 import { Layers, Plus, ExternalLink, Play, Square, Edit3, Trash2, X, ChevronLeft } from 'lucide-react';
+import { showConfirm, showAlert } from '@/shared/utils/swal';
 import { cn } from '@/shared/utils/cn';
 import { OverlayEditor } from '@/features/overlays/components/OverlayEditor';
 import { OverlayTemplate } from '@/features/overlays/types/overlay.types';
@@ -132,7 +133,19 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
                                 <ExternalLink size={10} /> Browser Source URL
                             </a>
                             <button
-                                onClick={() => confirm('Delete?') && deleteMutation.mutate(template.id)}
+                                onClick={async () => {
+                                    const result = await showConfirm(
+                                        `¿Eliminar overlay "${template.name}"?`,
+                                        'Esta acción no se puede deshacer.',
+                                        'Sí, eliminar'
+                                    );
+                                    if (result.isConfirmed) {
+                                        deleteMutation.mutate(template.id, {
+                                            onSuccess: () => showAlert('Eliminado', 'El overlay fue eliminado.', 'success'),
+                                            onError: () => showAlert('Error', 'No se pudo eliminar el overlay.', 'error'),
+                                        });
+                                    }
+                                }}
                                 className="text-muted hover:text-red-500 transition-colors"
                             >
                                 <Trash2 size={14} />
@@ -151,7 +164,7 @@ export const OverlayManager = ({ productionId }: { productionId: string }) => {
 
             {/* Create Overlay Modal */}
             {isCreateModalOpen && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-100 p-4">
                     <div className="bg-card-bg border border-card-border rounded-xl p-6 w-full max-w-sm  overflow-hidden relative">
                         <div className="absolute top-0 right-0 p-4">
                             <button onClick={() => {

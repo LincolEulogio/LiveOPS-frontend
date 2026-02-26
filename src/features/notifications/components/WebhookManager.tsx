@@ -16,6 +16,7 @@ import {
     MoreVertical
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { showConfirm, showAlert } from '@/shared/utils/swal';
 import { cn } from '@/shared/utils/cn';
 
 interface WebhookManagerProps {
@@ -187,7 +188,19 @@ export const WebhookManager = ({ productionId }: WebhookManagerProps) => {
                                         <Send className="w-4 h-4" />
                                     </button>
                                     <button
-                                        onClick={() => deleteWebhook.mutate(webhook.id)}
+                                        onClick={async () => {
+                                            const result = await showConfirm(
+                                                `¿Eliminar webhook "${webhook.name}"?`,
+                                                'Se desconectará esta integración permanentemente.',
+                                                'Sí, eliminar'
+                                            );
+                                            if (result.isConfirmed) {
+                                                deleteWebhook.mutate(webhook.id, {
+                                                    onSuccess: () => showAlert('Eliminado', 'Webhook desconectado correctamente.', 'success'),
+                                                    onError: () => showAlert('Error', 'No se pudo eliminar el webhook.', 'error'),
+                                                });
+                                            }
+                                        }}
                                         className="p-1.5 hover:bg-stone-700 rounded-lg text-stone-400 hover:text-red-400"
                                         title="Delete"
                                     >

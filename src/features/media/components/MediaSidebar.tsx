@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { toast } from 'sonner';
+import { showConfirm, showAlert } from '@/shared/utils/swal';
 import { apiClient } from '@/shared/api/api.client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUploadThing } from '@/shared/hooks/useUploadThing';
@@ -128,12 +129,19 @@ export const MediaSidebar = ({ productionId }: { productionId?: string }) => {
     useEffect(() => { fetchAssets(); }, [pid]);
 
     const handleDelete = async (id: string) => {
+        const asset = assets.find(a => a.id === id);
+        const result = await showConfirm(
+            `¿Eliminar "${asset?.name ?? 'asset'}"?`,
+            'Este archivo será eliminado del sistema de medios permanentemente.',
+            'Sí, eliminar'
+        );
+        if (!result.isConfirmed) return;
         try {
             await apiClient.delete(`/media/assets/${pid}/${id}`);
             setAssets(prev => prev.filter(a => a.id !== id));
-            toast.success('Asset eliminado');
+            showAlert('Eliminado', 'Asset eliminado correctamente.', 'success');
         } catch {
-            toast.error('No se pudo eliminar el asset');
+            showAlert('Error', 'No se pudo eliminar el asset.', 'error');
         }
     };
 
