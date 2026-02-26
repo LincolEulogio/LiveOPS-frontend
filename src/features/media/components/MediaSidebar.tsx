@@ -32,9 +32,15 @@ export const MediaSidebar = () => {
         try {
             const data = await apiClient.get<MediaAsset[]>('/media/assets');
             setAssets(data);
-        } catch (err) {
-            console.error('Failed to fetch assets:', err);
-            toast.error('Could not load media assets');
+        } catch (err: any) {
+            const msg: string = err.message || '';
+            // Silently handle permission/403 errors - user simply doesn't have media access
+            if (msg.includes('permissions') || msg.includes('failure') || msg.includes('Forbidden') || msg.includes('403')) {
+                setAssets([]);
+            } else {
+                console.error('Failed to fetch assets:', err);
+                toast.error('Could not load media assets');
+            }
         } finally {
             setIsLoading(false);
         }
