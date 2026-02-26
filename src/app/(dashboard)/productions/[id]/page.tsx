@@ -306,7 +306,7 @@ export default function ProductionDetailPage() {
 
             {/* Sidebar Media */}
             <div className="h-[400px] lg:h-[450px]">
-              <MediaSidebar />
+              <MediaSidebar productionId={id} />
             </div>
 
             {/* Intercom Quick Access */}
