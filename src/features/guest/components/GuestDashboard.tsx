@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useProduction } from '@/features/productions/hooks/useProductions';
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { ProductionStatus } from '@/features/productions/types/production.types';
@@ -8,6 +8,8 @@ import { ChatPanel } from '@/features/chat/components/ChatPanel';
 import { AlertCircle, Radio, Clock, Video, MessageSquare, X as CloseIcon, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/shared/utils/cn';
+import { useSocket } from '@/shared/socket/socket.provider';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
     productionId: string;
@@ -15,9 +17,30 @@ interface Props {
 
 export const GuestDashboard = ({ productionId }: Props) => {
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const queryClient = useQueryClient();
+    const { socket } = useSocket();
+
     // Initialize sockets and context
     useProductionContextInitializer(productionId);
     const { data: production, isLoading, error } = useProduction(productionId);
+
+    useEffect(() => {
+        if (!socket || !productionId) return;
+
+        // Join room to receive production updates
+        socket.emit('production.join', { productionId });
+
+        const handleUpdate = (payload: { productionId: string }) => {
+            if (payload.productionId === productionId) {
+                queryClient.invalidateQueries({ queryKey: ['productions', productionId] });
+            }
+        };
+
+        socket.on('production.updated', handleUpdate);
+        return () => {
+            socket.off('production.updated', handleUpdate);
+        };
+    }, [socket, productionId, queryClient]);
 
     if (isLoading) {
         return <div className="p-8 text-center text-muted animate-pulse">Loading Green Room...</div>;
