@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radio, Activity, ExternalLink, Scissors } from 'lucide-react';
+import { Radio, Activity, ExternalLink, Scissors, Monitor } from 'lucide-react';
 import { TemplateManager } from '@/features/intercom/components/TemplateManager';
 import { apiClient } from '@/shared/api/api.client';
 import { Production } from '@/features/productions/types/production.types';
@@ -48,13 +48,21 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full min-[1100px]:w-auto justify-center min-[1100px]:justify-end relative z-10">
 
                 <div className="flex flex-col sm:flex-row items-center gap-3 w-full min-[1100px]:w-auto overflow-hidden">
-                    <div className="grid grid-cols-2 sm:flex sm:flex-row gap-3 w-full sm:w-auto">
+                    <div className="grid grid-cols-3 sm:flex sm:flex-row gap-3 w-full sm:w-auto">
                         <button
                             onClick={() => window.open(`/productions/${activeProductionId}/talent`, '_blank')}
-                            className="flex-1 px-4 sm:px-6 py-3 sm:py-4 bg-gray-50 dark:bg-white/[0.03] hover:bg-gray-100 dark:hover:bg-white/[0.08] text-muted-foreground dark:text-muted hover:text-foreground rounded-2xl font-black text-[10px] uppercase transition-all active:scale-95 border border-black/5 dark:border-white/5 flex items-center justify-center gap-2 group/talent shadow-sm"
+                            className="flex-1 px-2 sm:px-6 py-3 sm:py-4 bg-gray-50 dark:bg-white/[0.03] hover:bg-gray-100 dark:hover:bg-white/[0.08] text-muted-foreground dark:text-muted hover:text-foreground rounded-2xl font-black text-[9px] sm:text-[10px] uppercase transition-all active:scale-95 border border-black/5 dark:border-white/5 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 group/talent shadow-sm"
                         >
-                            <ExternalLink size={16} className="text-indigo-500 dark:text-indigo-400 group-hover:rotate-12 transition-transform" />
-                            <span>Talent View</span>
+                            <ExternalLink size={14} className="text-indigo-500 dark:text-indigo-400 group-hover:rotate-12 transition-transform sm:w-4 sm:h-4" />
+                            <span className="truncate">Talent</span>
+                        </button>
+
+                        <button
+                            onClick={() => window.open(`/overlay/${activeProductionId}`, '_blank')}
+                            className="flex-1 px-2 sm:px-6 py-3 sm:py-4 bg-indigo-500/5 dark:bg-indigo-500/5 hover:bg-indigo-500 dark:hover:bg-indigo-500 hover:text-white border border-indigo-500/20 rounded-2xl font-black text-[9px] sm:text-[10px] uppercase transition-all active:scale-95 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 group/liveout shadow-lg shadow-indigo-500/10"
+                        >
+                            <Monitor size={14} className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors sm:w-4 sm:h-4" />
+                            <span className="truncate">Output</span>
                         </button>
 
                         <TemplateManager productionId={activeProductionId} />
