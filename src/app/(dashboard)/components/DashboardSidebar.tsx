@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Zap, X, LogOut, User as UserIcon, Server, Users, Shield, Layers } from 'lucide-react';
+import { Zap, X, LogOut, User as UserIcon, Server, Users, Shield, Layers, List, FolderOpen, Globe, Activity, Command, History, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { Guard } from '@/shared/components/Guard';
@@ -65,6 +65,27 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
                     active={pathname.includes('/intercom')}
                 />
 
+                <SidebarLink
+                    href={activeProductionId ? `/productions/${activeProductionId}/rundown` : '#'}
+                    icon={List}
+                    label="Escaleta / Rundown"
+                    active={pathname.includes('/rundown')}
+                />
+
+                <SidebarLink
+                    href={activeProductionId ? `/productions/${activeProductionId}/media` : '#'}
+                    icon={FolderOpen}
+                    label="Media Library"
+                    active={pathname.includes('/media')}
+                />
+
+                <SidebarLink
+                    href={activeProductionId ? `/productions/${activeProductionId}/multicast` : '#'}
+                    icon={Globe}
+                    label="Multi-Cast Distribución"
+                    active={pathname.includes('/multicast')}
+                />
+
                 {activeProductionId && (
                     <>
                         <div className="h-4" />
@@ -81,6 +102,18 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
                             label="Guest Panel"
                             active={pathname.includes('/guest')}
                         />
+                        <SidebarLink
+                            href={`/productions/${activeProductionId}/health`}
+                            icon={Activity}
+                            label="System Health"
+                            active={pathname.includes('/health')}
+                        />
+                        <SidebarLink
+                            href={`/productions/${activeProductionId}/automation`}
+                            icon={Command}
+                            label="Automation Macros"
+                            active={pathname.includes('/automation')}
+                        />
                     </>
                 )}
 
@@ -91,6 +124,20 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
                     icon={UserIcon}
                     label="Operator Profile"
                     active={pathname === '/profile'}
+                />
+
+                <SidebarLink
+                    href={activeProductionId ? `/productions/${activeProductionId}/logs` : '#'}
+                    icon={History}
+                    label="Audit Trails"
+                    active={pathname.includes('/logs')}
+                />
+
+                <SidebarLink
+                    href={activeProductionId ? `/productions/${activeProductionId}/settings` : '#'}
+                    icon={Settings}
+                    label="Hardware Config"
+                    active={pathname.includes('/settings')}
                 />
 
                 <Guard requiredPermissions={['user:manage', 'role:manage']}>
