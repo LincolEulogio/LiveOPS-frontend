@@ -1,26 +1,40 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { overlayService } from '@/features/overlays/api/overlay.service';
 import { OverlayRenderer } from '@/features/overlays/components/OverlayRenderer';
 import { Loader2 } from 'lucide-react';
+import { useSocket } from '@/shared/socket/socket.provider';
 
 export default function PublicOverlayPage() {
     const params = useParams();
-    const id = params.id as string;
-    const productionId = "PUBLIC"; // The backend should allow fetching by ID without explicit productionId for public routes
+    const productionId = params.id as string;
+    const queryClient = useQueryClient();
+    const { socket } = useSocket();
 
-    const { data: template, isLoading, error } = useQuery({
-        queryKey: ['public-overlay', id],
+    const { data: overlays, isLoading, error } = useQuery({
+        queryKey: ['public-overlays', productionId],
         queryFn: async () => {
-            // We'll use a direct fetch or a specific endpoint for public overlays
-            // For now, let's assume we can fetch it if we have the ID
-            return overlayService.getOverlay("all", id);
+            return overlayService.getOverlays(productionId);
         },
-        enabled: !!id,
+        enabled: !!productionId,
     });
+
+    useEffect(() => {
+        if (!socket || !productionId) return;
+
+        socket.emit('production.join', { productionId });
+
+        socket.on('overlay.list_updated', () => {
+            queryClient.invalidateQueries({ queryKey: ['public-overlays', productionId] });
+        });
+
+        return () => {
+            socket.off('overlay.list_updated');
+        };
+    }, [socket, productionId, queryClient]);
 
     if (isLoading) {
         return (
@@ -30,17 +44,32 @@ export default function PublicOverlayPage() {
         );
     }
 
-    if (error || !template) {
+    if (error || !overlays) {
         return (
-            <div className="w-screen h-screen flex items-center justify-center bg-red-500/10 text-red-500 font-mono text-xs">
-                OVERLAY_NOT_FOUND_OR_ERROR: {id}
+            <div className="w-screen h-screen flex items-center justify-center bg-red-500/10 text-red-500 font-mono text-xs text-center p-10">
+                OVERLAY_ERROR: NO_CONNECTION_OR_INVALID_ID<br />
+                ID: {productionId}
             </div>
         );
     }
 
+    const activeOverlays = overlays.filter(o => o.isActive);
+
     return (
-        <div className="w-screen h-screen bg-transparent overflow-hidden">
-            <OverlayRenderer template={template} />
+        <div className="w-screen h-screen bg-transparent overflow-hidden relative">
+            {activeOverlays.map(overlay => (
+                <div key={overlay.id} className="absolute inset-0 pointer-events-none">
+                    <OverlayRenderer template={overlay} />
+                </div>
+            ))}
+
+            {activeOverlays.length === 0 && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span className="text-[10px] font-black uppercase text-white/5 tracking-[0.6em] italic text-center px-10">
+                        Signal Stable. No active overlays for node {productionId.substring(0, 8)}...
+                    </span>
+                </div>
+            )}
         </div>
     );
 }
