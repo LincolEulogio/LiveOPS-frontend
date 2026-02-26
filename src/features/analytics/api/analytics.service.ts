@@ -6,8 +6,11 @@ export const analyticsService = {
         apiClient.get(`/productions/${productionId}/analytics/metrics`),
 
     getProductionLogs: (productionId: string): Promise<ProductionLog[]> =>
-        apiClient.get(`/productions/${productionId}/analytics/logs`),
+        apiClient.get(`/audit/production/${productionId}`),
 
     getAllLogsForExport: (productionId: string): Promise<ProductionLog[]> =>
-        apiClient.get(`/productions/${productionId}/analytics/logs/export`),
+        apiClient.get(`/audit/production/${productionId}?limit=1000`),
+
+    getGlobalAuditLogs: (page: number = 1): Promise<ProductionLog[]> =>
+        apiClient.get(`/audit/global?page=${page}`),
 };

@@ -85,7 +85,7 @@ Eres experta funcional en todos los flujos de la app, responde naturalmente ofre
     };
 
     return (
-        <div className="bg-card-bg/60 backdrop-blur-xl border border-card-border rounded-[2rem] p-6 flex flex-col h-[600px] relative overflow-hidden group">
+        <div className="bg-card-bg/60 backdrop-blur-xl border border-card-border rounded-4xl p-6 flex flex-col h-[600px] relative overflow-hidden group">
             {/* Background Glow */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-[60px] -mr-16 -mt-16 group-hover:bg-indigo-500/10 transition-colors pointer-events-none" />
 
@@ -95,14 +95,63 @@ Eres experta funcional en todos los flujos de la app, responde naturalmente ofre
                         <Bot size={16} />
                     </div>
                     <div>
-                        <h2 className="text-xs font-black text-foreground uppercase tracking-widest">Livia AI Briefing</h2>
-                        <p className="text-[9px] text-muted font-bold uppercase">Real-time Production Analysis</p>
+                        <h2 className="text-xs font-black text-foreground uppercase tracking-widest">Livia Intelligence</h2>
+                        <p className="text-[9px] text-muted font-bold uppercase">Briefing & Command v4.0</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl">
-                    <Activity size={10} className="text-emerald-500 animate-pulse" />
-                    <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Activo</span>
+                <div className="flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                    <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Active Link</span>
                 </div>
+            </div>
+
+            {/* AI Insights Bar */}
+            <div className="grid grid-cols-3 gap-2 my-4 shrink-0">
+                <div className="bg-indigo-500/3 border border-indigo-500/10 rounded-xl p-2.5">
+                    <p className="text-[8px] font-black text-muted-foreground uppercase mb-1">Sentiment</p>
+                    <div className="flex items-center gap-2">
+                        <div className="h-1 flex-1 bg-black/20 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-500 w-[78%]" />
+                        </div>
+                        <span className="text-[10px] font-bold text-emerald-500">78%</span>
+                    </div>
+                </div>
+                <div className="bg-indigo-500/3 border border-indigo-500/10 rounded-xl p-2.5">
+                    <p className="text-[8px] font-black text-muted-foreground uppercase mb-1">Engagement</p>
+                    <div className="flex items-center gap-2">
+                        <div className="h-1 flex-1 bg-black/20 rounded-full overflow-hidden">
+                            <div className="h-full bg-indigo-500 w-[45%]" />
+                        </div>
+                        <span className="text-[10px] font-bold text-indigo-400">High</span>
+                    </div>
+                </div>
+                <div className="bg-indigo-500/3 border border-indigo-500/10 rounded-xl p-2.5">
+                    <p className="text-[8px] font-black text-muted-foreground uppercase mb-1">Tech Health</p>
+                    <div className="flex items-center gap-2">
+                        <div className="h-1 flex-1 bg-black/20 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-500 w-[95%]" />
+                        </div>
+                        <span className="text-[10px] font-bold text-emerald-500">95%</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="flex gap-2 overflow-x-auto pb-2 shrink-0 no-scrollbar">
+                {[
+                    { label: 'Analizar Sentimiento', icon: '📊' },
+                    { label: 'Resumen Escaleta', icon: '📝' },
+                    { label: 'Estado Técnico', icon: '⚡' },
+                    { label: 'Sugerir Clips', icon: '📽️' }
+                ].map((action, i) => (
+                    <button 
+                        key={i}
+                        onClick={() => { setInput(action.label); handleSend(); }}
+                        className="whitespace-nowrap px-3 py-1.5 rounded-lg bg-indigo-500/5 hover:bg-indigo-500/10 border border-indigo-500/10 text-[9px] font-bold text-indigo-300 transition-all uppercase tracking-wider"
+                    >
+                        {action.icon} {action.label}
+                    </button>
+                ))}
             </div>
 
             <AiBriefingInterface

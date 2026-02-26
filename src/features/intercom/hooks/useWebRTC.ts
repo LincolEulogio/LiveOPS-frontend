@@ -176,7 +176,8 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
                 socket?.emit('webrtc.signal', {
                     productionId,
                     targetUserId,
-                    signal: { sdp: pc.localDescription }
+                    signal: { sdp: pc.localDescription },
+                    context: 'intercom'
                 });
             } catch (err) {
                 console.error(`[WebRTC] Negotiation error with ${targetUserId}:`, err);
@@ -298,7 +299,8 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
         socket.on('presence.update', handlePresence);
         socket.emit('presence.request');
 
-        const handleSignal = async (data: { senderUserId: string, signal: any }) => {
+        const handleSignal = async (data: { senderUserId: string, signal: any, context?: string }) => {
+            if (data.context && data.context !== 'intercom') return;
             try {
                 const stream = await setupLocalAudio();
                 if (!stream) return;
@@ -337,7 +339,8 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
                         socket.emit('webrtc.signal', {
                             productionId,
                             targetUserId: data.senderUserId,
-                            signal: { sdp: pc.localDescription }
+                            signal: { sdp: pc.localDescription },
+                            context: 'intercom'
                         });
                     }
                 } else if (data.signal.ice) {

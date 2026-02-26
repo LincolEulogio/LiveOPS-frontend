@@ -66,6 +66,7 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                     <thead className="sticky top-0 bg-card-bg border-b border-card-border z-10">
                         <tr className="text-[10px] font-bold text-muted uppercase ">
                             <th className="text-left py-3 px-6">Timestamp</th>
+                            <th className="text-left py-3 px-6">Operator</th>
                             <th className="text-left py-3 px-6">Event Type</th>
                             <th className="text-left py-3 px-6">Source Payload</th>
                         </tr>
@@ -75,13 +76,14 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                             Array(10).fill(0).map((_, i) => (
                                 <tr key={i} className="animate-pulse">
                                     <td className="py-4 px-6"><div className="h-3 w-20 bg-black/5 dark:bg-white/5 rounded"></div></td>
+                                    <td className="py-4 px-6"><div className="h-3 w-24 bg-black/5 dark:bg-white/5 rounded"></div></td>
                                     <td className="py-4 px-6"><div className="h-3 w-32 bg-black/5 dark:bg-white/5 rounded"></div></td>
                                     <td className="py-4 px-6"><div className="h-3 w-64 bg-black/5 dark:bg-white/5 rounded"></div></td>
                                 </tr>
                             ))
                         ) : filteredLogs.length === 0 ? (
                             <tr>
-                                <td colSpan={3} className="py-20 text-center text-muted">
+                                <td colSpan={4} className="py-20 text-center text-muted">
                                     <div className="flex flex-col items-center gap-3">
                                         <History size={48} strokeWidth={1} className="opacity-10" />
                                         <p className="text-[10px] uppercase font-bold ">No matching logs found</p>
@@ -94,8 +96,8 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                                     key={log.id}
                                     className={cn(
                                         "hover:bg-indigo-500/5 transition-colors group cursor-default border-l-2",
-                                        log.eventType.includes('error') || log.eventType.includes('fail') ? "border-red-500/40 bg-red-500/[0.02]" :
-                                            log.eventType.includes('warn') ? "border-amber-500/40 bg-amber-500/[0.02]" : "border-transparent"
+                                        log.eventType.includes('error') || log.eventType.includes('fail') ? "border-red-500/40 bg-red-500/2" :
+                                            log.eventType.includes('warn') ? "border-amber-500/40 bg-amber-500/2" : "border-transparent"
                                     )}
                                 >
                                     <td className="py-4 px-6 whitespace-nowrap">
@@ -106,15 +108,35 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                                             {new Date(log.createdAt).toLocaleDateString()}
                                         </div>
                                     </td>
+                                    <td className="py-4 px-6 whitespace-nowrap">
+                                        {log.user ? (
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-6 h-6 rounded-lg bg-indigo-500/10 flex items-center justify-center text-[10px] font-black text-indigo-400 border border-indigo-500/20 uppercase">
+                                                    {log.user.name.charAt(0)}
+                                                </div>
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-foreground uppercase">{log.user.name}</p>
+                                                    <p className="text-[8px] text-muted-foreground/50 lowercase">{log.user.email}</p>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-2 opacity-40">
+                                                <div className="w-6 h-6 rounded-lg bg-gray-500/10 flex items-center justify-center text-[10px] font-black text-gray-500 border border-gray-500/20 uppercase">
+                                                    S
+                                                </div>
+                                                <span className="text-[10px] font-black text-muted uppercase italic">System</span>
+                                            </div>
+                                        )}
+                                    </td>
                                     <td className="py-4 px-6">
                                         <span className={cn(
-                                            "text-[9px] font-black px-3 py-1 rounded-xl border uppercase tracking-[0.1em]",
+                                            "text-[9px] font-black px-3 py-1 rounded-xl border uppercase tracking-widest",
                                             log.eventType.includes('obs') ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400" :
                                                 log.eventType.includes('vmix') ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400" :
-                                                    log.eventType.includes('production.user') || log.eventType.includes('device') ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400" :
+                                                    log.eventType.includes('production') || log.eventType.includes('INTERCOM') ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400" :
                                                         "bg-gray-100 dark:bg-white/5 border-black/5 dark:border-white/5 text-muted-foreground"
                                         )}>
-                                            {log.eventType}
+                                            {log.eventType.replace('API_', '').replace('_', ' ')}
                                         </span>
                                     </td>
                                     <td className="py-4 px-6">

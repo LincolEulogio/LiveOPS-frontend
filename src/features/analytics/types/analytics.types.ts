@@ -1,9 +1,15 @@
 export interface ProductionLog {
     id: string;
     productionId: string;
+    userId?: string;
     eventType: string;
     details: Record<string, unknown>;
     createdAt: string;
+    user?: {
+        id: string;
+        name: string;
+        email?: string;
+    };
 }
 
 export interface OperatorActivity {
