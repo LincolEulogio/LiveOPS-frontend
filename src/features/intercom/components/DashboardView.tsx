@@ -128,6 +128,7 @@ export const DashboardView = () => {
                             startTalking={startTalking}
                             stopTalking={stopTalking}
                             isTalking={isTalking}
+                            talkingInfo={talkingInfo}
                         />
                     )}
 
