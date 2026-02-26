@@ -24,6 +24,7 @@ export interface CrewMember {
     userName: string;
     roleName: string;
     isOnline: boolean;
+    isTalking?: boolean;
     currentStatus?: string;
     lastAck?: {
         message: string;

@@ -16,8 +16,10 @@ import { AuditLogView } from '@/features/intercom/components/AuditLogView';
 import { useIntercomTemplates } from '@/features/intercom/hooks/useIntercomTemplates';
 import { AutomationDashboard } from '@/features/automation/components/AutomationDashboard';
 import { MulticastManager } from '@/features/streaming/components/MulticastManager';
-import { CrewMember } from '@/features/intercom/types/intercom.types';
 import { Production } from '@/features/productions/types/production.types';
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { useWebRTC } from '@/features/intercom/hooks/useWebRTC';
+import { CrewMember } from '@/features/intercom/types/intercom.types';
 
 // New Sub-components
 import { DashboardHeader } from '@/features/intercom/components/dashboard/DashboardHeader';
@@ -28,10 +30,37 @@ import { DashboardSidebar } from '@/features/intercom/components/dashboard/Dashb
 export const DashboardView = () => {
     const { id: productionIdFromParams } = useParams();
     const activeProductionId = (useAppStore((state) => state.activeProductionId) || productionIdFromParams) as string;
+    const user = useAuthStore((state) => state.user);
 
     const { sendCommand, sendDirectMessage, members: onlineMembers } = useIntercom();
     const { history } = useIntercomStore();
     const [activeTab, setActiveTab] = useState<'intercom' | 'automation' | 'multicast' | 'logs' | 'templates'>('intercom');
+
+    const { startTalking, stopTalking, isTalking, initiateCall, talkingUsers } = useWebRTC({
+        productionId: activeProductionId,
+        userId: user?.id || 'admin',
+        isHost: true,
+    });
+
+    const initiatedMembers = React.useRef<Set<string>>(new Set());
+
+    // We can initiate auto-call to all members when they are online or just allow PTT broadcasting
+    React.useEffect(() => {
+        onlineMembers.forEach(m => {
+            if (!initiatedMembers.current.has(m.userId)) {
+                initiateCall(m.userId);
+                initiatedMembers.current.add(m.userId);
+            }
+        });
+
+        // Cleanup initiated members who are no longer online
+        const onlineIds = new Set(onlineMembers.map(m => m.userId));
+        initiatedMembers.current.forEach(id => {
+            if (!onlineIds.has(id)) {
+                initiatedMembers.current.delete(id);
+            }
+        });
+    }, [onlineMembers, initiateCall]);
 
     const { data: production } = useQuery<Production>({
         queryKey: ['production', activeProductionId],
@@ -55,6 +84,7 @@ export const DashboardView = () => {
                 userName: pu.user.name,
                 roleName: pu.role.name,
                 isOnline,
+                isTalking: talkingUsers.has(pu.user.id),
                 currentStatus: onlineData?.status || 'IDLE',
                 lastAck: (onlineData?.status && onlineData.status.startsWith('ACK:')) ? {
                     message: onlineData.status.substring(4),
@@ -95,6 +125,9 @@ export const DashboardView = () => {
                         <DashboardQuickActions
                             templates={templates}
                             onMassAlert={handleMassAlert}
+                            startTalking={startTalking}
+                            stopTalking={stopTalking}
+                            isTalking={isTalking}
                         />
                     )}
 
@@ -114,6 +147,9 @@ export const DashboardView = () => {
                                         productionId={activeProductionId || ''}
                                         member={member}
                                         templates={templates}
+                                        onTalkStart={startTalking}
+                                        onTalkStop={stopTalking}
+                                        isTalkingLocal={isTalking}
                                         onSendCommand={(t) => {
                                             if (t.isChat) {
                                                 sendDirectMessage({

@@ -2,8 +2,11 @@ import React from 'react';
 import { Wifi, WifiOff, Shield, MessageCircle, Send, Bell, ChevronRight, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
+import { useWebRTC } from '@/features/intercom/hooks/useWebRTC';
+import { Mic } from 'lucide-react';
 
 interface DeviceIdleViewProps {
+    productionId: string;
     isConnected: boolean;
     activeRole: string;
     activeBlock: any;
@@ -24,8 +27,18 @@ export const DeviceIdleView: React.FC<DeviceIdleViewProps> = ({
     customMessage,
     setCustomMessage,
     onSendCustomMessage,
-    onSubscribePush
+    onSubscribePush,
+    productionId
 }) => {
+    const { startTalking, stopTalking, isTalking, audioLevel } = useWebRTC({
+        productionId,
+        userId: user?.id || 'guest',
+        isHost: false,
+    });
+
+    // Calculate a pulse scale based on audio volume (0 to ~1)
+    const activeScale = 1 + (audioLevel / 255) * 0.5;
+
     return (
         <div className="flex flex-col items-center justify-start min-h-[85vh] text-center py-12 bg-background safe-area-inset-bottom">
             {/* Top Status Bar - Floating Style */}
@@ -178,6 +191,33 @@ export const DeviceIdleView: React.FC<DeviceIdleViewProps> = ({
                         </button>
                     </form>
                 </div>
+            </div>
+
+            {/* Huge PTT Walkie-Talkie Button */}
+            <div className="mt-8 relative w-full flex justify-center py-4">
+                <button
+                    onPointerDown={(e) => { e.preventDefault(); startTalking(); }}
+                    onPointerUp={(e) => { e.preventDefault(); stopTalking(); }}
+                    onPointerLeave={stopTalking}
+                    onContextMenu={(e) => e.preventDefault()}
+                    style={{ transform: `scale(${isTalking ? activeScale : 1})` }}
+                    className={cn(
+                        "relative flex flex-col items-center justify-center w-36 h-36 rounded-full shadow-[0_0_40px_rgba(0,0,0,0.5)] transition-all duration-75 select-none touch-none",
+                        isTalking
+                            ? "bg-red-600 ring-8 ring-red-500/30 text-white"
+                            : "bg-indigo-600 ring-4 ring-indigo-500/20 text-indigo-100 hover:bg-indigo-500"
+                    )}
+                >
+                    <Mic size={48} className={cn("mb-2 transition-transform", isTalking && "animate-pulse scale-110")} />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-center px-4">
+                        {isTalking ? 'HABLANDO...' : 'MANTENER PRESIONADO'}
+                    </span>
+
+                    {/* Ring animation when talking */}
+                    {isTalking && (
+                        <div className="absolute -inset-4 rounded-full border border-red-500/50 animate-ping opacity-50" />
+                    )}
+                </button>
             </div>
 
             <div className="mt-8 flex flex-col items-center gap-8 w-full max-w-sm">

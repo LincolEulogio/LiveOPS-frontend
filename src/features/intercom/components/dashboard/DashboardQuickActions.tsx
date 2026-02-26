@@ -1,13 +1,19 @@
 import React from 'react';
-import { Zap } from 'lucide-react';
+import { Zap, Mic } from 'lucide-react';
 import { IntercomTemplate } from '@/features/intercom/types/intercom.types';
+import { cn } from '@/shared/utils/cn';
 
 interface DashboardQuickActionsProps {
     templates: IntercomTemplate[];
     onMassAlert: (message: string) => void;
+    startTalking: () => void;
+    stopTalking: () => void;
+    isTalking: boolean;
 }
 
-export const DashboardQuickActions: React.FC<DashboardQuickActionsProps> = ({ templates, onMassAlert }) => {
+export const DashboardQuickActions: React.FC<DashboardQuickActionsProps> = ({
+    templates, onMassAlert, startTalking, stopTalking, isTalking
+}) => {
     return (
         <div className="bg-white/50 dark:bg-card-bg/30 backdrop-blur-xl border border-black/5 dark:border-card-border/40 rounded-[1.2rem] p-1.5 flex items-center gap-1 overflow-x-auto no-scrollbar relative group/actions min-w-0 snap-x">
             <div className="flex items-center gap-3 px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-[0.9rem] shrink-0 snap-start">
@@ -20,6 +26,24 @@ export const DashboardQuickActions: React.FC<DashboardQuickActionsProps> = ({ te
                     <span className="text-[9px] font-black text-foreground uppercase whitespace-nowrap">Intercepts</span>
                 </div>
             </div>
+
+            <div className="h-6 w-[1px] bg-card-border/50 mx-2 shrink-0" />
+
+            <button
+                onPointerDown={(e) => { e.preventDefault(); startTalking(); }}
+                onPointerUp={(e) => { e.preventDefault(); stopTalking(); }}
+                onPointerLeave={stopTalking}
+                onContextMenu={(e) => e.preventDefault()}
+                className={cn(
+                    "flex items-center gap-2 px-6 py-2 border rounded-[0.9rem] text-[10px] uppercase font-black transition-all select-none touch-none shrink-0",
+                    isTalking
+                        ? "bg-red-600 text-white border-red-500 animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                        : "bg-indigo-600 hover:bg-indigo-500 text-white border-indigo-500 hover:scale-105"
+                )}
+            >
+                <Mic size={14} className={isTalking ? 'animate-bounce' : ''} />
+                {isTalking ? 'BROADCASTING...' : 'ALL-TALK (PTT)'}
+            </button>
 
             <div className="h-6 w-[1px] bg-card-border/50 mx-2 shrink-0" />
 

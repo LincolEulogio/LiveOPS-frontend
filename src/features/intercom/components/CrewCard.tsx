@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { IntercomTemplate, CrewMember } from '@/features/intercom/types/intercom.types';
 import { cn } from '@/shared/utils/cn';
 import { useIntercomStore } from '@/features/intercom/store/intercom.store';
+import { Mic } from 'lucide-react';
 
 // New Sub-components
 import { CrewCardHeader } from '@/features/intercom/components/crew-card/CrewCardHeader';
@@ -19,9 +20,20 @@ interface CrewCardProps {
     member: CrewMember;
     templates: IntercomTemplate[];
     onSendCommand: (template: IntercomTemplate) => void;
+    onTalkStart?: () => void;
+    onTalkStop?: () => void;
+    isTalkingLocal?: boolean;
 }
 
-export const CrewCard = ({ productionId, member, templates, onSendCommand }: CrewCardProps) => {
+export const CrewCard = ({
+    productionId,
+    member,
+    templates,
+    onSendCommand,
+    onTalkStart,
+    onTalkStop,
+    isTalkingLocal
+}: CrewCardProps) => {
     const history = useIntercomStore(state => state.history);
 
     // Filter chat history for this specific user
@@ -52,12 +64,16 @@ export const CrewCard = ({ productionId, member, templates, onSendCommand }: Cre
                 productionId={productionId}
                 userId={member.userId}
                 isOnline={member.isOnline}
+                isTalking={member.isTalking}
             />
 
             <CrewCardIdentity
                 userName={member.userName}
                 roleName={member.roleName}
                 isOnline={member.isOnline}
+                onTalkStart={onTalkStart}
+                onTalkStop={onTalkStop}
+                isTalkingLocal={isTalkingLocal}
             />
 
             <CrewCardStatus

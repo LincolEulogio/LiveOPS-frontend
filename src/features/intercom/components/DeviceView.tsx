@@ -21,9 +21,10 @@ export const DeviceView = () => {
     const user = useAuthStore((state) => state.user);
     const activeProductionId = useAppStore((state) => state.activeProductionId);
     const [customMessage, setCustomMessage] = useState('');
+    const [tallyState, setTallyState] = useState<'IDLE' | 'PREVIEW' | 'PROGRAM'>('IDLE');
 
     // Derived values
-    const { isConnected } = useSocket();
+    const { socket, isConnected } = useSocket();
     const activeRole = user?.role?.name || user?.globalRole?.name || 'OPERATOR';
     const { subscribeToPush } = usePushNotifications();
 
@@ -71,27 +72,61 @@ export const DeviceView = () => {
         }
     };
 
+    // Listen for Tally updates from the engine
+    React.useEffect(() => {
+        if (!socket) return;
+        const handleTally = (data: { targetUserId: string, state: 'IDLE' | 'PREVIEW' | 'PROGRAM' }) => {
+            if (data.targetUserId === user?.id) {
+                setTallyState(data.state);
+                if (data.state === 'PROGRAM' && navigator.vibrate) {
+                    navigator.vibrate(200); // Haptic feedback when going ON AIR
+                }
+            }
+        };
+        socket.on('tally_state_changed', handleTally);
+        return () => {
+            socket.off('tally_state_changed', handleTally);
+        };
+    }, [socket, user]);
+
+    // Tally Styles
+    const getTallyStyles = () => {
+        if (tallyState === 'PROGRAM') return 'ring-8 ring-inset ring-red-600 shadow-[inset_0_0_100px_rgba(220,38,38,0.5)]';
+        if (tallyState === 'PREVIEW') return 'ring-8 ring-inset ring-green-500 shadow-[inset_0_0_100px_rgba(34,197,94,0.5)]';
+        return '';
+    };
+
     if (!activeAlert) {
         return (
-            <DeviceIdleView
-                isConnected={isConnected}
-                activeRole={activeRole}
-                activeBlock={activeBlock}
-                userHistory={userHistory}
-                user={user}
-                customMessage={customMessage}
-                setCustomMessage={setCustomMessage}
-                onSendCustomMessage={handleSendCustomMessage}
-                onSubscribePush={handleSubscribePush}
-            />
+            <div className={`transition-all duration-300 min-h-[85vh] ${getTallyStyles()}`}>
+                {tallyState !== 'IDLE' && (
+                    <div className={`w-full py-2 text-center text-white font-black uppercase tracking-widest text-sm animate-pulse ${tallyState === 'PROGRAM' ? 'bg-red-600' : 'bg-green-600'}`}>
+                        {tallyState === 'PROGRAM' ? 'EN VIVO (PROGRAMA)' : 'PREVENIDO (PREVIO)'}
+                    </div>
+                )}
+                <DeviceIdleView
+                    isConnected={isConnected}
+                    activeRole={activeRole}
+                    activeBlock={activeBlock}
+                    userHistory={userHistory}
+                    user={user}
+                    customMessage={customMessage}
+                    setCustomMessage={setCustomMessage}
+                    onSendCustomMessage={handleSendCustomMessage}
+                    onSubscribePush={handleSubscribePush}
+                    productionId={activeProductionId || ''}
+                />
+            </div>
         );
     }
 
     return (
-        <DeviceAlertView
-            activeAlert={activeAlert}
-            activeRole={activeRole}
-            onAcknowledge={acknowledgeAlert}
-        />
+        <div className={`transition-all duration-300 min-h-[85vh] ${getTallyStyles()}`}>
+            <DeviceAlertView
+                activeAlert={activeAlert}
+                activeRole={activeRole}
+                onAcknowledge={acknowledgeAlert}
+            />
+        </div>
     );
 };
