@@ -73,7 +73,7 @@ export const DashboardView = () => {
     };
 
     return (
-        <div className="space-y-4 max-w-[1800px] mx-auto pb-20 mt-2 sm:mt-4">
+        <div className="space-y-3 sm:space-y-4 max-w-[1800px] mx-auto pb-24 mt-0 sm:mt-4 px-2 sm:px-4">
 
             <DashboardHeader
                 production={production}
@@ -87,10 +87,10 @@ export const DashboardView = () => {
             />
 
             {/* Bento Grid Architecture */}
-            <div className="grid grid-cols-1 min-[1280px]:grid-cols-12 gap-8 items-start">
+            <div className="grid grid-cols-1 min-[1280px]:grid-cols-12 gap-4 sm:gap-8 items-start">
 
                 {/* Protocol Area (Main Deck) */}
-                <div className="min-[1280px]:col-span-8 min-[1440px]:col-span-9 space-y-6 min-h-[400px]">
+                <div className="min-[1280px]:col-span-8 min-[1440px]:col-span-9 space-y-4 sm:space-y-6 min-h-[400px]">
                     {activeTab === 'intercom' && (
                         <DashboardQuickActions
                             templates={templates}
@@ -106,7 +106,7 @@ export const DashboardView = () => {
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.98, y: -10 }}
                                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                                className="grid grid-cols-1 sm:grid-cols-2 min-[1600px]:grid-cols-3 gap-6 xl:gap-8"
+                                className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 min-[1600px]:grid-cols-3 gap-4 sm:gap-6 xl:gap-8"
                             >
                                 {crewMembers.map((member) => (
                                     <CrewCard
@@ -133,11 +133,11 @@ export const DashboardView = () => {
                                     />
                                 ))}
                                 {crewMembers.length === 0 && (
-                                    <div className="col-span-full py-40 text-center bg-white/[0.02] border border-dashed border-card-border rounded-[3rem] flex flex-col items-center justify-center gap-6 opacity-40">
-                                        <Users size={64} strokeWidth={1} className="text-muted" />
-                                        <div>
-                                            <p className="text-xs font-black text-muted uppercase  mb-2">Matrix Unpopulated</p>
-                                            <p className="text-[9px] font-bold text-muted uppercase ">No operators are currently bound to this production segment</p>
+                                    <div className="col-span-full py-20 sm:py-40 text-center bg-white/[0.02] border border-dashed border-card-border rounded-[2rem] sm:rounded-[3rem] flex flex-col items-center justify-center gap-4 sm:gap-6 opacity-40">
+                                        <Users size={48} strokeWidth={1} className="text-muted sm:size-64" />
+                                        <div className="px-6">
+                                            <p className="text-[10px] font-black text-muted uppercase mb-2 leading-none">Matrix Unpopulated</p>
+                                            <p className="text-[8px] font-bold text-muted uppercase">No operators are currently bound to this production segment</p>
                                         </div>
                                     </div>
                                 )}
@@ -158,7 +158,7 @@ export const DashboardView = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                             >
-                                <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[3rem] p-8 md:p-12  min-h-[500px]">
+                                <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2rem] sm:rounded-[3rem] p-6 md:p-12 min-h-[500px]">
                                     <MulticastManager productionId={activeProductionId || ''} />
                                 </div>
                             </motion.div>

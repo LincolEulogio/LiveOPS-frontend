@@ -155,4 +155,32 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  @keyframes scan {
+    from {
+      transform: translateY(-100%);
+    }
+
+    to {
+      transform: translateY(400%);
+    }
+  }
+
+  .animate-scan {
+    animation: scan 3s linear infinite;
+  }
+
+  @keyframes scan-horizontal {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(400%);
+    }
+  }
+
+  .animate-scan-horizontal {
+    animation: scan-horizontal 5s linear infinite;
+  }
 }

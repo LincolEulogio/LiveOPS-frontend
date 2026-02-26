@@ -39,7 +39,24 @@ export function useUpdateUser() {
         mutationFn: async ({ id, data }: { id: string; data: UpdateUserPayload }) => {
             return await apiClient.patch<User>(`/users/${id}`, data);
         },
-        onSuccess: () => {
+        onMutate: async ({ id, data }) => {
+            await queryClient.cancelQueries({ queryKey: ['users'] });
+            const previousUsers = queryClient.getQueryData<User[]>(['users']);
+            queryClient.setQueryData<User[]>(['users'], old =>
+                old?.map(u => u.id === id ? {
+                    ...u,
+                    ...data,
+                    globalRoleId: data.globalRoleId === null ? undefined : (data.globalRoleId || u.globalRoleId)
+                } : u)
+            );
+            return { previousUsers };
+        },
+        onError: (err, variables, context) => {
+            if (context?.previousUsers) {
+                queryClient.setQueryData(['users'], context.previousUsers);
+            }
+        },
+        onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
         }
     });
@@ -51,7 +68,20 @@ export function useDeleteUser() {
         mutationFn: async (id: string) => {
             return await apiClient.delete(`/users/${id}`);
         },
-        onSuccess: () => {
+        onMutate: async (id) => {
+            await queryClient.cancelQueries({ queryKey: ['users'] });
+            const previousUsers = queryClient.getQueryData<User[]>(['users']);
+            queryClient.setQueryData<User[]>(['users'], old =>
+                old?.filter(u => u.id !== id)
+            );
+            return { previousUsers };
+        },
+        onError: (err, variables, context) => {
+            if (context?.previousUsers) {
+                queryClient.setQueryData(['users'], context.previousUsers);
+            }
+        },
+        onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
         }
     });
@@ -83,7 +113,42 @@ export function useUpdateRolePermissions() {
         mutationFn: async ({ roleId, permissionIds }: { roleId: string; permissionIds: string[] }) => {
             return await apiClient.post(`/users/roles/${roleId}/permissions`, { permissionIds });
         },
-        onSuccess: () => {
+        onMutate: async ({ roleId, permissionIds }) => {
+            await queryClient.cancelQueries({ queryKey: ['roles'] });
+            await queryClient.cancelQueries({ queryKey: ['permissions'] });
+
+            const previousRoles = queryClient.getQueryData<Role[]>(['roles']);
+            const permissions = queryClient.getQueryData<{ id: string; action: string; description?: string }[]>(['permissions']);
+
+            queryClient.setQueryData<Role[]>(['roles'], old =>
+                old?.map(role => {
+                    if (role.id === roleId) {
+                        return {
+                            ...role,
+                            permissions: permissionIds.map(id => {
+                                const permDef = permissions?.find(p => p.id === id);
+                                return {
+                                    permissionId: id,
+                                    permission: {
+                                        id,
+                                        action: permDef?.action || 'UNKNOWN',
+                                        resource: 'UNKNOWN'
+                                    }
+                                };
+                            })
+                        };
+                    }
+                    return role;
+                })
+            );
+            return { previousRoles };
+        },
+        onError: (err, variables, context) => {
+            if (context?.previousRoles) {
+                queryClient.setQueryData(['roles'], context.previousRoles);
+            }
+        },
+        onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['roles'] });
         }
     });

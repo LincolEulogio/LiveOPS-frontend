@@ -11,7 +11,7 @@ interface CrewCardHeaderProps {
 
 export const CrewCardHeader: React.FC<CrewCardHeaderProps> = ({ productionId, userId, isOnline }) => {
     return (
-        <div className="px-8 pt-6 flex items-center justify-between relative z-10">
+        <div className="px-6 sm:px-8 pt-4 sm:pt-6 flex items-center justify-between relative z-10">
             <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/5">
                     <Battery size={10} className="text-muted" />

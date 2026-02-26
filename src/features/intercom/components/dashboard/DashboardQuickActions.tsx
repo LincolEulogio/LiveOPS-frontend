@@ -9,8 +9,8 @@ interface DashboardQuickActionsProps {
 
 export const DashboardQuickActions: React.FC<DashboardQuickActionsProps> = ({ templates, onMassAlert }) => {
     return (
-        <div className="bg-card-bg/30 backdrop-blur-xl border border-card-border/40 rounded-[1.2rem] p-1.5 flex items-center gap-1 overflow-x-auto no-scrollbar relative group/actions min-w-0">
-            <div className="flex items-center gap-3 px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-[0.9rem] shrink-0">
+        <div className="bg-white/50 dark:bg-card-bg/30 backdrop-blur-xl border border-black/5 dark:border-card-border/40 rounded-[1.2rem] p-1.5 flex items-center gap-1 overflow-x-auto no-scrollbar relative group/actions min-w-0 snap-x">
+            <div className="flex items-center gap-3 px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-[0.9rem] shrink-0 snap-start">
                 <div className="relative">
                     <Zap size={13} className="text-amber-400 relative z-10" />
                     <div className="absolute inset-0 bg-amber-400/20 blur-sm animate-pulse" />
@@ -28,7 +28,7 @@ export const DashboardQuickActions: React.FC<DashboardQuickActionsProps> = ({ te
                     <button
                         key={t.id}
                         onClick={() => onMassAlert(t.name)}
-                        className="shrink-0 px-4 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.05] hover:border-indigo-500/30 rounded-[0.9rem] text-[9px] font-black text-muted hover:text-foreground uppercase transition-all whitespace-nowrap active:scale-95 group/btn relative overflow-hidden"
+                        className="shrink-0 px-4 py-2.5 bg-black/5 dark:bg-white/[0.03] hover:bg-black/10 dark:hover:bg-white/[0.08] border border-black/5 dark:border-white/[0.05] hover:border-indigo-500/30 rounded-[0.9rem] text-[9px] font-black text-muted-foreground dark:text-muted hover:text-foreground uppercase transition-all whitespace-nowrap active:scale-95 group/btn relative overflow-hidden snap-start"
                     >
                         <div className="flex items-center gap-2 relative z-10">
                             <div

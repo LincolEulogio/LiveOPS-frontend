@@ -74,9 +74,9 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                         {isLoading && logs.length === 0 ? (
                             Array(10).fill(0).map((_, i) => (
                                 <tr key={i} className="animate-pulse">
-                                    <td className="py-4 px-6"><div className="h-3 w-20 bg-card-border rounded"></div></td>
-                                    <td className="py-4 px-6"><div className="h-3 w-32 bg-card-border rounded"></div></td>
-                                    <td className="py-4 px-6"><div className="h-3 w-64 bg-card-border rounded"></div></td>
+                                    <td className="py-4 px-6"><div className="h-3 w-20 bg-black/5 dark:bg-white/5 rounded"></div></td>
+                                    <td className="py-4 px-6"><div className="h-3 w-32 bg-black/5 dark:bg-white/5 rounded"></div></td>
+                                    <td className="py-4 px-6"><div className="h-3 w-64 bg-black/5 dark:bg-white/5 rounded"></div></td>
                                 </tr>
                             ))
                         ) : filteredLogs.length === 0 ? (
@@ -92,30 +92,34 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                             filteredLogs.map((log) => (
                                 <tr
                                     key={log.id}
-                                    className="hover:bg-indigo-500/5 transition-colors group cursor-default"
+                                    className={cn(
+                                        "hover:bg-indigo-500/5 transition-colors group cursor-default border-l-2",
+                                        log.eventType.includes('error') || log.eventType.includes('fail') ? "border-red-500/40 bg-red-500/[0.02]" :
+                                            log.eventType.includes('warn') ? "border-amber-500/40 bg-amber-500/[0.02]" : "border-transparent"
+                                    )}
                                 >
                                     <td className="py-4 px-6 whitespace-nowrap">
-                                        <span className="text-[10px] font-mono text-muted">
+                                        <span className="text-[10px] font-mono text-muted-foreground/60 dark:text-muted/40 tracking-wider">
                                             {new Date(log.createdAt).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                                         </span>
-                                        <div className="text-[8px] text-muted/80 mt-0.5">
+                                        <div className="text-[8px] text-muted-foreground/40 dark:text-muted/20 mt-0.5 font-black uppercase tracking-widest">
                                             {new Date(log.createdAt).toLocaleDateString()}
                                         </div>
                                     </td>
                                     <td className="py-4 px-6">
                                         <span className={cn(
-                                            "text-[10px] font-bold px-2 py-0.5 rounded border uppercase ",
-                                            log.eventType.includes('obs') ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-400" :
-                                                log.eventType.includes('vmix') ? "bg-amber-500/10 border-amber-500/20 text-amber-400" :
-                                                    log.eventType.includes('production.user') || log.eventType.includes('device') ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
-                                                        "bg-background border-card-border text-muted"
+                                            "text-[9px] font-black px-3 py-1 rounded-xl border uppercase tracking-[0.1em]",
+                                            log.eventType.includes('obs') ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400" :
+                                                log.eventType.includes('vmix') ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400" :
+                                                    log.eventType.includes('production.user') || log.eventType.includes('device') ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400" :
+                                                        "bg-gray-100 dark:bg-white/5 border-black/5 dark:border-white/5 text-muted-foreground"
                                         )}>
                                             {log.eventType}
                                         </span>
                                     </td>
                                     <td className="py-4 px-6">
                                         <div className="max-w-md">
-                                            <pre className="text-[9px] font-mono text-muted bg-background p-2 rounded-lg border border-card-border/50 overflow-hidden text-ellipsis group-hover:border-card-border transition-colors">
+                                            <pre className="text-[9px] font-mono text-muted-foreground/70 dark:text-muted/50 bg-gray-50 dark:bg-black/20 p-3 rounded-xl border border-black/5 dark:border-white/5 overflow-hidden text-ellipsis group-hover:border-indigo-500/20 transition-all font-medium">
                                                 {JSON.stringify(log.details, null, 2).slice(0, 100)}
                                                 {JSON.stringify(log.details).length > 100 && '...'}
                                             </pre>

@@ -25,7 +25,7 @@ const getAckDisplay = (type: string) => {
 
 export const CrewCardStatus: React.FC<CrewCardStatusProps> = ({ currentStatus, lastAck }) => {
     return (
-        <div className="mx-6 mb-6 p-6 bg-background/40 backdrop-blur-md rounded-[2rem] border border-card-border/60  flex flex-col justify-center relative overflow-hidden group/status">
+        <div className="mx-4 sm:mx-6 mb-4 sm:mb-6 p-5 sm:p-6 bg-background/40 backdrop-blur-md rounded-[1.5rem] sm:rounded-[2rem] border border-card-border/60 flex flex-col justify-center relative overflow-hidden group/status">
             <div className="flex items-center justify-between mb-4">
                 <p className="text-[9px] font-black text-muted uppercase ">Operational Phase</p>
                 <p className="text-[8px] font-black text-muted/40 uppercase ">Live Feedback</p>

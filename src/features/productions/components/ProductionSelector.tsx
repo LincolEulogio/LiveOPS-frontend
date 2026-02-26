@@ -48,8 +48,8 @@ export const ProductionSelector = () => {
 
             <DropdownMenu.Portal>
                 <DropdownMenu.Content
-                    className="z-50 min-w-[280px] bg-card-bg/95 backdrop-blur-3xl border border-card-border/60 rounded-[2rem] p-3  animate-in fade-in zoom-in duration-300 relative overflow-hidden"
-                    align="start"
+                    className="z-[9999] min-w-[280px] bg-white/95 dark:bg-card-bg/95 backdrop-blur-3xl border border-black/10 dark:border-card-border/60 rounded-[2rem] p-4 shadow-2xl animate-in fade-in zoom-in duration-300 relative overflow-hidden"
+                    align="center"
                     sideOffset={12}
                 >
                     {/* Background Texture */}

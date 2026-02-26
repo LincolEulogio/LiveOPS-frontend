@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { useRoles, usePermissions, useUpdateRolePermissions, useCreateRole, useDeleteRole, useUpdateRole } from '@/features/users/hooks/useUsers';
-import { Shield, Loader2, Key, CheckCircle2, Square, Plus, Trash2, X, Edit2, Activity, Lock } from 'lucide-react';
+import { Shield, Loader2, Key, CheckCircle2, Square, Plus, Trash2, X, Edit2, Activity, Lock, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { Role } from '@/features/users/types/user.types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
+import { RolesSkeleton } from '@/shared/components/SkeletonLoaders';
 
 export default function AdminRolesPage() {
     const { data: roles, isLoading: rolesLoading } = useRoles();
@@ -81,31 +82,36 @@ export default function AdminRolesPage() {
 
     if (rolesLoading || permsLoading) {
         return (
-            <div className="flex flex-col items-center justify-center p-20 gap-4">
-                <Loader2 className="animate-spin text-indigo-500" size={40} />
-                <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest animate-pulse">Scanning Security Matrix...</p>
+            <div className="max-w-7xl mx-auto space-y-8 p-6 lg:p-12 pb-24">
+                <div className="flex justify-between items-center mb-12">
+                    <div className="space-y-4">
+                        <div className="h-10 w-64 bg-black/5 dark:bg-white/5 animate-pulse rounded-2xl" />
+                        <div className="h-4 w-96 bg-black/5 dark:bg-white/5 animate-pulse rounded-xl" />
+                    </div>
+                </div>
+                <RolesSkeleton />
             </div>
         );
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-8 p-4 sm:p-8 pb-24">
+        <div className="max-w-[1800px] mx-auto space-y-8 p-6 lg:p-12 pb-24">
             {/* Tactical Header */}
             <div className="flex flex-col gap-6 md:flex-row justify-between items-start md:items-center">
                 <div className="relative">
                     <div className="flex items-center gap-4 mb-2">
                         <div className="w-12 h-12 bg-indigo-600/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center">
-                            <Shield className="text-indigo-400" size={24} />
+                            <Shield className="text-indigo-600 dark:text-indigo-400" size={24} />
                         </div>
                         <div>
-                            <h1 className="text-2xl font-black text-foreground uppercase italic tracking-tight">Permissions Matrix</h1>
+                            <h1 className="text-2xl font-black text-foreground dark:text-white uppercase italic tracking-tighter">Permissions Matrix</h1>
                             <div className="flex items-center gap-2">
                                 <Activity size={12} className="text-emerald-500" />
-                                <span className="text-[9px] font-black text-muted uppercase tracking-widest">Auth Protocol: ACTIVE</span>
+                                <span className="text-[9px] font-black text-muted-foreground/60 dark:text-muted uppercase tracking-[0.2em]">Auth Protocol: ACTIVE</span>
                             </div>
                         </div>
                     </div>
-                    <p className="text-muted text-xs opacity-60 ml-16">Manage system access levels and tactical operational roles.</p>
+                    <p className="text-muted-foreground/70 dark:text-muted/60 text-[11px] font-medium tracking-wide ml-16">Manage system access levels and tactical operational roles.</p>
                 </div>
                 <button
                     onClick={() => {
@@ -126,12 +132,17 @@ export default function AdminRolesPage() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         whileHover={{ y: -5 }}
-                        className="group relative bg-white dark:bg-[#0a0a0f]/80 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-[2.5rem] p-8 shadow-xl dark:shadow-none transition-all flex flex-col h-full"
+                        className="group relative bg-white dark:bg-[#0a0a0f]/80 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-[2.5rem] p-8 shadow-xl dark:shadow-none transition-all flex flex-col h-full overflow-hidden"
                     >
+                        {/* Objective 3: Scanning Effect */}
+                        <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-500/[0.03] to-transparent h-[20%] w-full -translate-y-full group-hover:animate-scan" />
+                        </div>
+
                         <div className="flex justify-between items-start mb-6">
                             <div className="space-y-1">
-                                <h3 className="text-xl font-black text-foreground dark:text-white uppercase italic tracking-tight">{role.name}</h3>
-                                <p className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-widest leading-none">System Security Node</p>
+                                <h3 className="text-xl font-black text-foreground dark:text-white uppercase italic tracking-tight group-hover:text-indigo-500 transition-colors">{role.name}</h3>
+                                <p className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-[0.2em] leading-none">System Security Node</p>
                             </div>
                             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button
@@ -147,9 +158,9 @@ export default function AdminRolesPage() {
                                             if (confirm(`Authorize permanent purge of role "${role.name}"?`)) {
                                                 try {
                                                     await deleteRoleMutation.mutateAsync(role.id);
-                                                    toast.success('Security node purged');
+                                                    toast.success('Security node purged successfully');
                                                 } catch (err) {
-                                                    toast.error('Purge aborted by system');
+                                                    toast.error('Purge aborted: System protection active');
                                                 }
                                             }
                                         }}
@@ -162,15 +173,17 @@ export default function AdminRolesPage() {
                             </div>
                         </div>
 
-                        <p className="text-xs text-muted-foreground dark:text-muted mb-8 italic line-clamp-2 min-h-[2rem]">{role.description || 'System access node calibrated for specialized operations.'}</p>
+                        <p className="text-xs text-muted-foreground/80 dark:text-muted/70 mb-8 italic line-clamp-2 min-h-[2.5rem] leading-relaxed tracking-wide">
+                            {role.description || 'System access node calibrated for specialized operations.'}
+                        </p>
 
                         <div className="space-y-4 flex-1">
                             <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center gap-2">
-                                    <Shield size={14} className="text-indigo-600 dark:text-indigo-400" />
-                                    <span className="text-xs font-black text-foreground dark:text-white uppercase tracking-widest">Authorized Protocols</span>
+                                    <Shield size={14} className="text-indigo-500" />
+                                    <span className="text-[10px] font-black text-foreground/80 dark:text-white uppercase tracking-[0.2em]">Authorized Protocols</span>
                                 </div>
-                                <span className="text-[10px] font-black text-indigo-600/40 dark:text-indigo-400/40 uppercase tracking-widest">{role.permissions?.length || 0} Layers</span>
+                                <span className="text-[9px] font-black text-indigo-500/40 uppercase tracking-widest">{role.permissions?.length || 0} Layers</span>
                             </div>
 
                             {/* Scrollable Permission Matrix */}
@@ -190,7 +203,7 @@ export default function AdminRolesPage() {
                                         >
                                             <div className="text-left">
                                                 <div className={cn(
-                                                    "text-[11px] font-black uppercase tracking-wider mb-0.5 transition-colors",
+                                                    "text-[11px] font-black uppercase tracking-[0.1em] mb-0.5 transition-colors",
                                                     isAssigned ? "text-white dark:text-indigo-300" : "text-foreground dark:text-white/60 group-hover/item:text-indigo-500"
                                                 )}>
                                                     {perm.name}

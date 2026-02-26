@@ -32,7 +32,7 @@ export const CrewCardChatInput: React.FC<CrewCardChatInputProps> = ({
     };
 
     return (
-        <div className="px-6 pb-6 mt-auto">
+        <div className="px-4 sm:px-6 pb-4 sm:pb-6 mt-auto">
             <form
                 onSubmit={handleSubmit}
                 className="group/form relative flex items-center bg-background border border-card-border rounded-2xl overflow-hidden focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all "

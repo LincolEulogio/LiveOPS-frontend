@@ -12,11 +12,11 @@ export const CrewCardChatFeed: React.FC<CrewCardChatFeedProps> = ({ directHistor
     if (directHistory.length === 0) return null;
 
     return (
-        <div className="mx-6 mb-6 bg-background/60 backdrop-blur-md border border-card-border/60 rounded-[2rem] overflow-hidden flex flex-col h-[320px] ">
-            <div className="px-6 py-4 bg-white/[0.04] border-b border-card-border/40 flex items-center justify-between">
+        <div className="mx-4 sm:mx-6 mb-4 sm:mb-6 bg-white/[0.01] dark:bg-background/60 backdrop-blur-md border border-black/5 dark:border-card-border/60 rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden flex flex-col h-[320px] ">
+            <div className="px-5 sm:px-6 py-4 bg-black/5 dark:bg-white/[0.04] border-b border-black/5 dark:border-card-border/40 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <span className="text-indigo-400"><MessageSquare size={14} /></span>
-                    <span className="text-[10px] font-black text-muted uppercase ">Telemetry Chat</span>
+                    <span className="text-indigo-600 dark:text-indigo-400"><MessageSquare size={14} /></span>
+                    <span className="text-[10px] font-black text-muted-foreground dark:text-muted uppercase ">Telemetry Chat</span>
                 </div>
                 <div className="flex gap-1">
                     <div className="w-1 h-1 rounded-full bg-indigo-500" />
@@ -25,7 +25,7 @@ export const CrewCardChatFeed: React.FC<CrewCardChatFeedProps> = ({ directHistor
                 </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar flex flex-col-reverse">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 no-scrollbar flex flex-col-reverse">
                 {[...directHistory].map((msg, i) => {
                     const isMine = msg.senderId !== memberUserId;
                     return (

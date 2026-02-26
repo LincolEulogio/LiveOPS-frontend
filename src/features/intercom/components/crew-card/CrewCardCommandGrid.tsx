@@ -32,7 +32,7 @@ export const CrewCardCommandGrid: React.FC<CrewCardCommandGridProps> = ({
     onSendCommand
 }) => {
     return (
-        <div className="px-6 pb-6 grid grid-cols-2 gap-3 min-h-[180px]">
+        <div className="px-4 sm:px-6 pb-4 sm:pb-6 grid grid-cols-2 gap-2 sm:gap-3 min-h-[180px]">
             {templates.slice(0, 8).map(t => {
                 const isPending = isOnline && currentStatus === t.name.toUpperCase();
 

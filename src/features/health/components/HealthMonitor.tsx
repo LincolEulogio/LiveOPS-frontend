@@ -113,32 +113,36 @@ export const HealthMonitor = ({ productionId }: Props) => {
                         <AreaChart data={history}>
                             <defs>
                                 <linearGradient id="colorCpu" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
-                                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                                    <stop offset="0%" stopColor="#6366f1" stopOpacity={0.6} />
+                                    <stop offset="50%" stopColor="#6366f1" stopOpacity={0.2} />
+                                    <stop offset="100%" stopColor="#6366f1" stopOpacity={0} />
                                 </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
                             <Tooltip
                                 contentStyle={{
-                                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                                    border: '1px solid rgba(255,255,255,0.1)',
-                                    borderRadius: '12px',
+                                    backgroundColor: 'rgba(5, 5, 8, 0.95)',
+                                    border: '1px solid rgba(99, 102, 241, 0.2)',
+                                    borderRadius: '16px',
                                     fontSize: '10px',
-                                    backdropFilter: 'blur(10px)',
-                                    fontWeight: 'bold',
+                                    backdropFilter: 'blur(20px)',
+                                    fontWeight: '900',
                                     textTransform: 'uppercase',
-                                    letterSpacing: '0.05em'
+                                    letterSpacing: '0.1em',
+                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
                                 }}
-                                itemStyle={{ color: '#818cf8' }}
+                                itemStyle={{ color: '#818cf8', fontWeight: '900' }}
                             />
                             <Area
                                 type="monotone"
                                 dataKey="cpuUsage"
                                 stroke="#6366f1"
-                                strokeWidth={2}
+                                strokeWidth={3}
                                 fillOpacity={1}
                                 fill="url(#colorCpu)"
                                 isAnimationActive={true}
+                                animationDuration={1500}
+                                animationEasing="ease-in-out"
                             />
                         </AreaChart>
                     </ResponsiveContainer>

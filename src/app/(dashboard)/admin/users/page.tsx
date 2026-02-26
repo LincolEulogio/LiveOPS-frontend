@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { useUsers, useCreateUser, useDeleteUser, useUpdateUser, useRoles } from '@/features/users/hooks/useUsers';
-import { Users, Plus, Trash2, Shield, Loader2, Edit2, Info, X, Save, Mail, Calendar, Fingerprint, Activity, AtSign, KeyRound } from 'lucide-react';
+import { Users, Plus, Trash2, Shield, Loader2, Edit2, Info, X, Save, Mail, Calendar, Fingerprint, Activity, AtSign, KeyRound, Search } from 'lucide-react';
 import { User } from '@/features/users/types/user.types';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
+import { UsersSkeleton } from '@/shared/components/SkeletonLoaders';
 
 export default function AdminUsersPage() {
     const { data: users, isLoading: usersLoading } = useUsers();
@@ -61,31 +62,36 @@ export default function AdminUsersPage() {
 
     if (usersLoading || rolesLoading) {
         return (
-            <div className="flex flex-col items-center justify-center p-20 gap-4">
-                <Loader2 className="animate-spin text-indigo-500" size={40} />
-                <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest animate-pulse">Scanning Personnel Matrix...</p>
+            <div className="max-w-[1800px] mx-auto space-y-8 p-6 lg:p-12 pb-24">
+                <div className="flex justify-between items-center mb-12">
+                    <div className="space-y-4">
+                        <div className="h-10 w-64 bg-black/5 dark:bg-white/5 animate-pulse rounded-2xl" />
+                        <div className="h-4 w-96 bg-black/5 dark:bg-white/5 animate-pulse rounded-xl" />
+                    </div>
+                </div>
+                <UsersSkeleton />
             </div>
         );
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-10 p-4 sm:p-8 pb-32">
+        <div className="max-w-[1800px] mx-auto space-y-8 p-6 lg:p-12 pb-24">
             {/* Tactical Header */}
             <div className="flex flex-col gap-6 md:flex-row justify-between items-start md:items-center">
                 <div className="relative">
                     <div className="flex items-center gap-4 mb-2">
                         <div className="w-12 h-12 bg-indigo-600/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center">
-                            <Users className="text-indigo-400" size={24} />
+                            <Users className="text-indigo-600 dark:text-indigo-400" size={24} />
                         </div>
                         <div>
-                            <h1 className="text-2xl font-black text-foreground uppercase italic tracking-tight">Personnel Directory</h1>
+                            <h1 className="text-2xl font-black text-foreground dark:text-white uppercase italic tracking-tighter">Personnel Directory</h1>
                             <div className="flex items-center gap-2">
                                 <Activity size={12} className="text-emerald-500" />
-                                <span className="text-[9px] font-black text-muted uppercase tracking-widest">Directory Sync: ACTIVE</span>
+                                <span className="text-[9px] font-black text-muted-foreground/60 dark:text-muted uppercase tracking-[0.2em]">Directory Sync: ACTIVE</span>
                             </div>
                         </div>
                     </div>
-                    <p className="text-muted text-xs opacity-60 ml-16">Global roster of authorized tactical operators and administrators.</p>
+                    <p className="text-muted-foreground/70 dark:text-muted/60 text-[11px] font-medium tracking-wide ml-16">Global roster of authorized tactical operators and administrators.</p>
                 </div>
                 <button
                     onClick={openCreate}
@@ -105,7 +111,7 @@ export default function AdminUsersPage() {
                 <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left border-collapse min-w-[800px]">
                         <thead>
-                            <tr className="border-b border-black/5 dark:border-white/5 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
+                            <tr className="border-b border-black/5 dark:border-white/5 text-[10px] font-black text-muted-foreground/60 dark:text-muted uppercase tracking-[0.2em]">
                                 <th className="py-6 px-8">Operator Profile</th>
                                 <th className="py-6 px-8">Authorization Level</th>
                                 <th className="py-6 px-8">Service Entry</th>
@@ -170,9 +176,9 @@ export default function AdminUsersPage() {
                                                     if (confirm(`Authorize permanent purge of personnel "${user.name}"?`)) {
                                                         try {
                                                             await deleteMutation.mutateAsync(user.id);
-                                                            toast.success('Personnel purged from matrix');
+                                                            toast.success('Personnel record purged successfully');
                                                         } catch (err: any) {
-                                                            toast.error('Purge aborted');
+                                                            toast.error('Purge aborted: System protection active');
                                                         }
                                                     }
                                                 }}

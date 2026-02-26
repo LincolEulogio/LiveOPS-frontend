@@ -144,10 +144,10 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
                     setView('form');
                     setIsManagerOpen(true);
                 }}
-                className="flex items-center gap-3 px-5 py-3.5 bg-background/40 hover:bg-indigo-500/10 border border-card-border hover:border-indigo-500/30 rounded-2xl text-muted hover:text-indigo-400 transition-all group active:scale-95"
+                className="flex-1 px-4 sm:px-6 py-3.5 sm:py-4 bg-gray-50 dark:bg-white/[0.03] hover:bg-gray-100 dark:hover:bg-white/[0.08] text-muted-foreground dark:text-muted hover:text-foreground rounded-2xl font-black text-[10px] uppercase transition-all active:scale-95 border border-black/5 dark:border-white/5 flex items-center justify-center gap-2 sm:gap-3 group shadow-sm"
             >
-                <Settings size={16} className="group-hover:rotate-90 transition-transform duration-500" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Alertas</span>
+                <Settings size={16} className="text-indigo-500 dark:text-indigo-400 group-hover:rotate-90 transition-transform duration-500" />
+                <span className="tracking-widest">Alertas</span>
             </button>
 
             <Portal>
