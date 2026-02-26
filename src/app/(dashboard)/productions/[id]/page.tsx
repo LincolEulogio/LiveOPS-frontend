@@ -96,9 +96,9 @@ export default function ProductionDetailPage() {
       {/* Header - Glass Container */}
       <div className="relative group">
         <div className="absolute -inset-1 rounded-[2.5rem] blur opacity-10" />
-        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center bg-card-bg/80 backdrop-blur-2xl border border-card-border p-6 sm:p-8 rounded-[2rem]  gap-6 overflow-hidden">
+        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center bg-card-bg/80 backdrop-blur-2xl border border-card-border p-6 sm:p-8 rounded-4xl gap-6 overflow-hidden">
           <div className="flex items-center gap-5 min-w-0">
-            <div className="w-16 h-16 rounded-[1.5rem] bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 shrink-0">
+            <div className="w-16 h-16 rounded-4xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 shrink-0">
               {production.engineType === EngineType.OBS ? (
                 <Video className="text-indigo-400" size={32} />
               ) : (
@@ -106,7 +106,7 @@ export default function ProductionDetailPage() {
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="text-sm md:text-md lg:text-lg font-black text-foreground uppercase er leading-tight mb-2 break-words">
+              <h1 className="text-sm md:text-md lg:text-lg font-black text-foreground uppercase er leading-tight mb-2 wrap-break-word">
                 {production.name}
               </h1>
               <div className="flex flex-wrap items-center gap-2">
@@ -143,7 +143,7 @@ export default function ProductionDetailPage() {
       </div>
 
       {/* Mobile-Only Tab Navigation */}
-      <div className="lg:hidden flex bg-card-bg/40 backdrop-blur-xl border border-card-border p-1.5 rounded-[1.5rem]  overflow-x-auto no-scrollbar gap-1">
+      <div className="lg:hidden flex bg-card-bg/40 backdrop-blur-xl border border-card-border p-1.5 rounded-4xl  overflow-x-auto no-scrollbar gap-1">
         <TabButton id="overview" label="Panel" icon={Layout} />
         <TabButton id="streaming" label="Broadcast" icon={Zap} />
         <TabButton id="script" label="Rundown" icon={FileText} />
@@ -191,7 +191,7 @@ export default function ProductionDetailPage() {
                 </Link>
               </div>
             </div>
-            <div className="h-[400px] sm:h-[650px] bg-card-bg/30 rounded-[2rem] overflow-hidden ">
+            <div className="h-[400px] sm:h-[650px] bg-card-bg/30 rounded-2xl overflow-hidden ">
               <ScriptEditor productionId={id} />
             </div>
           </section>
@@ -206,7 +206,7 @@ export default function ProductionDetailPage() {
                 Social Media Manager
               </h2>
             </div>
-            <div className="h-[450px] bg-card-bg/30 rounded-[2rem] overflow-hidden ">
+            <div className="h-[450px] bg-card-bg/30 rounded-2xl overflow-hidden ">
               <SocialManager productionId={id} />
             </div>
           </section>
@@ -220,7 +220,7 @@ export default function ProductionDetailPage() {
           {/* Tactical Utilities Row - 3 Columns (Crew, Analytics, Automation) */}
           <div className={cn("grid grid-cols-1 lg:grid-cols-3 gap-8", activeTab !== 'overview' && 'hidden lg:grid')}>
             {/* 1. Active Crew */}
-            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6  relative overflow-hidden flex flex-col h-full">
+            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-2xl p-6  relative overflow-hidden flex flex-col h-full">
               <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
                 <Users size={80} />
               </div>
@@ -260,11 +260,11 @@ export default function ProductionDetailPage() {
 
             {/* 2. Analytics */}
             <Link href={`/productions/${id}/analytics`} className="group relative block h-full">
-              <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-8 h-full transition-all hover:bg-background/80 hover:border-pink-500/40 relative overflow-hidden active:scale-[0.98] flex flex-col justify-center">
+              <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-2xl p-8 h-full transition-all hover:bg-background/80 hover:border-pink-500/40 relative overflow-hidden active:scale-[0.98] flex flex-col justify-center">
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none group-hover:scale-110 group-hover:opacity-10 transition-all duration-500">
                   <BarChart3 size={120} className="text-pink-500" />
                 </div>
-                <div className="w-16 h-16 rounded-[1.5rem] bg-pink-500/10 flex items-center justify-center border border-pink-500/20 mb-8 group-hover:bg-pink-600 group-hover:text-white transition-colors duration-300">
+                <div className="w-16 h-16 rounded-2xl bg-pink-500/10 flex items-center justify-center border border-pink-500/20 mb-8 group-hover:bg-pink-600 group-hover:text-white transition-colors duration-300">
                   <BarChart3 size={28} />
                 </div>
                 <div>
@@ -279,11 +279,11 @@ export default function ProductionDetailPage() {
 
             {/* 3. Automation */}
             <Link href={`/productions/${id}/automation`} className="group relative block h-full">
-              <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-8 h-full transition-all hover:bg-background/80 hover:border-indigo-500/40 relative overflow-hidden active:scale-[0.98] flex flex-col justify-center">
+              <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-2xl p-8 h-full transition-all hover:bg-background/80 hover:border-indigo-500/40 relative overflow-hidden active:scale-[0.98] flex flex-col justify-center">
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none group-hover:scale-110 group-hover:opacity-10 transition-all duration-500">
                   <Zap size={120} className="text-indigo-500" />
                 </div>
-                <div className="w-16 h-16 rounded-[1.5rem] bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                <div className="w-16 h-16 rounded-2xl bg-indigo-600/10 flex items-center justify-center border border-indigo-500/20 mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
                   <Zap size={28} className="group-hover:animate-pulse" />
                 </div>
                 <div>
@@ -315,7 +315,7 @@ export default function ProductionDetailPage() {
             </div>
 
             {/* Social & Moderation Quick Link Card */}
-            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-[2rem] p-6 relative overflow-hidden group">
+            <div className="bg-card-bg/80 backdrop-blur-xl border border-card-border rounded-2xl p-6 relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform">
                 <Share2 size={80} className="text-pink-500" />
               </div>

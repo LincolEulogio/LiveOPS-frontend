@@ -235,7 +235,7 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
 
             {/* Post-Show Report Highlight */}
             {report && (
-                <div className="bg-gradient-to-br from-indigo-900/40 to-stone-900 border border-indigo-500/30 rounded-2xl p-6 ">
+                <div className="bg-linear-to-br from-indigo-900/40 to-stone-900 border border-indigo-500/30 rounded-2xl p-6 ">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-lg font-bold  text-indigo-400 uppercase flex items-center gap-2">
                             <CheckCircle size={20} />

@@ -126,7 +126,7 @@ export const VideoCallRoom = ({ roomId }: { roomId: string }) => {
                     <LiveKitRoom video={false} audio={false} token={token} serverUrl={lkUrl} connect
                         onError={handleError}
                         style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                        <VideoCallInner roomId={roomId} userName={user?.name || 'Participant'} isHost={isHost} onLeave={handleLeave} />
+                        <VideoCallInner roomId={roomId} userId={user?.id || ''} userName={user?.name || 'Participant'} isHost={isHost} onLeave={handleLeave} />
                     </LiveKitRoom>
                 </div>
             </>

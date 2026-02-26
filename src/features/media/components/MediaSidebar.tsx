@@ -182,7 +182,7 @@ export const MediaSidebar = ({ productionId }: { productionId?: string }) => {
             </AnimatePresence>
 
             {/* Scanline */}
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-linear-to-r from-transparent via-indigo-500/30 to-transparent animate-pulse" />
+            <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-indigo-500/30 to-transparent animate-pulse" />
 
             {/* Header */}
             <div className="p-5 border-b border-card-border/50 bg-white/5 flex items-center justify-between shrink-0">
@@ -252,9 +252,9 @@ export const MediaSidebar = ({ productionId }: { productionId?: string }) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
                                 key={asset.id}
-                                className="group flex items-center gap-3 p-3 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-white/[0.07] hover:border-indigo-500/20 transition-all"
+                                className="group flex items-center gap-3 p-3 bg-white/3 border border-white/5 rounded-2xl hover:bg-white/7 hover:border-indigo-500/20 transition-all"
                             >
-                                <div className={cn("w-9 h-9 rounded-xl border flex items-center justify-center flex-shrink-0", colorClass)}>
+                                <div className={cn("w-9 h-9 rounded-xl border flex items-center justify-center shrink-0", colorClass)}>
                                     <Icon size={14} />
                                 </div>
 
