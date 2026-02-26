@@ -55,18 +55,18 @@ export const TemplateManagerList: React.FC<TemplateManagerListProps> = ({
                                 <p className="text-[8px] font-bold text-muted uppercase  mt-0.5">ID: {t.id.substring(0, 8)}</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                             <button
                                 onClick={() => onEdit(t)}
-                                className="p-2 text-muted hover:text-foreground hover:bg-card-border rounded-lg transition-all"
+                                className="p-3 sm:p-2 text-muted-foreground dark:text-muted hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-black/5 dark:hover:bg-card-border rounded-xl transition-all active:scale-90"
                             >
-                                <Edit2 size={16} />
+                                <Edit2 size={18} />
                             </button>
                             <button
                                 onClick={() => onDelete(t.id)}
-                                className="p-2 text-muted hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                                className="p-3 sm:p-2 text-muted-foreground dark:text-muted hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all active:scale-90"
                             >
-                                <Trash2 size={16} />
+                                <Trash2 size={18} />
                             </button>
                         </div>
                     </div>

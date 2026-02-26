@@ -69,25 +69,24 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
 
             await refetch();
 
+            setIsManagerOpen(false); // Close modal on success
+
             MySwal.fire({
-                title: <p className="text-foreground font-black uppercase er">Éxito</p>,
-                html: <p className="text-muted text-xs font-bold uppercase ">{editingTemplate ? 'Plantilla actualizada' : 'Plantilla creada correctamente'}</p>,
+                title: <p className="text-foreground font-black uppercase tracking-tighter">Éxito</p>,
+                html: <p className="text-muted text-xs font-bold uppercase tracking-widest">{editingTemplate ? 'Protocolo Actualizado' : 'Protocolo Creado'}</p>,
                 icon: 'success',
                 background: 'var(--card-bg)',
                 color: 'var(--foreground)',
                 showConfirmButton: false,
                 timer: 1500,
                 customClass: {
-                    popup: 'border border-card-border rounded-3xl ',
+                    container: 'z-[10001]',
+                    popup: 'border border-card-border rounded-[2.5rem] p-6 shadow-2xl',
                 }
             });
 
-            if (editingTemplate) {
-                setView('list');
-                setEditingTemplate(null);
-            } else {
-                setIsManagerOpen(false);
-            }
+            setEditingTemplate(null);
+            setView('list');
         } catch (error) {
             MySwal.fire({
                 title: 'Error',
@@ -100,39 +99,60 @@ export const TemplateManager = ({ productionId }: { productionId: string }) => {
     };
 
     const handleDelete = async (id: string) => {
+        setIsManagerOpen(false); // Close modal IMMEDIATELY to avoid layering issues
+
         const result = await MySwal.fire({
-            title: '¿Estás seguro?',
-            text: "No podrás revertir esta acción",
+            title: <p className="text-foreground font-black uppercase tracking-tighter">¿Purgar Protocolo?</p>,
+            html: <p className="text-muted text-xs font-bold uppercase tracking-widest">Esta acción eliminará permanentemente esta instrucción.</p>,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
             cancelButtonColor: 'var(--card-border)',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, Eliminar',
+            cancelButtonText: 'Abortar',
             background: 'var(--card-bg)',
             color: 'var(--foreground)',
+            customClass: {
+                container: 'z-[10001]',
+                popup: 'border border-card-border rounded-[2.5rem] p-6 shadow-2xl',
+                confirmButton: 'rounded-2xl px-6 py-3 font-black uppercase text-xs tracking-widest',
+                cancelButton: 'rounded-2xl px-6 py-3 font-black uppercase text-xs tracking-widest',
+            }
         });
 
         if (result.isConfirmed) {
             try {
                 await deleteTemplate(id);
+
                 MySwal.fire({
-                    title: 'Eliminado',
+                    title: <p className="text-foreground font-black uppercase tracking-tighter">Eliminado</p>,
+                    html: <p className="text-muted text-xs font-bold uppercase tracking-widest">El protocolo ha sido removido de la matriz.</p>,
                     icon: 'success',
                     background: 'var(--card-bg)',
                     color: 'var(--foreground)',
-                    timer: 1000,
-                    showConfirmButton: false
+                    timer: 1500,
+                    showConfirmButton: false,
+                    customClass: {
+                        container: 'z-[10001]',
+                        popup: 'border border-card-border rounded-[2.5rem] p-6 shadow-2xl',
+                    }
                 });
             } catch (error) {
+                setIsManagerOpen(true); // Re-open on error if needed
                 MySwal.fire({
                     title: 'Error',
-                    text: 'No se pudo eliminar la plantilla',
+                    text: 'No se pudo eliminar el protocolo',
                     icon: 'error',
                     background: 'var(--card-bg)',
                     color: 'var(--foreground)',
+                    customClass: {
+                        container: 'z-[10001]'
+                    }
                 });
             }
+        } else {
+            // If user cancels, re-open the manager
+            setIsManagerOpen(true);
         }
     };
 
