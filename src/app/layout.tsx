@@ -32,6 +32,7 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from '@/shared/providers/ThemeProvider';
 import { PWAInitializer } from '@/shared/components/PWAInitializer';
+import { Toaster } from 'sonner';
 
 export default function RootLayout({
   children,
@@ -51,6 +52,24 @@ export default function RootLayout({
               <AudioProvider>
                 <SetupRedirect />
                 <SocketProvider>{children}</SocketProvider>
+                <Toaster
+                  position="top-right"
+                  expand={false}
+                  richColors
+                  closeButton
+                  theme="dark"
+                  toastOptions={{
+                    style: {
+                      background: 'rgba(12,12,12,0.85)',
+                      backdropFilter: 'blur(20px)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '1.25rem',
+                      color: '#fff',
+                      fontFamily: 'var(--font-inter)',
+                    },
+                    className: 'tactical-toast',
+                  }}
+                />
               </AudioProvider>
             </ThemeProvider>
           </ReactQueryProvider>

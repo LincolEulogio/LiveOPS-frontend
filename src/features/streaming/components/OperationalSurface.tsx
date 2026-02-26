@@ -16,11 +16,13 @@ import {
     Repeat,
     Zap,
     Scissors,
-    Bookmark
+    Bookmark,
+    RefreshCw
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { StreamingCommand, ObsState, VmixState } from '@/features/streaming/types/streaming.types';
 import { useAutomation } from '@/features/automation/hooks/useAutomation';
+import { SmartVmixImage } from './SmartVmixImage';
 
 interface OperationalSurfaceProps {
     productionId: string;
@@ -52,20 +54,36 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
 
     if (isDisconnected) {
         return (
-            <div className="flex flex-col items-center justify-center p-12 text-center space-y-6 bg-red-500/5 rounded-[2rem] border border-red-500/10 backdrop-blur-md">
-                <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center">
-                    <Activity className="text-red-400" size={40} />
-                </div>
-                <div className="space-y-2">
-                    <h3 className="text-xl font-black text-foreground uppercase tracking-widest">Engine Link Severed</h3>
-                    <p className="text-muted font-medium text-[10px] max-w-xs mb-6 uppercase leading-relaxed opacity-60">
-                        Verify your {engineType} WebSocket/API credentials and ensure the application is running.
-                    </p>
-                    <div className="flex justify-center">
-                        <div className="px-6 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase text-red-500 animate-pulse">
-                            Establishing Proxy Recon...
-                        </div>
+            <div className="flex flex-col items-center justify-center p-16 text-center space-y-10 bg-red-500/5 rounded-[3rem] border border-red-500/10 backdrop-blur-xl group transition-all hover:bg-red-500/10 shadow-2xl shadow-red-500/5">
+                <div className="relative">
+                    <div className="w-24 h-24 bg-red-500/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Activity className="text-red-400 animate-pulse" size={50} />
                     </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full border-4 border-background flex items-center justify-center">
+                        <VolumeX size={12} className="text-white" />
+                    </div>
+                </div>
+
+                <div className="space-y-4">
+                    <h3 className="text-3xl font-black text-foreground uppercase tracking-tighter er">Signal Link Severed</h3>
+                    <p className="text-muted font-medium text-xs max-w-sm mx-auto leading-relaxed opacity-60 uppercase italic">
+                        The proxy failed to handshake with the {engineType} Engine. Verify host credentials and internal firewall settings.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-red-500/10 border border-red-500/20 rounded-[1.5rem] text-[10px] font-black uppercase text-red-400 hover:bg-red-500 hover:text-white transition-all active:scale-95 shadow-lg shadow-red-500/5"
+                        >
+                            <RefreshCw size={14} /> Re-establish Handshake
+                        </button>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-6 w-full max-w-md pt-6 border-t border-red-500/10 opacity-40">
+                    <div className="space-y-1"><p className="text-[10px] font-black uppercase text-muted">Status</p><p className="text-[9px] font-bold text-red-500">OFFLINE</p></div>
+                    <div className="space-y-1"><p className="text-[10px] font-black uppercase text-muted">Engine</p><p className="text-[9px] font-bold text-foreground">{engineType}</p></div>
+                    <div className="space-y-1"><p className="text-[10px] font-black uppercase text-muted">Proxy</p><p className="text-[9px] font-bold text-emerald-500">STABLE</p></div>
                 </div>
             </div>
         );
@@ -121,16 +139,14 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                             <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentPreview}</span>
                         </div>
 
-                        <div className="w-full h-full flex items-center justify-center bg-black">
-                            {(previewUrl && previewUrl !== "" && !imgErrors['preview']) ? (
-                                <img
+                        <div className="w-full h-full bg-black">
+                            {previewUrl && (
+                                <SmartVmixImage
                                     src={previewUrl}
                                     alt="Preview"
-                                    className="w-full h-full object-cover"
-                                    onError={() => setImgErrors(prev => ({ ...prev, preview: true }))}
+                                    className="w-full h-full"
+                                    refreshInterval={2000}
                                 />
-                            ) : (
-                                <Camera size={48} className="text-muted/20" />
                             )}
                         </div>
 
@@ -149,16 +165,14 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                             <span className="text-[10px] font-bold text-white/80 uppercase truncate max-w-[200px]">{currentProgram}</span>
                         </div>
 
-                        <div className="w-full h-full flex items-center justify-center bg-black">
-                            {(programUrl && !imgErrors['program']) ? (
-                                <img
+                        <div className="w-full h-full bg-black">
+                            {programUrl && (
+                                <SmartVmixImage
                                     src={programUrl}
                                     alt="Program"
-                                    className="w-full h-full object-cover"
-                                    onError={() => setImgErrors(prev => ({ ...prev, program: true }))}
+                                    className="w-full h-full"
+                                    refreshInterval={2000}
                                 />
-                            ) : (
-                                <Monitor size={48} className="text-muted/20" />
                             )}
                         </div>
 
@@ -196,11 +210,11 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                             )}
                         >
                             {vmixBaseUrl ? (
-                                <img
-                                    src={`${vmixBaseUrl}/thumbnails/${input.key}.jpg?t=${tick}`}
-                                    className="w-full h-full object-cover"
-                                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/200x180/1c1917/6366f1?text=No+Signal')}
+                                <SmartVmixImage
+                                    src={`${vmixBaseUrl}/thumbnails/${input.key}.jpg`}
                                     alt={input.title}
+                                    className="w-full h-full"
+                                    refreshInterval={5000} // thumb refresh slower to save bandwidth
                                 />
                             ) : (
                                 <div className="w-full h-full bg-card-bg flex items-center justify-center">
@@ -286,12 +300,14 @@ export const OperationalSurface: React.FC<OperationalSurfaceProps> = ({
                                                     : "bg-background/40 border-card-border text-muted-foreground hover:border-indigo-500/50 hover:text-foreground"
                                         )}
                                     >
-                                        {thumbUrl && !imgErrors[input.key] && (
-                                            <img
-                                                src={thumbUrl}
-                                                className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity"
-                                                onError={() => setImgErrors(prev => ({ ...prev, [input.key]: true }))}
-                                            />
+                                        {thumbUrl && (
+                                            <div className="absolute inset-0 w-full h-full opacity-30 group-hover:opacity-60 transition-opacity">
+                                                <SmartVmixImage
+                                                    src={thumbUrl}
+                                                    alt={inputTitle}
+                                                    refreshInterval={10000} // VERY slow for row thumbnails
+                                                />
+                                            </div>
                                         )}
                                         <div className="absolute top-2 left-3 bg-black/40 backdrop-blur-sm px-1.5 rounded text-[8px] font-bold z-10">{inputNum}</div>
                                         <span className="text-[10px] font-black uppercase truncate w-full text-center px-1 z-10 relative drop-shadow-md">{inputTitle}</span>

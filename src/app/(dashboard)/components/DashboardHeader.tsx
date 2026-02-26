@@ -3,8 +3,10 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Menu, Activity, Command, Video } from 'lucide-react';
+import { cn } from '@/shared/utils/cn';
 import { ThemeSwitcher } from '@/shared/components/ThemeSwitcher';
 import { PresenceBar } from '@/shared/components/PresenceBar';
+import { useSocket } from '@/shared/socket/socket.provider';
 
 interface DashboardHeaderProps {
     pathname: string;
@@ -13,6 +15,7 @@ interface DashboardHeaderProps {
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ pathname, onOpenMobileMenu }) => {
     const router = useRouter();
+    const { isConnected } = useSocket();
 
     const startNewCall = () => {
         if (pathname === '/video-calls') {
@@ -71,9 +74,22 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ pathname, onOp
                         <ThemeSwitcher />
                         <PresenceBar />
                         <div className="h-6 w-[1px] bg-card-border/50 hidden lg:block" />
-                        <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 transition-all hover:bg-emerald-500/10">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                            <span className="text-[10px] font-black text-emerald-500/80 uppercase ">Signal Stable</span>
+                        <div className={cn(
+                            "hidden sm:flex items-center gap-3 px-4 py-2 rounded-xl border transition-all",
+                            isConnected
+                                ? "bg-emerald-500/5 border-emerald-500/10 hover:bg-emerald-500/10"
+                                : "bg-red-500/5 border-red-500/10 animate-pulse hover:bg-red-500/10"
+                        )}>
+                            <div className={cn(
+                                "w-2 h-2 rounded-full",
+                                isConnected ? "bg-emerald-500 animate-pulse" : "bg-red-500"
+                            )} />
+                            <span className={cn(
+                                "text-[10px] font-black uppercase ",
+                                isConnected ? "text-emerald-500/80" : "text-red-500/80"
+                            )}>
+                                {isConnected ? 'Signal Stable' : 'Signal Lost'}
+                            </span>
                         </div>
                     </div>
                 </div>

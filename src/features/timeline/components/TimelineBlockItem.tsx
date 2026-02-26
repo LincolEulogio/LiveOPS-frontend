@@ -1,3 +1,4 @@
+import React from 'react';
 import { TimelineBlock, TimelineStatus } from '@/features/timeline/types/timeline.types';
 import { Play, CheckCircle, RotateCcw, Clock, Trash2, Edit2 } from 'lucide-react';
 
@@ -11,7 +12,7 @@ interface TimelineBlockItemProps {
     isMutating: boolean;
 }
 
-export const TimelineBlockItem = ({
+export const TimelineBlockItem = React.memo(({
     block,
     onStart,
     onComplete,
@@ -138,4 +139,5 @@ export const TimelineBlockItem = ({
             </div>
         </div>
     );
-};
+});
+

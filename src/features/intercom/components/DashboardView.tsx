@@ -36,7 +36,7 @@ export const DashboardView = () => {
     const { history } = useIntercomStore();
     const [activeTab, setActiveTab] = useState<'intercom' | 'automation' | 'multicast' | 'logs' | 'templates'>('intercom');
 
-    const { startTalking, stopTalking, isTalking, initiateCall, talkingUsers, talkingInfo } = useWebRTC({
+    const { startTalking, stopTalking, isTalking, initiateCall, talkingUsers, talkingLevels, talkingInfo } = useWebRTC({
         productionId: activeProductionId,
         userId: user?.id || 'admin',
         isHost: true,
@@ -85,6 +85,7 @@ export const DashboardView = () => {
                 roleName: pu.role.name,
                 isOnline,
                 isTalking: talkingUsers.has(pu.user.id),
+                audioLevel: talkingLevels.get(pu.user.id) || 0,
                 currentStatus: onlineData?.status || 'IDLE',
                 lastAck: (onlineData?.status && onlineData.status.startsWith('ACK:')) ? {
                     message: onlineData.status.substring(4),
@@ -93,7 +94,7 @@ export const DashboardView = () => {
                 } : undefined
             };
         });
-    }, [production, onlineMembers, talkingUsers, talkingInfo]);
+    }, [production, onlineMembers, talkingUsers, talkingLevels, talkingInfo]);
 
     const handleMassAlert = (message: string) => {
         sendCommand({
@@ -151,6 +152,7 @@ export const DashboardView = () => {
                                         onTalkStart={() => startTalking(member.userId)}
                                         onTalkStop={() => stopTalking(member.userId)}
                                         isTalkingLocal={isTalking && talkingInfo?.targetUserId === member.userId}
+                                        audioLevel={member.audioLevel}
                                         onSendCommand={(t) => {
                                             if (t.isChat) {
                                                 sendDirectMessage({

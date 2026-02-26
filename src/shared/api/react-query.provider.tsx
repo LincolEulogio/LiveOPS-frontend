@@ -1,7 +1,9 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, MutationCache } from '@tanstack/react-query';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
+import { AlertCircle } from 'lucide-react';
 
 export const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(
@@ -15,9 +17,20 @@ export const ReactQueryProvider = ({ children }: { children: React.ReactNode }) 
             refetchOnWindowFocus: false,
           },
           mutations: {
-            retry: 1, // At least one retry for mutations in case of network blips
+            retry: 0, // Better for UX: show error immediately instead of retrying silently
           }
         },
+        mutationCache: new MutationCache({
+          onError: (error: any) => {
+            // Show global error toast for any mutation failure
+            const message = error.message || 'Error detectado en la operación táctica';
+            toast.error(message, {
+              icon: <AlertCircle className="text-red-500" size={16} />,
+              description: 'El motor no pudo procesar la solicitud. Verifica el estado del nodo.',
+              duration: 5000,
+            });
+          }
+        })
       })
   );
 

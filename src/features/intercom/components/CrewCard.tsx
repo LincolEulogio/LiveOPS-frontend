@@ -23,6 +23,7 @@ interface CrewCardProps {
     onTalkStart?: () => void;
     onTalkStop?: () => void;
     isTalkingLocal?: boolean;
+    audioLevel?: number;
 }
 
 export const CrewCard = ({
@@ -32,7 +33,8 @@ export const CrewCard = ({
     onSendCommand,
     onTalkStart,
     onTalkStop,
-    isTalkingLocal
+    isTalkingLocal,
+    audioLevel
 }: CrewCardProps) => {
     const history = useIntercomStore(state => state.history);
 
@@ -65,6 +67,7 @@ export const CrewCard = ({
                 userId={member.userId}
                 isOnline={member.isOnline}
                 isTalking={member.isTalking}
+                audioLevel={audioLevel}
             />
 
             <CrewCardIdentity

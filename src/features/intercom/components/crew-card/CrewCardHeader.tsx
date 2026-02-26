@@ -8,9 +8,13 @@ interface CrewCardHeaderProps {
     userId: string;
     isOnline: boolean;
     isTalking?: boolean;
+    audioLevel?: number;
 }
 
-export const CrewCardHeader: React.FC<CrewCardHeaderProps> = ({ productionId, userId, isOnline, isTalking }) => {
+export const CrewCardHeader: React.FC<CrewCardHeaderProps> = ({ productionId, userId, isOnline, isTalking, audioLevel = 0 }) => {
+    // Normalizar nivel (0-255 -> 0-100)
+    const levelPercent = Math.min(100, (audioLevel / 255) * 100);
+
     return (
         <div className="px-6 sm:px-8 pt-4 sm:pt-6 flex items-center justify-between relative z-10 w-full">
             <div className="flex items-center gap-3">
@@ -23,13 +27,13 @@ export const CrewCardHeader: React.FC<CrewCardHeaderProps> = ({ productionId, us
             </div>
             <div className="flex items-center gap-2">
                 {isTalking && (
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 border border-red-500/30 rounded-full animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 border border-red-500/30 rounded-full shadow-[0_0_15px_rgba(220,38,38,0.2)]">
                         <Mic size={12} className="text-red-500" />
                         <span className="text-[9px] font-black text-red-500 uppercase tracking-widest mt-[1px]">TALKING</span>
-                        <div className="flex items-center gap-[2px] h-3">
-                            <div className="w-1 bg-red-500 rounded-full animate-[bounce_0.8s_infinite] h-full"></div>
-                            <div className="w-1 bg-red-500 rounded-full animate-[bounce_0.9s_infinite] h-2/3"></div>
-                            <div className="w-1 bg-red-500 rounded-full animate-[bounce_0.7s_infinite] h-full"></div>
+                        <div className="flex items-end gap-[2px] h-3 w-4">
+                            <div className="w-1 bg-red-500 rounded-full transition-all duration-75" style={{ height: `${Math.max(20, levelPercent * 0.8)}%` }}></div>
+                            <div className="w-1 bg-red-500 rounded-full transition-all duration-75" style={{ height: `${Math.max(20, levelPercent)}%` }}></div>
+                            <div className="w-1 bg-red-500 rounded-full transition-all duration-75" style={{ height: `${Math.max(20, levelPercent * 0.6)}%` }}></div>
                         </div>
                     </div>
                 )}

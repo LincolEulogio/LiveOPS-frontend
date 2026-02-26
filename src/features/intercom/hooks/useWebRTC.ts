@@ -14,6 +14,13 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
     const [isTalking, setIsTalking] = useState(false);
     const [audioLevel, setAudioLevel] = useState(0);
     const [talkingUsers, setTalkingUsers] = useState<Set<string>>(new Set());
+    const [talkingLevels, setTalkingLevels] = useState<Map<string, number>>(new Map());
+    const lastEmitTime = useRef<number>(0);
+    const EMIT_INTERVAL = 100; // 100ms throttle for audio levels
+
+    const [connectionStates, setConnectionStates] = useState<Map<string, RTCPeerConnectionState>>(new Map());
+    const retryCounts = useRef<Map<string, number>>(new Map());
+    const MAX_RETRIES = 5;
 
     const peerConnections = useRef<Map<string, RTCPeerConnection>>(new Map());
     const localStream = useRef<MediaStream | null>(null);
@@ -99,11 +106,27 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
                     const bufferLength = analyserNode.current.frequencyBinCount;
                     const dataArray = new Uint8Array(bufferLength);
 
+                    if (audioContext.current?.state === 'suspended') {
+                        audioContext.current.resume();
+                    }
+
                     const updateLevel = () => {
                         if (analyserNode.current) {
                             analyserNode.current.getByteFrequencyData(dataArray);
                             const average = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
                             setAudioLevel(prev => (prev === 0 && average < 5) ? 0 : average);
+
+                            // Throttled Socket Emission
+                            if (socket && isTalking && isConnected) {
+                                const now = Date.now();
+                                if (now - lastEmitTime.current > EMIT_INTERVAL) {
+                                    socket.emit('webrtc.audio_level', {
+                                        productionId,
+                                        level: average
+                                    });
+                                    lastEmitTime.current = now;
+                                }
+                            }
                         }
                         animationRef.current = requestAnimationFrame(updateLevel);
                     };
@@ -177,8 +200,40 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
         };
 
         pc.oniceconnectionstatechange = () => {
+            console.log(`[WebRTC] ICE State with ${targetUserId}: ${pc.iceConnectionState}`);
             if (pc.iceConnectionState === 'failed') {
                 pc.restartIce();
+            }
+        };
+
+        pc.onconnectionstatechange = () => {
+            const state = pc.connectionState;
+            console.log(`[WebRTC] Connection State with ${targetUserId}: ${state}`);
+
+            setConnectionStates(prev => {
+                const updated = new Map(prev);
+                updated.set(targetUserId, state);
+                return updated;
+            });
+
+            if (state === 'failed') {
+                const count = retryCounts.current.get(targetUserId) || 0;
+                if (count < MAX_RETRIES) {
+                    console.warn(`[WebRTC] Connection failed with ${targetUserId}. Retry ${count + 1}/${MAX_RETRIES}`);
+                    retryCounts.current.set(targetUserId, count + 1);
+
+                    // Delay retry to avoid spin-locking
+                    setTimeout(() => {
+                        pc.close();
+                        peerConnections.current.delete(targetUserId);
+                        initiateCall(targetUserId);
+                    }, 2000 * (count + 1));
+                } else {
+                    console.error(`[WebRTC] Max retries reached for ${targetUserId}`);
+                    toast.error(`Error de conexión persistente con ${targetUserId}`);
+                }
+            } else if (state === 'connected') {
+                retryCounts.current.set(targetUserId, 0); // Reset on success
             }
         };
 
@@ -321,9 +376,20 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
         };
         socket.on('webrtc.talking', handleTalking);
 
+        const handleAudioLevel = (data: { senderUserId: string, level: number }) => {
+            setTalkingLevels(prev => {
+                const next = new Map(prev);
+                if (data.level < 5) next.delete(data.senderUserId);
+                else next.set(data.senderUserId, data.level);
+                return next;
+            });
+        };
+        socket.on('webrtc.audio_level', handleAudioLevel);
+
         return () => {
             socket.off('webrtc.signal_received', handleSignal);
             socket.off('webrtc.talking', handleTalking);
+            socket.off('webrtc.audio_level', handleAudioLevel);
             socket.off('presence.update', handlePresence);
         };
     }, [socket, isConnected, createPeerConnection, productionId, setupLocalAudio, isHost, initiateCall, userId]);
@@ -332,9 +398,18 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
         return () => {
             if (animationRef.current) cancelAnimationFrame(animationRef.current);
             if (audioContext.current) audioContext.current.close().catch(() => { });
+
             peerConnections.current.forEach(pc => pc.close());
+            peerConnections.current.clear();
+
+            remoteAudios.current.forEach(audio => {
+                if (audio.parentNode) audio.parentNode.removeChild(audio);
+            });
+            remoteAudios.current.clear();
+
             if (localStream.current) {
                 localStream.current.getTracks().forEach(track => track.stop());
+                localStream.current = null;
             }
         };
     }, []);
@@ -347,6 +422,9 @@ export const useWebRTC = ({ productionId, userId, roleName, isHost = false }: We
         initiateCall,
         setupLocalAudio,
         talkingUsers,
+        talkingLevels,
         talkingInfo,
+        connectionStates,
+        isManagerConnected: isConnected
     };
 };
