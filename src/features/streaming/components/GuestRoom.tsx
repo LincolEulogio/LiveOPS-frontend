@@ -258,8 +258,7 @@ function CustomControlBar({ onLeave, chatOpen, onChatToggle, viewMode, onViewTog
 }
 
 /* ─── GuestRoomInner ────────────────────────────────────────────────────── */
-const GuestRoomInner = ({ productionId, userName }: { productionId: string; userName: string }) => {
-    const router = useRouter();
+const GuestRoomInner = ({ productionId, userName, onLeave }: { productionId: string; userName: string; onLeave: () => void }) => {
     const participants = useParticipants();
     const connectionState = useConnectionState();
     const isConnected = connectionState === ConnectionState.Connected;
@@ -345,7 +344,7 @@ const GuestRoomInner = ({ productionId, userName }: { productionId: string; user
 
             {/* Control bar */}
             <CustomControlBar
-                onLeave={() => router.back()}
+                onLeave={onLeave}
                 chatOpen={chatOpen}
                 onChatToggle={() => setChatOpen(v => !v)}
                 viewMode={viewMode}
@@ -365,7 +364,16 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
     const [error, setError] = useState<{ type: 'permission' | 'connection'; msg: string } | null>(null);
     const fetchedRef = useRef(false);
 
+    const TOKEN_KEY = `lk_token_${productionId}`;
+    const URL_KEY = `lk_url_${productionId}`;
+    const clearCache = () => { sessionStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(URL_KEY); };
+
     useEffect(() => {
+        // 1. Restore from cache first (handles F5 / soft reload)
+        const cachedToken = sessionStorage.getItem(TOKEN_KEY);
+        const cachedUrl = sessionStorage.getItem(URL_KEY);
+        if (cachedToken && cachedUrl) { setToken(cachedToken); setLkUrl(cachedUrl); return; }
+        // 2. Fetch fresh token
         if (fetchedRef.current || !user) return;
         fetchedRef.current = true;
         (async () => {
@@ -375,9 +383,12 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
                     name: user.name || 'Guest',
                     isOperator: false,
                 });
+                sessionStorage.setItem(TOKEN_KEY, data.token);
+                sessionStorage.setItem(URL_KEY, data.url);
                 setToken(data.token);
                 setLkUrl(data.url);
             } catch (e: any) {
+                clearCache();
                 setError({ type: 'permission', msg: e.message });
                 toast.error('Acceso denegado');
             }
@@ -389,8 +400,13 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
         const isMedia = ['AbortError', 'NotAllowedError', 'NotFoundError'].includes(err.name)
             || m.includes('video source') || m.includes('getUserMedia') || m.includes('Timeout');
         if (isMedia) { toast.error('Verifica permisos de cámara/micrófono', { duration: 5000 }); return; }
+        clearCache();
         setError({ type: 'connection', msg: m });
     };
+
+    const handleRetry = () => { clearCache(); fetchedRef.current = false; setError(null); setToken(null); setLkUrl(null); };
+    const handleLeave = () => { clearCache(); router.back(); };
+
 
     /* Loading */
     if (!token || !lkUrl) return (
@@ -413,7 +429,7 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
                 <ShieldAlert size={32} className="text-red-400 mx-auto mb-4" />
                 <h2 className="text-lg font-black text-white uppercase tracking-wider mb-2">Acceso Denegado</h2>
                 <p className="text-white/40 text-sm mb-6">Solicita al director que te asigne el rol de <span className="text-indigo-400 font-bold">GUEST</span>.</p>
-                <button onClick={() => router.back()} className="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-colors">Volver</button>
+                <button onClick={handleLeave} className="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-colors">Volver</button>
             </div>
         </div>
     );
@@ -427,9 +443,9 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
                 <p className="text-white/40 text-sm mb-4">El servidor LiveKit no responde.</p>
                 <code className="block text-left bg-black/30 border border-white/8 rounded-xl p-3 text-amber-400 text-xs mb-6 font-mono">docker compose up livekit -d</code>
                 <div className="flex gap-2">
-                    <button onClick={() => { fetchedRef.current = false; setError(null); setToken(null); setLkUrl(null); }}
+                    <button onClick={handleRetry}
                         className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-colors">Reintentar</button>
-                    <button onClick={() => router.back()}
+                    <button onClick={handleLeave}
                         className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-colors">Salir</button>
                 </div>
             </div>
@@ -443,11 +459,11 @@ export const GuestRoom = ({ productionId }: { productionId: string }) => {
                 <LiveKitRoom
                     video={false} audio={false}
                     token={token} serverUrl={lkUrl} connect
-                    onDisconnected={() => router.back()}
+                    onDisconnected={handleLeave}
                     onError={handleError}
                     style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                 >
-                    <GuestRoomInner productionId={productionId} userName={user?.name || 'Guest'} />
+                    <GuestRoomInner productionId={productionId} userName={user?.name || 'Guest'} onLeave={handleLeave} />
                 </LiveKitRoom>
             </div>
         </>
