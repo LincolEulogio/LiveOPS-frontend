@@ -15,6 +15,16 @@ interface VmixControlsProps {
     isDisconnected: boolean;
 }
 
+const StatItem = ({ label, active, colorClass }: { label: string, value: string, active: boolean, colorClass: string }) => (
+    <div className={cn(
+        "px-4 py-2.5 rounded-xl border flex items-center gap-3 transition-all flex-1 min-w-[140px]",
+        active ? `${colorClass} ` : "bg-card-bg/40 border-card-border/50 text-muted opacity-60"
+    )}>
+        <div className={cn("w-1.5 h-1.5 rounded-full", active ? "animate-pulse bg-current" : "bg-muted")} />
+        <span className="text-[10px] font-black uppercase ">{label}</span>
+    </div>
+);
+
 export function VmixControls({ productionId, state, sendCommand, isPending, isDisconnected }: VmixControlsProps) {
     const [fadeDuration, setFadeDuration] = useState(500);
 
@@ -39,16 +49,6 @@ export function VmixControls({ productionId, state, sendCommand, isPending, isDi
             </div>
         );
     }
-
-    const StatItem = ({ label, value, active, colorClass }: { label: string, value: string, active: boolean, colorClass: string }) => (
-        <div className={cn(
-            "px-4 py-2.5 rounded-xl border flex items-center gap-3 transition-all flex-1 min-w-[140px]",
-            active ? `${colorClass} ` : "bg-card-bg/40 border-card-border/50 text-muted opacity-60"
-        )}>
-            <div className={cn("w-1.5 h-1.5 rounded-full", active ? "animate-pulse bg-current" : "bg-muted")} />
-            <span className="text-[10px] font-black uppercase ">{label}</span>
-        </div>
-    );
 
     return (
         <div className="space-y-10">

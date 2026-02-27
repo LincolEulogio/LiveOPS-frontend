@@ -93,7 +93,7 @@ export const OverlayViewport: React.FC<OverlayViewportProps> = ({
                                 </div>
                             )}
                             {layer.type === 'image' && (
-                                <img src={layer.content} className="w-full h-full object-contain pointer-events-none" />
+                                <img src={layer.content} alt="" className="w-full h-full object-contain pointer-events-none" />
                             )}
 
                             {/* Resize Handles */}

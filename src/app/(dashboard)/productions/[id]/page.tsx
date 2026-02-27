@@ -38,12 +38,42 @@ import { cn } from '@/shared/utils/cn';
 import { IntegrationsPanel } from '@/features/productions/components/IntegrationsPanel';
 import { AiBriefing } from '@/features/ai/components/AiBriefing';
 
+type ActiveTab = 'overview' | 'streaming' | 'script' | 'social';
+
+const TabButton = ({
+  id: tabId,
+  label,
+  icon: Icon,
+  activeTab,
+  setActiveTab,
+}: {
+  id: ActiveTab;
+  label: string;
+  icon: any;
+  activeTab: ActiveTab;
+  setActiveTab: (tab: ActiveTab) => void;
+}) => (
+  <button
+    onClick={() => setActiveTab(tabId)}
+    className={cn(
+      'flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase  transition-all relative overflow-hidden',
+      activeTab === tabId
+        ? 'bg-indigo-600 text-white  '
+        : 'text-muted hover:text-foreground hover:bg-card-bg'
+    )}
+  >
+    <Icon size={14} className={cn(activeTab === tabId ? 'text-white' : 'text-indigo-400')} />
+    <span className="hidden sm:inline">{label}</span>
+    {activeTab === tabId && (
+      <motion.div layoutId="tab-active-pill" className="absolute inset-0 bg-white/10" />
+    )}
+  </button>
+);
+
 export default function ProductionDetailPage() {
   const params = useParams();
   const id = params.id as string;
-  const [activeTab, setActiveTab] = React.useState<'overview' | 'streaming' | 'script' | 'social'>(
-    'overview'
-  );
+  const [activeTab, setActiveTab] = React.useState<ActiveTab>('overview');
 
   // 1. Initialize global context (updates Zustand layout & triggers WebSockets)
   useProductionContextInitializer(id);
@@ -88,32 +118,6 @@ export default function ProductionDetailPage() {
       </div>
     );
   }
-
-  const TabButton = ({
-    id: tabId,
-    label,
-    icon: Icon,
-  }: {
-    id: typeof activeTab;
-    label: string;
-    icon: any;
-  }) => (
-    <button
-      onClick={() => setActiveTab(tabId)}
-      className={cn(
-        'flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase  transition-all relative overflow-hidden',
-        activeTab === tabId
-          ? 'bg-indigo-600 text-white  '
-          : 'text-muted hover:text-foreground hover:bg-card-bg'
-      )}
-    >
-      <Icon size={14} className={cn(activeTab === tabId ? 'text-white' : 'text-indigo-400')} />
-      <span className="hidden sm:inline">{label}</span>
-      {activeTab === tabId && (
-        <motion.div layoutId="tab-active-pill" className="absolute inset-0 bg-white/10" />
-      )}
-    </button>
-  );
 
   return (
     <div className="mx-auto max-w-[1800px] space-y-6 sm:space-y-8 pb-6 mt-2 sm:mt-6 px-4 sm:px-0">
@@ -170,10 +174,10 @@ export default function ProductionDetailPage() {
 
       {/* Mobile-Only Tab Navigation */}
       <div className="lg:hidden flex bg-card-bg/40 backdrop-blur-xl border border-card-border p-1.5 rounded-4xl  overflow-x-auto no-scrollbar gap-1">
-        <TabButton id="overview" label="Panel" icon={Layout} />
-        <TabButton id="streaming" label="Broadcast" icon={Zap} />
-        <TabButton id="script" label="Rundown" icon={FileText} />
-        <TabButton id="social" label="Social" icon={Share2} />
+        <TabButton id="overview" label="Panel" icon={Layout} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabButton id="streaming" label="Broadcast" icon={Zap} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabButton id="script" label="Rundown" icon={FileText} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabButton id="social" label="Social" icon={Share2} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
       <div className="grid grid-cols-1 min-[1280px]:grid-cols-12 gap-8">

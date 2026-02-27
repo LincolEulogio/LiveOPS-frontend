@@ -20,7 +20,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { token, user, clearAuth, isHydrated } = useAuthStore();
   const activeProductionId = useAppStore((state) => state.activeProductionId);
   const [isMounted, setIsMounted] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileMenuOpenForPath, setMobileMenuOpenForPath] = useState<string | null>(null);
+  const isMobileMenuOpen = mobileMenuOpenForPath === pathname;
+  const setIsMobileMenuOpen = (open: boolean) => setMobileMenuOpenForPath(open ? pathname : null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -33,11 +35,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const scrollToTop = () => {
     scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  // Close mobile menu on path change
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     setIsMounted(true);
