@@ -1,8 +1,10 @@
 'use client';
 
 import { useTimeline } from '@/features/timeline/hooks/useTimeline';
-import { Plus, Layout, RotateCcw, ArrowRight, Play, CheckCircle2, Zap } from 'lucide-react';
-import { useState } from 'react';
+import { Plus, Layout, RotateCcw, ArrowRight, Play, CheckCircle2, Zap, Sparkles, RefreshCw, AlertTriangle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/shared/api/api.client';
+import { toast } from 'sonner';
 import { TimelineCRUD } from '@/features/timeline/components/TimelineCRUD';
 import { TimelineBlock } from '@/features/timeline/types/timeline.types';
 import { TimelineSkeleton } from '@/shared/components/SkeletonLoaders';
@@ -35,6 +37,27 @@ export const TimelineContainer = ({ productionId }: Props) => {
 
     const [isCRUDOpen, setIsCRUDOpen] = useState(false);
     const [editingBlock, setEditingBlock] = useState<TimelineBlock | undefined>();
+    const [aiAdvice, setAiAdvice] = useState<string>('');
+    const [isAiLoading, setIsAiLoading] = useState(false);
+
+    const fetchAiAdvice = async () => {
+        if (!productionId || isAiLoading) return;
+        setIsAiLoading(true);
+        try {
+            const data = await apiClient.get<{ advice: string }>(`/productions/${productionId}/timeline/ai-advice`);
+            setAiAdvice(data.advice);
+        } catch (e) {
+            console.error('Failed to fetch AI timing advice', e);
+        } finally {
+            setIsAiLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (blocks.length > 0 && !aiAdvice) {
+            fetchAiAdvice();
+        }
+    }, [productionId, blocks.length]);
 
     // RBAC: Find current user's role in this production
     const currentUserProdRelation = production?.users?.find(u => u.userId === user?.id);
@@ -188,10 +211,10 @@ export const TimelineContainer = ({ productionId }: Props) => {
     return (
         <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.5rem] overflow-hidden  flex flex-col group/timeline h-full">
             {/* Visual Scanline */}
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent opacity-0 group-hover/timeline:opacity-100 transition-opacity" />
+            <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-indigo-500/30 to-transparent opacity-0 group-hover/timeline:opacity-100 transition-opacity" />
 
             {/* Premium Tactical Header - Integrated */}
-            <div className="p-6 sm:p-8 border-b border-card-border/50 bg-white/[0.04] flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative overflow-hidden">
+            <div className="p-6 sm:p-8 border-b border-card-border/50 bg-white/4 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none group-hover/timeline:scale-110 transition-transform duration-1000">
                     <Layout size={100} />
                 </div>
@@ -204,6 +227,17 @@ export const TimelineContainer = ({ productionId }: Props) => {
                         <h2 className="text-lg font-black text-foreground uppercase  italic leading-none mb-1.5">
                             Operational Rundown
                         </h2>
+                        <button
+                            onClick={fetchAiAdvice}
+                            disabled={isAiLoading}
+                            className={cn(
+                                "flex items-center gap-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-[9px] font-black text-indigo-400 px-4 py-3 rounded-xl border border-indigo-500/20 transition-all uppercase group/ai",
+                                isAiLoading && "animate-pulse"
+                            )}
+                        >
+                            <Sparkles size={14} className={cn(isAiLoading && "animate-spin")} />
+                            AI Advice
+                        </button>
                         <p className="text-[9px] font-black text-muted uppercase ">Scalable Event Sequence</p>
                     </div>
                 </div>
@@ -248,9 +282,35 @@ export const TimelineContainer = ({ productionId }: Props) => {
                 </div>
             </div>
 
+            {/* AI Advice Banner */}
+            <AnimatePresence>
+                {aiAdvice && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="bg-indigo-600/10 border-b border-indigo-500/20 px-8 py-3 flex items-center justify-between gap-4 overflow-hidden"
+                    >
+                        <div className="flex items-center gap-3 min-w-0">
+                            <AlertTriangle size={14} className="text-indigo-400 shrink-0" />
+                            <p className="text-[10px] font-bold text-indigo-300 truncate uppercase">
+                                <span className="font-black mr-2 text-indigo-400">[LIVIA]:</span>
+                                {aiAdvice}
+                            </p>
+                        </div>
+                        <button 
+                            onClick={() => setAiAdvice('')}
+                            className="text-[9px] font-black text-muted hover:text-indigo-400 uppercase tracking-widest shrink-0"
+                        >
+                            Acknowledge
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Main Rundown Area - Integrated Table */}
             <div className="flex-1 relative min-h-[400px]">
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
+                <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-indigo-500/20 to-transparent" />
                 <RundownTable
                     productionId={productionId}
                     blocks={blocks}

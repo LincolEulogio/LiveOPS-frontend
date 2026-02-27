@@ -23,6 +23,11 @@ interface MediaAsset {
     mimeType: string;
     productionId: string;
     createdAt: string;
+    aiMetadata?: {
+        tags: string[];
+        description: string;
+        colors?: string[];
+    };
 }
 
 const TYPE_ICON = {
@@ -270,12 +275,22 @@ export const MediaSidebar = ({ productionId }: { productionId?: string }) => {
                                     <p className="text-[10px] font-black text-foreground truncate uppercase group-hover:text-indigo-400 transition-colors leading-none mb-1">
                                         {asset.name}
                                     </p>
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="text-[8px] font-black text-indigo-400 uppercase bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">
+                                    <div className="flex flex-wrap items-center gap-1 mt-1.5">
+                                        <span className={cn("text-[7px] font-black uppercase px-1 py-0.5 rounded border leading-none", colorClass)}>
                                             {asset.type}
                                         </span>
-                                        <span className="text-[8px] font-bold text-muted/60">{formatBytes(asset.size)}</span>
+                                        <span className="text-[7px] font-bold text-muted/40 uppercase tracking-tighter">{formatBytes(asset.size)}</span>
+                                        {asset.aiMetadata?.tags?.slice(0, 3).map(tag => (
+                                            <span key={tag} className="text-[7px] font-black text-emerald-400 bg-emerald-500/5 border border-emerald-500/10 px-1 py-0.5 rounded uppercase leading-none">
+                                                {tag}
+                                            </span>
+                                        ))}
                                     </div>
+                                    {asset.aiMetadata?.description && (
+                                        <p className="text-[8px] text-muted/60 mt-1 italic leading-tight line-clamp-1">
+                                            {asset.aiMetadata.description}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">

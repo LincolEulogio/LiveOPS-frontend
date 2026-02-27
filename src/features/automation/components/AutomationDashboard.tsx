@@ -10,6 +10,7 @@ import { AutomationDashboardHeader } from '@/features/automation/components/auto
 import { AutomationDashboardMacros } from '@/features/automation/components/automation-dashboard/AutomationDashboardMacros';
 import { AutomationDashboardTabs } from '@/features/automation/components/automation-dashboard/AutomationDashboardTabs';
 import { AutomationDashboardSidebar } from '@/features/automation/components/automation-dashboard/AutomationDashboardSidebar';
+import { AiMacroBuilder } from '@/features/automation/components/AiMacroBuilder';
 
 interface Props {
     productionId: string;
@@ -34,6 +35,7 @@ export const AutomationDashboard = ({ productionId }: Props) => {
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [editingRule, setEditingRule] = useState<Rule | undefined>();
     const [activeTab, setActiveTab] = useState<'rules' | 'history' | 'hardware'>('rules');
+    const [isAiBuilderOpen, setIsAiBuilderOpen] = useState(false);
 
     const handleCreate = () => {
         setEditingRule(undefined);
@@ -47,7 +49,10 @@ export const AutomationDashboard = ({ productionId }: Props) => {
 
     return (
         <div className="space-y-8 pb-20">
-            <AutomationDashboardHeader onCreateRule={handleCreate} />
+            <AutomationDashboardHeader 
+                onCreateRule={handleCreate} 
+                onAiBuild={() => setIsAiBuilderOpen(true)}
+            />
 
             <AutomationDashboardMacros
                 macros={manualMacros}
@@ -87,6 +92,15 @@ export const AutomationDashboard = ({ productionId }: Props) => {
                     setIsEditorOpen(false);
                 }}
                 editingRule={editingRule}
+            />
+
+            <AiMacroBuilder 
+                productionId={productionId}
+                isOpen={isAiBuilderOpen}
+                onClose={() => setIsAiBuilderOpen(false)}
+                onCreated={() => {
+                    // Logic to refresh rules if needed, though useAutomation hook might handle it
+                }}
             />
         </div>
     );

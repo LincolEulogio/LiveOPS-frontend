@@ -3,7 +3,8 @@
 import { useChat } from '@/features/chat/hooks/useChat';
 import { CommandItem } from '@/features/chat/components/CommandItem';
 import { TemplateManager } from '@/features/intercom/components/TemplateManager';
-import { MessageSquare, Send, AlertCircle, Zap, ShieldAlert, History, Settings, Laptop, Smartphone } from 'lucide-react';
+import { MessageSquare, Send, AlertCircle, Zap, ShieldAlert, History, Settings, Laptop, Smartphone, Sparkles, RefreshCw } from 'lucide-react';
+import { apiClient } from '@/shared/api/api.client';
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/shared/utils/cn';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -28,13 +29,31 @@ export const IntercomPanel = ({ productionId }: Props) => {
 
     const [message, setMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
+    const [aiSummary, setAiSummary] = useState<string>('');
+    const [isAiLoading, setIsAiLoading] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    const fetchSummary = async () => {
+        if (!productionId || isAiLoading) return;
+        setIsAiLoading(true);
+        try {
+            const data = await apiClient.get<{ summary: string }>(`/productions/${productionId}/intercom/ai-summary`);
+            setAiSummary(data.summary);
+        } catch (e) {
+            console.error('Failed to fetch AI summary', e);
+        } finally {
+            setIsAiLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = 0;
         }
-    }, [history]);
+        if (history.length > 0 && !aiSummary) {
+            fetchSummary();
+        }
+    }, [history, productionId]);
 
     const handleSend = () => {
         if (!message.trim() || isSending) return;
@@ -66,7 +85,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                         <div className="absolute inset-0 bg-emerald-500/20 blur-md rounded-full pointer-events-none" />
                     </div>
                     <div>
-                        <h2 className="text-xs font-black text-foreground uppercase  leading-none mb-1">Crew Intercom</h2>
+                        <h2 className="text-xs font-black text-foreground uppercase leading-none mb-1">Crew Intercom</h2>
                         <p className="text-[9px] font-black text-muted uppercase  leading-none">Security Channel 0-Alpha</p>
                     </div>
                 </div>
@@ -80,6 +99,31 @@ export const IntercomPanel = ({ productionId }: Props) => {
                 </div>
             </div>
 
+            {/* AI Summary Drawer */}
+            <AnimatePresence>
+                {aiSummary && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="bg-indigo-600/10 border-b border-indigo-500/20 px-5 py-3 relative overflow-hidden"
+                    >
+                        <div className="flex items-center justify-between mb-2">
+                            <span className="text-[8px] font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2">
+                                <Sparkles size={10} />
+                                Livia Intelligence
+                            </span>
+                            <button onClick={fetchSummary} className={cn("text-muted hover:text-indigo-400 transition-all", isAiLoading && "animate-spin")}>
+                                <RefreshCw size={10} />
+                            </button>
+                        </div>
+                        <p className="text-[10px] font-bold text-foreground/80 leading-relaxed italic line-clamp-2">
+                            {aiSummary}
+                        </p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Quick Tactical Templates Bar */}
             {templates.length > 0 && (
                 <div className="p-3 bg-indigo-600/5 border-b border-card-border/30 flex gap-2 overflow-x-auto no-scrollbar ">
@@ -90,7 +134,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 key={t.id}
                                 onClick={() => sendCommand(t.name, { templateId: t.id })}
-                                className="flex-shrink-0 flex items-center gap-2 px-4 py-2 bg-background hover:bg-card-bg border border-card-border rounded-[1rem] transition-all active:scale-95 group "
+                                className="shrink-0 flex items-center gap-2 px-4 py-2 bg-background hover:bg-card-bg border border-card-border rounded-2xl transition-all active:scale-95 group "
                             >
                                 <Zap size={12} className="text-amber-500 group-hover:scale-110 transition-transform" fill="currentColor" />
                                 <span className="text-[10px] font-black text-foreground uppercase ">{t.name}</span>
@@ -103,7 +147,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
             {/* Tactical History Grid */}
             <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar-premium bg-gradient-to-b from-transparent to-black/10"
+                className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar-premium bg-linear-to-b from-transparent to-black/10"
             >
                 {isLoading ? (
                     <IntercomSkeleton />
@@ -134,7 +178,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
             {/* Tactical Input Area */}
             <div className="p-5 border-t border-card-border/50 bg-white/5 backdrop-blur-3xl">
                 <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/20 to-purple-600/20 rounded-[1.5rem] blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                    <div className="absolute -inset-1 bg-linear-to-r from-indigo-500/20 to-purple-600/20 rounded-3xl blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
                     <div className="relative px-1 pt-1">
                         <textarea
                             value={message}

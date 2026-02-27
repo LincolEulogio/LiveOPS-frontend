@@ -17,7 +17,7 @@ export function SetupRedirect() {
             // Prune stale authentication state after a database reset
             clearAuth();
 
-            if (pathname !== '/register') {
+            if (pathname !== '/register' && pathname !== '/login') {
                 router.push('/register');
             }
         }

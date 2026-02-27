@@ -11,6 +11,7 @@ import { Activity, Cpu, WifiHigh, CheckCircle, AlertTriangle, FileText, ArrowLef
 import { useProductionContextInitializer } from '@/features/productions/hooks/useProductionContext';
 import { useProduction } from '@/features/productions/hooks/useProductions';
 import Link from 'next/link';
+import { SeoPackageView } from '@/features/analytics/components/SeoPackageView';
 
 interface TelemetryLog {
     timestamp: string;
@@ -70,6 +71,12 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
         ).catch(() => []),
         enabled: !!productionId,
         refetchInterval: isLive ? 15000 : false,
+    });
+
+    const { data: seoPackage } = useQuery({
+        queryKey: ['analytics', productionId, 'seo-package'],
+        queryFn: () => api.get<any>(`/productions/${productionId}/analytics/seo-package`).catch(() => null),
+        enabled: !!report && !!productionId,
     });
 
     // Derive event stats from audit logs
@@ -286,6 +293,9 @@ export const AnalyticsDashboard = ({ productionId }: { productionId: string }) =
                     )}
                 </div>
             )}
+
+            {/* AI SEO Package Segment */}
+            {seoPackage && <SeoPackageView data={seoPackage} />}
 
             {/* Telemetry Charts */}
             <div className="grid grid-cols-2 gap-6">

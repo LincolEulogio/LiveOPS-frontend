@@ -6,6 +6,7 @@ import {
     Twitch, Facebook, Trash2,
     Eye, EyeOff, Filter, Activity, Zap, Shield, Bot, Sparkles
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { cn } from '@/shared/utils/cn';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocial, SocialMessage } from '@/features/social/hooks/useSocial';
@@ -19,7 +20,22 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
     const { messages, activePoll, updateStatus, onAirMessage, isLoading } = useSocial(productionId);
     const [filter, setFilter] = useState<string>('');
     const [aiShield, setAiShield] = useState(false);
+    const [isAiCurating, setIsAiCurating] = useState(false);
+    const [aiSuggestions, setAiSuggestions] = useState<any[]>([]);
 
+    const handleSuggestHighlights = async () => {
+        if (isAiCurating) return;
+        setIsAiCurating(true);
+        try {
+            const result = await apiClient.get<any[]>(`/productions/${productionId}/social/ai-highlights`);
+            setAiSuggestions(result);
+            if (result.length === 0) toast.info('No hay sugerencias notables en este momento.');
+        } catch (e) {
+            console.error('AI curation failed', e);
+        } finally {
+            setIsAiCurating(false);
+        }
+    };
     const handleUpdateStatus = async (messageId: string, status: SocialMessage['status']) => {
         try {
             await updateStatus({ id: messageId, status });
@@ -71,6 +87,19 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                         title="Simulate Event"
                     >
                         <Zap size={16} />
+                    </button>
+
+                    <button
+                        onClick={handleSuggestHighlights}
+                        disabled={isAiCurating}
+                        className={cn(
+                            "flex items-center gap-2 px-4 py-2 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 rounded-xl transition-all active:scale-95 text-[10px] font-black uppercase hover:bg-emerald-600 hover:text-white",
+                            isAiCurating && "animate-pulse cursor-wait"
+                        )}
+                        title="Identify top fan moments"
+                    >
+                        <Sparkles size={14} className={cn(isAiCurating && "animate-spin")} />
+                        <span className="hidden sm:inline">Suggest Highlights</span>
                     </button>
 
                     <button
@@ -136,12 +165,53 @@ export const SocialManager = ({ productionId }: SocialManagerProps) => {
                     </button>
                 )}
 
+                {/* AI Suggestions Panel */}
+                <AnimatePresence>
+                    {aiSuggestions.length > 0 && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="px-6 py-4 bg-emerald-500/5 border-b border-emerald-500/20 overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                                    <Sparkles size={10} />
+                                    AI Curated Picks
+                                </span>
+                                <button onClick={() => setAiSuggestions([])} className="text-[9px] font-black text-muted hover:text-emerald-400 uppercase tracking-widest transition-colors">
+                                    Dismiss
+                                </button>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {aiSuggestions.map((s, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => {
+                                            const found = messages.find(m => m.author === s.author && m.content === s.content);
+                                            if (found) handleUpdateStatus(found.id, 'ON_AIR');
+                                        }}
+                                        className="flex-1 min-w-[150px] p-3 bg-background/60 border border-emerald-500/20 rounded-2xl text-left hover:border-emerald-500 transition-all group/s"
+                                    >
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="text-[8px] font-black text-emerald-400 uppercase truncate">{s.author}</span>
+                                            <div className="flex-1 h-px bg-emerald-500/10" />
+                                        </div>
+                                        <p className="text-[9px] font-bold text-muted-foreground line-clamp-2 italic mb-1">"{s.content}"</p>
+                                        <span className="text-[7px] font-black text-emerald-500 uppercase opacity-0 group-hover/s:opacity-100 transition-all">Click to Send Live →</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
                 {/* Visual Scanner Bar */}
-                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent animate-pulse" />
+                <div className="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-indigo-500/30 to-transparent animate-pulse" />
             </div>
 
             {/* Unified Communication Feed */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar no-scrollbar">
                 <AnimatePresence mode="popLayout">
                     {messages
                         .filter((m: SocialMessage) => !filter || m.status === filter)
