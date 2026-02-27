@@ -202,7 +202,7 @@ export const PrompterView = ({ productionId }: Props) => {
                 <div
                     onClick={resetToTop}
                     title="Reiniciar Guion"
-                    className="w-0 h-0 border-y-[12px] border-y-transparent border-l-[16px] border-l-red-600 cursor-pointer pointer-events-auto hover:scale-125 transition-transform active:scale-95 "
+                    className="w-0 h-0  border-y-transparentborder-l-red-600 cursor-pointer pointer-events-auto hover:scale-125 transition-transform active:scale-95 "
                 />
             </div>
 

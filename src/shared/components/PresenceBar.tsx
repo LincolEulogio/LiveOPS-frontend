@@ -17,7 +17,7 @@ export const PresenceBar = () => {
                     <div
                         key={member.userId}
                         className={cn(
-                            "inline-block h-8 w-8 rounded-full ring-2 ring-background bg-card-bg flex items-center justify-center border border-card-border group relative cursor-help",
+                            "h-8 w-8 rounded-full ring-2 ring-background bg-card-bg flex items-center justify-center border border-card-border group relative cursor-help",
                             member.status !== 'IDLE' && "ring-indigo-500/50"
                         )}
                         title={`${member.userName} (${member.roleName})`}
