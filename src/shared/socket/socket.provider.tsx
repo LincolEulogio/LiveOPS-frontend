@@ -31,13 +31,18 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
-    const socketUrl = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3000';
+    const socketUrl = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:4000';
+
+    logger.info('Live Alert System: Initializing connection', { url: socketUrl });
 
     const socketInstance = io(socketUrl, {
       path: '/socket.io/',
-      autoConnect: false, // Don't connect automatically
-      reconnectionAttempts: 20,
-      reconnectionDelay: 1000,
+      autoConnect: false,
+      reconnectionAttempts: Infinity, // Keep trying forever
+      reconnectionDelay: 2000,
+      reconnectionDelayMax: 5000,
+      transports: ['websocket', 'polling'],
+      timeout: 45000, // 🚀 Aumentado a 45s para dar tiempo a Render a despertar
       query: {
         productionId: useAppStore.getState().activeProductionId || '',
         userId: user?.id || '',
@@ -67,7 +72,11 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       socketInstance.on('disconnect', (reason) => {
         logger.warn('Live Alert System: Disconnected', { reason });
         setIsConnected(false);
-        if (reason === 'io server disconnect' || reason === 'transport close' || reason === 'transport error') {
+        if (
+          reason === 'io server disconnect' ||
+          reason === 'transport close' ||
+          reason === 'transport error'
+        ) {
           setIsConnecting(true);
         }
       });
@@ -117,7 +126,9 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
             <Loader2 className="animate-spin text-indigo-500" size={20} />
             <div className="flex flex-col">
               <span className="text-sm font-bold text-white ">Sync Interrupted</span>
-              <span className="text-[10px] text-stone-500 font-medium uppercase ">Reestablishing gateway...</span>
+              <span className="text-[10px] text-stone-500 font-medium uppercase ">
+                Reestablishing gateway...
+              </span>
             </div>
           </div>
         </div>
@@ -128,7 +139,9 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
             <WifiOff className="text-red-500" size={20} />
             <div className="flex flex-col">
               <span className="text-sm font-bold text-red-500 ">Backend Offline</span>
-              <span className="text-[10px] text-red-400/60 font-medium uppercase ">Manual refresh required</span>
+              <span className="text-[10px] text-red-400/60 font-medium uppercase ">
+                Manual refresh required
+              </span>
             </div>
           </div>
         </div>
