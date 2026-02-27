@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, User, ChevronDown, Activity } from 'lucide-react';
 import { aiService } from '@/features/ai/api/ai.service';
 import { apiClient } from '@/shared/api/api.client';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 import { AiBriefingInterface } from './AiBriefingInterface';
 
 interface Message {
@@ -32,7 +33,6 @@ export const AiBriefing = ({ productionId }: { productionId: string }) => {
         setIsLoading(true);
 
         try {
-            // Gather real-time context
             const [social, telemetry] = await Promise.all([
                 apiClient.get<any[]>(`/productions/${productionId}/social/messages`).catch(() => []),
                 apiClient.get<any[]>(`/productions/${productionId}/analytics/telemetry?minutes=15`).catch(() => []),
@@ -47,38 +47,47 @@ export const AiBriefing = ({ productionId }: { productionId: string }) => {
                 ? `FPS: ${latestTelemetry.fps || '60'}, CPU: ${latestTelemetry.cpuUsage || '15'}%, Dropped: ${latestTelemetry.droppedFrames || 0}`
                 : "Telemetry node offline.";
 
-            const systemContext = `
-ERES LIVIA, IA DE DIRECCIÓN Y CONTROL DE LIVEOPS.
-TIENES CONOCIMIENTO TOTAL DE TODA LA APLICACIÓN.
+            const systemContext = `ERES LIVIA, IA DE DIRECCIÓN Y CONTROL DE LIVEOPS. TIENES CONOCIMIENTO TOTAL DE TODA LA APLICACIÓN.\n\n== SISTEMAS DISPONIBLES ==\n1. Operational Hub\n2. ScriptEditor\n3. Media Library\n4. Video Calls\n5. Multi-Cast\n6. Graphics Engine\n7. Automation Macros\n8. Hardware Manager\n9. Chat Social\n\n== ESTADO TÉCNICO ==\n- Social: ${socialText}\n- Telemetría: ${telemetryText}`;
 
-== SISTEMAS DISPONIBLES EN LIVEOPS (TU CONOCIMIENTO) ==
-1. Operational Hub: Panel central de control técnico y telemetría de transmisión.
-2. Escaleta / Rundown (ScriptEditor): Editor de guiones colaborativo en tiempo real.
-3. Media Library: Gestor de recursos y Assets multimedia locales/nube.
-4. Video Calls (Guest Room): Salas de videollamada WebRTC integradas de baja latencia. Interactor directo con invitados.
-5. Multi-Cast Distribución: Control de retransmisión a YouTube, FB, Twitch, etc.
-6. Graphics Engine: Controlador de Overlays, cintillos y gráficos pre-construidos en OBS/vMix.
-7. Automation Macros: Combinación de secuencias ejecutables con 1-clic.
-8. Hardware Manager: Mapeo de superficies físicas de control (MIDI / Elgato StreamDeck, AKAI).
-9. Chat Social: Agregadores de chat de múltiples plataformas.
-
-== ESTADO TÉCNICO EN VIVO ==
-- Redes Sociales:
-${socialText}
-
-- Telemetría Engine:
-${telemetryText}
-
-== REGLAS ==
-Eres experta funcional en todos los flujos de la app, responde naturalmente ofreciendo ayuda sobre cómo usar o qué datos observar en cualquiera de los módulos. No digas "no tengo conocimiento" o "solo verifico redes", tú eres la administradora digital completa.
-`;
             const currentHistory = [...messages, { role: 'user' as const, content: userMsg }];
-            const res = await aiService.chat(currentHistory, systemContext);
+            
+            const token = useAuthStore.getState().token;
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1'}/ai/chat-stream`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ history: currentHistory, context: systemContext }),
+            });
 
-            setMessages(prev => [...prev, { role: 'assistant', content: res.reply }]);
+            if (!response.ok) throw new Error('Failed to start stream');
+            if (!response.body) throw new Error('No body in response');
+
+            setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+            
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let accumulatedContent = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                
+                const chunk = decoder.decode(value);
+                accumulatedContent += chunk;
+                
+                setMessages((prev: Message[]) => {
+                    const last = prev[prev.length - 1];
+                    if (last.role === 'assistant') {
+                        return [...prev.slice(0, -1), { ...last, content: accumulatedContent }];
+                    }
+                    return prev;
+                });
+            }
         } catch (error) {
-            console.error('LIVIA chat failed:', error);
-            setMessages(prev => [...prev, { role: 'assistant', content: "ALERT: Technical synchronization node unreachable. Check engine status." }]);
+            console.error('LIVIA streaming failed:', error);
+            setMessages(prev => [...prev, { role: 'assistant', content: "ALERT: Technical synchronization node unreachable." }]);
         } finally {
             setIsLoading(false);
         }
@@ -86,6 +95,8 @@ Eres experta funcional en todos los flujos de la app, responde naturalmente ofre
 
     return (
         <div className="bg-card-bg/60 backdrop-blur-xl border border-card-border rounded-4xl p-6 flex flex-col h-[600px] relative overflow-hidden group">
+            {/* Real-time Indicator Top Border */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0 pointer-events-none" />
             {/* Background Glow */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-[60px] -mr-16 -mt-16 group-hover:bg-indigo-500/10 transition-colors pointer-events-none" />
 

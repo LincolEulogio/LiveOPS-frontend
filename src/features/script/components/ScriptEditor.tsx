@@ -54,21 +54,49 @@ export const ScriptEditor = ({ productionId }: Props) => {
 
         const userMsg = aiInput.trim();
         setAiInput('');
-        const newMsgs = [...aiMessages, { role: 'user', content: userMsg }];
-        setAiMessages(newMsgs);
+        setAiMessages(prev => [...prev, { role: 'user', content: userMsg }]);
         setIsAiLoading(true);
 
         try {
             const { from, to } = editor.state.selection;
             const text = editor.state.doc.textBetween(from, to, ' ') || editor.getText();
 
-            const systemContext = `ESTAS ASISTIENDO AL GUIONISTA EN VIVO. 
-            Contenido actual del guion: "${text}"
-            
-            Ayúdalo a redactar, sugerir ideas o corregir errores. Responde el chat natural y cuando ofrezcas reescrituras hazlas listas para copiar.`;
+            const systemContext = `ESTAS ASISTIENDO AL GUIONISTA EN VIVO. Contenido actual del guion: "${text}"\n\nAyúdalo a redactar, sugerir ideas o corregir errores. Responde el chat natural y cuando ofrezcas reescrituras hazlas listas para copiar.`;
 
-            const res = await aiService.chat(newMsgs, systemContext);
-            setAiMessages(prev => [...prev, { role: 'assistant', content: res.reply }]);
+            const token = useAuthStore.getState().token;
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1'}/ai/chat-stream`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ history: [...aiMessages, { role: 'user', content: userMsg }], context: systemContext }),
+            });
+
+            if (!response.ok) throw new Error('Failed to start stream');
+            if (!response.body) throw new Error('No body in response');
+
+            setAiMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+            
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let accumulatedContent = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                
+                const chunk = decoder.decode(value);
+                accumulatedContent += chunk;
+                
+                setAiMessages(prev => {
+                    const last = prev[prev.length - 1];
+                    if (last?.role === 'assistant') {
+                        return [...prev.slice(0, -1), { ...last, content: accumulatedContent }];
+                    }
+                    return prev;
+                });
+            }
         } catch (error) {
             console.error('AI Chat failed:', error);
             setAiMessages(prev => [...prev, { role: 'assistant', content: "ALERT: Failed to reach creative intelligence nodes." }]);
@@ -150,7 +178,7 @@ export const ScriptEditor = ({ productionId }: Props) => {
     return (
         <div className="flex flex-col h-full bg-card-bg/80 backdrop-blur-2xl rounded-[2.5rem] border border-card-border overflow-hidden  relative">
             {/* Real-time Indicator Top Border */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0 pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0 pointer-events-none" />
 
             {/* Premium Toolbar */}
             <ScriptEditorToolbar
