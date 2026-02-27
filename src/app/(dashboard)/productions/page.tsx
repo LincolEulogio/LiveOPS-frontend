@@ -4,12 +4,26 @@ import { useState } from 'react';
 import { useProductions } from '@/features/productions/hooks/useProductions';
 import { Guard } from '@/shared/components/Guard';
 import Link from 'next/link';
-import { Plus, Server, Video, AlertCircle, Trash2, Search, Edit2, Activity, Filter, ArrowRight, Zap, Globe } from 'lucide-react';
+import {
+  Plus,
+  Server,
+  Video,
+  AlertCircle,
+  Trash2,
+  Search,
+  Edit2,
+  Activity,
+  Filter,
+  ArrowRight,
+  Zap,
+  Globe,
+} from 'lucide-react';
 import { EngineType, ProductionStatus } from '@/features/productions/types/production.types';
 import { useDeleteProduction } from '@/features/productions/hooks/useProductions';
 import { showConfirm, showAlert } from '@/shared/utils/swal';
 import { cn } from '@/shared/utils/cn';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePermissions } from '@/shared/hooks/usePermissions';
 
 export default function ProductionsListPage() {
   const [page, setPage] = useState(1);
@@ -20,9 +34,10 @@ export default function ProductionsListPage() {
     page,
     limit: 12, // Increased for a nice grid on larger screens
     status: statusFilter || undefined,
-    search: searchTerm || undefined
+    search: searchTerm || undefined,
   });
 
+  const canCreate = usePermissions(['production:create']);
   const { mutateAsync: deleteProduction, isPending: isDeleting } = useDeleteProduction();
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
@@ -65,7 +80,6 @@ export default function ProductionsListPage() {
 
   return (
     <div className="w-full space-y-10 p-4">
-
       {/* Tactical Page Header */}
       <div className="flex flex-col min-[1100px]:flex-row justify-between items-start min-[1100px]:items-center gap-8 bg-card-bg/60 backdrop-blur-3xl border border-card-border p-8 md:p-10 rounded-[3rem] relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
@@ -73,11 +87,13 @@ export default function ProductionsListPage() {
         </div>
 
         <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-          <div className="w-16 h-16 bg-indigo-600 rounded-[1.5rem] flex items-center justify-center border border-indigo-400/20 group-hover:rotate-6 transition-transform">
+          <div className="w-16 h-16 bg-indigo-600 rounded-3xl flex items-center justify-center border border-indigo-400/20 group-hover:rotate-6 transition-transform">
             <Zap size={32} className="text-white" fill="currentColor" />
           </div>
           <div className="text-center md:text-left">
-            <h1 className="text-3xl lg:text-4xl font-black uppercase er leading-none mb-3 text-slate-900 dark:text-white">Productions Hub</h1>
+            <h1 className="text-3xl lg:text-4xl font-black uppercase er leading-none mb-3 text-slate-900 dark:text-white">
+              Productions Hub
+            </h1>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
               <span className="text-[10px] font-black text-indigo-400 uppercase  bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 flex items-center gap-2">
                 <Activity size={10} className="animate-pulse" /> Global Control Surface
@@ -103,9 +119,12 @@ export default function ProductionsListPage() {
       </div>
 
       {/* Advanced Filter Matrix */}
-      <div className="flex flex-col xl:flex-row gap-6 bg-white/[0.02] border border-white/5 p-6 rounded-[2.5rem]">
+      <div className="flex flex-col xl:flex-row gap-6 bg-white/2 border border-white/5 p-6 rounded-[2.5rem]">
         <div className="relative flex-1 group">
-          <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-indigo-400 transition-colors" size={20} />
+          <Search
+            className="absolute left-6 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-indigo-400 transition-colors"
+            size={20}
+          />
           <input
             type="text"
             placeholder="Search production matrix by name or description..."
@@ -131,7 +150,7 @@ export default function ProductionsListPage() {
                 setStatusFilter(status);
               }}
               className={cn(
-                "px-6 py-2.5 text-[10px] font-black uppercase  rounded-xl transition-all whitespace-nowrap border relative overflow-hidden group",
+                'px-6 py-2.5 text-[10px] font-black uppercase  rounded-xl transition-all whitespace-nowrap border relative overflow-hidden group',
                 statusFilter === status
                   ? 'bg-indigo-600 border-indigo-500 text-white'
                   : 'bg-transparent border-transparent text-muted hover:text-foreground hover:bg-white/5'
@@ -150,8 +169,11 @@ export default function ProductionsListPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className="h-[280px] bg-card-bg/40 border border-card-border rounded-[2.5rem] animate-pulse relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
+            <div
+              key={i}
+              className="h-[280px] bg-card-bg/40 border border-card-border rounded-[2.5rem] animate-pulse relative overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
             </div>
           ))}
         </div>
@@ -162,14 +184,16 @@ export default function ProductionsListPage() {
           </div>
           <div className="text-center">
             <h3 className="text-xl font-black uppercase  mb-2">Downlink Failed</h3>
-            <p className="text-xs font-bold opacity-60">Failed to establish secure connection with production registry.</p>
+            <p className="text-xs font-bold opacity-60">
+              Failed to establish secure connection with production registry.
+            </p>
           </div>
         </div>
       ) : (
         <div className="space-y-12">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
             {(() => {
-              const productions = Array.isArray(data) ? data : (data?.data || []);
+              const productions = Array.isArray(data) ? data : data?.data || [];
               if (productions.length === 0) {
                 return (
                   <div className="col-span-full py-40 flex flex-col items-center text-center gap-10 bg-card-bg/20 backdrop-blur-xl border border-dashed border-card-border rounded-[4rem]">
@@ -178,14 +202,18 @@ export default function ProductionsListPage() {
                       <Plus size={48} className="text-indigo-400 relative z-10" strokeWidth={1} />
                     </div>
                     <div className="space-y-4 max-w-md">
-                      <h3 className="text-2xl font-black text-foreground uppercase er">No Productions Initialized</h3>
-                      <p className="text-[11px] font-bold text-muted uppercase  leading-loose px-6 opacity-60">
+                      <h3 className="text-2xl font-black text-foreground uppercase er text-center">
+                        {canCreate ? 'No Productions Initialized' : 'Access Restricted'}
+                      </h3>
+                      <p className="text-[11px] font-bold text-muted uppercase leading-loose px-6 opacity-60 text-center">
                         {statusFilter
-                          ? `The specified sector filter "${statusFilter.toLowerCase()}" returned no active nodes in current registry.`
-                          : "Your multi-tenant workspace is currently unpopulated. Secure a new production node to begin operations."}
+                          ? `The specified sector filter "${statusFilter.toLowerCase()}" returned no active nodes.`
+                          : canCreate
+                            ? 'Your multi-tenant workspace is currently unpopulated. Secure a new production node to begin operations.'
+                            : "You don't have active invitations to any production. Contact your administrator to request access."}
                       </p>
                     </div>
-                    {!statusFilter && (
+                    {!statusFilter && canCreate && (
                       <Link
                         href="/productions/new"
                         className="flex items-center gap-4 bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-5 rounded-2xl text-[10px] font-black uppercase  transition-all hover:scale-[1.05] active:scale-95"
@@ -201,14 +229,16 @@ export default function ProductionsListPage() {
                 <Link
                   key={production.id}
                   href={`/productions/${production.id}`}
-                  className="group relative h-[300px] flex flex-col bg-card-bg/60 backdrop-blur-2xl border border-card-border/60 rounded-[2.5rem] p-8 hover:bg-white/[0.04] hover:border-indigo-500/30 hover:-translate-y-2 transition-all duration-500 overflow-hidden"
+                  className="group relative h-[300px] flex flex-col bg-card-bg/60 backdrop-blur-2xl border border-card-border/60 rounded-[2.5rem] p-8 hover:bg-white/4 hover:border-indigo-500/30 hover:-translate-y-2 transition-all duration-500 overflow-hidden"
                 >
                   {/* Dynamic Corner Badge */}
                   <div className="absolute top-0 right-0 p-4">
-                    <span className={cn(
-                      "px-3 py-1.5 text-[9px] font-black rounded-xl border uppercase  transition-all",
-                      getStatusStyle(production.status)
-                    )}>
+                    <span
+                      className={cn(
+                        'px-3 py-1.5 text-[9px] font-black rounded-xl border uppercase  transition-all',
+                        getStatusStyle(production.status)
+                      )}
+                    >
                       {production.status}
                     </span>
                   </div>
@@ -222,17 +252,25 @@ export default function ProductionsListPage() {
                         {production.name}
                       </h3>
                       <p className="text-[11px] font-bold text-muted uppercase  line-clamp-2 leading-relaxed opacity-60">
-                        {production.description || 'System node initialized with default operational parameters.'}
+                        {production.description ||
+                          'System node initialized with default operational parameters.'}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between pt-6 border-t border-card-border/40 mt-auto">
                     <div className="flex -space-x-3">
-                      {[1, 2, 3].map(i => (
-                        <div key={i} className="w-8 h-8 rounded-full bg-background border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-muted uppercase er">U</div>
+                      {[1, 2, 3].map((i) => (
+                        <div
+                          key={i}
+                          className="w-8 h-8 rounded-full bg-background border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-muted uppercase er"
+                        >
+                          U
+                        </div>
                       ))}
-                      <div className="w-8 h-8 rounded-full bg-indigo-600 border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-white uppercase er">+5</div>
+                      <div className="w-8 h-8 rounded-full bg-indigo-600 border-2 border-card-bg flex items-center justify-center text-[8px] font-black text-white uppercase er">
+                        +5
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -247,13 +285,16 @@ export default function ProductionsListPage() {
                         </button>
                       </Guard>
                       <div className="p-3 bg-white/5 text-muted group-hover:text-indigo-400 transition-colors">
-                        <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight
+                          size={18}
+                          className="group-hover:translate-x-1 transition-transform"
+                        />
                       </div>
                     </div>
                   </div>
 
                   {/* Bottom Scanline Glow */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
               ));
             })()}
@@ -261,7 +302,7 @@ export default function ProductionsListPage() {
 
           {/* Tactical Pagination Hub */}
           {data && !Array.isArray(data) && data.meta?.lastPage > 1 && (
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-6 bg-white/[0.02] border border-white/5 p-6 rounded-[2.5rem]">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-6 bg-white/2 border border-white/5 p-6 rounded-[2.5rem]">
               <button
                 disabled={page === 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -272,7 +313,8 @@ export default function ProductionsListPage() {
               <div className="flex items-center gap-4">
                 <div className="h-px w-8 bg-card-border/50" />
                 <span className="text-[10px] font-black text-muted uppercase ">
-                  Registry Frame <span className="text-foreground">{data.meta.page}</span> / <span className="text-foreground">{data.meta.lastPage}</span>
+                  Registry Frame <span className="text-foreground">{data.meta.page}</span> /{' '}
+                  <span className="text-foreground">{data.meta.lastPage}</span>
                 </span>
                 <div className="h-px w-8 bg-card-border/50" />
               </div>
