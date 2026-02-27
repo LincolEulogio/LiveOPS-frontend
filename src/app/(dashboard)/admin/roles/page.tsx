@@ -228,7 +228,7 @@ export default function AdminRolesPage() {
                     >
                       <Edit2 size={14} />
                     </button>
-                    {!['ADMIN', 'SUPERADMIN', 'DIRECTOR'].includes(role.name) && (
+                    {role.name !== 'SUPERADMIN' && (
                       <button
                         onClick={() => handleDeleteRole(role.id, role.name)}
                         className="p-3 bg-white/5 hover:bg-red-500/20 border border-white/5 rounded-2xl text-white/40 hover:text-red-400 transition-all active:scale-95"
