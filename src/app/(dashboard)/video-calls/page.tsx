@@ -19,6 +19,8 @@ import {
   AlertCircle,
   Search,
 } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useAppStore } from '@/shared/store/app.store';
 import { toast } from 'sonner';
 import { showConfirm, showAlert } from '@/shared/utils/swal';
 import { apiClient } from '@/shared/api/api.client';
@@ -40,22 +42,24 @@ interface VideoCallItem {
 function StatusBadge({ status }: { status: string }) {
   const styles =
     {
-      scheduled: 'bg-amber-500/10 border-amber-500/25 text-amber-300',
-      active: 'bg-emerald-500/10 border-emerald-500/25 text-emerald-300',
-      ended: 'bg-white/5 border-white/10 text-white/30',
-    }[status] || 'bg-white/5 border-white/10 text-white/30';
+      scheduled: 'bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400',
+      active: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400',
+      ended: 'bg-muted/10 border-muted/20 text-muted-foreground',
+    }[status] || 'bg-muted/10 border-muted/20 text-muted-foreground';
 
   const dots =
-    { scheduled: 'bg-amber-500', active: 'bg-emerald-500 animate-pulse', ended: 'bg-white/20' }[
-      status
-    ] || 'bg-white/20';
+    {
+      scheduled: 'bg-amber-500',
+      active: 'bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]',
+      ended: 'bg-muted-foreground/30',
+    }[status] || 'bg-muted-foreground/30';
 
   return (
     <span
-      className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${styles}`}
+      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${styles}`}
     >
-      <span className={`w-1 h-1 rounded-full ${dots}`} />
-      {status}
+      <span className={`w-1.5 h-1.5 rounded-full ${dots}`} />
+      {status === 'scheduled' ? 'Programada' : status === 'active' ? 'En Vivo' : 'Finalizada'}
     </span>
   );
 }
@@ -66,16 +70,16 @@ function CopyLink({ roomId }: { roomId: string }) {
   const copy = () => {
     navigator.clipboard.writeText(link);
     setCopied(true);
-    toast.success('Link copiado');
+    toast.success('Enlace de invitación copiado');
     setTimeout(() => setCopied(false), 2000);
   };
   return (
     <button
       onClick={copy}
-      title="Copiar link de invitación"
-      className="p-1.5 rounded-lg bg-white/4 hover:bg-violet-500/15 border border-white/8 hover:border-violet-500/30 text-white/30 hover:text-violet-300 transition-colors"
+      title="Copiar enlace de invitación"
+      className="p-2 rounded-xl bg-indigo-500/5 hover:bg-indigo-500/15 border border-indigo-500/10 hover:border-indigo-500/30 text-indigo-500/60 hover:text-indigo-600 dark:text-indigo-400/50 dark:hover:text-indigo-300 transition-all duration-300 active:scale-90"
     >
-      {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+      {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
     </button>
   );
 }
@@ -111,89 +115,105 @@ function CallModal({
       };
       if (call) {
         await apiClient.patch(`/video-call/rooms/${call.id}`, body);
-        toast.success('Videollamada actualizada');
+        toast.success('Videollamada actualizada correctamente');
       } else {
         await apiClient.post('/video-call/rooms', body);
-        toast.success('Videollamada creada');
+        toast.success('Videollamada creada correctamente');
       }
       onSave();
       onClose();
     } catch (e: any) {
-      toast.error(e.message || 'Error al guardar');
+      toast.error(e.message || 'Error al procesar la solicitud');
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-[#0d0e1c] border border-violet-500/15 rounded-3xl p-6 shadow-2xl">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-sm font-black text-white uppercase tracking-widest">
-            {call ? 'Editar Videollamada' : 'Nueva Videollamada'}
-          </h2>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="w-full max-w-md bg-card-bg/95 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden"
+      >
+        {/* Modal Decorative Background */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[80px] -z-10" />
+
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
+              <Plus size={18} className="text-indigo-500" />
+            </div>
+            <h2 className="text-[12px] font-black text-foreground uppercase tracking-[0.2em]">
+              {call ? 'Editar Sesión' : 'Nueva Videollamada'}
+            </h2>
+          </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg bg-white/5 border border-white/8 text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+            className="p-2 rounded-xl bg-muted/10 border border-card-border text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-all duration-300"
           >
-            <X size={14} />
+            <X size={16} />
           </button>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="block text-[9px] font-black text-white/40 uppercase tracking-wider mb-1.5">
-              Título *
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest px-1">
+              Título de la Sesión
             </label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Reunión semanal de equipo"
-              className="w-full bg-white/5 border border-violet-500/15 rounded-xl px-4 py-2.5 text-[13px] text-white/85 placeholder:text-white/20 focus:outline-none focus:border-violet-500/40 transition-colors"
+              placeholder="Ej: Sincronización de Producción"
+              className="w-full bg-background/50 border border-card-border rounded-2xl px-5 py-3.5 text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none"
             />
           </div>
-          <div>
-            <label className="block text-[9px] font-black text-white/40 uppercase tracking-wider mb-1.5">
-              Descripción
+          <div className="space-y-2">
+            <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest px-1">
+              Descripción (Opcional)
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Agenda, temas a tratar..."
+              placeholder="Detalles sobre los temas a tratar..."
               rows={3}
-              className="w-full bg-white/5 border border-violet-500/15 rounded-xl px-4 py-2.5 text-[13px] text-white/85 placeholder:text-white/20 focus:outline-none focus:border-violet-500/40 transition-colors resize-none"
+              className="w-full bg-background/50 border border-card-border rounded-2xl px-5 py-3.5 text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none resize-none"
             />
           </div>
-          <div>
-            <label className="block text-[9px] font-black text-white/40 uppercase tracking-wider mb-1.5">
-              Fecha y hora programada
+          <div className="space-y-2">
+            <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest px-1">
+              Programar para (GMT-5)
             </label>
             <input
               type="datetime-local"
               value={scheduledAt}
               onChange={(e) => setScheduledAt(e.target.value)}
-              className="w-full bg-white/5 border border-violet-500/15 rounded-xl px-4 py-2.5 text-[13px] text-white/85 focus:outline-none focus:border-violet-500/40 transition-colors scheme-dark"
+              className="w-full bg-background/50 border border-card-border rounded-2xl px-5 py-3.5 text-sm text-foreground focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none"
             />
           </div>
         </div>
 
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-4 mt-10">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 bg-white/5 hover:bg-white/8 border border-white/10 rounded-xl text-white/60 text-[10px] font-black uppercase tracking-widest transition-colors"
+            className="flex-1 py-4 bg-muted/5 hover:bg-muted/10 border border-card-border rounded-2xl text-muted-foreground text-[10px] font-black uppercase tracking-widest transition-all duration-300 active:scale-95"
           >
             Cancelar
           </button>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex-1 py-2.5 bg-linear-to-r from-violet-700 to-violet-500 rounded-xl text-white text-[10px] font-black uppercase tracking-widest disabled:opacity-50 transition-opacity flex items-center justify-center gap-2"
+            className="flex-1 py-4 bg-linear-to-br from-indigo-700 to-indigo-500 rounded-2xl text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-indigo-500/25 disabled:opacity-50 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 hover:translate-y-[-2px]"
           >
-            <Save size={12} />
-            {saving ? 'Guardando...' : 'Guardar'}
+            {saving ? (
+              <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Save size={14} />
+            )}
+            {saving ? 'Procesando...' : 'Confirmar'}
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -216,95 +236,133 @@ function CallCard({
   const isPast = scheduled && scheduled < new Date();
 
   return (
-    <div
-      className={`relative bg-[#0d0e1c] border rounded-2xl p-5 flex flex-col gap-4 transition-all hover:border-violet-500/25 hover:shadow-lg hover:shadow-violet-500/5 ${
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`group relative bg-card-bg/60 backdrop-blur-xl border rounded-[2rem] p-6 flex flex-col gap-6 transition-all duration-500 hover:shadow-2xl hover:translate-y-[-4px] active:scale-[0.98] ${
         call.status === 'active'
-          ? 'border-emerald-500/25 shadow-emerald-500/5 shadow-lg'
-          : 'border-violet-500/10'
+          ? 'border-emerald-500/30 shadow-lg shadow-emerald-500/5'
+          : 'border-card-border hover:border-indigo-500/30 shadow-sm'
       }`}
     >
-      {/* Active indicator */}
-      {call.status === 'active' && (
-        <div className="absolute top-4 right-4">
-          <span className="flex items-center gap-1 text-[9px] font-black text-emerald-400 uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            LIVE
-          </span>
-        </div>
-      )}
+      {/* Dynamic Background Sparkle */}
+      <div className="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-indigo-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-      <div className="flex items-start gap-3">
-        <div
-          className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-            call.status === 'active'
-              ? 'bg-emerald-500/15 border border-emerald-500/25'
-              : 'bg-violet-500/10 border border-violet-500/15'
-          }`}
-        >
-          <Video
-            size={16}
-            className={call.status === 'active' ? 'text-emerald-400' : 'text-violet-400'}
-          />
+      {/* Header Info */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div
+            className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 duration-500 ${
+              call.status === 'active'
+                ? 'bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]'
+                : 'bg-indigo-500/10 border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.05)]'
+            }`}
+          >
+            <Video
+              size={24}
+              className={
+                call.status === 'active'
+                  ? 'text-emerald-500'
+                  : 'text-indigo-500 transition-all duration-300'
+              }
+            />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-[15px] font-black text-foreground truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+              {call.title}
+            </h3>
+            <div className="flex items-center gap-1.5 mt-1">
+              <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest border-r border-card-border pr-2">
+                Operador
+              </span>
+              <p className="text-[10px] text-muted-foreground/80 font-bold truncate">
+                {call.host.name || call.host.email}
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-black text-white truncate">{call.title}</h3>
-          <p className="text-[10px] text-white/40 mt-0.5">{call.host.name || call.host.email}</p>
-        </div>
+
+        {call.status === 'active' ? (
+          <div className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+            <span className="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 uppercase tracking-tighter">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Live Now
+            </span>
+          </div>
+        ) : (
+          <StatusBadge status={call.status} />
+        )}
       </div>
 
-      {call.description && (
-        <p className="text-[12px] text-white/50 leading-relaxed border-t border-white/5 pt-3">
+      {/* Description Panel */}
+      {call.description ? (
+        <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-3 bg-muted/5 p-4 rounded-2xl border border-card-border group-hover:border-indigo-500/10 transition-colors">
           {call.description}
         </p>
+      ) : (
+        <div className="h-0.5 bg-card-border/30 w-full rounded-full" />
       )}
 
+      {/* Time and Metadata */}
       {scheduled && (
-        <div
-          className={`flex items-center gap-2 text-[11px] font-bold ${isPast ? 'text-red-400/70' : 'text-amber-300/70'}`}
-        >
-          <Calendar size={11} />
-          {scheduled.toLocaleDateString()} · <Clock size={11} />
-          {scheduled.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          {isPast && <span className="text-red-400/50 ml-1">(vencida)</span>}
+        <div className="flex flex-wrap items-center gap-3">
+          <div
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-[11px] font-black tracking-tight ${
+              isPast
+                ? 'bg-red-500/5 border-red-500/10 text-red-500/70'
+                : 'bg-indigo-500/5 border-indigo-500/10 text-indigo-500/80 dark:text-indigo-300/80'
+            }`}
+          >
+            <Calendar size={12} />
+            {scheduled.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })}
+            <span className="text-muted-foreground/30 font-thin">|</span>
+            <Clock size={12} />
+            {scheduled.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {isPast && (
+              <span className="text-[8px] uppercase ml-1 opacity-50 font-black">Finalizado</span>
+            )}
+          </div>
         </div>
       )}
 
-      <div className="flex items-center gap-2 pt-1 border-t border-white/5">
-        <StatusBadge status={call.status} />
-        <div className="ml-auto flex items-center gap-1.5">
+      {/* Actions Toolbar */}
+      <div className="flex items-center justify-between mt-auto pt-4 border-t border-card-border">
+        <div className="flex items-center gap-2">
           <CopyLink roomId={call.roomId} />
           {isOwn && (
-            <>
+            <div className="flex items-center gap-2 bg-muted/5 p-1 rounded-2xl border border-card-border">
               <button
                 onClick={onEdit}
-                title="Editar"
-                className="p-1.5 rounded-lg bg-white/4 hover:bg-violet-500/15 border border-white/8 hover:border-violet-500/30 text-white/30 hover:text-violet-300 transition-colors"
+                title="Configuración"
+                className="p-2 rounded-xl text-muted-foreground hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-white dark:hover:bg-indigo-500/10 transition-all duration-300 active:scale-90"
               >
-                <Edit2 size={13} />
+                <Edit2 size={14} />
               </button>
               <button
                 onClick={onDelete}
                 title="Eliminar"
-                className="p-1.5 rounded-lg bg-white/4 hover:bg-red-500/15 border border-white/8 hover:border-red-500/30 text-white/30 hover:text-red-400 transition-colors"
+                className="p-2 rounded-xl text-muted-foreground hover:text-red-500 hover:bg-white dark:hover:bg-red-500/10 transition-all duration-300 active:scale-90"
               >
-                <Trash2 size={13} />
+                <Trash2 size={14} />
               </button>
-            </>
+            </div>
           )}
-          <button
-            onClick={onJoin}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors ${
-              call.status === 'active'
-                ? 'bg-emerald-600/90 hover:bg-emerald-500 border border-emerald-500/50 text-white'
-                : 'bg-violet-600/80 hover:bg-violet-500 border border-violet-500/40 text-white'
-            }`}
-          >
-            <Play size={11} />
-            {call.status === 'active' ? 'Unirse' : 'Iniciar'}
-          </button>
         </div>
+
+        <button
+          onClick={onJoin}
+          className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300 shadow-lg active:scale-95 ${
+            call.status === 'active'
+              ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-500/25'
+              : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/25 hover:translate-y-[-2px]'
+          }`}
+        >
+          <Play size={14} className={call.status === 'active' ? 'animate-pulse' : ''} />
+          {call.status === 'active' ? 'Conectar' : 'Iniciar Nodo'}
+        </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -396,150 +454,212 @@ export default function VideoCallsPage() {
 
   return (
     <Guard requiredPermissions={['streaming:manage']}>
-      <div className="min-h-screen bg-[#07080f] text-white">
-        {modal.open && (
-          <CallModal
-            call={modal.call}
-            onClose={() => setModal({ open: false })}
-            onSave={loadCalls}
-          />
-        )}
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
+        <AnimatePresence>
+          {modal.open && (
+            <CallModal
+              call={modal.call}
+              onClose={() => setModal({ open: false })}
+              onSave={loadCalls}
+            />
+          )}
+        </AnimatePresence>
 
-        {/* Header */}
-        <div className="border-b border-violet-500/10 bg-[#07080f]/80 backdrop-blur-xl sticky top-0 z-10">
-          <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-violet-600/15 border border-violet-500/25 flex items-center justify-center">
-                <Video size={16} className="text-violet-400" />
+        {/* Tactical Page Header */}
+        <div className="relative overflow-hidden pt-10 pb-16">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-32 bg-indigo-600/5 blur-[100px] pointer-events-none" />
+
+          <div className="max-w-7xl mx-auto px-6 sm:px-10 flex flex-col md:flex-row md:items-end justify-between gap-8 relative z-10">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                  <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
+                    Operational Module
+                  </span>
+                </div>
               </div>
-              <div>
-                <h1 className="text-[11px] font-black text-white uppercase tracking-widest">
-                  Video Calls
-                </h1>
-                <p className="text-[9px] text-violet-400/50 uppercase tracking-wider">
-                  {active.length} activa{active.length !== 1 ? 's' : ''} · {scheduled.length}{' '}
-                  programada{scheduled.length !== 1 ? 's' : ''}
-                </p>
-              </div>
+
+              <h1 className="text-4xl sm:text-5xl font-black text-foreground uppercase tracking-tight leading-none mb-3 italic">
+                Video <span className="text-indigo-600">Protocol</span>
+              </h1>
+              <p className="text-xs sm:text-sm text-muted-foreground font-medium max-w-lg">
+                Gestiona y coordina sesiones de comunicación en tiempo real para tu red de
+                producción. Actualmente hay{' '}
+                <span className="text-indigo-600 dark:text-indigo-400 font-black">
+                  {active.length}
+                </span>{' '}
+                activas y{' '}
+                <span className="text-indigo-600 dark:text-indigo-400 font-black">
+                  {scheduled.length}
+                </span>{' '}
+                programadas.
+              </p>
             </div>
+
             <button
               onClick={() => setModal({ open: true, call: null })}
-              className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-violet-700 to-violet-500 rounded-xl text-white text-[10px] font-black uppercase tracking-wider shadow-lg shadow-violet-500/20 hover:shadow-violet-500/35 transition-shadow"
+              className="group relative flex items-center gap-3 px-8 py-4 bg-linear-to-br from-indigo-700 to-indigo-500 rounded-[1.5rem] text-white text-[11px] font-black uppercase tracking-[0.15em] shadow-xl shadow-indigo-600/25 hover:shadow-indigo-600/40 transition-all duration-300 active:scale-95 hover:translate-y-[-2px]"
             >
-              <Plus size={13} />
+              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[1.5rem]" />
+              <Plus size={16} className="group-hover:rotate-90 transition-transform duration-500" />
               Nueva Videollamada
             </button>
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 pb-20">
+          {/* Dashboard Stats Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {[
               {
-                label: 'En Vivo',
+                label: 'Señales Activas',
                 value: active.length,
                 color: 'emerald',
-                icon: '🟢',
+                desc: 'Llamadas en curso actualmente',
+                icon: <Video size={20} />,
                 filter: 'active',
               },
               {
-                label: 'Programadas',
+                label: 'Agenda de Hoy',
                 value: scheduled.length,
                 color: 'amber',
-                icon: '📅',
+                desc: 'Sesiones pendientes de inicio',
+                icon: <Calendar size={20} />,
                 filter: 'scheduled',
               },
-              { label: 'Total', value: calls.length, color: 'violet', icon: '📹', filter: 'all' },
+              {
+                label: 'Registro Histórico',
+                value: calls.length,
+                color: 'indigo',
+                desc: 'Total de sesiones creadas',
+                icon: <Users size={20} />,
+                filter: 'all',
+              },
             ].map((stat) => (
               <button
                 key={stat.label}
                 onClick={() => setFilter(stat.filter as any)}
-                className={`border rounded-2xl p-4 flex items-center gap-3 text-left transition-all hover:scale-[1.02] ${
+                className={`group relative border rounded-[2.2rem] p-7 flex flex-col text-left transition-all duration-500 hover:translate-y-[-4px] ${
                   filter === stat.filter
-                    ? 'bg-white/10 border-white/20'
-                    : 'bg-[#0d0e1c] border-violet-500/10 hover:border-violet-500/30'
+                    ? 'bg-card-bg border-indigo-500/40 shadow-xl shadow-indigo-500/5'
+                    : 'bg-card-bg/40 border-card-border hover:border-indigo-500/30'
                 }`}
               >
-                <span className="text-2xl">{stat.icon}</span>
-                <div>
-                  <p className="text-xl font-black text-white">{stat.value}</p>
-                  <p className="text-[9px] text-white/40 font-black uppercase tracking-wider">
+                <div
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-500 ${
+                    filter === stat.filter
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-muted/10 text-muted-foreground group-hover:bg-indigo-500/10 group-hover:text-indigo-500'
+                  }`}
+                >
+                  {stat.icon}
+                </div>
+                <div className="relative z-10">
+                  <p className="text-4xl font-black text-foreground mb-1 group-hover:scale-105 transition-transform origin-left duration-500">
+                    {stat.value}
+                  </p>
+                  <p className="text-[10px] text-foreground font-black uppercase tracking-[0.2em] mb-2 px-0.5">
                     {stat.label}
                   </p>
+                  <p className="text-[10px] text-muted-foreground font-medium tracking-tight">
+                    {stat.desc}
+                  </p>
                 </div>
+                {filter === stat.filter && (
+                  <div className="absolute top-6 right-6 w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)]" />
+                )}
               </button>
             ))}
           </div>
 
-          {/* Filters + Search */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <div className="relative flex-1 max-w-xs">
+          {/* Search + Control Bar */}
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 mb-10 bg-card-bg/30 backdrop-blur-md p-4 rounded-[2rem] border border-card-border/50">
+            <div className="relative w-full lg:max-w-md">
               <Search
-                size={13}
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30"
+                size={16}
+                className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground/60"
               />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Buscar videollamadas..."
-                className="w-full pl-9 pr-4 py-2.5 bg-white/5 border border-violet-500/15 rounded-xl text-[13px] text-white/85 placeholder:text-white/20 focus:outline-none focus:border-violet-500/40 transition-colors"
+                placeholder="Identificador o título de sesión..."
+                className="w-full pl-14 pr-6 py-4 bg-background border border-card-border rounded-2xl text-[13px] text-foreground placeholder:text-muted focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none"
               />
             </div>
-            <div className="flex gap-2">
+
+            <div className="flex p-1.5 bg-background border border-card-border rounded-2xl w-full lg:w-auto">
               {(['all', 'active', 'scheduled'] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors ${
+                  className={`flex-1 lg:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
                     filter === f
-                      ? 'bg-violet-600/90 border border-violet-500/50 text-white'
-                      : 'bg-white/5 border border-white/8 text-white/50 hover:text-white/70'
+                      ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/5'
                   }`}
                 >
-                  {f === 'all' ? 'Todas' : f === 'active' ? 'Activas' : 'Programadas'}
+                  {f === 'all' ? 'Ver Todos' : f === 'active' ? 'Solo Activos' : 'Programados'}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Call Cards */}
-          {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="w-10 h-10 rounded-full border-t-2 border-violet-500 animate-spin" />
-            </div>
-          ) : filtered.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-violet-500/10 border border-violet-500/15 flex items-center justify-center">
-                <Video size={24} className="text-violet-400/50" />
+          {/* Results Area */}
+          <div className="relative min-h-[400px]">
+            {loading ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+                <div className="w-16 h-16 border-4 border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin" />
+                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest animate-pulse">
+                  Sincronizando Datos
+                </span>
               </div>
-              <p className="text-white/30 text-sm text-center">
-                {search ? 'No se encontraron resultados' : 'No hay videollamadas aún'}
-                <br />
-                <span className="text-[11px]">Crea una nueva para empezar</span>
-              </p>
-              <button
-                onClick={() => setModal({ open: true })}
-                className="flex items-center gap-2 px-4 py-2 bg-violet-600/20 hover:bg-violet-600/30 border border-violet-500/25 rounded-xl text-violet-300 text-[10px] font-black uppercase tracking-wider transition-colors"
+            ) : filtered.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center py-24 gap-6 bg-card-bg/20 border border-dashed border-card-border rounded-[3rem]"
               >
-                <Plus size={12} />
-                Nueva Videollamada
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {filtered.map((call) => (
-                <CallCard
-                  key={call.id}
-                  call={call}
-                  isOwn={call.host.id === user?.id}
-                  onEdit={() => setModal({ open: true, call })}
-                  onDelete={() => handleDelete(call.id)}
-                  onJoin={() => handleJoin(call)}
-                />
-              ))}
-            </div>
-          )}
+                <div className="w-20 h-20 rounded-3xl bg-indigo-500/5 border border-indigo-500/10 flex items-center justify-center">
+                  <Search size={32} className="text-muted-foreground/20" />
+                </div>
+                <div className="text-center space-y-2">
+                  <p className="text-foreground font-black text-lg uppercase tracking-tight">
+                    {search ? 'Sin coincidencias operativas' : 'Nodos inactivos'}
+                  </p>
+                  <p className="text-xs text-muted-foreground/60 max-w-xs mx-auto">
+                    {search
+                      ? 'Asegúrate de haber escrito correctamente el nombre o ID de la sala.'
+                      : 'No se han detectado sesiones activas ni programadas en el sistema.'}
+                  </p>
+                </div>
+                {!search && (
+                  <button
+                    onClick={() => setModal({ open: true })}
+                    className="flex items-center gap-2 px-6 py-3 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 rounded-2xl text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300"
+                  >
+                    <Plus size={14} />
+                    Iniciar Primera Sesión
+                  </button>
+                )}
+              </motion.div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <AnimatePresence mode="popLayout">
+                  {filtered.map((call) => (
+                    <CallCard
+                      key={call.id}
+                      call={call}
+                      isOwn={call.host.id === user?.id}
+                      onEdit={() => setModal({ open: true, call })}
+                      onDelete={() => handleDelete(call.id)}
+                      onJoin={() => handleJoin(call)}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </Guard>
