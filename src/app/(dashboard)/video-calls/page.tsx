@@ -250,17 +250,17 @@ function CallCard({
       <div className="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-indigo-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
       {/* Header Info */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div className="flex items-center gap-4 min-w-0">
           <div
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 duration-500 ${
+            className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 duration-500 ${
               call.status === 'active'
                 ? 'bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]'
                 : 'bg-indigo-500/10 border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.05)]'
             }`}
           >
             <Video
-              size={24}
+              size={20}
               className={
                 call.status === 'active'
                   ? 'text-emerald-500'
@@ -268,40 +268,42 @@ function CallCard({
               }
             />
           </div>
-          <div className="min-w-0">
-            <h3 className="text-[15px] font-black text-foreground truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-sm sm:text-[15px] font-black text-foreground truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
               {call.title}
             </h3>
-            <div className="flex items-center gap-1.5 mt-1">
-              <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest border-r border-card-border pr-2">
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="text-[8px] sm:text-[9px] font-black text-muted-foreground uppercase tracking-widest border-r border-card-border pr-2">
                 Operador
               </span>
-              <p className="text-[10px] text-muted-foreground/80 font-bold truncate">
+              <p className="text-[9px] sm:text-[10px] text-muted-foreground/80 font-bold truncate">
                 {call.host.name || call.host.email}
               </p>
             </div>
           </div>
         </div>
 
-        {call.status === 'active' ? (
-          <div className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-            <span className="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 uppercase tracking-tighter">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              Live Now
-            </span>
-          </div>
-        ) : (
-          <StatusBadge status={call.status} />
-        )}
+        <div className="flex sm:block self-start sm:self-auto">
+          {call.status === 'active' ? (
+            <div className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+              <span className="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 uppercase tracking-tighter">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                En Vivo
+              </span>
+            </div>
+          ) : (
+            <StatusBadge status={call.status} />
+          )}
+        </div>
       </div>
 
       {/* Description Panel */}
       {call.description ? (
-        <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-3 bg-muted/5 p-4 rounded-2xl border border-card-border group-hover:border-indigo-500/10 transition-colors">
+        <p className="text-[12px] sm:text-[13px] text-muted-foreground leading-relaxed line-clamp-2 sm:line-clamp-3 bg-muted/5 p-3 sm:p-4 rounded-2xl border border-card-border group-hover:border-indigo-500/10 transition-colors">
           {call.description}
         </p>
       ) : (
-        <div className="h-0.5 bg-card-border/30 w-full rounded-full" />
+        <div className="h-px bg-card-border/30 w-full" />
       )}
 
       {/* Time and Metadata */}
@@ -327,11 +329,11 @@ function CallCard({
       )}
 
       {/* Actions Toolbar */}
-      <div className="flex items-center justify-between mt-auto pt-4 border-t border-card-border">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mt-auto pt-4 border-t border-card-border">
+        <div className="flex items-center justify-between sm:justify-start gap-2">
           <CopyLink roomId={call.roomId} />
           {isOwn && (
-            <div className="flex items-center gap-2 bg-muted/5 p-1 rounded-2xl border border-card-border">
+            <div className="flex items-center gap-1 bg-muted/5 p-1 rounded-2xl border border-card-border">
               <button
                 onClick={onEdit}
                 title="Configuración"
@@ -352,7 +354,7 @@ function CallCard({
 
         <button
           onClick={onJoin}
-          className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300 shadow-lg active:scale-95 ${
+          className={`w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 shadow-lg active:scale-95 ${
             call.status === 'active'
               ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-500/25'
               : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/25 hover:translate-y-[-2px]'
@@ -469,7 +471,7 @@ export default function VideoCallsPage() {
         <div className="relative overflow-hidden pt-10 pb-16">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-32 bg-indigo-600/5 blur-[100px] pointer-events-none" />
 
-          <div className="max-w-7xl mx-auto px-6 sm:px-10 flex flex-col md:flex-row md:items-end justify-between gap-8 relative z-10">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 flex flex-col md:flex-row md:items-end justify-between gap-8 relative z-10">
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
@@ -508,7 +510,7 @@ export default function VideoCallsPage() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 pb-20">
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 pb-20">
           {/* Dashboard Stats Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {[
@@ -574,7 +576,7 @@ export default function VideoCallsPage() {
           </div>
 
           {/* Search + Control Bar */}
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 mb-10 bg-card-bg/30 backdrop-blur-md p-4 rounded-[2rem] border border-card-border/50">
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 mb-10 bg-card-bg/30 backdrop-blur-md p-4 rounded-[2rem] border border-card-border/50">
             <div className="relative w-full lg:max-w-md">
               <Search
                 size={16}
@@ -588,12 +590,12 @@ export default function VideoCallsPage() {
               />
             </div>
 
-            <div className="flex p-1.5 bg-background border border-card-border rounded-2xl w-full lg:w-auto">
+            <div className="flex p-1.5 bg-background border border-card-border rounded-2xl w-full lg:w-auto overflow-x-auto no-scrollbar">
               {(['all', 'active', 'scheduled'] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`flex-1 lg:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                  className={`flex-1 lg:flex-none px-3 sm:px-6 py-2.5 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
                     filter === f
                       ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted/5'

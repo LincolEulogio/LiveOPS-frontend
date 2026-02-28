@@ -56,7 +56,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6">
         <div className="w-16 h-16 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin" />
-        <span className="text-[10px] font-black text-muted uppercase  animate-pulse">Initializing System</span>
+        <span className="text-[10px] font-black text-muted uppercase  animate-pulse">
+          Initializing System
+        </span>
       </div>
     );
   }
@@ -72,14 +74,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60] lg:hidden"
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-60 lg:hidden"
             />
             <motion.aside
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 left-0 w-[85%] max-w-[320px] bg-card-bg/95 backdrop-blur-3xl border-r border-card-border z-[70] flex flex-col lg:hidden"
+              className="fixed inset-y-0 left-0 w-[85%] max-w-[320px] bg-card-bg/95 backdrop-blur-3xl border-r border-card-border z-70 flex flex-col lg:hidden"
             >
               <DashboardSidebar
                 pathname={pathname}
@@ -104,10 +106,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main Content Viewport */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden bg-background relative selection:bg-indigo-500/30">
-        <DashboardHeader
-          pathname={pathname}
-          onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
-        />
+        <DashboardHeader pathname={pathname} onOpenMobileMenu={() => setIsMobileMenuOpen(true)} />
 
         <CommandPalette />
 
@@ -118,15 +117,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           className="flex-1 overflow-y-auto no-scrollbar relative"
         >
           {/* Ambient Background Glows */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none -z-0">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
             <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/5 blur-[120px] rounded-full" />
             <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
           </div>
 
-          <div className="max-w-[1800px] mx-auto lg:p-12 relative min-h-full flex flex-col">
-            <div className="flex-1">
-              {children}
-            </div>
+          <div className="w-full max-w-[1800px] mx-auto lg:p-12 relative min-h-full flex flex-col">
+            <div className="flex-1">{children}</div>
 
             <DashboardFooter />
           </div>
@@ -139,7 +136,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.5, y: 20 }}
                 onClick={scrollToTop}
-                className="fixed bottom-28 right-8 z-[100] w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.25rem] flex items-center justify-center border border-indigo-400/30 group active:scale-90 transition-all"
+                className="fixed bottom-28 right-8 z-100 w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.25rem] flex items-center justify-center border border-indigo-400/30 group active:scale-90 transition-all"
                 whileHover={{ y: -5 }}
               >
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[1.25rem]" />
@@ -147,7 +144,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
                 {/* Tactical Label Hint */}
                 <div className="absolute right-full mr-4 px-3 py-1.5 bg-card-bg/95 backdrop-blur-md border border-card-border rounded-xl opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0 pointer-events-none hidden sm:block">
-                  <span className="text-[9px] font-black uppercase  text-foreground whitespace-nowrap">Retorno a Base</span>
+                  <span className="text-[9px] font-black uppercase  text-foreground whitespace-nowrap">
+                    Retorno a Base
+                  </span>
                 </div>
               </motion.button>
             )}

@@ -335,7 +335,7 @@ export const MediaSidebar = ({ productionId }: { productionId?: string }) => {
             </div>
 
             {/* Upload Footer */}
-            <div className="p-4 border-t border-card-border/30 bg-black/20 shrink-0">
+            <div className="p-4 border-t border-card-border/30 bg-black/10 shrink-0">
                 <button
                     onClick={handleBrowseClick}
                     disabled={uploading || !pid}

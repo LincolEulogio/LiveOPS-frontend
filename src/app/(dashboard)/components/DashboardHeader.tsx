@@ -71,7 +71,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ pathname, onOp
               <button
                 onClick={startNewCall}
                 title="Nueva videollamada"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-violet-500/8 border border-violet-500/20 rounded-xl text-violet-300/80 hover:bg-violet-500/15 hover:border-violet-500/35 hover:text-violet-200 transition-colors text-[10px] font-black uppercase tracking-wider"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-slate-800/8 border border-slate-800/20 rounded-xl text-slate-800 dark:text-violet-300 hover:bg-slate-800/15 dark:hover:bg-violet-500/15 hover:border-slate-800/35 dark:hover:border-violet-500/35 hover:text-slate-800 dark:hover:text-slate-200 transition-colors text-[10px] font-black uppercase tracking-wider"
               >
                 <Video size={13} />
                 <span>Nueva Llamada</span>

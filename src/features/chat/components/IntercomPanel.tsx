@@ -192,11 +192,13 @@ export const IntercomPanel = ({ productionId }: Props) => {
               <MessageSquare size={48} strokeWidth={1} />
               <div className="absolute inset-0 bg-indigo-500/5 blur-2xl rounded-full" />
             </div>
-            <div className="text-center">
-              <p className="text-[10px] font-black uppercase  text-foreground/30">
+            <div className="text-center px-6">
+              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-foreground/40 mb-1">
                 Communications Offline
               </p>
-              <p className="text-[10px] font-bold uppercase  mt-1">Ready for primary broadcast</p>
+              <p className="text-[10px] font-bold uppercase tracking-tight text-muted/60">
+                Ready for primary broadcast
+              </p>
             </div>
           </div>
         ) : (
@@ -219,7 +221,7 @@ export const IntercomPanel = ({ productionId }: Props) => {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Type tactical command..."
-                className="w-full bg-background border border-card-border rounded-2xl pl-5 pr-14 py-4 text-sm text-foreground placeholder:text-muted/50 focus:border-indigo-500 outline-none transition-all resize-none min-h-[55px] max-h-[150px] font-bold uppercase  "
+                className="w-full bg-background/50 border border-card-border rounded-[1.25rem] pl-4 sm:pl-5 pr-14 py-3 sm:py-4 text-[13px] sm:text-sm text-foreground placeholder:text-muted/40 focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/5 outline-none transition-all resize-none min-h-[50px] sm:min-h-[55px] max-h-[150px] font-bold uppercase tracking-tight"
                 rows={1}
               />
               <button

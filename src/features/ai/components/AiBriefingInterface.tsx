@@ -57,7 +57,7 @@ export const AiBriefingInterface = ({
                         }
                     }}
                     placeholder="Escribe un mensaje a LIVIA..."
-                    className="w-full bg-background/50 border border-card-border focus:border-indigo-500/40 rounded-2xl pl-4 pr-12 py-3.5 text-[16px] text-foreground placeholder:text-muted focus:outline-none transition-all"
+                    className="w-full bg-background/50 border border-card-border focus:border-indigo-500/40 rounded-2xl pl-4 pr-12 py-3.5 text-[12px] text-foreground placeholder:text-muted focus:outline-none transition-all"
                 />
                 <button
                     onClick={handleSend}
