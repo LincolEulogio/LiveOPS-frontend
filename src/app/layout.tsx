@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${montserrat.variable} antialiased h-screen w-screen overflow-hidden`}
+        className={`${inter.variable} ${montserrat.variable} antialiased h-dvh w-full overflow-hidden`}
         suppressHydrationWarning
       >
         <PWAInitializer />

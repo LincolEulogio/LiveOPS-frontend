@@ -36,7 +36,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ pathname, onOp
   };
 
   return (
-    <header className="h-20 border-b border-card-border/40 bg-background/50 backdrop-blur-2xl z-30">
+    <header className="fixed top-0 left-0 right-0 lg:sticky lg:top-0 w-full h-20 border-b border-card-border/40 bg-background/95 backdrop-blur-3xl z-50 shrink-0">
       <div className="max-w-[1800px] mx-auto h-full flex items-center justify-between px-6 lg:px-10">
         <div className="flex items-center gap-3 sm:gap-6">
           <button

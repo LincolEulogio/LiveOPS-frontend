@@ -64,7 +64,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex h-screen bg-background text-foreground overflow-hidden selection:bg-indigo-500/30">
+    <div className="flex h-dvh bg-background text-foreground overflow-hidden selection:bg-indigo-500/30">
       {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -105,7 +105,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       />
 
       {/* Main Content Viewport */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden bg-background relative selection:bg-indigo-500/30">
+      <main className="flex-1 flex flex-col h-dvh overflow-hidden bg-background relative selection:bg-indigo-500/30">
+        {/* Persistent Mobile Header Spacer */}
+        <div className="h-20 lg:hidden shrink-0" />
         <DashboardHeader pathname={pathname} onOpenMobileMenu={() => setIsMobileMenuOpen(true)} />
 
         <CommandPalette />
@@ -114,7 +116,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="flex-1 overflow-y-auto no-scrollbar relative"
+          className="flex-1 overflow-y-auto no-scrollbar relative z-10"
         >
           {/* Ambient Background Glows */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
