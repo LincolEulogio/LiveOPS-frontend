@@ -33,6 +33,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { UsersSkeleton } from '@/shared/components/SkeletonLoaders';
 import { Guard } from '@/shared/components/Guard';
+import { Portal } from '@/shared/components/Portal';
 
 export default function AdminUsersPage() {
   const { data: users, isLoading: usersLoading } = useUsers();
@@ -261,224 +262,226 @@ export default function AdminUsersPage() {
         {/* Modals System */}
         <AnimatePresence>
           {modalMode && (
-            <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={closeModals}
-                className="absolute inset-0 bg-black/80 backdrop-blur-md"
-              />
-
-              {modalMode === 'view' && selectedUser ? (
+            <Portal>
+              <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                  className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl"
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
-                  <button
-                    onClick={closeModals}
-                    className="absolute top-6 right-6 p-2 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={closeModals}
+                  className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                />
+
+                {modalMode === 'view' && selectedUser ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                    className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl"
                   >
-                    <X size={20} />
-                  </button>
-
-                  <div className="flex flex-col items-center mb-10">
-                    <div className="w-24 h-24 rounded-4xl bg-indigo-600/10 border border-indigo-500/40 flex items-center justify-center text-3xl font-black text-indigo-500 mb-4 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
-                      {selectedUser.name?.[0]?.toUpperCase() || 'U'}
-                    </div>
-                    <h2 className="text-2xl font-black text-foreground dark:text-white uppercase italic tracking-tight">
-                      {selectedUser.name}
-                    </h2>
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black text-indigo-400 uppercase tracking-widest mt-2">
-                      <Shield size={12} /> {selectedUser.globalRole?.name || 'Authorized Member'}
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
-                      <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
-                        <Mail size={20} />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
-                          Authorization Email
-                        </p>
-                        <p className="text-sm font-bold text-foreground dark:text-white">
-                          {selectedUser.email}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
-                      <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
-                        <Calendar size={20} />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
-                          Service Initiation
-                        </p>
-                        <p className="text-sm font-bold text-foreground dark:text-white">
-                          {new Date(selectedUser.createdAt).toLocaleDateString(undefined, {
-                            dateStyle: 'long',
-                          })}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
-                      <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
-                        <Fingerprint size={20} />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
-                          Matrix Identifier
-                        </p>
-                        <p className="text-[10px] font-mono text-muted group-hover:text-indigo-400/60 transition-colors uppercase">
-                          {selectedUser.id}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-10 pt-6 border-t border-black/5 dark:border-white/5 flex gap-4">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
                     <button
                       onClick={closeModals}
-                      className="flex-1 px-8 py-4 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-muted-foreground dark:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all"
+                      className="absolute top-6 right-6 p-2 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all"
                     >
-                      Close Case
+                      <X size={20} />
                     </button>
-                    <button
-                      onClick={() => openEdit(selectedUser)}
-                      className="flex-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 transition-all active:scale-95"
-                    >
-                      <Edit2 size={14} /> Update Record
-                    </button>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                  className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl"
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
-                  <button
-                    onClick={closeModals}
-                    className="absolute top-6 right-6 p-2 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all"
-                  >
-                    <X size={20} />
-                  </button>
 
-                  <h2 className="text-2xl font-black text-foreground dark:text-white uppercase italic mb-8 flex items-center gap-4">
-                    <div className="w-10 h-10 bg-indigo-600/10 dark:bg-indigo-600/20 rounded-xl flex items-center justify-center border border-indigo-500/40 text-indigo-500">
-                      {modalMode === 'create' ? <Plus size={20} /> : <Edit2 size={20} />}
-                    </div>
-                    {modalMode === 'create' ? 'Personnel Enlistment' : 'Record Calibration'}
-                  </h2>
-
-                  <form onSubmit={handleSave} className="space-y-6">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-widest pl-1 flex items-center gap-1.5">
-                        <AtSign size={10} /> Designation (Full Name)
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={form.name}
-                        onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                        className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
-                        placeholder="Operator Name"
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-widest pl-1 flex items-center gap-1.5">
-                          <Mail size={10} /> Auth Email
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          disabled={modalMode === 'edit'}
-                          value={form.email}
-                          onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                          placeholder="email@tactical.node"
-                        />
+                    <div className="flex flex-col items-center mb-10">
+                      <div className="w-24 h-24 rounded-4xl bg-indigo-600/10 border border-indigo-500/40 flex items-center justify-center text-3xl font-black text-indigo-500 mb-4 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
+                        {selectedUser.name?.[0]?.toUpperCase() || 'U'}
+                      </div>
+                      <h2 className="text-2xl font-black text-foreground dark:text-white uppercase italic tracking-tight">
+                        {selectedUser.name}
+                      </h2>
+                      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black text-indigo-400 uppercase tracking-widest mt-2">
+                        <Shield size={12} /> {selectedUser.globalRole?.name || 'Authorized Member'}
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-widest pl-1 flex items-center gap-1.5">
-                        <KeyRound size={10} />{' '}
-                        {modalMode === 'create'
-                          ? 'Access Key (Password)'
-                          : 'Override Key (Leave blank to keep current)'}
-                      </label>
-                      <input
-                        type="password"
-                        required={modalMode === 'create'}
-                        minLength={6}
-                        value={form.password}
-                        onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-                        className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
-                        placeholder="••••••••"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-widest pl-1 flex items-center gap-1.5">
-                        <Shield size={10} /> Clearance Level (Global Role)
-                      </label>
-                      <select
-                        value={form.globalRoleId}
-                        onChange={(e) => setForm((f) => ({ ...f, globalRoleId: e.target.value }))}
-                        className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white focus:ring-1 focus:ring-indigo-500 outline-none transition-all appearance-none cursor-pointer"
-                      >
-                        <option
-                          value=""
-                          className="bg-white dark:bg-[#0a0a0f] text-foreground dark:text-white"
-                        >
-                          NO CLEARANCE
-                        </option>
-                        {roles?.map((role) => (
-                          <option
-                            key={role.id}
-                            value={role.id}
-                            className="bg-white dark:bg-[#0a0a0f] text-foreground dark:text-white lowercase first-letter:uppercase"
-                          >
-                            {role.name}
-                          </option>
-                        ))}
-                      </select>
+
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
+                        <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
+                          <Mail size={20} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
+                            Authorization Email
+                          </p>
+                          <p className="text-sm font-bold text-foreground dark:text-white">
+                            {selectedUser.email}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
+                        <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
+                          <Calendar size={20} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
+                            Service Initiation
+                          </p>
+                          <p className="text-sm font-bold text-foreground dark:text-white">
+                            {new Date(selectedUser.createdAt).toLocaleDateString(undefined, {
+                              dateStyle: 'long',
+                            })}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
+                        <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
+                          <Fingerprint size={20} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
+                            Matrix Identifier
+                          </p>
+                          <p className="text-[10px] font-mono text-muted group-hover:text-indigo-400/60 transition-colors uppercase">
+                            {selectedUser.id}
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="flex gap-4 mt-6 pt-6 border-t border-black/5 dark:border-white/5">
+                    <div className="mt-10 pt-6 border-t border-black/5 dark:border-white/5 flex gap-4">
                       <button
-                        type="button"
                         onClick={closeModals}
                         className="flex-1 px-8 py-4 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-muted-foreground dark:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all"
                       >
-                        Abort
+                        Close Case
                       </button>
                       <button
-                        type="submit"
-                        disabled={createMutation.isPending || updateMutation.isPending}
-                        className="flex-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 disabled:opacity-50 flex items-center justify-center gap-3"
+                        onClick={() => openEdit(selectedUser)}
+                        className="flex-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 transition-all active:scale-95"
                       >
-                        {createMutation.isPending || updateMutation.isPending ? (
-                          <Loader2 size={16} className="animate-spin" />
-                        ) : (
-                          <Save size={16} />
-                        )}
-                        {modalMode === 'create' ? 'Commit Authorization' : 'Save Calibrations'}
+                        <Edit2 size={14} /> Update Record
                       </button>
                     </div>
-                  </form>
-                </motion.div>
-              )}
-            </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                    className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl"
+                  >
+                    <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
+                    <button
+                      onClick={closeModals}
+                      className="absolute top-6 right-6 p-2 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                    >
+                      <X size={20} />
+                    </button>
+
+                    <h2 className="text-2xl font-black text-foreground dark:text-white uppercase italic mb-8 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-indigo-600/10 dark:bg-indigo-600/20 rounded-xl flex items-center justify-center border border-indigo-500/40 text-indigo-500">
+                        {modalMode === 'create' ? <Plus size={20} /> : <Edit2 size={20} />}
+                      </div>
+                      {modalMode === 'create' ? 'Personnel Enlistment' : 'Record Calibration'}
+                    </h2>
+
+                    <form onSubmit={handleSave} className="space-y-6">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-widest pl-1 flex items-center gap-1.5">
+                          <AtSign size={10} /> Designation (Full Name)
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={form.name}
+                          onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                          placeholder="Operator Name"
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 gap-6">
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-widest pl-1 flex items-center gap-1.5">
+                            <Mail size={10} /> Auth Email
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            disabled={modalMode === 'edit'}
+                            value={form.email}
+                            onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                            className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                            placeholder="email@tactical.node"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-widest pl-1 flex items-center gap-1.5">
+                          <KeyRound size={10} />{' '}
+                          {modalMode === 'create'
+                            ? 'Access Key (Password)'
+                            : 'Override Key (Leave blank to keep current)'}
+                        </label>
+                        <input
+                          type="password"
+                          required={modalMode === 'create'}
+                          minLength={6}
+                          value={form.password}
+                          onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                          placeholder="••••••••"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-widest pl-1 flex items-center gap-1.5">
+                          <Shield size={10} /> Clearance Level (Global Role)
+                        </label>
+                        <select
+                          value={form.globalRoleId}
+                          onChange={(e) => setForm((f) => ({ ...f, globalRoleId: e.target.value }))}
+                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white focus:ring-1 focus:ring-indigo-500 outline-none transition-all appearance-none cursor-pointer"
+                        >
+                          <option
+                            value=""
+                            className="bg-white dark:bg-[#0a0a0f] text-foreground dark:text-white"
+                          >
+                            NO CLEARANCE
+                          </option>
+                          {roles?.map((role) => (
+                            <option
+                              key={role.id}
+                              value={role.id}
+                              className="bg-white dark:bg-[#0a0a0f] text-foreground dark:text-white lowercase first-letter:uppercase"
+                            >
+                              {role.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="flex gap-4 mt-6 pt-6 border-t border-black/5 dark:border-white/5">
+                        <button
+                          type="button"
+                          onClick={closeModals}
+                          className="flex-1 px-8 py-4 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-muted-foreground dark:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all"
+                        >
+                          Abort
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={createMutation.isPending || updateMutation.isPending}
+                          className="flex-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 disabled:opacity-50 flex items-center justify-center gap-3"
+                        >
+                          {createMutation.isPending || updateMutation.isPending ? (
+                            <Loader2 size={16} className="animate-spin" />
+                          ) : (
+                            <Save size={16} />
+                          )}
+                          {modalMode === 'create' ? 'Commit Authorization' : 'Save Calibrations'}
+                        </button>
+                      </div>
+                    </form>
+                  </motion.div>
+                )}
+              </div>
+            </Portal>
           )}
         </AnimatePresence>
       </div>

@@ -35,6 +35,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { RolesSkeleton } from '@/shared/components/SkeletonLoaders';
 import { Guard } from '@/shared/components/Guard';
+import { Portal } from '@/shared/components/Portal';
 
 export default function AdminRolesPage() {
   const { data: roles, isLoading: rolesLoading } = useRoles();
@@ -352,99 +353,101 @@ export default function AdminRolesPage() {
         {/* Modals */}
         <AnimatePresence>
           {(isCreateModalOpen || isEditModalOpen) && (
-            <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => {
-                  setIsCreateModalOpen(false);
-                  setIsEditModalOpen(false);
-                }}
-                className="absolute inset-0 bg-black/60 backdrop-blur-md"
-              />
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="bg-card-bg/95 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl overflow-hidden"
-              >
-                {/* Modal Decorative Background */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[80px] -z-10" />
-                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
-
-                <button
+            <Portal>
+              <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   onClick={() => {
                     setIsCreateModalOpen(false);
                     setIsEditModalOpen(false);
                   }}
-                  className="absolute top-6 right-6 p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
+                  className="absolute inset-0 bg-black/60 backdrop-blur-md"
+                />
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  className="bg-card-bg/95 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl overflow-hidden"
                 >
-                  <X size={20} />
-                </button>
+                  {/* Modal Decorative Background */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[80px] -z-10" />
+                  <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
 
-                <h2 className="text-2xl font-black text-foreground uppercase italic mb-8 flex items-center gap-4">
-                  <div className="w-10 h-10 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 text-indigo-600 dark:text-indigo-400">
-                    <Shield size={20} />
-                  </div>
-                  {isEditModalOpen ? 'Edit Role Parameters' : 'Authorize New Role'}
-                </h2>
+                  <button
+                    onClick={() => {
+                      setIsCreateModalOpen(false);
+                      setIsEditModalOpen(false);
+                    }}
+                    className="absolute top-6 right-6 p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
+                  >
+                    <X size={20} />
+                  </button>
 
-                <form
-                  onSubmit={isEditModalOpen ? handleUpdateRole : handleCreateRole}
-                  className="space-y-6"
-                >
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest pl-1">
-                      Protocol Identifier (Name)
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formRole.name}
-                      onChange={(e) =>
-                        setFormRole((prev) => ({ ...prev, name: e.target.value.toUpperCase() }))
-                      }
-                      className="w-full bg-background/50 border border-card-border rounded-2xl px-6 py-4 text-sm font-bold text-foreground placeholder:text-muted focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500/40 outline-none transition-all"
-                      placeholder="e.g., SECTOR_CHIEF"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest pl-1">
-                      Operational Directive (Description)
-                    </label>
-                    <textarea
-                      value={formRole.description}
-                      onChange={(e) =>
-                        setFormRole((prev) => ({ ...prev, description: e.target.value }))
-                      }
-                      className="w-full bg-background/50 border border-card-border rounded-2xl px-6 py-4 text-sm font-medium text-foreground placeholder:text-muted focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500/40 outline-none min-h-[120px] resize-none transition-all"
-                      placeholder="Define mission scope..."
-                    />
-                  </div>
+                  <h2 className="text-2xl font-black text-foreground uppercase italic mb-8 flex items-center gap-4">
+                    <div className="w-10 h-10 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 text-indigo-600 dark:text-indigo-400">
+                      <Shield size={20} />
+                    </div>
+                    {isEditModalOpen ? 'Edit Role Parameters' : 'Authorize New Role'}
+                  </h2>
 
-                  <div className="flex gap-4 mt-10 pt-8 border-t border-card-border">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsCreateModalOpen(false);
-                        setIsEditModalOpen(false);
-                      }}
-                      className="flex-1 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-muted/5 transition-all"
-                    >
-                      Abort
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={createRoleMutation.isPending || updateRoleMutation.isPending}
-                      className="flex-2 bg-linear-to-br from-indigo-700 to-indigo-500 text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/25 disabled:opacity-50"
-                    >
-                      {isEditModalOpen ? 'Commit Parameters' : 'Authorize Protocol'}
-                    </button>
-                  </div>
-                </form>
-              </motion.div>
-            </div>
+                  <form
+                    onSubmit={isEditModalOpen ? handleUpdateRole : handleCreateRole}
+                    className="space-y-6"
+                  >
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest pl-1">
+                        Protocol Identifier (Name)
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formRole.name}
+                        onChange={(e) =>
+                          setFormRole((prev) => ({ ...prev, name: e.target.value.toUpperCase() }))
+                        }
+                        className="w-full bg-background/50 border border-card-border rounded-2xl px-6 py-4 text-sm font-bold text-foreground placeholder:text-muted focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500/40 outline-none transition-all"
+                        placeholder="e.g., SECTOR_CHIEF"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest pl-1">
+                        Operational Directive (Description)
+                      </label>
+                      <textarea
+                        value={formRole.description}
+                        onChange={(e) =>
+                          setFormRole((prev) => ({ ...prev, description: e.target.value }))
+                        }
+                        className="w-full bg-background/50 border border-card-border rounded-2xl px-6 py-4 text-sm font-medium text-foreground placeholder:text-muted focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500/40 outline-none min-h-[120px] resize-none transition-all"
+                        placeholder="Define mission scope..."
+                      />
+                    </div>
+
+                    <div className="flex gap-4 mt-10 pt-8 border-t border-card-border">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsCreateModalOpen(false);
+                          setIsEditModalOpen(false);
+                        }}
+                        className="flex-1 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-muted/5 transition-all"
+                      >
+                        Abort
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={createRoleMutation.isPending || updateRoleMutation.isPending}
+                        className="flex-2 bg-linear-to-br from-indigo-700 to-indigo-500 text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/25 disabled:opacity-50"
+                      >
+                        {isEditModalOpen ? 'Commit Parameters' : 'Authorize Protocol'}
+                      </button>
+                    </div>
+                  </form>
+                </motion.div>
+              </div>
+            </Portal>
           )}
         </AnimatePresence>
       </div>
