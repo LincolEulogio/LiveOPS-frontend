@@ -277,7 +277,7 @@ export default function AdminUsersPage() {
                     initial={{ opacity: 0, scale: 0.9, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl"
+                    className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-10 w-full max-w-lg relative z-110 shadow-3xl max-h-[90vh] overflow-y-auto custom-scrollbar"
                   >
                     <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
                     <button
@@ -287,42 +287,42 @@ export default function AdminUsersPage() {
                       <X size={20} />
                     </button>
 
-                    <div className="flex flex-col items-center mb-10">
-                      <div className="w-24 h-24 rounded-4xl bg-indigo-600/10 border border-indigo-500/40 flex items-center justify-center text-3xl font-black text-indigo-500 mb-4 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
+                    <div className="flex flex-col items-center mb-6 sm:mb-10">
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl sm:rounded-4xl bg-indigo-600/10 border border-indigo-500/40 flex items-center justify-center text-2xl sm:text-3xl font-black text-indigo-500 mb-4 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
                         {selectedUser.name?.[0]?.toUpperCase() || 'U'}
                       </div>
-                      <h2 className="text-2xl font-black text-foreground dark:text-white uppercase italic tracking-tight">
+                      <h2 className="text-xl sm:text-2xl font-black text-foreground dark:text-white uppercase italic tracking-tight text-center">
                         {selectedUser.name}
                       </h2>
-                      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black text-indigo-400 uppercase tracking-widest mt-2">
+                      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[9px] sm:text-[10px] font-black text-indigo-400 uppercase tracking-widest mt-2 text-center">
                         <Shield size={12} /> {selectedUser.globalRole?.name || 'Authorized Member'}
                       </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
-                        <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
-                          <Mail size={20} />
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="flex items-center gap-4 sm:gap-5 p-4 sm:p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all shrink-0">
+                          <Mail size={18} className="sm:size-5" />
                         </div>
-                        <div className="flex-1">
-                          <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[8px] sm:text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
                             Authorization Email
                           </p>
-                          <p className="text-sm font-bold text-foreground dark:text-white">
+                          <p className="text-xs sm:text-sm font-bold text-foreground dark:text-white truncate">
                             {selectedUser.email}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
-                        <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
-                          <Calendar size={20} />
+                      <div className="flex items-center gap-4 sm:gap-5 p-4 sm:p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all shrink-0">
+                          <Calendar size={18} className="sm:size-5" />
                         </div>
-                        <div className="flex-1">
-                          <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[8px] sm:text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
                             Service Initiation
                           </p>
-                          <p className="text-sm font-bold text-foreground dark:text-white">
+                          <p className="text-xs sm:text-sm font-bold text-foreground dark:text-white">
                             {new Date(selectedUser.createdAt).toLocaleDateString(undefined, {
                               dateStyle: 'long',
                             })}
@@ -330,15 +330,15 @@ export default function AdminUsersPage() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
-                        <div className="w-12 h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all">
-                          <Fingerprint size={20} />
+                      <div className="flex items-center gap-4 sm:gap-5 p-4 sm:p-5 bg-gray-50 dark:bg-white/2 border border-black/5 dark:border-white/5 rounded-2xl group transition-all">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white dark:bg-black/40 border border-black/5 dark:border-white/10 flex items-center justify-center text-muted group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all shrink-0">
+                          <Fingerprint size={18} className="sm:size-5" />
                         </div>
-                        <div className="flex-1">
-                          <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[8px] sm:text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">
                             Matrix Identifier
                           </p>
-                          <p className="text-[10px] font-mono text-muted group-hover:text-indigo-400/60 transition-colors uppercase">
+                          <p className="text-[9px] sm:text-[10px] font-mono text-muted group-hover:text-indigo-400/60 transition-colors uppercase truncate">
                             {selectedUser.id}
                           </p>
                         </div>
@@ -365,7 +365,7 @@ export default function AdminUsersPage() {
                     initial={{ opacity: 0, scale: 0.9, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl"
+                    className="bg-white dark:bg-[#0a0a0f] border border-black/10 dark:border-white/10 rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-10 w-full max-w-lg relative z-110 shadow-3xl max-h-[90vh] overflow-y-auto custom-scrollbar"
                   >
                     <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
                     <button
@@ -375,11 +375,17 @@ export default function AdminUsersPage() {
                       <X size={20} />
                     </button>
 
-                    <h2 className="text-2xl font-black text-foreground dark:text-white uppercase italic mb-8 flex items-center gap-4">
-                      <div className="w-10 h-10 bg-indigo-600/10 dark:bg-indigo-600/20 rounded-xl flex items-center justify-center border border-indigo-500/40 text-indigo-500">
-                        {modalMode === 'create' ? <Plus size={20} /> : <Edit2 size={20} />}
+                    <h2 className="text-xl sm:text-2xl font-black text-foreground dark:text-white uppercase italic mb-6 sm:mb-8 flex items-center gap-4">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-indigo-600/10 dark:bg-indigo-600/20 rounded-xl flex items-center justify-center border border-indigo-500/40 text-indigo-500 shrink-0">
+                        {modalMode === 'create' ? (
+                          <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
+                        ) : (
+                          <Edit2 className="w-5 h-5 sm:w-6 sm:h-6" />
+                        )}
                       </div>
-                      {modalMode === 'create' ? 'Personnel Enlistment' : 'Record Calibration'}
+                      <span className="truncate">
+                        {modalMode === 'create' ? 'Personnel Enlistment' : 'Record Calibration'}
+                      </span>
                     </h2>
 
                     <form onSubmit={handleSave} className="space-y-6">
@@ -392,7 +398,7 @@ export default function AdminUsersPage() {
                           required
                           value={form.name}
                           onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
                           placeholder="Operator Name"
                         />
                       </div>
@@ -407,7 +413,7 @@ export default function AdminUsersPage() {
                             disabled={modalMode === 'edit'}
                             value={form.email}
                             onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                            className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                            className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                             placeholder="email@tactical.node"
                           />
                         </div>
@@ -425,7 +431,7 @@ export default function AdminUsersPage() {
                           minLength={6}
                           value={form.password}
                           onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-foreground dark:text-white placeholder:text-muted/20 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
                           placeholder="••••••••"
                         />
                       </div>
@@ -436,7 +442,7 @@ export default function AdminUsersPage() {
                         <select
                           value={form.globalRoleId}
                           onChange={(e) => setForm((f) => ({ ...f, globalRoleId: e.target.value }))}
-                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-foreground dark:text-white focus:ring-1 focus:ring-indigo-500 outline-none transition-all appearance-none cursor-pointer"
+                          className="w-full bg-gray-50 dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-foreground dark:text-white focus:ring-1 focus:ring-indigo-500 outline-none transition-all appearance-none cursor-pointer"
                         >
                           <option
                             value=""
@@ -456,18 +462,18 @@ export default function AdminUsersPage() {
                         </select>
                       </div>
 
-                      <div className="flex gap-4 mt-6 pt-6 border-t border-black/5 dark:border-white/5">
+                      <div className="flex flex-col sm:flex-row gap-4 mt-6 pt-6 border-t border-black/5 dark:border-white/5">
                         <button
                           type="button"
                           onClick={closeModals}
-                          className="flex-1 px-8 py-4 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-muted-foreground dark:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all"
+                          className="w-full sm:flex-1 px-8 py-3.5 sm:py-4 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-muted-foreground dark:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all"
                         >
                           Abort
                         </button>
                         <button
                           type="submit"
                           disabled={createMutation.isPending || updateMutation.isPending}
-                          className="flex-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 disabled:opacity-50 flex items-center justify-center gap-3"
+                          className="w-full sm:flex-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3.5 sm:py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/20 disabled:opacity-50 flex items-center justify-center gap-3"
                         >
                           {createMutation.isPending || updateMutation.isPending ? (
                             <Loader2 size={16} className="animate-spin" />

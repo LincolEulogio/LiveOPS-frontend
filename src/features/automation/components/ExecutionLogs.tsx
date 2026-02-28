@@ -32,7 +32,7 @@ export const ExecutionLogs = ({ logs, isLoading }: Props) => {
         <div className="absolute inset-0 bg-indigo-500/1 pointer-events-none" />
         <div className="relative mb-8 group-hover/empty:scale-110 transition-transform duration-700">
           <div className="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-full scale-150 animate-pulse" />
-          <div className="relative w-20 h-20 bg-card-bg/40 backdrop-blur-xl border border-card-border rounded-4xl flex items-center justify-center shadow-2xl">
+          <div className="relative w-20 h-20 bg-card-bg/40 backdrop-blur-xl border border-card-border rounded-4xl sm:rounded-[2.5rem] flex items-center justify-center shadow-2xl">
             <Clock size={32} strokeWidth={1} className="text-muted-foreground/30" />
           </div>
         </div>
@@ -59,7 +59,7 @@ export const ExecutionLogs = ({ logs, isLoading }: Props) => {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -20, scale: 0.95 }}
             className={cn(
-              'group flex items-start gap-5 p-5 bg-card-bg/40 backdrop-blur-3xl border border-card-border/50 rounded-3xl transition-all duration-500 relative overflow-hidden active:scale-[0.99] hover:bg-card-bg/60 shadow-sm'
+              'group flex items-start gap-4 sm:gap-5 p-4 sm:p-5 bg-card-bg/40 backdrop-blur-3xl border border-card-border/50 rounded-3xl transition-all duration-500 relative overflow-hidden active:scale-[0.99] hover:bg-card-bg/60 shadow-sm'
             )}
           >
             {/* Status Vertical Trace */}
@@ -74,18 +74,22 @@ export const ExecutionLogs = ({ logs, isLoading }: Props) => {
 
             <div
               className={cn(
-                'mt-0.5 w-12 h-12 rounded-2xl border shrink-0 flex items-center justify-center transition-all shadow-inner',
+                'mt-0.5 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl border shrink-0 flex items-center justify-center transition-all shadow-inner',
                 log.status === 'SUCCESS'
                   ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
                   : 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400 animate-pulse'
               )}
             >
-              {log.status === 'SUCCESS' ? <CheckCircle2 size={20} /> : <AlertCircle size={20} />}
+              {log.status === 'SUCCESS' ? (
+                <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />
+              ) : (
+                <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+              )}
             </div>
 
             <div className="flex-1 min-w-0 py-0.5">
               <div className="flex items-center justify-between gap-4 mb-2">
-                <h4 className="text-[11px] font-black text-foreground uppercase tracking-wider truncate flex items-center gap-2.5">
+                <h4 className="text-[10px] sm:text-[11px] font-black text-foreground uppercase tracking-wider truncate flex items-center gap-2">
                   <div
                     className={cn(
                       'w-1.5 h-1.5 rounded-full shadow-[0_0_8px]',
@@ -96,9 +100,9 @@ export const ExecutionLogs = ({ logs, isLoading }: Props) => {
                   />
                   {log.rule?.name || 'Automated Protocol'}
                 </h4>
-                <div className="flex items-center gap-2.5 bg-black/10 dark:bg-black/20 px-3 py-1.5 rounded-xl border border-white/5 shadow-inner">
-                  <Clock size={11} className="text-muted-foreground/60" />
-                  <span className="text-[10px] font-black font-mono text-muted-foreground/80 tracking-tighter">
+                <div className="flex items-center gap-2 sm:gap-2.5 bg-black/10 dark:bg-black/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-white/5 shadow-inner shrink-0">
+                  <Clock size={10} className="text-muted-foreground/60" />
+                  <span className="text-[9px] sm:text-[10px] font-black font-mono text-muted-foreground/80 tracking-tighter">
                     {new Date(log.createdAt).toLocaleTimeString([], {
                       hour12: false,
                       hour: '2-digit',

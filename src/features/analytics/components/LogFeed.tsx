@@ -20,25 +20,25 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
   );
 
   return (
-    <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.3rem] overflow-hidden flex flex-col h-[750px] shadow-inner">
+    <div className="bg-card-bg/60 backdrop-blur-2xl border border-card-border rounded-[2.3rem] overflow-hidden flex flex-col h-[600px] sm:h-[750px] shadow-inner">
       {/* Search Header */}
-      <div className="p-6 border-b border-card-border bg-card-bg/40 backdrop-blur-md flex flex-col lg:flex-row gap-6 items-center justify-between relative z-10">
+      <div className="p-4 sm:p-6 border-b border-card-border bg-card-bg/40 backdrop-blur-md flex flex-col lg:flex-row gap-4 sm:gap-6 items-start lg:items-center justify-between relative z-10">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl text-indigo-500 shadow-lg shadow-indigo-500/5">
-            <Terminal size={22} />
+          <div className="p-2.5 sm:p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl text-indigo-500 shadow-lg shadow-indigo-500/5">
+            <Terminal size={20} className="sm:w-[22px] sm:h-[22px]" />
           </div>
           <div>
-            <h2 className="text-sm font-black text-foreground uppercase tracking-widest leading-none mb-1">
+            <h2 className="text-[12px] sm:text-sm font-black text-foreground uppercase tracking-widest leading-none mb-1">
               Event Feed
             </h2>
-            <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-tighter">
+            <p className="text-[9px] sm:text-[10px] font-bold text-muted-foreground/40 uppercase tracking-tighter">
               Real-time log stream initialized
             </p>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-          <div className="relative w-full sm:w-80 group/input">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full lg:w-auto">
+          <div className="relative w-full sm:w-64 lg:w-80 group/input">
             <Search
               size={14}
               className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within/input:text-indigo-500 transition-colors"
@@ -47,12 +47,12 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Filter entry parameters..."
-              className="w-full bg-background/40 border border-card-border rounded-xl pl-11 pr-4 py-3 text-[11px] font-black text-foreground placeholder:text-muted-foreground/40 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/50 outline-none transition-all uppercase tracking-widest shadow-inner"
+              className="w-full bg-background/40 border border-card-border rounded-xl pl-11 pr-4 py-2.5 sm:py-3 text-[10px] sm:text-[11px] font-black text-foreground placeholder:text-muted-foreground/40 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/50 outline-none transition-all uppercase tracking-widest shadow-inner"
             />
           </div>
 
           <select
-            className="w-full sm:w-auto bg-background/40 border border-card-border rounded-xl px-5 py-3 text-[10px] font-black text-muted-foreground uppercase tracking-widest focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all cursor-pointer hover:bg-background/60 shadow-inner appearance-none"
+            className="w-full sm:w-auto bg-background/40 border border-card-border rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 text-[9px] sm:text-[10px] font-black text-muted-foreground uppercase tracking-widest focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all cursor-pointer hover:bg-background/60 shadow-inner appearance-none"
             style={{
               backgroundImage:
                 "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E\")",
@@ -79,16 +79,22 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
       </div>
 
       {/* Table Content */}
-      <div className="flex-1 overflow-auto no-scrollbar relative">
-        <table className="w-full border-separate border-spacing-0">
+      <div className="flex-1 overflow-x-auto overflow-y-auto no-scrollbar relative custom-scrollbar">
+        <table className="w-full border-separate border-spacing-0 min-w-[1000px] lg:min-w-0">
           <thead className="sticky top-0 bg-card-bg/95 backdrop-blur-xl border-b border-card-border z-20 shadow-sm">
-            <tr className="text-[11px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
-              <th className="text-left py-5 px-8 border-b border-card-border">Temporal Stamp</th>
-              <th className="text-left py-5 px-8 border-b border-card-border">Origin Operator</th>
-              <th className="text-left py-5 px-8 border-b border-card-border">
+            <tr className="text-[10px] sm:text-[11px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
+              <th className="text-left py-4 sm:py-5 px-6 sm:px-8 border-b border-card-border">
+                Temporal Stamp
+              </th>
+              <th className="text-left py-4 sm:py-5 px-6 sm:px-8 border-b border-card-border">
+                Origin Operator
+              </th>
+              <th className="text-left py-4 sm:py-5 px-6 sm:px-8 border-b border-card-border">
                 Event Classification
               </th>
-              <th className="text-left py-5 px-8 border-b border-card-border">Source Payload</th>
+              <th className="text-left py-4 sm:py-5 px-6 sm:px-8 border-b border-card-border">
+                Source Payload
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-card-border/30">
@@ -97,16 +103,16 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                 .fill(0)
                 .map((_, i) => (
                   <tr key={i} className="animate-pulse">
-                    <td className="py-6 px-8">
+                    <td className="py-5 sm:py-6 px-6 sm:px-8">
                       <div className="h-4 w-24 bg-card-bg/40 rounded-lg"></div>
                     </td>
-                    <td className="py-6 px-8">
+                    <td className="py-5 sm:py-6 px-6 sm:px-8">
                       <div className="h-4 w-32 bg-card-bg/40 rounded-lg"></div>
                     </td>
-                    <td className="py-6 px-8">
+                    <td className="py-5 sm:py-6 px-6 sm:px-8">
                       <div className="h-4 w-40 bg-card-bg/40 rounded-lg"></div>
                     </td>
-                    <td className="py-6 px-8">
+                    <td className="py-5 sm:py-6 px-6 sm:px-8">
                       <div className="h-4 w-full bg-card-bg/40 rounded-lg"></div>
                     </td>
                   </tr>
@@ -128,7 +134,7 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                         Matrix Isolation
                       </p>
                       <p className="text-[10px] font-bold text-muted-foreground/30 uppercase tracking-widest">
-                        No matching telemetry data detected
+                        No telemetry data detected
                       </p>
                     </div>
                   </div>
@@ -147,9 +153,9 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                         : 'border-transparent'
                   )}
                 >
-                  <td className="py-6 px-8 whitespace-nowrap">
+                  <td className="py-5 sm:py-6 px-6 sm:px-8 whitespace-nowrap">
                     <div className="flex flex-col gap-1">
-                      <span className="text-[11px] font-black font-mono text-foreground tracking-tighter shadow-sm">
+                      <span className="text-[10px] sm:text-[11px] font-black font-mono text-foreground tracking-tighter shadow-sm">
                         {new Date(log.createdAt).toLocaleTimeString([], {
                           hour12: false,
                           hour: '2-digit',
@@ -157,47 +163,47 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                           second: '2-digit',
                         })}
                       </span>
-                      <div className="text-[9px] text-muted-foreground/40 font-black uppercase tracking-widest flex items-center gap-2">
+                      <div className="text-[8px] sm:text-[9px] text-muted-foreground/40 font-black uppercase tracking-widest flex items-center gap-2">
                         <div className="w-1 h-1 rounded-full bg-card-border" />
                         {new Date(log.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                   </td>
-                  <td className="py-6 px-8 whitespace-nowrap">
+                  <td className="py-5 sm:py-6 px-6 sm:px-8 whitespace-nowrap">
                     {log.user ? (
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[11px] font-black text-indigo-600 dark:text-indigo-400 uppercase shadow-sm">
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[10px] sm:text-[11px] font-black text-indigo-600 dark:text-indigo-400 uppercase shadow-sm shrink-0">
                           {log.user.name.charAt(0)}
                         </div>
-                        <div>
-                          <p className="text-[11px] font-black text-foreground uppercase tracking-tight">
+                        <div className="min-w-0">
+                          <p className="text-[10px] sm:text-[11px] font-black text-foreground uppercase tracking-tight truncate">
                             {log.user.name}
                           </p>
-                          <p className="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-tighter italic">
+                          <p className="text-[8px] sm:text-[9px] font-bold text-muted-foreground/40 uppercase tracking-tighter italic">
                             Auth Level 1
                           </p>
                         </div>
                       </div>
                     ) : (
                       <div className="flex items-center gap-3 opacity-60">
-                        <div className="w-9 h-9 rounded-2xl bg-muted-foreground/10 border border-muted-foreground/20 flex items-center justify-center text-[10px] font-black text-muted-foreground uppercase shadow-sm">
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-muted-foreground/10 border border-muted-foreground/20 flex items-center justify-center text-[9px] sm:text-[10px] font-black text-muted-foreground uppercase shadow-sm shrink-0">
                           S
                         </div>
-                        <div>
-                          <span className="text-[11px] font-black text-muted-foreground uppercase italic tracking-widest">
+                        <div className="min-w-0">
+                          <span className="text-[10px] sm:text-[11px] font-black text-muted-foreground uppercase italic tracking-widest truncate">
                             System Engine
                           </span>
-                          <p className="text-[9px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
-                            Automated process
+                          <p className="text-[8px] sm:text-[9px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
+                            Automated
                           </p>
                         </div>
                       </div>
                     )}
                   </td>
-                  <td className="py-6 px-8">
+                  <td className="py-5 sm:py-6 px-6 sm:px-8">
                     <span
                       className={cn(
-                        'text-[10px] font-black px-4 py-1.5 rounded-2xl border uppercase tracking-[0.15em] shadow-sm flex items-center gap-2 w-fit',
+                        'text-[9px] sm:text-[10px] font-black px-3 sm:px-4 py-1.5 rounded-2xl border uppercase tracking-[0.15em] shadow-sm flex items-center gap-2 w-fit whitespace-nowrap',
                         log.eventType.includes('obs')
                           ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-600 dark:text-indigo-400'
                           : log.eventType.includes('vmix')
@@ -223,10 +229,10 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
                       {log.eventType.replace('API_', '').replace('_', ' ')}
                     </span>
                   </td>
-                  <td className="py-6 px-8">
+                  <td className="py-5 sm:py-6 px-6 sm:px-8">
                     <div className="max-w-xl">
                       <div className="relative group/payload">
-                        <pre className="text-[10px] font-bold font-mono text-muted-foreground/60 dark:text-muted-foreground/40 bg-black/5 dark:bg-black/40 p-4 rounded-2xl border border-card-border/50 overflow-hidden text-ellipsis transition-all max-h-[100px] hover:max-h-[300px] hover:overflow-y-auto custom-scrollbar group-hover/payload:border-indigo-500/30 shadow-inner leading-relaxed">
+                        <pre className="text-[9px] sm:text-[10px] font-bold font-mono text-muted-foreground/60 dark:text-muted-foreground/40 bg-black/5 dark:bg-black/40 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-card-border/50 overflow-hidden text-ellipsis transition-all max-h-[80px] sm:max-h-[100px] hover:max-h-[300px] hover:overflow-y-auto custom-scrollbar group-hover/payload:border-indigo-500/30 shadow-inner leading-relaxed">
                           {JSON.stringify(log.details, null, 2)}
                         </pre>
                         <div className="absolute top-2 right-2 opacity-0 group-hover/payload:opacity-100 transition-opacity">
@@ -245,16 +251,17 @@ export const LogFeed = ({ logs, isLoading }: Props) => {
       </div>
 
       {/* Footer */}
-      <div className="p-5 border-t border-card-border bg-card-bg/60 backdrop-blur-md flex justify-between items-center text-[11px] font-black text-muted-foreground/50 uppercase tracking-widest relative z-10 shadow-2xl">
-        <span className="flex items-center gap-3 pl-3">
-          <Filter size={14} className="text-indigo-500" />
-          Telemetría <span className="text-foreground">{filteredLogs.length}</span>{' '}
-          <span className="opacity-40">de</span>{' '}
-          <span className="text-foreground">{logs.length}</span> Entradas
+      <div className="p-4 sm:p-5 border-t border-card-border bg-card-bg/60 backdrop-blur-md flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between items-center text-[10px] sm:text-[11px] font-black text-muted-foreground/50 uppercase tracking-widest relative z-10 shadow-2xl">
+        <span className="flex items-center gap-3 pl-0 sm:pl-3 w-full sm:w-auto">
+          <Filter size={14} className="text-indigo-500 shrink-0" />
+          <span>
+            Telemetría <span className="text-foreground">{filteredLogs.length}</span> /{' '}
+            <span className="text-foreground">{logs.length}</span> Entries
+          </span>
         </span>
-        <span className="flex items-center gap-3 pr-3">
+        <span className="flex items-center gap-3 pr-0 sm:pr-3 w-full sm:w-auto justify-end">
           <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
-          Real-time link synchronized
+          Real-time synchronized
         </span>
       </div>
     </div>

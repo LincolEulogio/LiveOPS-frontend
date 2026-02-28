@@ -65,31 +65,31 @@ export const RundownTable = ({
 
   return (
     <div className="w-full relative overflow-x-auto no-scrollbar touch-pan-x">
-      <table className="w-full text-left border-separate border-spacing-0 min-w-[900px]">
+      <table className="w-full text-left border-separate border-spacing-0 min-w-[900px] lg:min-w-0">
         <thead>
           <tr className="bg-white/5 dark:bg-black/20">
-            <th className="pl-10 pr-4 py-6 text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50 shrink-0">
+            <th className="pl-6 sm:pl-10 pr-4 py-4 sm:py-6 text-[10px] sm:text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50 shrink-0">
               #
             </th>
-            <th className="px-6 py-6 text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50">
+            <th className="px-4 sm:px-6 py-4 sm:py-6 text-[10px] sm:text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50">
               Segment / Identity
             </th>
-            <th className="px-6 py-6 text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50">
+            <th className="px-4 sm:px-6 py-4 sm:py-6 text-[10px] sm:text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50">
               Source Node
             </th>
-            <th className="px-6 py-6 text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50 text-center">
+            <th className="px-4 sm:px-6 py-4 sm:py-6 text-[10px] sm:text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50 text-center">
               Duration
             </th>
-            <th className="px-6 py-6 text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50 text-center">
+            <th className="px-4 sm:px-6 py-4 sm:py-6 text-[10px] sm:text-[11px] font-black text-foreground dark:text-muted-foreground uppercase tracking-[0.2em] border-b border-card-border/50 text-center">
               Active Timer
             </th>
-            <th className="pl-6 pr-10 py-6 text-right border-b border-card-border/50">
-              <div className="inline-flex items-center gap-3 bg-indigo-600/10 px-4 py-2 rounded-xl border border-indigo-500/20 shadow-sm">
-                <Activity size={12} className="text-indigo-600 dark:text-indigo-400" />
-                <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none">
-                  Total Remaining:
+            <th className="pl-4 sm:pl-6 pr-6 sm:pr-10 py-4 sm:py-6 text-right border-b border-card-border/50">
+              <div className="inline-flex items-center gap-2 sm:gap-3 bg-indigo-600/10 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-indigo-500/20 shadow-sm">
+                <Activity className="text-indigo-600 dark:text-indigo-400 w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                <span className="text-[9px] sm:text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest leading-none">
+                  Left:
                 </span>
-                <span className="text-[13px] font-mono font-black text-indigo-600 dark:text-indigo-400 leading-none">
+                <span className="text-[11px] sm:text-[13px] font-mono font-black text-indigo-600 dark:text-indigo-400 leading-none">
                   {formatDuration(totalRemainingMs)}
                 </span>
               </div>
@@ -125,26 +125,26 @@ export const RundownTable = ({
                     inPreview && 'bg-emerald-600/8 dark:bg-emerald-600/4'
                   )}
                 >
-                  <td className="pl-10 pr-6 py-7 text-[12px] font-black font-mono text-muted-foreground opacity-40 group-hover:opacity-100 transition-opacity">
+                  <td className="pl-6 sm:pl-10 pr-4 sm:pr-6 py-5 sm:py-7 text-[11px] sm:text-[12px] font-black font-mono text-muted-foreground opacity-40 group-hover:opacity-100 transition-opacity">
                     {/* Tally State Markers */}
                     {inProgram && (
-                      <div className="absolute left-0 top-1 bottom-1 w-1.5 bg-red-600 rounded-r-lg shadow-[0_0_15px_rgba(220,38,38,0.5)] z-10" />
+                      <div className="absolute left-0 top-1 bottom-1 w-1 sm:w-1.5 bg-red-600 rounded-r-lg shadow-[0_0_15px_rgba(220,38,38,0.5)] z-10" />
                     )}
                     {inPreview && (
-                      <div className="absolute left-0 top-1 bottom-1 w-1.5 bg-emerald-600 rounded-r-lg shadow-[0_0_15px_rgba(5,150,105,0.5)] z-10" />
+                      <div className="absolute left-0 top-1 bottom-1 w-1 sm:w-1.5 bg-emerald-600 rounded-r-lg shadow-[0_0_15px_rgba(5,150,105,0.5)] z-10" />
                     )}
                     {block.status === TimelineStatus.ACTIVE && !inProgram && (
-                      <div className="absolute left-0 top-1 bottom-1 w-1.5 bg-indigo-600 rounded-r-lg shadow-[0_0_15px_rgba(79,70,229,0.5)] z-10" />
+                      <div className="absolute left-0 top-1 bottom-1 w-1 sm:w-1.5 bg-indigo-600 rounded-r-lg shadow-[0_0_15px_rgba(79,70,229,0.5)] z-10" />
                     )}
                     {(index + 1).toString().padStart(2, '0')}
                   </td>
 
-                  <td className="px-6 py-7">
-                    <div className="flex flex-col gap-1.5 min-w-[250px]">
+                  <td className="px-4 sm:px-6 py-5 sm:py-7">
+                    <div className="flex flex-col gap-1 min-w-[180px] sm:min-w-[250px]">
                       <div className="flex items-center gap-2">
                         <span
                           className={cn(
-                            'font-black text-[15px] uppercase tracking-tight transition-colors',
+                            'font-black text-[13px] sm:text-[15px] uppercase tracking-tight transition-colors',
                             block.status === TimelineStatus.ACTIVE
                               ? 'text-indigo-600 dark:text-indigo-400'
                               : 'text-foreground'
@@ -153,22 +153,22 @@ export const RundownTable = ({
                           {block.title}
                         </span>
                         {block.status === TimelineStatus.ACTIVE && (
-                          <span className="flex h-2 w-2 rounded-full bg-indigo-500 animate-ping" />
+                          <span className="flex h-1.5 w-1.5 rounded-full bg-indigo-500 animate-ping" />
                         )}
                       </div>
                       {block.description && (
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider line-clamp-1 opacity-50 group-hover:opacity-80 transition-opacity italic">
+                        <span className="text-[9px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-wider line-clamp-1 opacity-50 group-hover:opacity-80 transition-opacity italic">
                           // {block.description}
                         </span>
                       )}
                     </div>
                   </td>
 
-                  <td className="px-6 py-7">
-                    <div className="flex items-center gap-4">
+                  <td className="px-4 sm:px-6 py-5 sm:py-7">
+                    <div className="flex items-center gap-3 sm:gap-4">
                       <div
                         className={cn(
-                          'w-3 h-3 rounded-full border-2 ',
+                          'w-2 h-2 sm:w-3 sm:h-3 rounded-full border sm:border-2 ',
                           inProgram
                             ? 'bg-red-500 border-red-400/50 shadow-[0_0_10px_rgba(239,68,68,0.4)] animate-pulse'
                             : inPreview
@@ -176,10 +176,10 @@ export const RundownTable = ({
                               : 'bg-background border-card-border'
                         )}
                       />
-                      <div className="px-4 py-1.5 bg-background/50 border border-card-border/50 rounded-xl group-hover:border-card-border transition-colors">
+                      <div className="px-2.5 sm:px-4 py-1 sm:py-1.5 bg-background/50 border border-card-border/50 rounded-lg sm:rounded-xl group-hover:border-card-border transition-colors">
                         <span
                           className={cn(
-                            'text-[10px] font-black uppercase tracking-widest',
+                            'text-[9px] sm:text-[10px] font-black uppercase tracking-widest',
                             inProgram
                               ? 'text-red-600 dark:text-red-400'
                               : inPreview
@@ -187,24 +187,24 @@ export const RundownTable = ({
                                 : 'text-muted-foreground/60'
                           )}
                         >
-                          {block.source || 'EXTERNAL NODE'}
+                          {block.source || 'EXTERNAL'}
                         </span>
                       </div>
                     </div>
                   </td>
 
-                  <td className="px-6 py-7 text-center">
-                    <span className="text-[12px] font-black font-mono text-foreground/70 dark:text-muted-foreground uppercase ">
+                  <td className="px-4 sm:px-6 py-5 sm:py-7 text-center">
+                    <span className="text-[11px] sm:text-[12px] font-black font-mono text-foreground/70 dark:text-muted-foreground uppercase ">
                       {block.durationMs && block.durationMs > 0
                         ? formatDuration(block.durationMs)
-                        : '— MANUAL —'}
+                        : '— M —'}
                     </span>
                   </td>
 
-                  <td className="px-6 py-7 text-center">
+                  <td className="px-4 sm:px-6 py-5 sm:py-7 text-center">
                     <div
                       className={cn(
-                        'inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl font-mono text-[12px] font-black border transition-all shadow-sm',
+                        'inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl font-mono text-[11px] sm:text-[12px] font-black border transition-all shadow-sm',
                         block.status === TimelineStatus.ACTIVE
                           ? isOvertime
                             ? 'bg-red-600/20 border-red-500/40 text-red-600 dark:text-red-400 animate-pulse '
@@ -215,64 +215,64 @@ export const RundownTable = ({
                       )}
                     >
                       <Clock
-                        size={14}
+                        size={12}
                         className={
                           block.status === TimelineStatus.ACTIVE ? 'animate-spin-slow' : ''
                         }
                       />
                       {formatDuration(effective)}
                       {isOvertime && (
-                        <AlertTriangle size={14} className="text-red-500 animate-bounce" />
+                        <AlertTriangle size={12} className="text-red-500 animate-bounce" />
                       )}
                     </div>
                   </td>
 
-                  <td className="pl-6 pr-10 py-7 text-right">
-                    <div className="flex items-center justify-end gap-3 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
+                  <td className="pl-4 sm:pl-6 pr-6 sm:pr-10 py-5 sm:py-7 text-right">
+                    <div className="flex items-center justify-end gap-2 sm:gap-3 translate-x-2 sm:translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
                       {block.status === TimelineStatus.PENDING && canControl && (
                         <button
                           onClick={() => onStart(block.id)}
-                          className="p-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all shadow-lg active:scale-90 "
-                          title="Deploy Segment"
+                          className="p-2.5 sm:p-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg sm:rounded-xl transition-all shadow-lg active:scale-90 "
+                          title="Deploy"
                         >
-                          <Play size={16} fill="currentColor" />
+                          <Play size={14} fill="currentColor" />
                         </button>
                       )}
                       {block.status === TimelineStatus.ACTIVE && canControl && (
                         <button
                           onClick={() => onComplete(block.id)}
-                          className="px-5 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-all active:scale-95 shadow-lg flex items-center gap-2 text-[11px] font-black uppercase tracking-widest"
-                          title="Secure Segment"
+                          className="px-4 sm:px-5 py-2.5 sm:py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg sm:rounded-xl transition-all active:scale-95 shadow-lg flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-black uppercase tracking-widest"
+                          title="Secure"
                         >
-                          <CheckCircle2 size={16} />
+                          <CheckCircle2 size={14} />
                           Finalize
                         </button>
                       )}
                       {block.status !== TimelineStatus.PENDING && canControl && (
                         <button
                           onClick={() => onReset(block.id)}
-                          className="p-3.5 bg-background border border-card-border text-muted-foreground hover:text-orange-500 hover:border-orange-500/50 rounded-xl transition-all active:scale-90 shadow-sm"
-                          title="Abort / Re-queue"
+                          className="p-2.5 sm:p-3.5 bg-background border border-card-border text-muted-foreground hover:text-orange-500 hover:border-orange-500/50 rounded-lg sm:rounded-xl transition-all active:scale-90 shadow-sm"
+                          title="Abort"
                         >
-                          <RotateCcw size={16} />
+                          <RotateCcw size={14} />
                         </button>
                       )}
 
-                      <div className="w-px h-8 bg-card-border/50 mx-1" />
+                      <div className="w-px h-6 sm:h-8 bg-card-border/50 mx-0.5 sm:mx-1" />
 
                       {canEdit && (
                         <>
                           <button
                             onClick={() => onEdit(block)}
-                            className="p-3.5 bg-card-bg border border-card-border text-muted-foreground hover:text-foreground hover:border-foreground rounded-xl transition-all active:scale-90"
+                            className="p-2.5 sm:p-3.5 bg-card-bg border border-card-border text-muted-foreground hover:text-foreground hover:border-foreground rounded-lg sm:rounded-xl transition-all active:scale-90"
                           >
-                            <Edit2 size={16} />
+                            <Edit2 size={14} />
                           </button>
                           <button
                             onClick={() => onDelete(block.id)}
-                            className="p-3.5 bg-card-bg border border-card-border text-muted-foreground hover:text-red-500 hover:border-red-500/50 rounded-xl transition-all active:scale-90"
+                            className="p-2.5 sm:p-3.5 bg-card-bg border border-card-border text-muted-foreground hover:text-red-500 hover:border-red-500/50 rounded-lg sm:rounded-xl transition-all active:scale-90"
                           >
-                            <Trash2 size={16} />
+                            <Trash2 size={14} />
                           </button>
                         </>
                       )}

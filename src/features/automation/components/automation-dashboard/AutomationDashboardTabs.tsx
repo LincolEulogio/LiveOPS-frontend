@@ -38,13 +38,13 @@ export const AutomationDashboardTabs: React.FC<AutomationDashboardTabsProps> = (
 
   return (
     <div className="space-y-10">
-      <div className="flex bg-card-bg/40 backdrop-blur-md p-2 rounded-4xl border border-card-border w-full sm:w-fit overflow-x-auto no-scrollbar gap-2 shadow-sm">
+      <div className="flex bg-card-bg/40 backdrop-blur-md p-1.5 sm:p-2 rounded-2xl sm:rounded-4xl border border-card-border w-full lg:w-fit overflow-x-auto no-scrollbar gap-1 sm:gap-2 shadow-sm shrink-0">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
-              'flex-1 sm:flex-none flex items-center justify-center gap-3 px-8 py-4 rounded-3xl text-[11px] font-black uppercase tracking-widest transition-all relative overflow-hidden group/tab',
+              'flex-1 sm:flex-none flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-3xl text-[10px] sm:text-[11px] font-black uppercase tracking-widest transition-all relative overflow-hidden group/tab',
               activeTab === tab.id
                 ? 'text-white shadow-xl'
                 : 'text-muted-foreground hover:text-foreground hover:bg-white/5',
@@ -59,7 +59,7 @@ export const AutomationDashboardTabs: React.FC<AutomationDashboardTabsProps> = (
               />
             )}
             <tab.icon
-              size={14}
+              size={12}
               className={cn(
                 'relative z-10 transition-transform duration-500 group-hover/tab:scale-110',
                 activeTab === tab.id ? 'text-white' : 'text-indigo-500'
@@ -73,7 +73,7 @@ export const AutomationDashboardTabs: React.FC<AutomationDashboardTabsProps> = (
         ))}
       </div>
 
-      <div className="min-h-[500px]">
+      <div className="min-h-[400px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -92,7 +92,7 @@ export const AutomationDashboardTabs: React.FC<AutomationDashboardTabsProps> = (
             )}
 
             {activeTab === 'history' && (
-              <div className="bg-card-bg/60 backdrop-blur-xl border border-card-border rounded-[2.5rem] p-6 lg:p-10  h-[700px] flex flex-col">
+              <div className="bg-card-bg/60 backdrop-blur-xl border border-card-border rounded-3xl sm:rounded-[2.5rem] p-4 sm:p-6 lg:p-10  h-[600px] sm:h-[700px] flex flex-col">
                 <ExecutionLogs logs={logs} isLoading={isLoading} />
               </div>
             )}

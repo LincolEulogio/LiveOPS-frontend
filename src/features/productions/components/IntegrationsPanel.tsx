@@ -27,7 +27,7 @@ export const IntegrationsPanel = ({ productionId }: { productionId: string }) =>
   };
 
   return (
-    <div className="bg-transparent space-y-8 p-4 sm:p-5">
+    <div className="bg-transparent space-y-8 p-0 sm:p-5">
       <div className="flex items-center gap-4 border-b border-card-border/40 pb-6 relative">
         <div className="p-3 bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/30 rounded-2xl text-indigo-500 shadow-lg shadow-indigo-500/5">
           <Share2 size={24} />

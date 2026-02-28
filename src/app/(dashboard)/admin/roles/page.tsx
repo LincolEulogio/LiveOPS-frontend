@@ -369,7 +369,7 @@ export default function AdminRolesPage() {
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                  className="bg-card-bg/95 backdrop-blur-2xl border border-card-border rounded-[2.5rem] p-10 w-full max-w-lg relative z-110 shadow-3xl overflow-hidden"
+                  className="bg-card-bg/95 backdrop-blur-2xl border border-card-border rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-10 w-full max-w-lg relative z-110 shadow-3xl overflow-y-auto max-h-[90vh] custom-scrollbar"
                 >
                   {/* Modal Decorative Background */}
                   <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[80px] -z-10" />
@@ -385,11 +385,13 @@ export default function AdminRolesPage() {
                     <X size={20} />
                   </button>
 
-                  <h2 className="text-2xl font-black text-foreground uppercase italic mb-8 flex items-center gap-4">
-                    <div className="w-10 h-10 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 text-indigo-600 dark:text-indigo-400">
-                      <Shield size={20} />
+                  <h2 className="text-xl sm:text-2xl font-black text-foreground uppercase italic mb-6 sm:mb-8 flex items-center gap-4">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 bg-indigo-600/10 rounded-xl sm:rounded-2xl flex items-center justify-center border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 shrink-0">
+                      <Shield className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    {isEditModalOpen ? 'Edit Role Parameters' : 'Authorize New Role'}
+                    <span className="truncate">
+                      {isEditModalOpen ? 'Edit Role Parameters' : 'Authorize New Role'}
+                    </span>
                   </h2>
 
                   <form
@@ -407,7 +409,7 @@ export default function AdminRolesPage() {
                         onChange={(e) =>
                           setFormRole((prev) => ({ ...prev, name: e.target.value.toUpperCase() }))
                         }
-                        className="w-full bg-background/50 border border-card-border rounded-2xl px-6 py-4 text-sm font-bold text-foreground placeholder:text-muted focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500/40 outline-none transition-all"
+                        className="w-full bg-background/50 border border-card-border rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-foreground placeholder:text-muted focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500/40 outline-none transition-all"
                         placeholder="e.g., SECTOR_CHIEF"
                       />
                     </div>
@@ -420,26 +422,26 @@ export default function AdminRolesPage() {
                         onChange={(e) =>
                           setFormRole((prev) => ({ ...prev, description: e.target.value }))
                         }
-                        className="w-full bg-background/50 border border-card-border rounded-2xl px-6 py-4 text-sm font-medium text-foreground placeholder:text-muted focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500/40 outline-none min-h-[120px] resize-none transition-all"
+                        className="w-full bg-background/50 border border-card-border rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-xs sm:text-sm font-medium text-foreground placeholder:text-muted focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500/40 outline-none min-h-[100px] sm:min-h-[120px] resize-none transition-all"
                         placeholder="Define mission scope..."
                       />
                     </div>
 
-                    <div className="flex gap-4 mt-10 pt-8 border-t border-card-border">
+                    <div className="flex flex-col sm:flex-row gap-4 mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-card-border">
                       <button
                         type="button"
                         onClick={() => {
                           setIsCreateModalOpen(false);
                           setIsEditModalOpen(false);
                         }}
-                        className="flex-1 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-muted/5 transition-all"
+                        className="w-full sm:flex-1 px-6 py-3.5 sm:py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-muted/5 transition-all"
                       >
                         Abort
                       </button>
                       <button
                         type="submit"
                         disabled={createRoleMutation.isPending || updateRoleMutation.isPending}
-                        className="flex-2 bg-linear-to-br from-indigo-700 to-indigo-500 text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/25 disabled:opacity-50"
+                        className="w-full sm:flex-2 bg-linear-to-br from-indigo-700 to-indigo-500 text-white px-8 py-3.5 sm:py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-600/25 disabled:opacity-50"
                       >
                         {isEditModalOpen ? 'Commit Parameters' : 'Authorize Protocol'}
                       </button>
